@@ -1,0 +1,352 @@
+# =============================================================================
+# NexusAI Infrastructure Pipeline
+# =============================================================================
+# Manages cloud infrastructure via Terraform
+
+name: Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "terraform/**"
+      - ".github/workflows/infra.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "terraform/**"
+      - ".github/workflows/infra.yml"
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Terraform action"
+        required: true
+        default: "plan"
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+      environment:
+        description: "Target environment"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+
+env:
+  TF_VERSION: "1.6.0"
+  TF_WORKING_DIR: "terraform"
+
+jobs:
+  # ===========================================================================
+  # Terraform Validation
+  # ===========================================================================
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Init
+        run: terraform init -backend=false
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+  # ===========================================================================
+  # Security Scan
+  # ===========================================================================
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: terraform
+          framework: terraform
+          output_format: sarif
+          output_file_path: checkov-results.sarif
+          soft_fail: true
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: checkov-results.sarif
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          working_directory: terraform
+          soft_fail: true
+
+  # ===========================================================================
+  # Plan Dev
+  # ===========================================================================
+  plan-dev:
+    name: Plan (Dev)
+    runs-on: ubuntu-latest
+    needs: [validate, security]
+    if: github.event.inputs.environment == 'dev' || github.event.inputs.environment == ''
+    environment: dev
+    env:
+      TF_VAR_environment: dev
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Configure Azure credentials
+        if: vars.CLOUD_PROVIDER == 'azure'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Configure AWS credentials
+        if: vars.CLOUD_PROVIDER == 'aws'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Configure GCP credentials
+        if: vars.CLOUD_PROVIDER == 'gcp'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="environments/dev/backend.tfvars"
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Plan
+        run: |
+          terraform plan \
+            -var-file="environments/dev/terraform.tfvars" \
+            -out=tfplan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-dev
+          path: terraform/tfplan
+          retention-days: 7
+
+  # ===========================================================================
+  # Apply Dev
+  # ===========================================================================
+  apply-dev:
+    name: Apply (Dev)
+    runs-on: ubuntu-latest
+    needs: plan-dev
+    if: github.event.inputs.action == 'apply' && github.event.inputs.environment == 'dev'
+    environment:
+      name: dev
+      url: https://dev.nexusai.example.com
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Configure credentials
+        uses: azure/login@v1
+        if: vars.CLOUD_PROVIDER == 'azure'
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan-dev
+          path: terraform
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="environments/dev/backend.tfvars"
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Save outputs
+        run: |
+          terraform output -json > outputs.json
+          cat outputs.json
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+  # ===========================================================================
+  # Plan Staging
+  # ===========================================================================
+  plan-staging:
+    name: Plan (Staging)
+    runs-on: ubuntu-latest
+    needs: [validate, security]
+    if: github.event.inputs.environment == 'staging'
+    environment: staging
+    env:
+      TF_VAR_environment: staging
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Configure Azure credentials
+        if: vars.CLOUD_PROVIDER == 'azure'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="environments/staging/backend.tfvars"
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Plan
+        run: |
+          terraform plan \
+            -var-file="environments/staging/terraform.tfvars" \
+            -out=tfplan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-staging
+          path: terraform/tfplan
+
+  # ===========================================================================
+  # Plan Production
+  # ===========================================================================
+  plan-prod:
+    name: Plan (Production)
+    runs-on: ubuntu-latest
+    needs: [validate, security]
+    if: github.event.inputs.environment == 'prod'
+    environment: production
+    env:
+      TF_VAR_environment: prod
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Configure Azure credentials
+        if: vars.CLOUD_PROVIDER == 'azure'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="environments/prod/backend.tfvars"
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Plan
+        run: |
+          terraform plan \
+            -var-file="environments/prod/terraform.tfvars" \
+            -out=tfplan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-prod
+          path: terraform/tfplan
+
+  # ===========================================================================
+  # Apply Production (Requires Approval)
+  # ===========================================================================
+  apply-prod:
+    name: Apply (Production)
+    runs-on: ubuntu-latest
+    needs: plan-prod
+    if: github.event.inputs.action == 'apply' && github.event.inputs.environment == 'prod'
+    environment:
+      name: production
+      url: https://nexusai.example.com
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Configure credentials
+        uses: azure/login@v1
+        if: vars.CLOUD_PROVIDER == 'azure'
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan-prod
+          path: terraform
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="environments/prod/backend.tfvars"
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Notify on success
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "✅ Production infrastructure updated successfully"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

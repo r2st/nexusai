@@ -1,0 +1,47 @@
+# =============================================================================
+# Grafana Dashboard Provisioning Configuration
+# =============================================================================
+# Automatically loads dashboards from the specified directory
+# =============================================================================
+
+apiVersion: 1
+
+providers:
+  # ---------------------------------------------------------------------------
+  # NexusAI Custom Dashboards
+  # ---------------------------------------------------------------------------
+  - name: "NexusAI Dashboards"
+    orgId: 1
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true
+
+  # ---------------------------------------------------------------------------
+  # Infrastructure Dashboards (if using separate folder)
+  # ---------------------------------------------------------------------------
+  # - name: "Infrastructure"
+  #   orgId: 1
+  #   folder: "Infrastructure"
+  #   folderUid: "infrastructure"
+  #   type: file
+  #   disableDeletion: false
+  #   updateIntervalSeconds: 30
+  #   options:
+  #     path: /var/lib/grafana/dashboards/infrastructure
+
+  # ---------------------------------------------------------------------------
+  # Application Dashboards
+  # ---------------------------------------------------------------------------
+  # - name: "Application"
+  #   orgId: 1
+  #   folder: "Application"
+  #   folderUid: "application"
+  #   type: file
+  #   disableDeletion: false
+  #   updateIntervalSeconds: 30
+  #   options:
+  #     path: /var/lib/grafana/dashboards/application

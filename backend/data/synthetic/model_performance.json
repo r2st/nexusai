@@ -1,0 +1,198 @@
+[
+  {
+    "model_id": "gpt-4",
+    "model_name": "GPT-4",
+    "provider": "openai",
+    "pricing": {
+      "input_per_1k": 0.03,
+      "output_per_1k": 0.06
+    },
+    "performance": {
+      "avg_latency_ms": 549,
+      "p50_latency_ms": 540,
+      "p95_latency_ms": 3486,
+      "p99_latency_ms": 5666,
+      "throughput_rpm": 215
+    },
+    "quality_metrics": {
+      "accuracy_score": 0.949,
+      "relevance_score": 0.842,
+      "coherence_score": 0.903,
+      "helpfulness_rating": 4.45
+    },
+    "usage_stats": {
+      "total_requests_30d": 50160,
+      "total_tokens_30d": 4700727,
+      "unique_users_30d": 82,
+      "error_rate_30d": 0.0121
+    }
+  },
+  {
+    "model_id": "gpt-4-turbo",
+    "model_name": "GPT-4 Turbo",
+    "provider": "openai",
+    "pricing": {
+      "input_per_1k": 0.01,
+      "output_per_1k": 0.03
+    },
+    "performance": {
+      "avg_latency_ms": 1619,
+      "p50_latency_ms": 1228,
+      "p95_latency_ms": 3769,
+      "p99_latency_ms": 7617,
+      "throughput_rpm": 125
+    },
+    "quality_metrics": {
+      "accuracy_score": 0.943,
+      "relevance_score": 0.814,
+      "coherence_score": 0.922,
+      "helpfulness_rating": 4.27
+    },
+    "usage_stats": {
+      "total_requests_30d": 85405,
+      "total_tokens_30d": 768971,
+      "unique_users_30d": 45,
+      "error_rate_30d": 0.0144
+    }
+  },
+  {
+    "model_id": "gpt-3.5-turbo",
+    "model_name": "GPT-3.5 Turbo",
+    "provider": "openai",
+    "pricing": {
+      "input_per_1k": 0.0005,
+      "output_per_1k": 0.0015
+    },
+    "performance": {
+      "avg_latency_ms": 2708,
+      "p50_latency_ms": 587,
+      "p95_latency_ms": 4820,
+      "p99_latency_ms": 8153,
+      "throughput_rpm": 127
+    },
+    "quality_metrics": {
+      "accuracy_score": 0.97,
+      "relevance_score": 0.898,
+      "coherence_score": 0.917,
+      "helpfulness_rating": 4.6
+    },
+    "usage_stats": {
+      "total_requests_30d": 38877,
+      "total_tokens_30d": 518934,
+      "unique_users_30d": 48,
+      "error_rate_30d": 0.0193
+    }
+  },
+  {
+    "model_id": "claude-3-opus",
+    "model_name": "Claude 3 Opus",
+    "provider": "anthropic",
+    "pricing": {
+      "input_per_1k": 0.015,
+      "output_per_1k": 0.075
+    },
+    "performance": {
+      "avg_latency_ms": 2101,
+      "p50_latency_ms": 688,
+      "p95_latency_ms": 2137,
+      "p99_latency_ms": 8348,
+      "throughput_rpm": 227
+    },
+    "quality_metrics": {
+      "accuracy_score": 0.915,
+      "relevance_score": 0.811,
+      "coherence_score": 0.884,
+      "helpfulness_rating": 4.32
+    },
+    "usage_stats": {
+      "total_requests_30d": 18818,
+      "total_tokens_30d": 8344505,
+      "unique_users_30d": 68,
+      "error_rate_30d": 0.016
+    }
+  },
+  {
+    "model_id": "claude-3-sonnet",
+    "model_name": "Claude 3 Sonnet",
+    "provider": "anthropic",
+    "pricing": {
+      "input_per_1k": 0.003,
+      "output_per_1k": 0.015
+    },
+    "performance": {
+      "avg_latency_ms": 1968,
+      "p50_latency_ms": 1704,
+      "p95_latency_ms": 5976,
+      "p99_latency_ms": 5578,
+      "throughput_rpm": 260
+    },
+    "quality_metrics": {
+      "accuracy_score": 0.891,
+      "relevance_score": 0.943,
+      "coherence_score": 0.879,
+      "helpfulness_rating": 5.0
+    },
+    "usage_stats": {
+      "total_requests_30d": 3280,
+      "total_tokens_30d": 641285,
+      "unique_users_30d": 85,
+      "error_rate_30d": 0.0027
+    }
+  },
+  {
+    "model_id": "claude-3-haiku",
+    "model_name": "Claude 3 Haiku",
+    "provider": "anthropic",
+    "pricing": {
+      "input_per_1k": 0.00025,
+      "output_per_1k": 0.00125
+    },
+    "performance": {
+      "avg_latency_ms": 887,
+      "p50_latency_ms": 1980,
+      "p95_latency_ms": 4293,
+      "p99_latency_ms": 5142,
+      "throughput_rpm": 332
+    },
+    "quality_metrics": {
+      "accuracy_score": 0.941,
+      "relevance_score": 0.816,
+      "coherence_score": 0.865,
+      "helpfulness_rating": 4.42
+    },
+    "usage_stats": {
+      "total_requests_30d": 10102,
+      "total_tokens_30d": 3464356,
+      "unique_users_30d": 171,
+      "error_rate_30d": 0.0195
+    }
+  },
+  {
+    "model_id": "gemini-pro",
+    "model_name": "Gemini Pro",
+    "provider": "google",
+    "pricing": {
+      "input_per_1k": 0.00025,
+      "output_per_1k": 0.0005
+    },
+    "performance": {
+      "avg_latency_ms": 1917,
+      "p50_latency_ms": 1556,
+      "p95_latency_ms": 2073,
+      "p99_latency_ms": 6349,
+      "throughput_rpm": 390
+    },
+    "quality_metrics": {
+      "accuracy_score": 0.963,
+      "relevance_score": 0.86,
+      "coherence_score": 0.965,
+      "helpfulness_rating": 4.06
+    },
+    "usage_stats": {
+      "total_requests_30d": 79854,
+      "total_tokens_30d": 3400663,
+      "unique_users_30d": 66,
+      "error_rate_30d": 0.0021
+    }
+  }
+]

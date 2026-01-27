@@ -1,0 +1,116 @@
+# =============================================================================
+# Docker Compose Override - Development Defaults
+# This file is automatically loaded with docker-compose.yml
+# All values come from .env file - no hardcoding
+# =============================================================================
+
+services:
+  # Development overrides for backend
+  backend:
+    build:
+      target: development
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-true}
+      - LOG_LEVEL=${LOG_LEVEL:-debug}
+      - SECRET_KEY=${SECRET_KEY}
+      # Inside Docker, use container names for service discovery
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=${DATABASE_USER:-postgres}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD:-postgres}
+      - DATABASE_NAME=${DATABASE_NAME:-nexusai}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - CORS_ORIGINS=${CORS_ORIGINS:-["http://localhost:3000","http://localhost:8000"]}
+      # DevLake API URL - use Docker service name for container-to-container communication
+      - DEVLAKE_API_URL=http://devlake:8080
+    volumes:
+      - ../../../backend:/app:cached
+      - /app/.venv
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+
+  # Development overrides for worker
+  worker:
+    build:
+      target: development
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-true}
+      - LOG_LEVEL=${LOG_LEVEL:-debug}
+      - SECRET_KEY=${SECRET_KEY}
+      # Inside Docker, use container names for service discovery
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=${DATABASE_USER:-postgres}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD:-postgres}
+      - DATABASE_NAME=${DATABASE_NAME:-nexusai}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+    volumes:
+      - ../../../backend:/app:cached
+      - /app/.venv
+
+  # Development overrides for frontend
+  frontend:
+    build:
+      target: development
+    read_only: false
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
+      - BACKEND_INTERNAL_URL=${BACKEND_INTERNAL_URL:-http://backend:8000}
+    volumes:
+      - ../../../frontend:/app:cached
+      - frontend_node_modules:/app/node_modules
+      - frontend_next:/app/.next
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+
+  # Expose database ports for local development
+  postgres:
+    ports:
+      - "${DATABASE_PORT:-5434}:5432"
+    networks:
+      - nexusai-internal
+      - nexusai-public
+
+  redis:
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory ${REDIS_MAXMEMORY:-256mb}
+      --maxmemory-policy ${REDIS_MAXMEMORY_POLICY:-allkeys-lru}
+      --tcp-keepalive 60
+      --timeout 0
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - nexusai-internal
+      - nexusai-public
+
+  meilisearch:
+    ports:
+      - "${MEILISEARCH_PORT:-7700}:7700"
+    networks:
+      - nexusai-internal
+      - nexusai-public
+
+# Named volumes for frontend to avoid permission issues
+volumes:
+  frontend_node_modules:
+  frontend_next:
+
+# Override internal network to allow external access in development
+networks:
+  nexusai-internal:
+    internal: false
+  nexusai-public:

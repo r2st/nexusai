@@ -1,0 +1,66 @@
+version: "3.8"
+
+# Local LLM support using Ollama
+# Supports: Llama 3, Mistral, CodeLlama, Phi, Gemma, and more
+#
+# Usage:
+#   make ollama-up           # Start Ollama
+#   make ollama-pull MODEL=llama3   # Pull a model
+#   make ollama-list         # List installed models
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: nexusai-ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_ORIGINS=*
+    restart: unless-stopped
+    # GPU support (uncomment for NVIDIA GPU)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list || exit 1"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+      start_period: 60s
+    networks:
+      - nexusai-network
+
+  # Optional: Open WebUI for Ollama (ChatGPT-like interface)
+  ollama-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: nexusai-ollama-webui
+    ports:
+      - "${OLLAMA_WEBUI_PORT:-3003}:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_AUTH=false
+    volumes:
+      - ollama_webui_data:/app/backend/data
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - nexusai-network
+
+volumes:
+  ollama_data:
+    name: nexusai-ollama-data
+  ollama_webui_data:
+    name: nexusai-ollama-webui-data
+
+networks:
+  nexusai-network:
+    external: true

@@ -1,0 +1,652 @@
+"""
+Unit tests for background task processing module.
+"""
+
+import asyncio
+from datetime import datetime, timedelta
+from unittest.mock import AsyncMock, MagicMock, patch
+import uuid
+
+import pytest
+
+from app.core.tasks import (
+    TaskPriority,
+    TaskConfig,
+    TaskQueue,
+    task_queue,
+    get_redis_settings,
+    background_task,
+    tenant_background_task,
+    WorkerSettings,
+)
+
+
+# =============================================================================
+# Fixtures
+# =============================================================================
+
+
+@pytest.fixture
+def mock_task_queue():
+    """Create a mock task queue."""
+    queue = TaskQueue()
+    queue._pool = AsyncMock()
+    return queue
+
+
+@pytest.fixture
+def connected_task_queue():
+    """Create a connected task queue with mocked pool."""
+    queue = TaskQueue()
+    queue._pool = AsyncMock()
+    return queue
+
+
+# =============================================================================
+# TaskPriority Tests
+# =============================================================================
+
+
+class TestTaskPriority:
+    """Tests for TaskPriority constants."""
+
+    def test_priority_levels_defined(self):
+        """Test all priority levels are defined."""
+        assert TaskPriority.CRITICAL == "critical"
+        assert TaskPriority.HIGH == "high"
+        assert TaskPriority.NORMAL == "normal"
+        assert TaskPriority.LOW == "low"
+        assert TaskPriority.BULK == "bulk"
+
+
+# =============================================================================
+# TaskConfig Tests
+# =============================================================================
+
+
+class TestTaskConfig:
+    """Tests for TaskConfig constants."""
+
+    def test_queue_names_defined(self):
+        """Test queue names are defined."""
+        assert TaskConfig.DEFAULT_QUEUE == "nexusai:default"
+        assert TaskConfig.HIGH_PRIORITY_QUEUE == "nexusai:high"
+        assert TaskConfig.LOW_PRIORITY_QUEUE == "nexusai:low"
+        assert TaskConfig.SCHEDULED_QUEUE == "nexusai:scheduled"
+
+    def test_retry_settings(self):
+        """Test retry settings are defined."""
+        assert TaskConfig.MAX_RETRIES == 3
+        assert TaskConfig.RETRY_DELAY == 60
+        assert TaskConfig.RETRY_BACKOFF == 2
+
+    def test_job_settings(self):
+        """Test job settings are defined."""
+        assert TaskConfig.DEFAULT_TIMEOUT == 300  # 5 minutes
+        assert TaskConfig.RESULT_TTL == 3600  # 1 hour
+
+
+# =============================================================================
+# get_redis_settings Tests
+# =============================================================================
+
+
+class TestGetRedisSettings:
+    """Tests for get_redis_settings function."""
+
+    def test_returns_redis_settings(self):
+        """Test that function returns RedisSettings."""
+        from arq.connections import RedisSettings
+
+        settings = get_redis_settings()
+
+        assert isinstance(settings, RedisSettings)
+
+    def test_uses_settings_values(self):
+        """Test that function uses app settings."""
+        with patch("app.core.tasks.settings") as mock_settings:
+            mock_settings.REDIS_HOST = "test-redis"
+            mock_settings.REDIS_PORT = 6380
+            mock_settings.REDIS_PASSWORD = "test-pass"
+            mock_settings.REDIS_DB = 2
+
+            settings = get_redis_settings()
+
+            assert settings.host == "test-redis"
+            assert settings.port == 6380
+            assert settings.password == "test-pass"
+            # Database should be REDIS_DB + 1 for tasks
+            assert settings.database == 3
+
+
+# =============================================================================
+# TaskQueue Tests - Connection
+# =============================================================================
+
+
+class TestTaskQueueConnection:
+    """Tests for TaskQueue connection management."""
+
+    @pytest.mark.asyncio
+    async def test_connect(self):
+        """Test connecting to Redis."""
+        queue = TaskQueue()
+
+        with patch("app.core.tasks.create_pool", new_callable=AsyncMock) as mock_create:
+            mock_pool = AsyncMock()
+            mock_create.return_value = mock_pool
+
+            await queue.connect()
+
+            mock_create.assert_called_once()
+            assert queue._pool is mock_pool
+
+    @pytest.mark.asyncio
+    async def test_connect_idempotent(self):
+        """Test that connect is idempotent."""
+        queue = TaskQueue()
+        mock_pool = AsyncMock()
+        queue._pool = mock_pool
+
+        with patch("app.core.tasks.create_pool", new_callable=AsyncMock) as mock_create:
+            await queue.connect()
+
+            mock_create.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_disconnect(self):
+        """Test disconnecting from Redis."""
+        queue = TaskQueue()
+        mock_pool = AsyncMock()
+        queue._pool = mock_pool
+
+        await queue.disconnect()
+
+        mock_pool.close.assert_called_once()
+        assert queue._pool is None
+
+    @pytest.mark.asyncio
+    async def test_disconnect_when_not_connected(self):
+        """Test disconnect when not connected."""
+        queue = TaskQueue()
+
+        # Should not raise
+        await queue.disconnect()
+
+    def test_pool_property_raises_when_not_connected(self):
+        """Test pool property raises when not connected."""
+        queue = TaskQueue()
+
+        with pytest.raises(RuntimeError) as exc_info:
+            _ = queue.pool
+
+        assert "not connected" in str(exc_info.value)
+
+
+# =============================================================================
+# TaskQueue Tests - Enqueue
+# =============================================================================
+
+
+class TestTaskQueueEnqueue:
+    """Tests for TaskQueue enqueue methods."""
+
+    @pytest.mark.asyncio
+    async def test_enqueue_basic(self, connected_task_queue):
+        """Test basic task enqueue."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        job = await connected_task_queue.enqueue(
+            "test_task",
+            "arg1",
+            "arg2",
+            kwarg1="value1",
+        )
+
+        connected_task_queue._pool.enqueue_job.assert_called_once()
+        assert job is mock_job
+
+    @pytest.mark.asyncio
+    async def test_enqueue_with_custom_queue(self, connected_task_queue):
+        """Test enqueue with custom queue name."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        await connected_task_queue.enqueue(
+            "test_task",
+            _queue_name="custom:queue",
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs["_queue_name"] == "custom:queue"
+
+    @pytest.mark.asyncio
+    async def test_enqueue_with_defer_by(self, connected_task_queue):
+        """Test enqueue with defer_by."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        delay = timedelta(minutes=5)
+        await connected_task_queue.enqueue(
+            "test_task",
+            _defer_by=delay,
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs["_defer_by"] == delay
+
+    @pytest.mark.asyncio
+    async def test_enqueue_with_defer_until(self, connected_task_queue):
+        """Test enqueue with defer_until."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        run_at = datetime.utcnow() + timedelta(hours=1)
+        await connected_task_queue.enqueue(
+            "test_task",
+            _defer_until=run_at,
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs["_defer_until"] == run_at
+
+    @pytest.mark.asyncio
+    async def test_enqueue_with_custom_job_id(self, connected_task_queue):
+        """Test enqueue with custom job ID."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        await connected_task_queue.enqueue(
+            "test_task",
+            _job_id="custom-job-123",
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs["_job_id"] == "custom-job-123"
+
+    @pytest.mark.asyncio
+    async def test_enqueue_generates_job_id(self, connected_task_queue):
+        """Test that enqueue generates job ID if not provided."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        await connected_task_queue.enqueue("test_task")
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs["_job_id"] is not None
+        # Should be a valid UUID
+        uuid.UUID(call_kwargs["_job_id"])
+
+
+# =============================================================================
+# TaskQueue Tests - Priority Enqueue
+# =============================================================================
+
+
+class TestTaskQueuePriorityEnqueue:
+    """Tests for priority-specific enqueue methods."""
+
+    @pytest.mark.asyncio
+    async def test_enqueue_high_priority(self, connected_task_queue):
+        """Test high priority enqueue."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        await connected_task_queue.enqueue_high_priority(
+            "urgent_task",
+            "arg1",
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs["_queue_name"] == TaskConfig.HIGH_PRIORITY_QUEUE
+
+    @pytest.mark.asyncio
+    async def test_enqueue_low_priority(self, connected_task_queue):
+        """Test low priority enqueue."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        await connected_task_queue.enqueue_low_priority(
+            "background_task",
+            "arg1",
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs["_queue_name"] == TaskConfig.LOW_PRIORITY_QUEUE
+
+
+# =============================================================================
+# TaskQueue Tests - Scheduling
+# =============================================================================
+
+
+class TestTaskQueueScheduling:
+    """Tests for task scheduling."""
+
+    @pytest.mark.asyncio
+    async def test_schedule_with_run_at(self, connected_task_queue):
+        """Test scheduling task for specific time."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        run_at = datetime.utcnow() + timedelta(hours=2)
+        await connected_task_queue.schedule(
+            "scheduled_task",
+            run_at=run_at,
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs["_queue_name"] == TaskConfig.SCHEDULED_QUEUE
+        assert call_kwargs["_defer_until"] == run_at
+
+    @pytest.mark.asyncio
+    async def test_schedule_with_delay(self, connected_task_queue):
+        """Test scheduling task with delay."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        delay = timedelta(minutes=30)
+        await connected_task_queue.schedule(
+            "delayed_task",
+            delay=delay,
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs["_defer_by"] == delay
+
+
+# =============================================================================
+# TaskQueue Tests - Job Management
+# =============================================================================
+
+
+class TestTaskQueueJobManagement:
+    """Tests for job management."""
+
+    @pytest.mark.asyncio
+    async def test_get_job(self, connected_task_queue):
+        """Test getting job by ID."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.get_job = AsyncMock(return_value=mock_job)
+
+        job = await connected_task_queue.get_job("job-123")
+
+        connected_task_queue._pool.get_job.assert_called_once_with("job-123")
+        assert job is mock_job
+
+    @pytest.mark.asyncio
+    async def test_get_job_result(self, connected_task_queue):
+        """Test getting job result."""
+        mock_job = MagicMock()
+        mock_job.result = AsyncMock(return_value={"status": "completed"})
+        connected_task_queue._pool.get_job = AsyncMock(return_value=mock_job)
+
+        result = await connected_task_queue.get_job_result("job-123", timeout=10.0)
+
+        mock_job.result.assert_called_once_with(timeout=10.0)
+        assert result == {"status": "completed"}
+
+    @pytest.mark.asyncio
+    async def test_get_job_result_not_found(self, connected_task_queue):
+        """Test getting result for non-existent job."""
+        connected_task_queue._pool.get_job = AsyncMock(return_value=None)
+
+        result = await connected_task_queue.get_job_result("nonexistent")
+
+        assert result is None
+
+    @pytest.mark.asyncio
+    async def test_cancel_job(self, connected_task_queue):
+        """Test canceling a job."""
+        mock_job = MagicMock()
+        mock_job.abort = AsyncMock()
+        connected_task_queue._pool.get_job = AsyncMock(return_value=mock_job)
+
+        result = await connected_task_queue.cancel_job("job-123")
+
+        mock_job.abort.assert_called_once()
+        assert result is True
+
+    @pytest.mark.asyncio
+    async def test_cancel_job_not_found(self, connected_task_queue):
+        """Test canceling non-existent job."""
+        connected_task_queue._pool.get_job = AsyncMock(return_value=None)
+
+        result = await connected_task_queue.cancel_job("nonexistent")
+
+        assert result is False
+
+
+# =============================================================================
+# TaskQueue Tests - Queue Info
+# =============================================================================
+
+
+class TestTaskQueueInfo:
+    """Tests for queue information."""
+
+    @pytest.mark.asyncio
+    async def test_get_queue_info(self, connected_task_queue):
+        """Test getting queue statistics."""
+        connected_task_queue._pool.info = AsyncMock(return_value={
+            "pending": 10,
+            "complete": 100,
+            "failed": 5,
+        })
+
+        info = await connected_task_queue.get_queue_info()
+
+        assert info["pending"] == 10
+        assert info["complete"] == 100
+        assert info["failed"] == 5
+        assert info["queue"] == TaskConfig.DEFAULT_QUEUE
+
+    @pytest.mark.asyncio
+    async def test_get_queue_info_custom_queue(self, connected_task_queue):
+        """Test getting info for specific queue."""
+        connected_task_queue._pool.info = AsyncMock(return_value={})
+
+        info = await connected_task_queue.get_queue_info("custom:queue")
+
+        assert info["queue"] == "custom:queue"
+
+
+# =============================================================================
+# TaskQueue Tests - Tenant-Aware Methods
+# =============================================================================
+
+
+class TestTaskQueueTenantAware:
+    """Tests for tenant-aware task methods."""
+
+    @pytest.mark.asyncio
+    async def test_enqueue_for_tenant(self, connected_task_queue):
+        """Test tenant-aware task enqueue."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        await connected_task_queue.enqueue_for_tenant(
+            tenant_id="tenant-123",
+            task_name="tenant_task",
+            document_id="doc-456",
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        # Should include tenant_id in kwargs
+        assert call_kwargs.get("tenant_id") == "tenant-123"
+        # Job ID should be prefixed with tenant
+        assert "tenant:tenant-123:" in call_kwargs["_job_id"]
+
+    @pytest.mark.asyncio
+    async def test_enqueue_for_tenant_preserves_existing_tenant_id(self, connected_task_queue):
+        """Test that existing tenant_id kwarg is not overwritten."""
+        mock_job = MagicMock()
+        connected_task_queue._pool.enqueue_job = AsyncMock(return_value=mock_job)
+
+        await connected_task_queue.enqueue_for_tenant(
+            tenant_id="tenant-123",
+            task_name="tenant_task",
+            tenant_id_override="different-tenant",  # Different key
+        )
+
+        call_kwargs = connected_task_queue._pool.enqueue_job.call_args[1]
+        assert call_kwargs.get("tenant_id") == "tenant-123"
+
+    @pytest.mark.asyncio
+    async def test_get_tenant_jobs(self, connected_task_queue):
+        """Test getting jobs for a tenant."""
+        jobs = await connected_task_queue.get_tenant_jobs("tenant-123")
+
+        # Currently returns empty list (needs Redis SCAN implementation)
+        assert isinstance(jobs, list)
+
+    @pytest.mark.asyncio
+    async def test_cancel_tenant_jobs(self, connected_task_queue):
+        """Test canceling all jobs for a tenant."""
+        # With empty tenant jobs, should return 0
+        cancelled = await connected_task_queue.cancel_tenant_jobs("tenant-123")
+
+        assert cancelled == 0
+
+
+# =============================================================================
+# Decorator Tests
+# =============================================================================
+
+
+class TestBackgroundTaskDecorator:
+    """Tests for background_task decorator."""
+
+    def test_decorator_adds_metadata(self):
+        """Test decorator adds task metadata."""
+        @background_task(queue="custom:queue", timeout=120, max_tries=5)
+        async def test_task(ctx):
+            return "result"
+
+        assert test_task._task_queue == "custom:queue"
+        assert test_task._task_timeout == 120
+        assert test_task._task_max_tries == 5
+        assert test_task._is_background_task is True
+
+    def test_decorator_default_values(self):
+        """Test decorator default values."""
+        @background_task()
+        async def test_task(ctx):
+            return "result"
+
+        assert test_task._task_queue == TaskConfig.DEFAULT_QUEUE
+        assert test_task._task_timeout == TaskConfig.DEFAULT_TIMEOUT
+        assert test_task._task_max_tries == TaskConfig.MAX_RETRIES
+
+    @pytest.mark.asyncio
+    async def test_decorated_function_callable(self):
+        """Test decorated function is still callable."""
+        @background_task()
+        async def test_task(ctx, value):
+            return value * 2
+
+        result = await test_task({}, 5)
+
+        assert result == 10
+
+
+class TestTenantBackgroundTaskDecorator:
+    """Tests for tenant_background_task decorator."""
+
+    def test_decorator_adds_tenant_metadata(self):
+        """Test decorator adds tenant task metadata."""
+        @tenant_background_task(queue="tenant:queue")
+        async def tenant_task(ctx, tenant_id):
+            return "result"
+
+        assert tenant_task._is_tenant_task is True
+        assert tenant_task._task_queue == "tenant:queue"
+
+    @pytest.mark.asyncio
+    async def test_sets_tenant_context(self):
+        """Test decorator sets tenant context."""
+        context_tenant_id = None
+
+        @tenant_background_task()
+        async def tenant_task(ctx, tenant_id):
+            nonlocal context_tenant_id
+            context_tenant_id = ctx.get("tenant_id")
+            return "result"
+
+        with patch("app.core.tasks.set_current_tenant_id") as mock_set:
+            with patch("app.core.tasks.clear_tenant_context"):
+                await tenant_task({}, tenant_id="test-tenant")
+
+                mock_set.assert_called_with("test-tenant")
+
+    @pytest.mark.asyncio
+    async def test_clears_tenant_context_on_completion(self):
+        """Test decorator clears tenant context on completion."""
+        @tenant_background_task()
+        async def tenant_task(ctx, tenant_id):
+            return "result"
+
+        with patch("app.core.tasks.set_current_tenant_id"):
+            with patch("app.core.tasks.clear_tenant_context") as mock_clear:
+                await tenant_task({}, tenant_id="test-tenant")
+
+                mock_clear.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_clears_tenant_context_on_error(self):
+        """Test decorator clears tenant context even on error."""
+        @tenant_background_task()
+        async def failing_task(ctx, tenant_id):
+            raise ValueError("Task failed")
+
+        with patch("app.core.tasks.set_current_tenant_id"):
+            with patch("app.core.tasks.clear_tenant_context") as mock_clear:
+                with pytest.raises(ValueError):
+                    await failing_task({}, tenant_id="test-tenant")
+
+                mock_clear.assert_called_once()
+
+
+# =============================================================================
+# WorkerSettings Tests
+# =============================================================================
+
+
+class TestWorkerSettings:
+    """Tests for WorkerSettings configuration."""
+
+    def test_worker_has_redis_settings(self):
+        """Test worker has Redis settings."""
+        assert WorkerSettings.redis_settings is not None
+
+    def test_worker_has_functions(self):
+        """Test worker has task functions registered."""
+        assert len(WorkerSettings.functions) > 0
+
+    def test_worker_has_lifecycle_hooks(self):
+        """Test worker has lifecycle hooks."""
+        assert WorkerSettings.on_startup is not None
+        assert WorkerSettings.on_shutdown is not None
+
+    def test_worker_settings(self):
+        """Test worker configuration settings."""
+        assert WorkerSettings.max_jobs > 0
+        assert WorkerSettings.job_timeout > 0
+        assert WorkerSettings.keep_result > 0
+        assert WorkerSettings.retry_jobs is True
+        assert WorkerSettings.max_tries > 0
+
+
+# =============================================================================
+# Singleton Instance Tests
+# =============================================================================
+
+
+class TestSingletonInstance:
+    """Tests for singleton instance."""
+
+    def test_task_queue_singleton_exists(self):
+        """Test task queue singleton is available."""
+        assert task_queue is not None
+        assert isinstance(task_queue, TaskQueue)

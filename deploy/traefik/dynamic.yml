@@ -1,0 +1,269 @@
+# =============================================================================
+# Traefik Dynamic Configuration
+# =============================================================================
+# This file contains the dynamic configuration for Traefik
+# Including middlewares, routers, and services
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# HTTP Configuration
+# -----------------------------------------------------------------------------
+http:
+  # ---------------------------------------------------------------------------
+  # Middlewares
+  # ---------------------------------------------------------------------------
+  middlewares:
+    # Security Headers
+    security-headers:
+      headers:
+        # HSTS
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        # Frame options
+        frameDeny: true
+        # Content type options
+        contentTypeNosniff: true
+        # XSS protection
+        browserXssFilter: true
+        # Referrer policy
+        referrerPolicy: "strict-origin-when-cross-origin"
+        # Content Security Policy
+        contentSecurityPolicy: |
+          default-src 'self';
+          script-src 'self' 'unsafe-inline' 'unsafe-eval';
+          style-src 'self' 'unsafe-inline';
+          img-src 'self' data: https:;
+          font-src 'self' data:;
+          connect-src 'self' https://api.${DOMAIN};
+          frame-ancestors 'self';
+          base-uri 'self';
+          form-action 'self';
+        # Permissions policy
+        permissionsPolicy: |
+          geolocation=(),
+          microphone=(),
+          camera=(),
+          payment=(),
+          usb=(),
+          interest-cohort=()
+        # Custom headers
+        customResponseHeaders:
+          X-Robots-Tag: "noindex, nofollow, nosnippet, noarchive"
+          X-Content-Type-Options: "nosniff"
+          X-Download-Options: "noopen"
+          X-Permitted-Cross-Domain-Policies: "none"
+
+    # Rate limiting
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 200
+        period: 1s
+        sourceCriterion:
+          ipStrategy:
+            depth: 1
+            excludedIPs:
+              - "127.0.0.1/32"
+              - "10.0.0.0/8"
+              - "172.16.0.0/12"
+              - "192.168.0.0/16"
+
+    # Strict rate limiting for auth endpoints
+    rate-limit-auth:
+      rateLimit:
+        average: 10
+        burst: 20
+        period: 1m
+        sourceCriterion:
+          ipStrategy:
+            depth: 1
+
+    # Basic authentication for dashboard
+    auth:
+      basicAuth:
+        users:
+          # Generate with: htpasswd -nB admin
+          - "admin:$2y$10$example.hash.here"
+        removeHeader: true
+
+    # Compress responses
+    compress:
+      compress:
+        excludedContentTypes:
+          - "text/event-stream"
+
+    # Retry middleware
+    retry:
+      retry:
+        attempts: 3
+        initialInterval: 100ms
+
+    # Circuit breaker
+    circuit-breaker:
+      circuitBreaker:
+        expression: "NetworkErrorRatio() > 0.30 || ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+        checkPeriod: 10s
+        fallbackDuration: 30s
+        recoveryDuration: 60s
+
+    # Request size limit
+    request-size:
+      buffering:
+        maxRequestBodyBytes: 52428800  # 50MB
+        memRequestBodyBytes: 2097152   # 2MB
+
+    # Strip prefix
+    strip-api-prefix:
+      stripPrefix:
+        prefixes:
+          - "/api"
+
+    # Add trailing slash
+    add-trailing-slash:
+      redirectRegex:
+        regex: "^(https?://[^/]+/[a-zA-Z0-9_-]+)$"
+        replacement: "${1}/"
+        permanent: true
+
+    # IP whitelist (for admin routes)
+    ip-whitelist:
+      ipWhiteList:
+        sourceRange:
+          - "10.0.0.0/8"
+          - "172.16.0.0/12"
+          - "192.168.0.0/16"
+
+    # CORS middleware
+    cors:
+      headers:
+        accessControlAllowMethods:
+          - "GET"
+          - "POST"
+          - "PUT"
+          - "DELETE"
+          - "PATCH"
+          - "OPTIONS"
+        accessControlAllowHeaders:
+          - "Content-Type"
+          - "Authorization"
+          - "X-Request-ID"
+          - "X-Requested-With"
+        accessControlAllowOriginList:
+          - "https://${DOMAIN}"
+        accessControlMaxAge: 86400
+        accessControlAllowCredentials: true
+        addVaryHeader: true
+
+  # ---------------------------------------------------------------------------
+  # Routers
+  # ---------------------------------------------------------------------------
+  routers:
+    # Backend API router
+    backend-api:
+      rule: "Host(`api.${DOMAIN}`)"
+      entryPoints:
+        - websecure
+      service: backend
+      middlewares:
+        - security-headers
+        - rate-limit
+        - compress
+        - cors
+      tls:
+        certResolver: letsencrypt
+
+    # Backend auth routes (stricter rate limiting)
+    backend-auth:
+      rule: "Host(`api.${DOMAIN}`) && PathPrefix(`/api/v1/auth`)"
+      entryPoints:
+        - websecure
+      service: backend
+      middlewares:
+        - security-headers
+        - rate-limit-auth
+        - cors
+      tls:
+        certResolver: letsencrypt
+      priority: 100
+
+    # Frontend router
+    frontend:
+      rule: "Host(`${DOMAIN}`)"
+      entryPoints:
+        - websecure
+      service: frontend
+      middlewares:
+        - security-headers
+        - compress
+      tls:
+        certResolver: letsencrypt
+
+    # Traefik dashboard
+    traefik-dashboard:
+      rule: "Host(`traefik.${DOMAIN}`)"
+      entryPoints:
+        - websecure
+      service: api@internal
+      middlewares:
+        - auth
+        - ip-whitelist
+        - security-headers
+      tls:
+        certResolver: letsencrypt
+
+  # ---------------------------------------------------------------------------
+  # Services
+  # ---------------------------------------------------------------------------
+  services:
+    backend:
+      loadBalancer:
+        servers:
+          - url: "http://backend:8000"
+        healthCheck:
+          path: /health
+          interval: 10s
+          timeout: 3s
+        sticky:
+          cookie:
+            name: nexusai_backend
+            secure: true
+            httpOnly: true
+            sameSite: strict
+
+    frontend:
+      loadBalancer:
+        servers:
+          - url: "http://frontend:3000"
+        healthCheck:
+          path: /api/health
+          interval: 10s
+          timeout: 3s
+
+# -----------------------------------------------------------------------------
+# TCP Configuration (if needed)
+# -----------------------------------------------------------------------------
+tcp: {}
+
+# -----------------------------------------------------------------------------
+# TLS Configuration
+# -----------------------------------------------------------------------------
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+      maxVersion: VersionTLS13
+      cipherSuites:
+        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
+        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
+        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+      curvePreferences:
+        - CurveP521
+        - CurveP384
+      sniStrict: true
+
+    modern:
+      minVersion: VersionTLS13

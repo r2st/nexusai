@@ -1,0 +1,71 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "f8a3b5c1-d2e4-4a6f-b8c9-0e1f2a3b4c5d",
+    "name": "NexusAIAnalyze",
+    "friendlyName": "NexusAI Analyze",
+    "description": "Analyze build results with NexusAI",
+    "helpMarkDown": "[Learn more](https://docs.nexusai.dev/azure-devops)",
+    "category": "Utility",
+    "visibility": [
+        "Build",
+        "Release"
+    ],
+    "author": "NexusAI",
+    "version": {
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 0
+    },
+    "instanceNameFormat": "NexusAI Analyze",
+    "groups": [
+        {
+            "name": "advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "serviceConnection",
+            "type": "connectedService:nexusai",
+            "label": "NexusAI Service Connection",
+            "required": true,
+            "helpMarkDown": "Select the NexusAI service connection"
+        },
+        {
+            "name": "includeTests",
+            "type": "boolean",
+            "label": "Include Test Results",
+            "defaultValue": "true",
+            "required": false,
+            "helpMarkDown": "Include test results in analysis"
+        },
+        {
+            "name": "includeLogs",
+            "type": "boolean",
+            "label": "Include Build Logs",
+            "defaultValue": "true",
+            "required": false,
+            "helpMarkDown": "Include build logs in analysis"
+        },
+        {
+            "name": "depth",
+            "type": "pickList",
+            "label": "Analysis Depth",
+            "defaultValue": "standard",
+            "required": false,
+            "options": {
+                "quick": "Quick",
+                "standard": "Standard",
+                "full": "Full"
+            },
+            "helpMarkDown": "Depth of analysis to perform",
+            "groupName": "advanced"
+        }
+    ],
+    "execution": {
+        "Node16": {
+            "target": "index.js"
+        }
+    }
+}

@@ -1,0 +1,3729 @@
+[
+  {
+    "id": "81e0c0de-a5f9-41ef-8aac-e9abbba31384",
+    "user_id": "fd2506d6-92e3-4da8-ab23-7f127be0f3ea",
+    "title": "Risk Assessment Report",
+    "model": "claude-3-sonnet",
+    "created_at": "2026-01-02T05:19:38.840632",
+    "updated_at": "2026-01-02T07:19:38.840632",
+    "message_count": 16,
+    "total_tokens": 7578,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "e8e4209e-7247-4710-8dcc-a023e9dd6a89",
+    "user_id": "9f243db0-1119-4bd3-b225-9faf5cdaed48",
+    "title": "Project Status Update",
+    "model": "gemini-pro",
+    "created_at": "2026-01-10T03:00:43.840644",
+    "updated_at": "2026-01-11T22:00:43.840644",
+    "message_count": 20,
+    "total_tokens": 4915,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Documentation Update"
+    }
+  },
+  {
+    "id": "aa37e477-6aef-475c-a192-53b85a7dc3e9",
+    "user_id": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "title": "Marketing Campaign Analysis",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-12T06:51:10.840653",
+    "updated_at": "2025-12-13T22:51:10.840653",
+    "message_count": 7,
+    "total_tokens": 8556,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Data Migration"
+    }
+  },
+  {
+    "id": "7a9402f1-6085-47f7-b466-f48d985d7ce8",
+    "user_id": "26dd68f2-64cd-4308-b368-1eee114b3b97",
+    "title": "Budget Allocation Review",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-25T05:54:13.840661",
+    "updated_at": "2025-12-26T23:54:13.840661",
+    "message_count": 24,
+    "total_tokens": 7061,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "3534c07a-5cca-4b9d-b284-e2018cb51750",
+    "user_id": "9f654358-9891-42f8-8225-6679cfac30d5",
+    "title": "Product Roadmap Planning",
+    "model": "gemini-pro",
+    "created_at": "2025-12-24T12:29:50.840669",
+    "updated_at": "2025-12-24T12:29:50.840669",
+    "message_count": 29,
+    "total_tokens": 9389,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "review"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "80d4deac-3e2a-4fe5-8e28-4f60322371ca",
+    "user_id": "c78b6237-1244-4527-9487-5327b850f2fe",
+    "title": "Market Research Insights",
+    "model": "claude-3-opus",
+    "created_at": "2026-01-07T14:28:32.840676",
+    "updated_at": "2026-01-09T10:28:32.840676",
+    "message_count": 6,
+    "total_tokens": 8441,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "follow-up",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "e95423d7-ebd2-4922-a1cc-2142a27dd3b0",
+    "user_id": "55203c1b-bc48-446d-98a4-6a0ba26c0456",
+    "title": "Team Performance Metrics",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-24T07:53:39.840683",
+    "updated_at": "2025-11-24T14:53:39.840683",
+    "message_count": 9,
+    "total_tokens": 3022,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "review"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "8cf48cef-2fad-4e76-a03e-0ad76731de78",
+    "user_id": "b5b6022a-3454-4703-aefb-629674eae558",
+    "title": "Competitor Analysis",
+    "model": "gpt-4-turbo",
+    "created_at": "2026-01-07T19:14:30.840691",
+    "updated_at": "2026-01-09T09:14:30.840691",
+    "message_count": 6,
+    "total_tokens": 8827,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "8c811d77-733a-4fd8-b1b7-4809680606d7",
+    "user_id": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "title": "Budget Allocation Review",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2026-01-03T13:48:56.840698",
+    "updated_at": "2026-01-05T11:48:56.840698",
+    "message_count": 10,
+    "total_tokens": 5391,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "324ac2ef-21e6-47f2-bf53-a19f74d97a8a",
+    "user_id": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "title": "Budget Allocation Review",
+    "model": "claude-3-opus",
+    "created_at": "2026-01-07T20:45:42.840705",
+    "updated_at": "2026-01-09T01:45:42.840705",
+    "message_count": 26,
+    "total_tokens": 5772,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "645de801-9e9a-42d9-a863-521188b8a064",
+    "user_id": "adf0560a-63fd-4c1e-81ca-45c5ad1b4979",
+    "title": "Hr Policy Questions",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-25T03:52:35.840712",
+    "updated_at": "2025-12-26T09:52:35.840712",
+    "message_count": 3,
+    "total_tokens": 6746,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up",
+      "review"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "8cb713b0-3c05-4bd7-add0-cf43bfd0e6f7",
+    "user_id": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "title": "Compliance Audit Findings",
+    "model": "gemini-pro",
+    "created_at": "2025-12-17T12:18:17.840720",
+    "updated_at": "2025-12-18T16:18:17.840720",
+    "message_count": 29,
+    "total_tokens": 2133,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up",
+      "review"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "6c75e7e4-b1f2-4816-9758-70e8e4ddd3a1",
+    "user_id": "c45237c9-124c-4efb-bab1-414ca86d079c",
+    "title": "Hr Policy Questions",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-11T00:14:56.840727",
+    "updated_at": "2025-12-12T01:14:56.840727",
+    "message_count": 12,
+    "total_tokens": 1815,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "review",
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "72292e90-100e-4196-8c7e-31e9ce3295bb",
+    "user_id": "76830006-41ab-425a-8e4f-54bde1f4a33c",
+    "title": "Compliance Audit Findings",
+    "model": "claude-3-haiku",
+    "created_at": "2025-11-21T22:07:58.840734",
+    "updated_at": "2025-11-22T16:07:58.840734",
+    "message_count": 9,
+    "total_tokens": 4227,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "a07179c7-ca45-4b41-882e-85959bda8638",
+    "user_id": "9f243db0-1119-4bd3-b225-9faf5cdaed48",
+    "title": "Strategic Planning Discussion",
+    "model": "gpt-4",
+    "created_at": "2025-12-14T08:30:27.840741",
+    "updated_at": "2025-12-15T04:30:27.840741",
+    "message_count": 30,
+    "total_tokens": 1419,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "51238277-1017-4abb-b7a3-e5af3fe14dcd",
+    "user_id": "f92d5823-8a33-4577-8af2-d5a1ae6b4e0a",
+    "title": "Project Status Update",
+    "model": "gpt-4",
+    "created_at": "2025-12-02T18:15:50.840748",
+    "updated_at": "2025-12-04T09:15:50.840748",
+    "message_count": 7,
+    "total_tokens": 6767,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Documentation Update"
+    }
+  },
+  {
+    "id": "536a6246-06f6-458a-a898-93ef41d4584d",
+    "user_id": "d18d2142-fa6d-4c2e-a834-79ac84e101cd",
+    "title": "Market Research Insights",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-11-16T04:35:55.840755",
+    "updated_at": "2025-11-17T23:35:55.840755",
+    "message_count": 30,
+    "total_tokens": 9455,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "5fce816c-96dc-4906-8e26-e5b891287087",
+    "user_id": "ade41183-8c62-4867-9b95-342487a11e65",
+    "title": "Strategic Planning Discussion",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-09T13:28:19.840762",
+    "updated_at": "2025-12-10T13:28:19.840762",
+    "message_count": 16,
+    "total_tokens": 8416,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Mobile App Launch"
+    }
+  },
+  {
+    "id": "6eed5bc5-8d1d-4424-bdd8-5bf57e1f657f",
+    "user_id": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "title": "Quarterly Sales Analysis",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-23T16:59:43.840769",
+    "updated_at": "2025-12-25T11:59:43.840769",
+    "message_count": 10,
+    "total_tokens": 1303,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "632851fd-48b5-462c-8cb0-ceb70c4fe9cc",
+    "user_id": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "title": "Technical Documentation Review",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-09T14:42:13.840776",
+    "updated_at": "2025-12-11T08:42:13.840776",
+    "message_count": 23,
+    "total_tokens": 2740,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "important",
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "e115a818-73dc-4b2e-974c-63476f36d370",
+    "user_id": "c78b6237-1244-4527-9487-5327b850f2fe",
+    "title": "Budget Allocation Review",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-11-28T00:54:46.840783",
+    "updated_at": "2025-11-29T23:54:46.840783",
+    "message_count": 4,
+    "total_tokens": 7307,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "b8d7f648-6488-4fa6-a3e0-e0a6980b2b86",
+    "user_id": "c78b6237-1244-4527-9487-5327b850f2fe",
+    "title": "It Support Troubleshooting",
+    "model": "claude-3-haiku",
+    "created_at": "2026-01-01T01:29:16.840793",
+    "updated_at": "2026-01-01T22:29:16.840793",
+    "message_count": 27,
+    "total_tokens": 2386,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "9e5c2119-fc0e-4898-be8d-4e68c9386244",
+    "user_id": "c50b1690-5fd4-489f-b62b-b46c5de9dcd0",
+    "title": "Budget Allocation Review",
+    "model": "gpt-4",
+    "created_at": "2025-11-24T01:07:19.840801",
+    "updated_at": "2025-11-24T17:07:19.840801",
+    "message_count": 27,
+    "total_tokens": 9291,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "review"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "a01d46f3-c53f-4a19-a5e1-f55d413bf814",
+    "user_id": "c45237c9-124c-4efb-bab1-414ca86d079c",
+    "title": "Technical Documentation Review",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-31T01:19:18.840808",
+    "updated_at": "2025-12-31T21:19:18.840808",
+    "message_count": 2,
+    "total_tokens": 4126,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "dc2cc4bb-8745-4ee5-8cea-8acd7987b3e5",
+    "user_id": "26dd68f2-64cd-4308-b368-1eee114b3b97",
+    "title": "Quarterly Sales Analysis",
+    "model": "gpt-4",
+    "created_at": "2025-11-18T21:24:41.840815",
+    "updated_at": "2025-11-19T03:24:41.840815",
+    "message_count": 11,
+    "total_tokens": 4346,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Data Migration"
+    }
+  },
+  {
+    "id": "f13f1018-f581-4ad8-bdb3-e1b072fbe491",
+    "user_id": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "title": "Marketing Campaign Analysis",
+    "model": "gemini-pro",
+    "created_at": "2025-12-25T13:27:07.840823",
+    "updated_at": "2025-12-26T20:27:07.840823",
+    "message_count": 22,
+    "total_tokens": 7186,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "7de1be61-1114-412c-843e-5b4503b66f1a",
+    "user_id": "4a3c4f3f-e070-4b4c-96db-1f9fb722a238",
+    "title": "Technical Documentation Review",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-20T11:49:15.840830",
+    "updated_at": "2025-12-21T21:49:15.840830",
+    "message_count": 5,
+    "total_tokens": 6376,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "e144bada-3597-4331-8ceb-b050e434d531",
+    "user_id": "e16cebcd-e133-49ec-bde4-69e9e6373ee6",
+    "title": "Technical Documentation Review",
+    "model": "gemini-pro",
+    "created_at": "2026-01-12T06:09:07.840837",
+    "updated_at": "2026-01-13T03:09:07.840837",
+    "message_count": 2,
+    "total_tokens": 4490,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "da133866-e80b-458d-9599-429d33d640e6",
+    "user_id": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "title": "Technical Documentation Review",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2026-01-11T05:04:21.840844",
+    "updated_at": "2026-01-11T14:04:21.840844",
+    "message_count": 8,
+    "total_tokens": 546,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "0942b985-155f-4093-a229-270644833d6d",
+    "user_id": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "title": "Project Status Update",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-11-17T18:46:23.840851",
+    "updated_at": "2025-11-18T09:46:23.840851",
+    "message_count": 6,
+    "total_tokens": 5804,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "5d4ea56e-d1d7-4377-bd1b-7dd4606b465f",
+    "user_id": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "title": "Competitor Analysis",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-28T19:15:29.840858",
+    "updated_at": "2025-12-30T08:15:29.840858",
+    "message_count": 26,
+    "total_tokens": 2286,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "bb6d20d2-4be0-4584-8a87-7a5c1f3bdb94",
+    "user_id": "c50b1690-5fd4-489f-b62b-b46c5de9dcd0",
+    "title": "Quarterly Sales Analysis",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-31T18:48:35.840865",
+    "updated_at": "2026-01-02T13:48:35.840865",
+    "message_count": 29,
+    "total_tokens": 2268,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "1b88fe4c-2375-4060-9587-30de0e0c7c54",
+    "user_id": "b3bfd063-2517-43d9-8703-9cec38c81982",
+    "title": "Customer Feedback Summary",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-21T15:45:06.840873",
+    "updated_at": "2025-11-23T07:45:06.840873",
+    "message_count": 6,
+    "total_tokens": 9484,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "6d35e33a-9f4c-4b30-b889-7c707a7af131",
+    "user_id": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-haiku",
+    "created_at": "2025-11-26T09:18:18.840880",
+    "updated_at": "2025-11-27T20:18:18.840880",
+    "message_count": 29,
+    "total_tokens": 4022,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "00196bc5-6375-4ae9-b729-194b7c6f7408",
+    "user_id": "50a40004-0b5a-40ce-af04-8d0e6e0b7439",
+    "title": "Strategic Planning Discussion",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-11-24T12:16:01.840887",
+    "updated_at": "2025-11-26T06:16:01.840887",
+    "message_count": 12,
+    "total_tokens": 4676,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "86c76965-21b8-4559-8ab3-3379cccbdeee",
+    "user_id": "545fe39f-6df5-471c-a4f2-36e73dce775d",
+    "title": "Team Performance Metrics",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-11-24T15:42:45.840894",
+    "updated_at": "2025-11-24T23:42:45.840894",
+    "message_count": 25,
+    "total_tokens": 9615,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "completed",
+      "important"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "0fe11a98-9fe3-4617-9dec-7afd0cd6c140",
+    "user_id": "9b258240-6ff3-444c-abd2-b5b6e0c8a9d6",
+    "title": "Project Status Update",
+    "model": "gpt-4",
+    "created_at": "2025-12-26T08:12:55.840902",
+    "updated_at": "2025-12-27T02:12:55.840902",
+    "message_count": 29,
+    "total_tokens": 5619,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "4fcae4a3-d0f1-4f9b-b60c-441adb8ed788",
+    "user_id": "3037c033-3a52-4b02-b202-b7eb82957008",
+    "title": "It Support Troubleshooting",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-11-25T18:52:05.840910",
+    "updated_at": "2025-11-26T01:52:05.840910",
+    "message_count": 13,
+    "total_tokens": 5064,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "8ca07d8d-7da2-45fd-ab8b-3a1886a3cbaf",
+    "user_id": "0f775567-df8e-411e-82ff-eb013a0b70ed",
+    "title": "Market Research Insights",
+    "model": "gpt-4",
+    "created_at": "2025-12-15T06:41:15.840917",
+    "updated_at": "2025-12-15T17:41:15.840917",
+    "message_count": 12,
+    "total_tokens": 2847,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "50d36a73-9c96-4251-82be-e39ee708a478",
+    "user_id": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "title": "Risk Assessment Report",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-06T03:59:49.840924",
+    "updated_at": "2025-12-07T00:59:49.840924",
+    "message_count": 14,
+    "total_tokens": 3078,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "important"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "8f431b12-253d-426e-8aa9-6167bb5159da",
+    "user_id": "4a3c4f3f-e070-4b4c-96db-1f9fb722a238",
+    "title": "Hr Policy Questions",
+    "model": "gpt-4",
+    "created_at": "2026-01-14T06:22:06.840941",
+    "updated_at": "2026-01-14T23:22:06.840941",
+    "message_count": 3,
+    "total_tokens": 7759,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "3f69d057-513f-4173-b61f-83a2b363c572",
+    "user_id": "50a40004-0b5a-40ce-af04-8d0e6e0b7439",
+    "title": "Risk Assessment Report",
+    "model": "gpt-4",
+    "created_at": "2025-11-26T07:54:54.840948",
+    "updated_at": "2025-11-27T01:54:54.840948",
+    "message_count": 13,
+    "total_tokens": 8472,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "4c02d09e-aace-4dac-bfe2-2eb0b365b659",
+    "user_id": "ee735570-941a-4169-8c0f-6e07d25c349f",
+    "title": "Quarterly Sales Analysis",
+    "model": "gemini-pro",
+    "created_at": "2025-12-05T03:02:29.840956",
+    "updated_at": "2025-12-05T11:02:29.840956",
+    "message_count": 11,
+    "total_tokens": 4686,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "3dc7dc47-89c3-4ef3-86f4-fb7537d544c9",
+    "user_id": "3037c033-3a52-4b02-b202-b7eb82957008",
+    "title": "Risk Assessment Report",
+    "model": "gemini-pro",
+    "created_at": "2025-12-07T14:53:52.840963",
+    "updated_at": "2025-12-09T08:53:52.840963",
+    "message_count": 18,
+    "total_tokens": 6302,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "a026e723-b5a2-4028-a14b-4a09a81a1c32",
+    "user_id": "adf0560a-63fd-4c1e-81ca-45c5ad1b4979",
+    "title": "Marketing Campaign Analysis",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-22T20:08:02.840971",
+    "updated_at": "2025-11-23T23:08:02.840971",
+    "message_count": 29,
+    "total_tokens": 9894,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "01dda9cb-6c47-4013-a7db-3530566759cc",
+    "user_id": "c45237c9-124c-4efb-bab1-414ca86d079c",
+    "title": "Budget Allocation Review",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-01T23:11:40.840977",
+    "updated_at": "2025-12-03T19:11:40.840977",
+    "message_count": 27,
+    "total_tokens": 6428,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "83aa6dd9-051f-4a24-959f-497c4d49c0f2",
+    "user_id": "ade41183-8c62-4867-9b95-342487a11e65",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-23T16:54:15.840984",
+    "updated_at": "2025-12-24T13:54:15.840984",
+    "message_count": 29,
+    "total_tokens": 4130,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "5c9afcca-c0a9-4498-93e9-0a215a98d6ea",
+    "user_id": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "title": "It Support Troubleshooting",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-11-29T14:50:36.840991",
+    "updated_at": "2025-11-30T06:50:36.840991",
+    "message_count": 9,
+    "total_tokens": 3732,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "ffb417b8-c93d-437a-bffe-7796bfe06563",
+    "user_id": "4a3c4f3f-e070-4b4c-96db-1f9fb722a238",
+    "title": "Compliance Audit Findings",
+    "model": "claude-3-sonnet",
+    "created_at": "2026-01-10T12:57:34.840999",
+    "updated_at": "2026-01-12T05:57:34.840999",
+    "message_count": 16,
+    "total_tokens": 5795,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "00d8f6c0-0e8f-42eb-a359-0605be55f842",
+    "user_id": "b3bfd063-2517-43d9-8703-9cec38c81982",
+    "title": "Competitor Analysis",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-14T16:19:25.841007",
+    "updated_at": "2025-12-14T19:19:25.841007",
+    "message_count": 27,
+    "total_tokens": 6266,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "a389a2bd-7aaa-4f23-8801-bb5fdccfe2f2",
+    "user_id": "fd2506d6-92e3-4da8-ab23-7f127be0f3ea",
+    "title": "Market Research Insights",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-22T17:29:50.841014",
+    "updated_at": "2025-11-24T07:29:50.841014",
+    "message_count": 22,
+    "total_tokens": 8807,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "review"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "38e3469b-f8ec-4687-944f-49e3b07e3f0a",
+    "user_id": "e16cebcd-e133-49ec-bde4-69e9e6373ee6",
+    "title": "Competitor Analysis",
+    "model": "claude-3-opus",
+    "created_at": "2026-01-02T22:58:17.841023",
+    "updated_at": "2026-01-03T04:58:17.841023",
+    "message_count": 6,
+    "total_tokens": 6126,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "follow-up",
+      "important"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Documentation Update"
+    }
+  },
+  {
+    "id": "8588ba58-dc6f-4b5d-a93b-f6642a79c481",
+    "user_id": "c85ddb12-6ee1-46ed-8126-7f8ca53ce3d7",
+    "title": "Risk Assessment Report",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2026-01-05T00:47:32.841030",
+    "updated_at": "2026-01-05T23:47:32.841030",
+    "message_count": 21,
+    "total_tokens": 5134,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "616237f1-cc7c-4f07-ba54-6899cdb8246a",
+    "user_id": "b5b6022a-3454-4703-aefb-629674eae558",
+    "title": "Product Roadmap Planning",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2026-01-08T10:50:58.841037",
+    "updated_at": "2026-01-09T02:50:58.841037",
+    "message_count": 23,
+    "total_tokens": 2963,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "fc6ead62-108f-4806-9157-a4ffd58aa3ce",
+    "user_id": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "title": "Project Status Update",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-23T08:01:45.841044",
+    "updated_at": "2025-12-23T13:01:45.841044",
+    "message_count": 6,
+    "total_tokens": 5572,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "27512917-2e08-4ab6-a318-12ab62b5ad0e",
+    "user_id": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "title": "Risk Assessment Report",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-20T09:49:18.841051",
+    "updated_at": "2025-12-20T20:49:18.841051",
+    "message_count": 2,
+    "total_tokens": 4009,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "Data Migration"
+    }
+  },
+  {
+    "id": "5a8f6de2-dd41-474f-ac92-78096c62ba9b",
+    "user_id": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-13T23:56:47.841058",
+    "updated_at": "2025-12-15T09:56:47.841058",
+    "message_count": 29,
+    "total_tokens": 9126,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up",
+      "review"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "cb74a3f0-6d03-42b5-b776-63e55d529453",
+    "user_id": "47b2e619-6f72-41bc-9aba-8b2a01418894",
+    "title": "It Support Troubleshooting",
+    "model": "gpt-4",
+    "created_at": "2025-12-01T08:26:07.841065",
+    "updated_at": "2025-12-02T10:26:07.841065",
+    "message_count": 25,
+    "total_tokens": 6468,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Documentation Update"
+    }
+  },
+  {
+    "id": "d755345b-1125-40c1-b64a-f660fa34a6e5",
+    "user_id": "ade41183-8c62-4867-9b95-342487a11e65",
+    "title": "Technical Documentation Review",
+    "model": "gemini-pro",
+    "created_at": "2026-01-06T03:02:14.841073",
+    "updated_at": "2026-01-07T09:02:14.841073",
+    "message_count": 9,
+    "total_tokens": 3678,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "review"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "c7d55f54-21c5-4399-8857-fde6909aaee3",
+    "user_id": "e2cca01e-58fe-4f37-93b6-53bbc3900fa3",
+    "title": "Risk Assessment Report",
+    "model": "gemini-pro",
+    "created_at": "2025-12-25T22:15:05.841080",
+    "updated_at": "2025-12-27T12:15:05.841080",
+    "message_count": 7,
+    "total_tokens": 2767,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "b12c6339-2765-4396-8fa9-2d20639eeb91",
+    "user_id": "fd2506d6-92e3-4da8-ab23-7f127be0f3ea",
+    "title": "It Support Troubleshooting",
+    "model": "gemini-pro",
+    "created_at": "2025-11-27T09:13:16.841087",
+    "updated_at": "2025-11-27T19:13:16.841087",
+    "message_count": 11,
+    "total_tokens": 4969,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "b5685a8f-228b-41fa-9b39-1cb4659d0e16",
+    "user_id": "e16cebcd-e133-49ec-bde4-69e9e6373ee6",
+    "title": "Marketing Campaign Analysis",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-17T20:50:49.841095",
+    "updated_at": "2025-11-19T04:50:49.841095",
+    "message_count": 15,
+    "total_tokens": 6626,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "a93dc5e1-670d-4c1b-82dc-161ed3653ef9",
+    "user_id": "4de0bcde-01ec-4a93-8432-ced825a7f4da",
+    "title": "Product Roadmap Planning",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-17T19:59:03.841102",
+    "updated_at": "2025-12-17T21:59:03.841102",
+    "message_count": 27,
+    "total_tokens": 5200,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "6833d201-4523-43a5-bea1-6b66e38a6cb0",
+    "user_id": "0e0961f9-7565-4f51-91e9-21f9604768d5",
+    "title": "Quarterly Sales Analysis",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-11-22T23:18:37.841109",
+    "updated_at": "2025-11-23T08:18:37.841109",
+    "message_count": 2,
+    "total_tokens": 9491,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "63ccf81e-2c95-48de-84da-4666da4370ee",
+    "user_id": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-haiku",
+    "created_at": "2025-11-19T21:57:55.841117",
+    "updated_at": "2025-11-21T12:57:55.841117",
+    "message_count": 9,
+    "total_tokens": 7989,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "6a46aa60-e1e6-4e4e-8bec-7ac896a6128e",
+    "user_id": "50a40004-0b5a-40ce-af04-8d0e6e0b7439",
+    "title": "Technical Documentation Review",
+    "model": "gpt-4",
+    "created_at": "2025-11-29T05:15:33.841124",
+    "updated_at": "2025-11-30T20:15:33.841124",
+    "message_count": 11,
+    "total_tokens": 6280,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "completed"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "77804f2a-fe93-454a-baa6-17c0ea14ac8a",
+    "user_id": "9f243db0-1119-4bd3-b225-9faf5cdaed48",
+    "title": "Risk Assessment Report",
+    "model": "claude-3-opus",
+    "created_at": "2026-01-03T13:32:50.841131",
+    "updated_at": "2026-01-04T19:32:50.841131",
+    "message_count": 19,
+    "total_tokens": 1213,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "2762272c-c1ea-4f3a-8aa1-139c96d95bb2",
+    "user_id": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "title": "Technical Documentation Review",
+    "model": "claude-3-haiku",
+    "created_at": "2025-11-25T08:15:19.841138",
+    "updated_at": "2025-11-27T08:15:19.841138",
+    "message_count": 26,
+    "total_tokens": 5947,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Documentation Update"
+    }
+  },
+  {
+    "id": "10e71d33-722f-46f9-a1ca-a553ab8baf2b",
+    "user_id": "1079c127-6d94-45b6-a46b-357d4005d848",
+    "title": "Project Status Update",
+    "model": "gpt-4",
+    "created_at": "2025-12-02T23:26:22.841145",
+    "updated_at": "2025-12-04T20:26:22.841145",
+    "message_count": 27,
+    "total_tokens": 7998,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "f58ab5ba-83c5-45ed-9327-0d65061bf15d",
+    "user_id": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "title": "Market Research Insights",
+    "model": "claude-3-opus",
+    "created_at": "2026-01-04T07:37:54.841152",
+    "updated_at": "2026-01-04T23:37:54.841152",
+    "message_count": 14,
+    "total_tokens": 1099,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "433e5cdd-01cd-48c0-9b29-c3a019922f98",
+    "user_id": "c50b1690-5fd4-489f-b62b-b46c5de9dcd0",
+    "title": "Hr Policy Questions",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-21T00:14:52.841159",
+    "updated_at": "2025-12-22T04:14:52.841159",
+    "message_count": 15,
+    "total_tokens": 6834,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "completed"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "bf637b85-3f4e-4c90-845c-5a05404b84f4",
+    "user_id": "f92d5823-8a33-4577-8af2-d5a1ae6b4e0a",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-27T02:05:18.841169",
+    "updated_at": "2025-12-27T20:05:18.841169",
+    "message_count": 21,
+    "total_tokens": 5762,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "6289801d-3946-4910-a354-af71d969e1e6",
+    "user_id": "47b2e619-6f72-41bc-9aba-8b2a01418894",
+    "title": "Customer Feedback Summary",
+    "model": "gpt-4",
+    "created_at": "2025-12-28T09:04:57.841176",
+    "updated_at": "2025-12-30T07:04:57.841176",
+    "message_count": 13,
+    "total_tokens": 6276,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "ed1cc869-f191-4626-9635-b92e16d5836a",
+    "user_id": "4de0bcde-01ec-4a93-8432-ced825a7f4da",
+    "title": "Hr Policy Questions",
+    "model": "gemini-pro",
+    "created_at": "2025-11-30T19:29:49.841183",
+    "updated_at": "2025-12-02T09:29:49.841183",
+    "message_count": 2,
+    "total_tokens": 7679,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "63700567-241e-4e98-adc1-ccfc0aa7cd4f",
+    "user_id": "47b2e619-6f72-41bc-9aba-8b2a01418894",
+    "title": "Compliance Audit Findings",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-11-30T04:14:16.841191",
+    "updated_at": "2025-12-01T03:14:16.841191",
+    "message_count": 23,
+    "total_tokens": 7773,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "review"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "2591e08d-991b-47c1-934d-3d2e297524ad",
+    "user_id": "f92d5823-8a33-4577-8af2-d5a1ae6b4e0a",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-17T19:05:00.841198",
+    "updated_at": "2025-11-19T04:05:00.841198",
+    "message_count": 25,
+    "total_tokens": 6840,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "review"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Mobile App Launch"
+    }
+  },
+  {
+    "id": "7223833a-073e-4bc2-89e8-2c746f7c763e",
+    "user_id": "55203c1b-bc48-446d-98a4-6a0ba26c0456",
+    "title": "Strategic Planning Discussion",
+    "model": "gpt-4-turbo",
+    "created_at": "2026-01-01T23:16:49.841205",
+    "updated_at": "2026-01-02T03:16:49.841205",
+    "message_count": 8,
+    "total_tokens": 7906,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "cc615243-95e3-42dd-982e-ca7d26651d58",
+    "user_id": "ade41183-8c62-4867-9b95-342487a11e65",
+    "title": "Risk Assessment Report",
+    "model": "gemini-pro",
+    "created_at": "2026-01-06T22:03:07.841212",
+    "updated_at": "2026-01-07T08:03:07.841212",
+    "message_count": 11,
+    "total_tokens": 3352,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "aa02adbc-833f-4d6e-b146-f423689a484a",
+    "user_id": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "title": "Hr Policy Questions",
+    "model": "claude-3-sonnet",
+    "created_at": "2026-01-02T05:51:20.841221",
+    "updated_at": "2026-01-03T17:51:20.841221",
+    "message_count": 2,
+    "total_tokens": 6544,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "bf132b21-56a7-4084-822b-f7eb9df5e13d",
+    "user_id": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "title": "Team Performance Metrics",
+    "model": "gemini-pro",
+    "created_at": "2025-12-31T18:04:17.841228",
+    "updated_at": "2026-01-01T20:04:17.841228",
+    "message_count": 18,
+    "total_tokens": 9919,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "important",
+      "review"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "8f7c88d1-aafa-4311-b8b0-43c66b2249f1",
+    "user_id": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "title": "Customer Feedback Summary",
+    "model": "gpt-4-turbo",
+    "created_at": "2026-01-07T19:19:52.841235",
+    "updated_at": "2026-01-08T03:19:52.841235",
+    "message_count": 22,
+    "total_tokens": 7588,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "2192dfbc-2638-4550-94e8-1eddb9b3805e",
+    "user_id": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "title": "Customer Feedback Summary",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-16T14:33:18.841278",
+    "updated_at": "2025-12-17T23:33:18.841278",
+    "message_count": 24,
+    "total_tokens": 5153,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "completed"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "4324709a-da0b-4a8b-be16-424da12bd1eb",
+    "user_id": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "title": "Risk Assessment Report",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-11-24T08:24:18.841287",
+    "updated_at": "2025-11-25T21:24:18.841287",
+    "message_count": 18,
+    "total_tokens": 3026,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "important"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "56b9d343-5bc5-41e9-85d0-5db36210e0a5",
+    "user_id": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "title": "Project Status Update",
+    "model": "gpt-4-turbo",
+    "created_at": "2026-01-10T06:40:31.841294",
+    "updated_at": "2026-01-11T18:40:31.841294",
+    "message_count": 10,
+    "total_tokens": 7325,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "completed"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "afc0d901-4102-4efa-994c-2d202e87eeb1",
+    "user_id": "d18d2142-fa6d-4c2e-a834-79ac84e101cd",
+    "title": "Hr Policy Questions",
+    "model": "gpt-4",
+    "created_at": "2025-12-24T16:57:55.841301",
+    "updated_at": "2025-12-26T12:57:55.841301",
+    "message_count": 11,
+    "total_tokens": 1481,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "ff20052e-40c7-4728-b60e-2cd8436169b2",
+    "user_id": "0f775567-df8e-411e-82ff-eb013a0b70ed",
+    "title": "It Support Troubleshooting",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-16T06:45:44.841309",
+    "updated_at": "2025-12-16T14:45:44.841309",
+    "message_count": 25,
+    "total_tokens": 6570,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "6d6040d0-ea2b-4dc6-a203-16abad402197",
+    "user_id": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "title": "Competitor Analysis",
+    "model": "gpt-4",
+    "created_at": "2025-12-09T08:23:38.841317",
+    "updated_at": "2025-12-10T02:23:38.841317",
+    "message_count": 6,
+    "total_tokens": 6793,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "e1bc9106-a3c4-4437-b10c-fd3a007f9a90",
+    "user_id": "9f654358-9891-42f8-8225-6679cfac30d5",
+    "title": "Technical Documentation Review",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-30T17:59:45.841324",
+    "updated_at": "2025-12-02T00:59:45.841324",
+    "message_count": 17,
+    "total_tokens": 5555,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "731b969a-f706-4fcd-9b14-cb14b1a471cd",
+    "user_id": "e16cebcd-e133-49ec-bde4-69e9e6373ee6",
+    "title": "Compliance Audit Findings",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-19T13:00:22.841331",
+    "updated_at": "2025-12-20T20:00:22.841331",
+    "message_count": 3,
+    "total_tokens": 8210,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "099e6eaf-a042-4027-9cac-17f7bdffa167",
+    "user_id": "c50b1690-5fd4-489f-b62b-b46c5de9dcd0",
+    "title": "Market Research Insights",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-20T19:01:29.841338",
+    "updated_at": "2025-12-20T21:01:29.841338",
+    "message_count": 26,
+    "total_tokens": 7063,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "2520cf8f-5673-4c6f-a04f-e73dd8999adc",
+    "user_id": "3037c033-3a52-4b02-b202-b7eb82957008",
+    "title": "Risk Assessment Report",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-29T00:06:10.841345",
+    "updated_at": "2025-12-30T15:06:10.841345",
+    "message_count": 26,
+    "total_tokens": 2446,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "27eca8e9-496c-4682-9993-65fee6272a63",
+    "user_id": "9f654358-9891-42f8-8225-6679cfac30d5",
+    "title": "Compliance Audit Findings",
+    "model": "gpt-4",
+    "created_at": "2026-01-03T17:02:33.841352",
+    "updated_at": "2026-01-03T19:02:33.841352",
+    "message_count": 14,
+    "total_tokens": 1137,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "375d88bd-0566-4e6c-b9dd-03dc40a58117",
+    "user_id": "adf0560a-63fd-4c1e-81ca-45c5ad1b4979",
+    "title": "Marketing Campaign Analysis",
+    "model": "claude-3-sonnet",
+    "created_at": "2026-01-04T07:54:59.841359",
+    "updated_at": "2026-01-05T03:54:59.841359",
+    "message_count": 6,
+    "total_tokens": 3162,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "dfcc7823-d40b-4983-8259-c22e876c699b",
+    "user_id": "ff84bfe0-d875-4e32-ac5d-8f42fec2e9ed",
+    "title": "Risk Assessment Report",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2026-01-01T20:07:35.841367",
+    "updated_at": "2026-01-03T02:07:35.841367",
+    "message_count": 24,
+    "total_tokens": 772,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "9bdfd984-595e-47db-8ef3-257123872e4e",
+    "user_id": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "title": "Compliance Audit Findings",
+    "model": "gemini-pro",
+    "created_at": "2025-12-31T08:34:35.841374",
+    "updated_at": "2026-01-01T21:34:35.841374",
+    "message_count": 10,
+    "total_tokens": 9963,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "0e2030a4-c04b-42c7-847a-7568240fa49f",
+    "user_id": "ff84bfe0-d875-4e32-ac5d-8f42fec2e9ed",
+    "title": "Project Status Update",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-08T19:03:36.841382",
+    "updated_at": "2025-12-09T02:03:36.841382",
+    "message_count": 3,
+    "total_tokens": 3625,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "3e6d2708-ec3a-4942-81d7-a12beae19b9d",
+    "user_id": "545fe39f-6df5-471c-a4f2-36e73dce775d",
+    "title": "Risk Assessment Report",
+    "model": "claude-3-haiku",
+    "created_at": "2026-01-13T15:32:53.841389",
+    "updated_at": "2026-01-13T18:32:53.841389",
+    "message_count": 17,
+    "total_tokens": 2762,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Documentation Update"
+    }
+  },
+  {
+    "id": "990bd966-0656-4a2f-919c-43cc577996a5",
+    "user_id": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "title": "Marketing Campaign Analysis",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2026-01-06T00:58:37.841396",
+    "updated_at": "2026-01-07T19:58:37.841396",
+    "message_count": 12,
+    "total_tokens": 4831,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "d601cdbb-9555-4954-8c76-46dc93b91e92",
+    "user_id": "ee735570-941a-4169-8c0f-6e07d25c349f",
+    "title": "Market Research Insights",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-13T08:07:46.841404",
+    "updated_at": "2025-12-15T05:07:46.841404",
+    "message_count": 24,
+    "total_tokens": 8511,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "e6fd6225-f52d-4034-bf9c-196dcc868ea4",
+    "user_id": "0f775567-df8e-411e-82ff-eb013a0b70ed",
+    "title": "Team Performance Metrics",
+    "model": "gemini-pro",
+    "created_at": "2025-12-23T14:01:42.841412",
+    "updated_at": "2025-12-23T23:01:42.841412",
+    "message_count": 28,
+    "total_tokens": 5258,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": "Mobile App Launch"
+    }
+  },
+  {
+    "id": "85f52d73-d46f-499d-82fb-c71bb11e9d3b",
+    "user_id": "e2cca01e-58fe-4f37-93b6-53bbc3900fa3",
+    "title": "Strategic Planning Discussion",
+    "model": "gemini-pro",
+    "created_at": "2025-12-31T19:02:12.841418",
+    "updated_at": "2026-01-02T05:02:12.841418",
+    "message_count": 8,
+    "total_tokens": 4942,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "976f5af5-c021-40f3-8cd9-0fe735667331",
+    "user_id": "89efaa85-8087-481e-af10-f1acedb48baf",
+    "title": "Technical Documentation Review",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-08T19:40:09.841425",
+    "updated_at": "2025-12-09T09:40:09.841425",
+    "message_count": 3,
+    "total_tokens": 4314,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "important"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "ce0bcd6f-0118-4cbf-accb-2eaf7ef329d0",
+    "user_id": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "title": "Risk Assessment Report",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-30T14:43:49.841432",
+    "updated_at": "2025-12-01T20:43:49.841432",
+    "message_count": 15,
+    "total_tokens": 3767,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "55628a25-e895-4187-ba91-0a8770ebce24",
+    "user_id": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "title": "Risk Assessment Report",
+    "model": "gemini-pro",
+    "created_at": "2025-11-18T21:36:44.841439",
+    "updated_at": "2025-11-19T08:36:44.841439",
+    "message_count": 7,
+    "total_tokens": 1095,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "d164f9cb-9d0b-4742-b6e6-70c97a59d1bd",
+    "user_id": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "title": "Market Research Insights",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2026-01-09T10:08:53.841447",
+    "updated_at": "2026-01-10T04:08:53.841447",
+    "message_count": 21,
+    "total_tokens": 7944,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "64d1d1bb-51c0-45d6-9434-794917164e32",
+    "user_id": "c85ddb12-6ee1-46ed-8126-7f8ca53ce3d7",
+    "title": "Hr Policy Questions",
+    "model": "claude-3-haiku",
+    "created_at": "2025-11-26T05:11:13.841454",
+    "updated_at": "2025-11-27T10:11:13.841454",
+    "message_count": 12,
+    "total_tokens": 4715,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "a9c74ba9-a0d9-4c34-a46d-2a349d1e2826",
+    "user_id": "50a40004-0b5a-40ce-af04-8d0e6e0b7439",
+    "title": "It Support Troubleshooting",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-24T15:33:43.841461",
+    "updated_at": "2025-12-25T11:33:43.841461",
+    "message_count": 28,
+    "total_tokens": 1921,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "55f2530f-6c82-447c-85d9-9564c495388a",
+    "user_id": "b5b6022a-3454-4703-aefb-629674eae558",
+    "title": "Technical Documentation Review",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-11-15T22:36:59.841468",
+    "updated_at": "2025-11-17T02:36:59.841468",
+    "message_count": 10,
+    "total_tokens": 4874,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "137c6e1b-42b0-4ba9-b31e-e26bf39ba54a",
+    "user_id": "ade41183-8c62-4867-9b95-342487a11e65",
+    "title": "Quarterly Sales Analysis",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-11-26T18:11:05.841476",
+    "updated_at": "2025-11-27T19:11:05.841476",
+    "message_count": 16,
+    "total_tokens": 8733,
+    "is_archived": true,
+    "is_starred": true,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "92a2d8e5-f084-4d90-ac36-0f360a9808cf",
+    "user_id": "abf09b06-22b0-45c5-8abc-a4d01a35e79e",
+    "title": "Technical Documentation Review",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-06T13:18:27.841484",
+    "updated_at": "2025-12-07T18:18:27.841484",
+    "message_count": 6,
+    "total_tokens": 6621,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "c9a26944-9e46-46e9-9f27-1941b56a51d3",
+    "user_id": "47b2e619-6f72-41bc-9aba-8b2a01418894",
+    "title": "It Support Troubleshooting",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-23T05:28:21.841491",
+    "updated_at": "2025-11-25T02:28:21.841491",
+    "message_count": 18,
+    "total_tokens": 6427,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "Data Migration"
+    }
+  },
+  {
+    "id": "4bcdb1a3-b2d5-4f85-a24c-fbb9efe25bcb",
+    "user_id": "00c8cb3f-7d6e-42cc-b830-3ffd8b14252c",
+    "title": "Customer Feedback Summary",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-17T03:16:14.841498",
+    "updated_at": "2025-12-17T10:16:14.841498",
+    "message_count": 29,
+    "total_tokens": 3865,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "important"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "67c7a7b2-6e83-4a93-aec5-e68f8682ec6f",
+    "user_id": "e16cebcd-e133-49ec-bde4-69e9e6373ee6",
+    "title": "Team Performance Metrics",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-29T15:07:07.841506",
+    "updated_at": "2025-12-30T20:07:07.841506",
+    "message_count": 20,
+    "total_tokens": 5549,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "b8ae1a99-975d-42ef-988a-294c64358ead",
+    "user_id": "1dddfc60-c75f-4c99-a459-90292206da89",
+    "title": "Team Performance Metrics",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-18T17:30:41.841513",
+    "updated_at": "2025-12-18T20:30:41.841513",
+    "message_count": 24,
+    "total_tokens": 1630,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "review"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "b4cecb45-f7a8-4c4f-a5c5-65681ddb986c",
+    "user_id": "b5b6022a-3454-4703-aefb-629674eae558",
+    "title": "Budget Allocation Review",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-22T09:56:35.841520",
+    "updated_at": "2025-12-22T14:56:35.841520",
+    "message_count": 16,
+    "total_tokens": 9335,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "1ec8e3bf-569e-4d7a-842b-6f58423cee7d",
+    "user_id": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "title": "Risk Assessment Report",
+    "model": "gemini-pro",
+    "created_at": "2025-11-27T15:26:28.841527",
+    "updated_at": "2025-11-27T15:26:28.841527",
+    "message_count": 25,
+    "total_tokens": 872,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "review"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "5dcec825-bd2c-4400-ac7c-f56154195a11",
+    "user_id": "b3bfd063-2517-43d9-8703-9cec38c81982",
+    "title": "Competitor Analysis",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-18T21:18:42.841534",
+    "updated_at": "2025-12-20T19:18:42.841534",
+    "message_count": 6,
+    "total_tokens": 2348,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "bcd49f25-6095-4d54-82d9-a19dfc312309",
+    "user_id": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "title": "Compliance Audit Findings",
+    "model": "claude-3-haiku",
+    "created_at": "2025-11-18T12:56:22.841543",
+    "updated_at": "2025-11-20T09:56:22.841543",
+    "message_count": 16,
+    "total_tokens": 1297,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "68cf1403-900b-4fdc-87b1-644fce04e97d",
+    "user_id": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "title": "Customer Feedback Summary",
+    "model": "gemini-pro",
+    "created_at": "2026-01-03T04:51:48.841551",
+    "updated_at": "2026-01-05T02:51:48.841551",
+    "message_count": 11,
+    "total_tokens": 9938,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "1df8fe3e-6868-4ef7-be6f-f5287be6f0c2",
+    "user_id": "b3bfd063-2517-43d9-8703-9cec38c81982",
+    "title": "Technical Documentation Review",
+    "model": "gpt-4",
+    "created_at": "2025-12-25T10:21:58.841558",
+    "updated_at": "2025-12-26T21:21:58.841558",
+    "message_count": 11,
+    "total_tokens": 3369,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "0ddb0601-6fdf-48b6-9540-5c2bcb4acc66",
+    "user_id": "d32af08c-32a6-452a-b4f8-2fb4f760e050",
+    "title": "Hr Policy Questions",
+    "model": "claude-3-opus",
+    "created_at": "2026-01-05T04:47:19.841565",
+    "updated_at": "2026-01-06T06:47:19.841565",
+    "message_count": 12,
+    "total_tokens": 2944,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "ab7810bb-6e76-4479-a9b3-55ba890e001f",
+    "user_id": "d18d2142-fa6d-4c2e-a834-79ac84e101cd",
+    "title": "Strategic Planning Discussion",
+    "model": "gpt-4",
+    "created_at": "2025-11-29T07:03:54.841572",
+    "updated_at": "2025-11-30T18:03:54.841572",
+    "message_count": 27,
+    "total_tokens": 7261,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "23852346-f7cf-4822-a317-f24e00bc5895",
+    "user_id": "fd2506d6-92e3-4da8-ab23-7f127be0f3ea",
+    "title": "Technical Documentation Review",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-17T08:16:10.841578",
+    "updated_at": "2025-12-18T07:16:10.841578",
+    "message_count": 22,
+    "total_tokens": 2014,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "80f5fa0a-dae7-4b95-bbd1-8a9ba15c5fac",
+    "user_id": "1dddfc60-c75f-4c99-a459-90292206da89",
+    "title": "Compliance Audit Findings",
+    "model": "gpt-4-turbo",
+    "created_at": "2026-01-12T19:36:40.841598",
+    "updated_at": "2026-01-14T19:36:40.841598",
+    "message_count": 3,
+    "total_tokens": 9656,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "a9d946d3-d2a8-4a1e-aad9-a576fee99a89",
+    "user_id": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "title": "Technical Documentation Review",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-26T16:04:03.841606",
+    "updated_at": "2025-11-27T07:04:03.841606",
+    "message_count": 25,
+    "total_tokens": 3850,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "4f422a69-fb6a-41e4-ab8f-a846fc50e61e",
+    "user_id": "0e0961f9-7565-4f51-91e9-21f9604768d5",
+    "title": "Project Status Update",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-20T03:50:11.841614",
+    "updated_at": "2025-12-21T11:50:11.841614",
+    "message_count": 11,
+    "total_tokens": 8647,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "completed"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "6b042474-c05c-46d6-9f9f-c0f6dee5d74d",
+    "user_id": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "title": "Team Performance Metrics",
+    "model": "claude-3-haiku",
+    "created_at": "2025-11-19T17:13:32.841621",
+    "updated_at": "2025-11-20T02:13:32.841621",
+    "message_count": 20,
+    "total_tokens": 765,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "review",
+      "completed"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "db0a9741-2826-4aa7-8f29-7ab182ccc271",
+    "user_id": "f0377fe6-ad54-4308-84c0-be42650dd58d",
+    "title": "Technical Documentation Review",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-22T03:47:30.841629",
+    "updated_at": "2025-12-23T14:47:30.841629",
+    "message_count": 20,
+    "total_tokens": 6030,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "980251b8-64dd-43ac-91b2-1225eb3fb8b9",
+    "user_id": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "title": "Customer Feedback Summary",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-28T20:49:41.841636",
+    "updated_at": "2025-11-29T07:49:41.841636",
+    "message_count": 25,
+    "total_tokens": 9382,
+    "is_archived": true,
+    "is_starred": true,
+    "tags": [
+      "important",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "cec8155a-c2fe-4646-8f6f-c440500f489f",
+    "user_id": "b42c1e77-b23a-46f7-b167-fe7a9ca55090",
+    "title": "Customer Feedback Summary",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-07T17:58:48.841647",
+    "updated_at": "2025-12-07T17:58:48.841647",
+    "message_count": 4,
+    "total_tokens": 4083,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "review"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "aca0af76-2102-4d7b-b7d5-6e6f475eab2f",
+    "user_id": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "title": "Risk Assessment Report",
+    "model": "gpt-4",
+    "created_at": "2026-01-07T20:07:25.841655",
+    "updated_at": "2026-01-09T05:07:25.841655",
+    "message_count": 15,
+    "total_tokens": 5001,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "471c2019-2e4a-4756-8634-14f2b87b6cd4",
+    "user_id": "c45237c9-124c-4efb-bab1-414ca86d079c",
+    "title": "Customer Feedback Summary",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-08T16:11:57.841663",
+    "updated_at": "2025-12-09T08:11:57.841663",
+    "message_count": 8,
+    "total_tokens": 6307,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "2a7d1fcf-4947-4f3b-878b-9a779ba42654",
+    "user_id": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "title": "Market Research Insights",
+    "model": "gemini-pro",
+    "created_at": "2025-11-23T02:33:07.841670",
+    "updated_at": "2025-11-23T04:33:07.841670",
+    "message_count": 22,
+    "total_tokens": 2031,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "a3cf2000-d4b9-4e52-8268-0ef02a4f4031",
+    "user_id": "d7cf97d1-274a-4146-aefd-24eb63ddd226",
+    "title": "Competitor Analysis",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-27T09:47:01.841678",
+    "updated_at": "2025-12-27T15:47:01.841678",
+    "message_count": 22,
+    "total_tokens": 9153,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "review"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "54bd376c-dd82-4720-92a9-7030b8b8042f",
+    "user_id": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-12T12:01:03.841686",
+    "updated_at": "2025-12-14T06:01:03.841686",
+    "message_count": 30,
+    "total_tokens": 1039,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "50ad7f70-be32-428d-922d-55c6f752b909",
+    "user_id": "c85ddb12-6ee1-46ed-8126-7f8ca53ce3d7",
+    "title": "Marketing Campaign Analysis",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-22T17:58:42.841694",
+    "updated_at": "2025-11-23T08:58:42.841694",
+    "message_count": 11,
+    "total_tokens": 9784,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "review"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "100636eb-fb1a-4ae2-b905-883fdf9fa4a0",
+    "user_id": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "title": "Risk Assessment Report",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-18T20:36:43.841702",
+    "updated_at": "2025-12-19T10:36:43.841702",
+    "message_count": 3,
+    "total_tokens": 1745,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review",
+      "completed"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Documentation Update"
+    }
+  },
+  {
+    "id": "a5dcac4f-1da0-405c-8e7f-02700325f9a9",
+    "user_id": "3037c033-3a52-4b02-b202-b7eb82957008",
+    "title": "Competitor Analysis",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-07T10:18:07.841710",
+    "updated_at": "2025-12-08T13:18:07.841710",
+    "message_count": 13,
+    "total_tokens": 3543,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "d098423b-0ff9-4697-ac9c-e1b94bcfe6a2",
+    "user_id": "b5b6022a-3454-4703-aefb-629674eae558",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-11T07:07:16.841717",
+    "updated_at": "2025-12-12T23:07:16.841717",
+    "message_count": 6,
+    "total_tokens": 3027,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "00ad66de-55c0-436a-a915-913070af5f6c",
+    "user_id": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "title": "Market Research Insights",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-28T11:00:38.841724",
+    "updated_at": "2025-12-28T17:00:38.841724",
+    "message_count": 13,
+    "total_tokens": 2670,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "review"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "58e5db2b-c174-4ca7-9bed-869717c85b28",
+    "user_id": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "title": "Budget Allocation Review",
+    "model": "claude-3-sonnet",
+    "created_at": "2026-01-08T02:07:36.841732",
+    "updated_at": "2026-01-08T22:07:36.841732",
+    "message_count": 4,
+    "total_tokens": 6811,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "Data Migration"
+    }
+  },
+  {
+    "id": "b425d760-758c-48dd-8d2d-bb0160ceb4c4",
+    "user_id": "1079c127-6d94-45b6-a46b-357d4005d848",
+    "title": "Project Status Update",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-22T05:52:15.841741",
+    "updated_at": "2025-12-23T00:52:15.841741",
+    "message_count": 7,
+    "total_tokens": 4897,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "bd776c42-486e-400b-8861-7f13ca3fb214",
+    "user_id": "0e0961f9-7565-4f51-91e9-21f9604768d5",
+    "title": "Hr Policy Questions",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-11-22T17:56:27.841749",
+    "updated_at": "2025-11-24T15:56:27.841749",
+    "message_count": 13,
+    "total_tokens": 8623,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "2363cc74-c8f7-4540-9184-3050f2ff961e",
+    "user_id": "c45237c9-124c-4efb-bab1-414ca86d079c",
+    "title": "Team Performance Metrics",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-17T12:49:23.841756",
+    "updated_at": "2025-12-18T09:49:23.841756",
+    "message_count": 28,
+    "total_tokens": 7712,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "079f5567-fd14-48f8-b35d-654ed5c04897",
+    "user_id": "adf0560a-63fd-4c1e-81ca-45c5ad1b4979",
+    "title": "Strategic Planning Discussion",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-04T18:43:08.841764",
+    "updated_at": "2025-12-05T19:43:08.841764",
+    "message_count": 17,
+    "total_tokens": 5728,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "49a71b0d-4785-4dc0-a58c-1365bc6a84c7",
+    "user_id": "55203c1b-bc48-446d-98a4-6a0ba26c0456",
+    "title": "Market Research Insights",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-23T10:18:22.841771",
+    "updated_at": "2025-12-23T22:18:22.841771",
+    "message_count": 13,
+    "total_tokens": 9439,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "API Redesign"
+    }
+  },
+  {
+    "id": "8a84a264-5809-4223-88d0-a714de33d5da",
+    "user_id": "d32af08c-32a6-452a-b4f8-2fb4f760e050",
+    "title": "Competitor Analysis",
+    "model": "gpt-4",
+    "created_at": "2025-12-13T13:33:07.841779",
+    "updated_at": "2025-12-14T15:33:07.841779",
+    "message_count": 28,
+    "total_tokens": 8680,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "0df76e41-73be-4f18-acb1-b7fdd0b955d7",
+    "user_id": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "title": "Competitor Analysis",
+    "model": "claude-3-opus",
+    "created_at": "2026-01-12T07:59:16.841788",
+    "updated_at": "2026-01-13T17:59:16.841788",
+    "message_count": 17,
+    "total_tokens": 8800,
+    "is_archived": true,
+    "is_starred": true,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "9fed3464-2a6f-4d2e-a7b7-ee7e67f224d9",
+    "user_id": "76830006-41ab-425a-8e4f-54bde1f4a33c",
+    "title": "Strategic Planning Discussion",
+    "model": "gpt-4",
+    "created_at": "2026-01-06T09:46:57.841795",
+    "updated_at": "2026-01-06T15:46:57.841795",
+    "message_count": 21,
+    "total_tokens": 4567,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "important"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "303f84be-4d6b-4f32-8d2d-a654fe7d19d6",
+    "user_id": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "title": "Hr Policy Questions",
+    "model": "gpt-4",
+    "created_at": "2025-12-27T01:44:06.841803",
+    "updated_at": "2025-12-27T17:44:06.841803",
+    "message_count": 5,
+    "total_tokens": 4137,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "3caaa328-3b2a-451c-8f0a-37b018ee5137",
+    "user_id": "9f654358-9891-42f8-8225-6679cfac30d5",
+    "title": "Competitor Analysis",
+    "model": "gpt-4-turbo",
+    "created_at": "2026-01-11T10:12:54.841812",
+    "updated_at": "2026-01-12T08:12:54.841812",
+    "message_count": 24,
+    "total_tokens": 902,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": "Data Migration"
+    }
+  },
+  {
+    "id": "c370890d-3371-402e-b538-852e6742f50c",
+    "user_id": "d18d2142-fa6d-4c2e-a834-79ac84e101cd",
+    "title": "Budget Allocation Review",
+    "model": "gemini-pro",
+    "created_at": "2025-12-15T13:27:29.841819",
+    "updated_at": "2025-12-16T02:27:29.841819",
+    "message_count": 12,
+    "total_tokens": 9037,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "dadc2a22-87db-47ab-9ae0-c05b5f158000",
+    "user_id": "d7cf97d1-274a-4146-aefd-24eb63ddd226",
+    "title": "Quarterly Sales Analysis",
+    "model": "claude-3-haiku",
+    "created_at": "2025-11-26T10:52:09.841827",
+    "updated_at": "2025-11-26T16:52:09.841827",
+    "message_count": 2,
+    "total_tokens": 3192,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "follow-up",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Documentation Update"
+    }
+  },
+  {
+    "id": "be91e729-5e07-45e0-8071-3f90f92f913c",
+    "user_id": "f92d5823-8a33-4577-8af2-d5a1ae6b4e0a",
+    "title": "Technical Documentation Review",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-24T14:31:48.841834",
+    "updated_at": "2025-12-26T06:31:48.841834",
+    "message_count": 22,
+    "total_tokens": 7580,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "8730efd3-be65-464e-b0d0-3c06f8e4c405",
+    "user_id": "b3bfd063-2517-43d9-8703-9cec38c81982",
+    "title": "Quarterly Sales Analysis",
+    "model": "gemini-pro",
+    "created_at": "2025-12-06T03:12:44.841842",
+    "updated_at": "2025-12-08T00:12:44.841842",
+    "message_count": 8,
+    "total_tokens": 1525,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up",
+      "completed"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "1e7df7e9-961a-4741-8280-2535c08eb8b7",
+    "user_id": "26dd68f2-64cd-4308-b368-1eee114b3b97",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-10T18:01:43.841850",
+    "updated_at": "2025-12-12T10:01:43.841850",
+    "message_count": 23,
+    "total_tokens": 5634,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "completed"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "33e71aee-a4c3-496a-9649-e4c105c1740b",
+    "user_id": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "title": "Customer Feedback Summary",
+    "model": "gpt-4",
+    "created_at": "2025-12-14T03:47:52.841858",
+    "updated_at": "2025-12-15T22:47:52.841858",
+    "message_count": 21,
+    "total_tokens": 2694,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "945a3de0-44ea-4705-b256-b155a5ba11ec",
+    "user_id": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "title": "Customer Feedback Summary",
+    "model": "claude-3-sonnet",
+    "created_at": "2026-01-03T21:00:33.841865",
+    "updated_at": "2026-01-04T05:00:33.841865",
+    "message_count": 14,
+    "total_tokens": 9917,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "2a919ccf-fa85-472b-bac9-d5f0d0c4002b",
+    "user_id": "47b2e619-6f72-41bc-9aba-8b2a01418894",
+    "title": "Customer Feedback Summary",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-03T10:40:20.841873",
+    "updated_at": "2025-12-03T13:40:20.841873",
+    "message_count": 12,
+    "total_tokens": 6382,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "6ebc81fd-d847-4ab4-8c47-96f61cc907e5",
+    "user_id": "4a3c4f3f-e070-4b4c-96db-1f9fb722a238",
+    "title": "Project Status Update",
+    "model": "claude-3-opus",
+    "created_at": "2026-01-02T08:03:52.841880",
+    "updated_at": "2026-01-03T10:03:52.841880",
+    "message_count": 15,
+    "total_tokens": 7772,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "c1bf5579-829b-43bc-b048-3c45ceae9a8a",
+    "user_id": "c78b6237-1244-4527-9487-5327b850f2fe",
+    "title": "Market Research Insights",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-07T02:37:27.841888",
+    "updated_at": "2025-12-08T07:37:27.841888",
+    "message_count": 19,
+    "total_tokens": 9767,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent",
+      "important"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "ff1af49f-3e5a-4d43-b7bb-574434774f70",
+    "user_id": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "title": "Risk Assessment Report",
+    "model": "gpt-4",
+    "created_at": "2025-12-20T21:33:03.841897",
+    "updated_at": "2025-12-22T21:33:03.841897",
+    "message_count": 19,
+    "total_tokens": 7731,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "af2eb98e-5746-4620-9ed6-2b46c6eb5cbf",
+    "user_id": "0f775567-df8e-411e-82ff-eb013a0b70ed",
+    "title": "Quarterly Sales Analysis",
+    "model": "gemini-pro",
+    "created_at": "2025-12-28T22:39:12.841905",
+    "updated_at": "2025-12-29T03:39:12.841905",
+    "message_count": 10,
+    "total_tokens": 7693,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "5272f559-cbd9-47d5-b167-e72737967585",
+    "user_id": "b42c1e77-b23a-46f7-b167-fe7a9ca55090",
+    "title": "Strategic Planning Discussion",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-19T07:43:48.841913",
+    "updated_at": "2025-12-20T23:43:48.841913",
+    "message_count": 29,
+    "total_tokens": 7515,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "c6dd26f0-a7cc-492c-aa58-ead5f28a3505",
+    "user_id": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "title": "Budget Allocation Review",
+    "model": "claude-3-sonnet",
+    "created_at": "2026-01-05T23:00:18.841920",
+    "updated_at": "2026-01-06T09:00:18.841920",
+    "message_count": 10,
+    "total_tokens": 5802,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "important"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "cfca8bec-2aac-45c9-8933-a70d8916ddf4",
+    "user_id": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "title": "Marketing Campaign Analysis",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-11-21T00:50:50.841935",
+    "updated_at": "2025-11-22T20:50:50.841935",
+    "message_count": 10,
+    "total_tokens": 2674,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "c5e49a19-f182-4c91-b44e-d5f99e7a8931",
+    "user_id": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "title": "Compliance Audit Findings",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-11T08:51:26.841944",
+    "updated_at": "2025-12-12T12:51:26.841944",
+    "message_count": 22,
+    "total_tokens": 1737,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Mobile App Launch"
+    }
+  },
+  {
+    "id": "dd3e9bd8-9c27-4541-98d1-7d617311b159",
+    "user_id": "26dd68f2-64cd-4308-b368-1eee114b3b97",
+    "title": "Strategic Planning Discussion",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-21T02:41:57.841951",
+    "updated_at": "2025-12-22T15:41:57.841951",
+    "message_count": 16,
+    "total_tokens": 540,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "9d4ba7e5-b8bd-42fe-9cba-fed40f23ed65",
+    "user_id": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "title": "It Support Troubleshooting",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-21T10:16:20.841960",
+    "updated_at": "2025-11-21T23:16:20.841960",
+    "message_count": 27,
+    "total_tokens": 7539,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Data Migration"
+    }
+  },
+  {
+    "id": "fb2777c9-b586-4c4b-915a-68528a9353be",
+    "user_id": "d7cf97d1-274a-4146-aefd-24eb63ddd226",
+    "title": "Compliance Audit Findings",
+    "model": "claude-3-haiku",
+    "created_at": "2026-01-01T09:37:13.841967",
+    "updated_at": "2026-01-03T09:37:13.841967",
+    "message_count": 27,
+    "total_tokens": 1293,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Data Migration"
+    }
+  },
+  {
+    "id": "ae4a6fd7-4309-40a3-afbd-394610de04d1",
+    "user_id": "50a40004-0b5a-40ce-af04-8d0e6e0b7439",
+    "title": "Competitor Analysis",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-29T14:27:55.841975",
+    "updated_at": "2025-12-31T10:27:55.841975",
+    "message_count": 2,
+    "total_tokens": 2661,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "73c62431-9207-45f3-85db-5e8f24724bd8",
+    "user_id": "c50b1690-5fd4-489f-b62b-b46c5de9dcd0",
+    "title": "Budget Allocation Review",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-01T08:24:09.841983",
+    "updated_at": "2025-12-02T03:24:09.841983",
+    "message_count": 3,
+    "total_tokens": 4336,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "14f915a7-7fcc-4249-8722-4653f5d9a9d3",
+    "user_id": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-28T03:54:50.841990",
+    "updated_at": "2025-11-29T22:54:50.841990",
+    "message_count": 20,
+    "total_tokens": 7791,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Documentation Update"
+    }
+  },
+  {
+    "id": "d3dee71b-10a4-4b59-bae6-fcbe87fde49d",
+    "user_id": "fd2506d6-92e3-4da8-ab23-7f127be0f3ea",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-07T12:11:09.842001",
+    "updated_at": "2025-12-07T18:11:09.842001",
+    "message_count": 14,
+    "total_tokens": 2190,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": "Data Migration"
+    }
+  },
+  {
+    "id": "1bd60838-e3e3-406a-923e-3aaa9d395f5b",
+    "user_id": "00c8cb3f-7d6e-42cc-b830-3ffd8b14252c",
+    "title": "Project Status Update",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-29T03:34:22.842009",
+    "updated_at": "2025-11-29T03:34:22.842009",
+    "message_count": 4,
+    "total_tokens": 3188,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up",
+      "review"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "c6547553-32db-400b-9000-a43ce3e7c0bf",
+    "user_id": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "title": "Marketing Campaign Analysis",
+    "model": "gpt-4",
+    "created_at": "2025-11-25T00:48:06.842017",
+    "updated_at": "2025-11-26T13:48:06.842017",
+    "message_count": 6,
+    "total_tokens": 6791,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "85a7cd3a-e859-480b-9f4a-756261bdd9fc",
+    "user_id": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-09T08:58:19.842024",
+    "updated_at": "2025-12-11T06:58:19.842024",
+    "message_count": 19,
+    "total_tokens": 5168,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": "Mobile App Launch"
+    }
+  },
+  {
+    "id": "8f493a68-ad67-44c2-b94d-a710a6773ca5",
+    "user_id": "f0377fe6-ad54-4308-84c0-be42650dd58d",
+    "title": "Project Status Update",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-20T13:51:23.842032",
+    "updated_at": "2025-11-21T13:51:23.842032",
+    "message_count": 27,
+    "total_tokens": 2347,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "6de8cb5d-ebf2-403c-9d4c-4c6451359569",
+    "user_id": "ff84bfe0-d875-4e32-ac5d-8f42fec2e9ed",
+    "title": "Customer Feedback Summary",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-22T20:05:58.842039",
+    "updated_at": "2025-12-23T19:05:58.842039",
+    "message_count": 29,
+    "total_tokens": 9451,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "e81aacc4-058e-4ebd-a392-687b1f35de0b",
+    "user_id": "e16cebcd-e133-49ec-bde4-69e9e6373ee6",
+    "title": "Market Research Insights",
+    "model": "gemini-pro",
+    "created_at": "2025-12-06T05:25:06.842046",
+    "updated_at": "2025-12-07T06:25:06.842046",
+    "message_count": 3,
+    "total_tokens": 8800,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "review"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "f3c50340-8413-43e3-b110-68524f798f83",
+    "user_id": "4de0bcde-01ec-4a93-8432-ced825a7f4da",
+    "title": "Risk Assessment Report",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2026-01-06T11:31:44.842054",
+    "updated_at": "2026-01-06T16:31:44.842054",
+    "message_count": 21,
+    "total_tokens": 5577,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "d593a694-08e9-4737-807e-afeed3d18601",
+    "user_id": "d32af08c-32a6-452a-b4f8-2fb4f760e050",
+    "title": "Project Status Update",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-21T16:45:37.842062",
+    "updated_at": "2025-11-23T14:45:37.842062",
+    "message_count": 11,
+    "total_tokens": 4409,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "slack",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "5e1e96c3-eabc-4edc-b04a-8b6b66f164d7",
+    "user_id": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "title": "Market Research Insights",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-02T07:59:08.842070",
+    "updated_at": "2025-12-02T15:59:08.842070",
+    "message_count": 5,
+    "total_tokens": 685,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [
+      "urgent",
+      "completed"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "fcf6280c-bd50-4c98-ad29-e1fd3717474a",
+    "user_id": "55203c1b-bc48-446d-98a4-6a0ba26c0456",
+    "title": "Strategic Planning Discussion",
+    "model": "gemini-pro",
+    "created_at": "2025-12-11T08:58:03.842077",
+    "updated_at": "2025-12-11T09:58:03.842077",
+    "message_count": 25,
+    "total_tokens": 5988,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "89c93fad-eca7-45c7-a430-41788ad2dcd5",
+    "user_id": "d18d2142-fa6d-4c2e-a834-79ac84e101cd",
+    "title": "Project Status Update",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-22T18:17:14.842085",
+    "updated_at": "2025-11-23T17:17:14.842085",
+    "message_count": 17,
+    "total_tokens": 1408,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Analytics Dashboard"
+    }
+  },
+  {
+    "id": "291ae9a1-cc73-457e-9d5f-b9bf38e8071b",
+    "user_id": "545fe39f-6df5-471c-a4f2-36e73dce775d",
+    "title": "Project Status Update",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-26T11:26:52.842092",
+    "updated_at": "2025-11-26T11:26:52.842092",
+    "message_count": 9,
+    "total_tokens": 1221,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "f9678fc7-d893-4f52-9f52-1b4cc15aeaef",
+    "user_id": "35028ac8-ce5b-47e9-8292-17910e66608d",
+    "title": "Marketing Campaign Analysis",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-11-29T20:25:25.842099",
+    "updated_at": "2025-12-01T17:25:25.842099",
+    "message_count": 7,
+    "total_tokens": 7370,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "urgent"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Customer Portal v2"
+    }
+  },
+  {
+    "id": "7c6c3da4-7a8f-4621-b906-fa211f445e4c",
+    "user_id": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "title": "Risk Assessment Report",
+    "model": "gemini-pro",
+    "created_at": "2025-11-20T09:26:10.842107",
+    "updated_at": "2025-11-21T18:26:10.842107",
+    "message_count": 7,
+    "total_tokens": 1252,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": null
+    }
+  },
+  {
+    "id": "19f9d734-5ac2-490d-b272-4ebcb7ad2bc8",
+    "user_id": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "title": "Risk Assessment Report",
+    "model": "gpt-4-turbo",
+    "created_at": "2025-12-29T14:59:48.842115",
+    "updated_at": "2025-12-30T08:59:48.842115",
+    "message_count": 2,
+    "total_tokens": 9737,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "f0127147-31f2-4818-8bc2-8179f2bb819d",
+    "user_id": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "title": "Competitor Analysis",
+    "model": "gemini-pro",
+    "created_at": "2025-12-04T06:04:06.842123",
+    "updated_at": "2025-12-04T21:04:06.842123",
+    "message_count": 25,
+    "total_tokens": 2966,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "mobile",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "525090f7-b44d-4fa0-9687-dc4f68cc39d8",
+    "user_id": "89efaa85-8087-481e-af10-f1acedb48baf",
+    "title": "Budget Allocation Review",
+    "model": "claude-3-opus",
+    "created_at": "2025-11-15T10:06:28.842130",
+    "updated_at": "2025-11-17T09:06:28.842130",
+    "message_count": 26,
+    "total_tokens": 5538,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "slack",
+      "project": null
+    }
+  },
+  {
+    "id": "78b9150b-f6ae-4318-b629-144233731538",
+    "user_id": "b3bfd063-2517-43d9-8703-9cec38c81982",
+    "title": "Quarterly Sales Analysis",
+    "model": "gpt-4",
+    "created_at": "2025-11-29T02:27:19.842137",
+    "updated_at": "2025-11-29T04:27:19.842137",
+    "message_count": 24,
+    "total_tokens": 4292,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed",
+      "review"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Integration Hub"
+    }
+  },
+  {
+    "id": "9e749d58-9adc-488a-a4a2-f40cd10d8223",
+    "user_id": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "title": "Customer Feedback Summary",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-23T13:36:22.842145",
+    "updated_at": "2025-12-23T16:36:22.842145",
+    "message_count": 4,
+    "total_tokens": 7626,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "completed"
+    ],
+    "metadata": {
+      "source": "mobile",
+      "project": "Performance Optimization"
+    }
+  },
+  {
+    "id": "10f8c941-1ef2-4593-b1b3-8319577123bc",
+    "user_id": "47b2e619-6f72-41bc-9aba-8b2a01418894",
+    "title": "Strategic Planning Discussion",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2025-12-16T22:55:20.842153",
+    "updated_at": "2025-12-17T12:55:20.842153",
+    "message_count": 12,
+    "total_tokens": 1723,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "abd55af2-69b6-4d4f-af1f-f3a806edce50",
+    "user_id": "55203c1b-bc48-446d-98a4-6a0ba26c0456",
+    "title": "Competitor Analysis",
+    "model": "claude-3-sonnet",
+    "created_at": "2025-12-15T18:27:06.842161",
+    "updated_at": "2025-12-16T16:27:06.842161",
+    "message_count": 15,
+    "total_tokens": 3901,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "9ed67418-86d6-4b29-ae02-554bcb340be8",
+    "user_id": "b42c1e77-b23a-46f7-b167-fe7a9ca55090",
+    "title": "Project Status Update",
+    "model": "claude-3-haiku",
+    "created_at": "2025-12-14T19:34:24.842169",
+    "updated_at": "2025-12-16T09:34:24.842169",
+    "message_count": 28,
+    "total_tokens": 1160,
+    "is_archived": false,
+    "is_starred": true,
+    "tags": [],
+    "metadata": {
+      "source": "web",
+      "project": "Security Audit"
+    }
+  },
+  {
+    "id": "028d9483-e9a6-4f8d-9a6b-6d4ad0af763c",
+    "user_id": "4a3c4f3f-e070-4b4c-96db-1f9fb722a238",
+    "title": "Team Performance Metrics",
+    "model": "gpt-3.5-turbo",
+    "created_at": "2026-01-04T03:08:55.842176",
+    "updated_at": "2026-01-04T19:08:55.842176",
+    "message_count": 3,
+    "total_tokens": 3348,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "urgent"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  },
+  {
+    "id": "16068d9c-0cb4-4fc2-b667-9eb0db786a23",
+    "user_id": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "title": "Product Roadmap Planning",
+    "model": "gpt-4",
+    "created_at": "2025-11-28T20:26:33.842185",
+    "updated_at": "2025-11-29T10:26:33.842185",
+    "message_count": 5,
+    "total_tokens": 2641,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "important",
+      "completed"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": null
+    }
+  },
+  {
+    "id": "fc74263b-ba4b-413c-9c92-0ebf4521db70",
+    "user_id": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "title": "Product Roadmap Planning",
+    "model": "claude-3-opus",
+    "created_at": "2025-12-04T11:29:34.842194",
+    "updated_at": "2025-12-04T19:29:34.842194",
+    "message_count": 30,
+    "total_tokens": 2006,
+    "is_archived": true,
+    "is_starred": false,
+    "tags": [
+      "important"
+    ],
+    "metadata": {
+      "source": "web",
+      "project": "Project Alpha"
+    }
+  },
+  {
+    "id": "2e87caed-3ee7-43a4-8cdf-1aa56d06f8ff",
+    "user_id": "9b258240-6ff3-444c-abd2-b5b6e0c8a9d6",
+    "title": "Customer Feedback Summary",
+    "model": "claude-3-opus",
+    "created_at": "2026-01-09T23:56:53.842201",
+    "updated_at": "2026-01-11T06:56:53.842201",
+    "message_count": 15,
+    "total_tokens": 983,
+    "is_archived": false,
+    "is_starred": false,
+    "tags": [
+      "follow-up"
+    ],
+    "metadata": {
+      "source": "api",
+      "project": null
+    }
+  }
+]

@@ -1,0 +1,240 @@
+version: "3.9"
+
+# =============================================================================
+# Authentication & Authorization Services
+# Includes: Keycloak, OAuth2 Proxy, OpenFGA, OpenBao
+# =============================================================================
+
+x-common-labels: &common-labels
+  app.kubernetes.io/part-of: nexusai
+  app.kubernetes.io/managed-by: docker-compose
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-healthcheck-defaults: &healthcheck-defaults
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 60s
+
+services:
+  # =============================================================================
+  # Keycloak - Identity and Access Management
+  # =============================================================================
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0
+    container_name: nexusai-keycloak
+    restart: unless-stopped
+    command:
+      - start
+      - --hostname=${KEYCLOAK_HOSTNAME:-auth.${DOMAIN:-localhost}}
+      - --hostname-strict=false
+      - --proxy=edge
+      - --http-enabled=true
+    environment:
+      # Admin credentials
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN:-admin}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      # Database configuration
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB:-nexusai}
+      - KC_DB_USERNAME=${POSTGRES_USER:-nexusai}
+      - KC_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - KC_DB_SCHEMA=keycloak
+      # Features
+      - KC_FEATURES=token-exchange,admin-fine-grained-authz
+      # Health
+      - KC_HEALTH_ENABLED=true
+      - KC_METRICS_ENABLED=true
+      # Logging
+      - KC_LOG_LEVEL=${KEYCLOAK_LOG_LEVEL:-info}
+    volumes:
+      - ./deploy/keycloak/themes:/opt/keycloak/themes:ro
+      - ./deploy/keycloak/realm-export.json:/opt/keycloak/data/import/realm.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - nexusai-internal
+      - nexusai-public
+    expose:
+      - "8080"
+    labels:
+      <<: *common-labels
+      traefik.enable: "true"
+      traefik.http.routers.keycloak.rule: "Host(`auth.${DOMAIN:-localhost}`)"
+      traefik.http.routers.keycloak.tls.certresolver: "letsencrypt"
+      traefik.http.services.keycloak.loadbalancer.server.port: "8080"
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e 'GET /health/ready HTTP/1.1\r\nhost: localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"]
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    logging: *default-logging
+
+  # =============================================================================
+  # OAuth2 Proxy - Authentication Proxy for Services
+  # =============================================================================
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.5.1
+    container_name: nexusai-oauth2-proxy
+    restart: unless-stopped
+    command:
+      - --http-address=0.0.0.0:4180
+      - --reverse-proxy=true
+      - --provider=keycloak-oidc
+      - --client-id=${OAUTH2_PROXY_CLIENT_ID:-nexusai-proxy}
+      - --client-secret=${OAUTH2_PROXY_CLIENT_SECRET}
+      - --redirect-url=https://${DOMAIN:-localhost}/oauth2/callback
+      - --oidc-issuer-url=https://auth.${DOMAIN:-localhost}/realms/${KEYCLOAK_REALM:-nexusai}
+      - --cookie-secret=${OAUTH2_PROXY_COOKIE_SECRET}
+      - --cookie-secure=true
+      - --cookie-httponly=true
+      - --cookie-samesite=lax
+      - --email-domain=*
+      - --upstream=http://frontend:3000
+      - --skip-provider-button=true
+      - --silence-ping-logging=true
+      - --session-store-type=redis
+      - --redis-connection-url=redis://:${REDIS_PASSWORD}@redis:6379/1
+    depends_on:
+      keycloak:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexusai-internal
+    expose:
+      - "4180"
+    labels:
+      <<: *common-labels
+      traefik.enable: "true"
+      traefik.http.routers.oauth2-proxy.rule: "Host(`${DOMAIN:-localhost}`) && PathPrefix(`/oauth2`)"
+      traefik.http.routers.oauth2-proxy.tls.certresolver: "letsencrypt"
+      traefik.http.services.oauth2-proxy.loadbalancer.server.port: "4180"
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4180/ping"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128M
+        reservations:
+          cpus: "0.1"
+          memory: 64M
+    logging: *default-logging
+
+  # =============================================================================
+  # OpenFGA - Fine-Grained Authorization
+  # =============================================================================
+  openfga:
+    image: openfga/openfga:v1.4.3
+    container_name: nexusai-openfga
+    restart: unless-stopped
+    command: run
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://${POSTGRES_USER:-nexusai}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-nexusai}?sslmode=disable&search_path=openfga
+      - OPENFGA_LOG_FORMAT=json
+      - OPENFGA_LOG_LEVEL=${OPENFGA_LOG_LEVEL:-info}
+      - OPENFGA_HTTP_ADDR=0.0.0.0:8080
+      - OPENFGA_GRPC_ADDR=0.0.0.0:8081
+      - OPENFGA_PLAYGROUND_ENABLED=${OPENFGA_PLAYGROUND_ENABLED:-false}
+      - OPENFGA_METRICS_ENABLED=true
+      - OPENFGA_METRICS_ADDR=0.0.0.0:2112
+    depends_on:
+      postgres:
+        condition: service_healthy
+      openfga-migrate:
+        condition: service_completed_successfully
+    networks:
+      - nexusai-internal
+    expose:
+      - "8080"
+      - "8081"
+      - "2112"
+    labels:
+      <<: *common-labels
+      traefik.enable: "false"
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "/usr/local/bin/grpc_health_probe", "-addr=:8081"]
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    logging: *default-logging
+
+  # OpenFGA Database Migration
+  openfga-migrate:
+    image: openfga/openfga:v1.4.3
+    container_name: nexusai-openfga-migrate
+    command: migrate
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://${POSTGRES_USER:-nexusai}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-nexusai}?sslmode=disable&search_path=openfga
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - nexusai-internal
+    labels:
+      <<: *common-labels
+
+  # =============================================================================
+  # OpenBao - Secrets Management (Vault Fork)
+  # =============================================================================
+  openbao:
+    image: quay.io/openbao/openbao:2.0.0
+    container_name: nexusai-openbao
+    restart: unless-stopped
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - BAO_ADDR=http://127.0.0.1:8200
+      - BAO_API_ADDR=http://openbao:8200
+      - BAO_LOG_LEVEL=${OPENBAO_LOG_LEVEL:-info}
+    volumes:
+      - ./deploy/openbao/config.hcl:/openbao/config/config.hcl:ro
+      - openbao-data:/openbao/data
+    command: server -config=/openbao/config/config.hcl
+    networks:
+      - nexusai-internal
+    expose:
+      - "8200"
+    labels:
+      <<: *common-labels
+      traefik.enable: "false"
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "bao", "status", "-tls-skip-verify"]
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.1"
+          memory: 64M
+    logging: *default-logging
+
+volumes:
+  openbao-data:
+    name: nexusai-openbao-data

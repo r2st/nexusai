@@ -1,0 +1,402 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/20 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/40;
+}
+
+/* Code blocks */
+pre {
+  @apply rounded-lg bg-muted p-4 overflow-x-auto;
+}
+
+code {
+  @apply rounded bg-muted px-1.5 py-0.5 text-sm font-mono;
+}
+
+pre code {
+  @apply bg-transparent p-0;
+}
+
+/* Markdown styles */
+.prose {
+  @apply max-w-none;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  @apply font-semibold tracking-tight;
+}
+
+.prose a {
+  @apply text-primary underline underline-offset-4;
+}
+
+.prose ul,
+.prose ol {
+  @apply my-2 pl-6;
+}
+
+.prose ul {
+  @apply list-disc;
+}
+
+.prose ol {
+  @apply list-decimal;
+}
+
+.prose li {
+  @apply my-1;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-muted-foreground/30 pl-4 italic;
+}
+
+.prose table {
+  @apply w-full border-collapse;
+}
+
+.prose th,
+.prose td {
+  @apply border border-border px-3 py-2 text-left;
+}
+
+.prose th {
+  @apply bg-muted font-semibold;
+}
+
+/* Animation for streaming text */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink::after {
+  content: '▋';
+  animation: blink 1s infinite;
+}
+
+/* =============================================================================
+   RESPONSIVE UTILITIES
+   ============================================================================= */
+
+/* Mobile-first responsive panels */
+.responsive-panel {
+  @apply fixed inset-0 z-50 bg-background;
+}
+
+@media (min-width: 768px) {
+  .responsive-panel {
+    @apply relative inset-auto z-auto;
+    @apply w-80 border-l;
+  }
+}
+
+.responsive-panel--collapsed {
+  @apply hidden;
+}
+
+@media (min-width: 768px) {
+  .responsive-panel--collapsed {
+    @apply flex w-12;
+  }
+}
+
+/* Bottom sheet for mobile */
+.bottom-sheet {
+  @apply fixed inset-x-0 bottom-0 z-50;
+  @apply rounded-t-xl bg-background shadow-xl;
+  @apply transform transition-transform duration-300 ease-out;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.bottom-sheet--closed {
+  transform: translateY(100%);
+}
+
+.bottom-sheet--open {
+  transform: translateY(0);
+}
+
+.bottom-sheet__handle {
+  @apply mx-auto my-3;
+  width: 48px;
+  height: 4px;
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 2px;
+}
+
+/* Drawer for tablet/mobile sidebar */
+.drawer {
+  @apply fixed inset-y-0 left-0 z-50;
+  @apply bg-background shadow-xl;
+  width: 288px;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-out;
+}
+
+.drawer--open {
+  transform: translateX(0);
+}
+
+.drawer__overlay {
+  @apply fixed inset-0 z-40;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s;
+}
+
+.drawer__overlay--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Chat layout responsive */
+.chat-layout {
+  @apply flex flex-col h-screen;
+}
+
+@media (min-width: 768px) {
+  .chat-layout {
+    @apply flex-row;
+  }
+}
+
+.chat-sidebar {
+  @apply hidden;
+}
+
+@media (min-width: 768px) {
+  .chat-sidebar {
+    @apply flex w-64 flex-col border-r;
+  }
+}
+
+.chat-main {
+  @apply flex-1 flex flex-col min-w-0;
+}
+
+.chat-context {
+  @apply hidden;
+}
+
+@media (min-width: 1024px) {
+  .chat-context {
+    @apply flex w-80 border-l;
+  }
+}
+
+/* Message container responsive */
+.message-container {
+  @apply px-4 py-6;
+}
+
+@media (min-width: 768px) {
+  .message-container {
+    @apply px-6;
+  }
+}
+
+@media (min-width: 1024px) {
+  .message-container {
+    @apply px-8;
+  }
+}
+
+/* Input area responsive */
+.chat-input-container {
+  @apply sticky bottom-0 left-0 right-0;
+  @apply bg-background border-t;
+  @apply p-2;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  .chat-input-container {
+    @apply p-4;
+  }
+}
+
+/* Touch-friendly targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  @apply flex items-center justify-center;
+}
+
+/* Focus visible for keyboard navigation */
+.focus-ring {
+  @apply focus:outline-none;
+}
+
+.focus-ring:focus-visible {
+  @apply ring-2 ring-ring ring-offset-2;
+}
+
+/* Loading skeleton animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted-foreground) / 0.1) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Virtualized list container */
+.virtualized-list {
+  @apply relative overflow-y-auto;
+  will-change: scroll-position;
+}
+
+.virtualized-list__inner {
+  @apply relative;
+}
+
+.virtualized-list__item {
+  @apply absolute left-0 right-0;
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =============================================================================
+   PRINT STYLES
+   ============================================================================= */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .chat-sidebar,
+  .chat-context {
+    display: none !important;
+  }
+
+  .chat-main {
+    width: 100% !important;
+  }
+
+  .message-container {
+    break-inside: avoid;
+  }
+}

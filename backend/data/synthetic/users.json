@@ -1,0 +1,1052 @@
+[
+  {
+    "id": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "email": "mary.smith@example.com",
+    "full_name": "Mary Smith",
+    "role": "user",
+    "department": "Data Science",
+    "is_active": true,
+    "created_at": "2025-12-09T06:34:36.839306",
+    "last_login": "2025-12-26T02:45:37.839345",
+    "preferences": {
+      "theme": "system",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 21,
+      "total_messages": 264,
+      "total_documents_uploaded": 11,
+      "tokens_used_this_month": 115629
+    }
+  },
+  {
+    "id": "9f243db0-1119-4bd3-b225-9faf5cdaed48",
+    "email": "patricia.rodriguez@example.com",
+    "full_name": "Patricia Rodriguez",
+    "role": "user",
+    "department": "Legal",
+    "is_active": true,
+    "created_at": "2025-11-12T04:18:42.839391",
+    "last_login": null,
+    "preferences": {
+      "theme": "dark",
+      "language": "fr",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 8,
+      "total_messages": 1327,
+      "total_documents_uploaded": 89,
+      "tokens_used_this_month": 222571
+    }
+  },
+  {
+    "id": "35028ac8-ce5b-47e9-8292-17910e66608d",
+    "email": "jennifer.jones@nexusai.com",
+    "full_name": "Jennifer Jones",
+    "role": "admin",
+    "department": "Sales",
+    "is_active": true,
+    "created_at": "2025-08-17T11:17:17.839405",
+    "last_login": "2025-12-31T14:51:43.839407",
+    "preferences": {
+      "theme": "dark",
+      "language": "fr",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 378,
+      "total_messages": 3783,
+      "total_documents_uploaded": 68,
+      "tokens_used_this_month": 66444
+    }
+  },
+  {
+    "id": "e16cebcd-e133-49ec-bde4-69e9e6373ee6",
+    "email": "michael.johnson@example.com",
+    "full_name": "Michael Johnson",
+    "role": "user",
+    "department": "Engineering",
+    "is_active": true,
+    "created_at": "2025-11-02T11:23:48.839417",
+    "last_login": "2026-01-01T20:02:11.839418",
+    "preferences": {
+      "theme": "dark",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 448,
+      "total_messages": 847,
+      "total_documents_uploaded": 48,
+      "tokens_used_this_month": 146738
+    }
+  },
+  {
+    "id": "1dddfc60-c75f-4c99-a459-90292206da89",
+    "email": "linda.garcia@company.org",
+    "full_name": "Linda Garcia",
+    "role": "user",
+    "department": "Data Science",
+    "is_active": true,
+    "created_at": "2025-08-18T20:43:26.839427",
+    "last_login": "2025-12-25T10:47:40.839429",
+    "preferences": {
+      "theme": "system",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 130,
+      "total_messages": 1358,
+      "total_documents_uploaded": 59,
+      "tokens_used_this_month": 199943
+    }
+  },
+  {
+    "id": "fd2506d6-92e3-4da8-ab23-7f127be0f3ea",
+    "email": "robert.rodriguez@example.com",
+    "full_name": "Robert Rodriguez",
+    "role": "viewer",
+    "department": "Operations",
+    "is_active": true,
+    "created_at": "2025-08-29T22:10:55.839437",
+    "last_login": "2025-12-17T23:52:24.839439",
+    "preferences": {
+      "theme": "light",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 295,
+      "total_messages": 2597,
+      "total_documents_uploaded": 27,
+      "tokens_used_this_month": 344638
+    }
+  },
+  {
+    "id": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "email": "linda.miller@example.com",
+    "full_name": "Linda Miller",
+    "role": "user",
+    "department": "Legal",
+    "is_active": true,
+    "created_at": "2025-11-20T02:36:28.839447",
+    "last_login": "2025-12-28T03:18:31.839449",
+    "preferences": {
+      "theme": "system",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 209,
+      "total_messages": 2985,
+      "total_documents_uploaded": 28,
+      "tokens_used_this_month": 73525
+    }
+  },
+  {
+    "id": "55203c1b-bc48-446d-98a4-6a0ba26c0456",
+    "email": "william.davis@example.com",
+    "full_name": "William Davis",
+    "role": "user",
+    "department": "Data Science",
+    "is_active": true,
+    "created_at": "2025-08-04T22:22:10.839457",
+    "last_login": "2025-12-20T14:27:05.839458",
+    "preferences": {
+      "theme": "light",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 244,
+      "total_messages": 4354,
+      "total_documents_uploaded": 32,
+      "tokens_used_this_month": 291049
+    }
+  },
+  {
+    "id": "1079c127-6d94-45b6-a46b-357d4005d848",
+    "email": "james.johnson@company.org",
+    "full_name": "James Johnson",
+    "role": "user",
+    "department": "Product",
+    "is_active": true,
+    "created_at": "2025-11-27T15:42:06.839466",
+    "last_login": "2025-12-28T05:34:29.839468",
+    "preferences": {
+      "theme": "light",
+      "language": "fr",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 395,
+      "total_messages": 1483,
+      "total_documents_uploaded": 64,
+      "tokens_used_this_month": 479479
+    }
+  },
+  {
+    "id": "4de0bcde-01ec-4a93-8432-ced825a7f4da",
+    "email": "mary.jones@example.com",
+    "full_name": "Mary Jones",
+    "role": "user",
+    "department": "Marketing",
+    "is_active": true,
+    "created_at": "2025-11-19T08:25:17.839476",
+    "last_login": "2025-12-24T22:26:57.839477",
+    "preferences": {
+      "theme": "system",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 255,
+      "total_messages": 179,
+      "total_documents_uploaded": 14,
+      "tokens_used_this_month": 488115
+    }
+  },
+  {
+    "id": "c85ddb12-6ee1-46ed-8126-7f8ca53ce3d7",
+    "email": "jennifer.jones@nexusai.com",
+    "full_name": "Jennifer Jones",
+    "role": "admin",
+    "department": "Customer Success",
+    "is_active": true,
+    "created_at": "2025-09-02T18:37:47.839486",
+    "last_login": null,
+    "preferences": {
+      "theme": "system",
+      "language": "es",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 248,
+      "total_messages": 4523,
+      "total_documents_uploaded": 21,
+      "tokens_used_this_month": 139966
+    }
+  },
+  {
+    "id": "f92d5823-8a33-4577-8af2-d5a1ae6b4e0a",
+    "email": "william.martinez@example.com",
+    "full_name": "William Martinez",
+    "role": "user",
+    "department": "Product",
+    "is_active": true,
+    "created_at": "2025-10-08T10:40:00.839495",
+    "last_login": "2026-01-10T11:01:35.839496",
+    "preferences": {
+      "theme": "system",
+      "language": "fr",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 269,
+      "total_messages": 3718,
+      "total_documents_uploaded": 15,
+      "tokens_used_this_month": 130973
+    }
+  },
+  {
+    "id": "e2cca01e-58fe-4f37-93b6-53bbc3900fa3",
+    "email": "patricia.johnson@example.com",
+    "full_name": "Patricia Johnson",
+    "role": "user",
+    "department": "Engineering",
+    "is_active": true,
+    "created_at": "2025-09-21T22:17:38.839506",
+    "last_login": null,
+    "preferences": {
+      "theme": "system",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 468,
+      "total_messages": 277,
+      "total_documents_uploaded": 42,
+      "tokens_used_this_month": 38149
+    }
+  },
+  {
+    "id": "ee735570-941a-4169-8c0f-6e07d25c349f",
+    "email": "william.brown@example.com",
+    "full_name": "William Brown",
+    "role": "user",
+    "department": "Research",
+    "is_active": true,
+    "created_at": "2025-09-10T08:29:57.839514",
+    "last_login": "2025-12-25T16:18:18.839515",
+    "preferences": {
+      "theme": "light",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 102,
+      "total_messages": 792,
+      "total_documents_uploaded": 12,
+      "tokens_used_this_month": 346496
+    }
+  },
+  {
+    "id": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "email": "michael.garcia@nexusai.com",
+    "full_name": "Michael Garcia",
+    "role": "admin",
+    "department": "Operations",
+    "is_active": true,
+    "created_at": "2025-10-08T12:43:14.839523",
+    "last_login": "2025-12-17T21:48:54.839524",
+    "preferences": {
+      "theme": "light",
+      "language": "es",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 279,
+      "total_messages": 3695,
+      "total_documents_uploaded": 17,
+      "tokens_used_this_month": 222187
+    }
+  },
+  {
+    "id": "f0377fe6-ad54-4308-84c0-be42650dd58d",
+    "email": "john.jones@corp.net",
+    "full_name": "John Jones",
+    "role": "viewer",
+    "department": "Legal",
+    "is_active": true,
+    "created_at": "2025-10-16T02:42:15.839532",
+    "last_login": "2025-12-18T22:31:51.839533",
+    "preferences": {
+      "theme": "system",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 479,
+      "total_messages": 1956,
+      "total_documents_uploaded": 21,
+      "tokens_used_this_month": 214078
+    }
+  },
+  {
+    "id": "0e0961f9-7565-4f51-91e9-21f9604768d5",
+    "email": "linda.davis@example.com",
+    "full_name": "Linda Davis",
+    "role": "user",
+    "department": "Product",
+    "is_active": true,
+    "created_at": "2025-08-28T18:50:08.839541",
+    "last_login": "2025-12-18T03:00:58.839542",
+    "preferences": {
+      "theme": "dark",
+      "language": "fr",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 495,
+      "total_messages": 4572,
+      "total_documents_uploaded": 84,
+      "tokens_used_this_month": 377652
+    }
+  },
+  {
+    "id": "b3bfd063-2517-43d9-8703-9cec38c81982",
+    "email": "linda.williams@nexusai.com",
+    "full_name": "Linda Williams",
+    "role": "user",
+    "department": "Engineering",
+    "is_active": true,
+    "created_at": "2025-08-24T03:41:21.839551",
+    "last_login": "2025-12-18T02:50:20.839553",
+    "preferences": {
+      "theme": "dark",
+      "language": "es",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 265,
+      "total_messages": 676,
+      "total_documents_uploaded": 23,
+      "tokens_used_this_month": 36924
+    }
+  },
+  {
+    "id": "c78b6237-1244-4527-9487-5327b850f2fe",
+    "email": "elizabeth.johnson@nexusai.com",
+    "full_name": "Elizabeth Johnson",
+    "role": "viewer",
+    "department": "Research",
+    "is_active": true,
+    "created_at": "2025-11-26T09:25:10.839561",
+    "last_login": "2026-01-03T21:08:01.839563",
+    "preferences": {
+      "theme": "system",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 219,
+      "total_messages": 4801,
+      "total_documents_uploaded": 72,
+      "tokens_used_this_month": 275088
+    }
+  },
+  {
+    "id": "ade41183-8c62-4867-9b95-342487a11e65",
+    "email": "jennifer.jones@example.com",
+    "full_name": "Jennifer Jones",
+    "role": "user",
+    "department": "Marketing",
+    "is_active": true,
+    "created_at": "2025-08-26T22:37:04.839570",
+    "last_login": "2025-12-30T12:45:06.839572",
+    "preferences": {
+      "theme": "dark",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 389,
+      "total_messages": 614,
+      "total_documents_uploaded": 1,
+      "tokens_used_this_month": 241273
+    }
+  },
+  {
+    "id": "adf0560a-63fd-4c1e-81ca-45c5ad1b4979",
+    "email": "elizabeth.martinez@example.com",
+    "full_name": "Elizabeth Martinez",
+    "role": "user",
+    "department": "Marketing",
+    "is_active": true,
+    "created_at": "2025-08-06T16:38:51.839579",
+    "last_login": null,
+    "preferences": {
+      "theme": "light",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 85,
+      "total_messages": 3609,
+      "total_documents_uploaded": 69,
+      "tokens_used_this_month": 369857
+    }
+  },
+  {
+    "id": "d7cf97d1-274a-4146-aefd-24eb63ddd226",
+    "email": "robert.martinez@company.org",
+    "full_name": "Robert Martinez",
+    "role": "viewer",
+    "department": "Sales",
+    "is_active": true,
+    "created_at": "2025-11-22T06:27:05.839586",
+    "last_login": "2026-01-11T04:51:34.839589",
+    "preferences": {
+      "theme": "light",
+      "language": "fr",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 59,
+      "total_messages": 4552,
+      "total_documents_uploaded": 19,
+      "tokens_used_this_month": 143788
+    }
+  },
+  {
+    "id": "0f775567-df8e-411e-82ff-eb013a0b70ed",
+    "email": "robert.martinez@company.org",
+    "full_name": "Robert Martinez",
+    "role": "user",
+    "department": "HR",
+    "is_active": true,
+    "created_at": "2025-08-28T04:18:23.839597",
+    "last_login": "2025-12-25T03:54:33.839599",
+    "preferences": {
+      "theme": "light",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 429,
+      "total_messages": 2286,
+      "total_documents_uploaded": 5,
+      "tokens_used_this_month": 2858
+    }
+  },
+  {
+    "id": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "email": "jennifer.williams@corp.net",
+    "full_name": "Jennifer Williams",
+    "role": "user",
+    "department": "Product",
+    "is_active": true,
+    "created_at": "2025-11-18T23:51:52.839607",
+    "last_login": "2025-12-23T02:57:27.839609",
+    "preferences": {
+      "theme": "light",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 358,
+      "total_messages": 1241,
+      "total_documents_uploaded": 69,
+      "tokens_used_this_month": 19889
+    }
+  },
+  {
+    "id": "b5b6022a-3454-4703-aefb-629674eae558",
+    "email": "jennifer.martinez@nexusai.com",
+    "full_name": "Jennifer Martinez",
+    "role": "user",
+    "department": "Engineering",
+    "is_active": true,
+    "created_at": "2025-11-02T13:39:16.839617",
+    "last_login": "2025-12-21T11:11:09.839618",
+    "preferences": {
+      "theme": "light",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 186,
+      "total_messages": 4606,
+      "total_documents_uploaded": 52,
+      "tokens_used_this_month": 326405
+    }
+  },
+  {
+    "id": "c50b1690-5fd4-489f-b62b-b46c5de9dcd0",
+    "email": "john.brown@corp.net",
+    "full_name": "John Brown",
+    "role": "admin",
+    "department": "Operations",
+    "is_active": true,
+    "created_at": "2025-08-18T20:00:51.839627",
+    "last_login": "2025-12-23T20:58:55.839628",
+    "preferences": {
+      "theme": "dark",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 408,
+      "total_messages": 905,
+      "total_documents_uploaded": 48,
+      "tokens_used_this_month": 458266
+    }
+  },
+  {
+    "id": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "email": "james.davis@company.org",
+    "full_name": "James Davis",
+    "role": "user",
+    "department": "Finance",
+    "is_active": true,
+    "created_at": "2025-08-30T11:19:02.839637",
+    "last_login": "2026-01-06T14:59:35.839638",
+    "preferences": {
+      "theme": "system",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 147,
+      "total_messages": 588,
+      "total_documents_uploaded": 98,
+      "tokens_used_this_month": 147341
+    }
+  },
+  {
+    "id": "50a40004-0b5a-40ce-af04-8d0e6e0b7439",
+    "email": "jennifer.rodriguez@company.org",
+    "full_name": "Jennifer Rodriguez",
+    "role": "viewer",
+    "department": "Sales",
+    "is_active": true,
+    "created_at": "2025-10-03T21:20:14.839646",
+    "last_login": "2026-01-10T07:26:15.839648",
+    "preferences": {
+      "theme": "dark",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 140,
+      "total_messages": 333,
+      "total_documents_uploaded": 13,
+      "tokens_used_this_month": 313775
+    }
+  },
+  {
+    "id": "47b2e619-6f72-41bc-9aba-8b2a01418894",
+    "email": "michael.garcia@nexusai.com",
+    "full_name": "Michael Garcia",
+    "role": "user",
+    "department": "Research",
+    "is_active": true,
+    "created_at": "2025-12-06T17:58:01.839656",
+    "last_login": "2026-01-05T11:08:12.839658",
+    "preferences": {
+      "theme": "light",
+      "language": "de",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 478,
+      "total_messages": 4430,
+      "total_documents_uploaded": 87,
+      "tokens_used_this_month": 378188
+    }
+  },
+  {
+    "id": "d18d2142-fa6d-4c2e-a834-79ac84e101cd",
+    "email": "patricia.garcia@company.org",
+    "full_name": "Patricia Garcia",
+    "role": "user",
+    "department": "Data Science",
+    "is_active": true,
+    "created_at": "2025-10-10T00:41:33.839666",
+    "last_login": null,
+    "preferences": {
+      "theme": "system",
+      "language": "fr",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 346,
+      "total_messages": 3365,
+      "total_documents_uploaded": 41,
+      "tokens_used_this_month": 211973
+    }
+  },
+  {
+    "id": "abf09b06-22b0-45c5-8abc-a4d01a35e79e",
+    "email": "robert.rodriguez@example.com",
+    "full_name": "Robert Rodriguez",
+    "role": "user",
+    "department": "HR",
+    "is_active": true,
+    "created_at": "2025-08-11T23:54:18.839673",
+    "last_login": "2026-01-02T16:26:14.839675",
+    "preferences": {
+      "theme": "light",
+      "language": "fr",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 225,
+      "total_messages": 4771,
+      "total_documents_uploaded": 77,
+      "tokens_used_this_month": 344254
+    }
+  },
+  {
+    "id": "26dd68f2-64cd-4308-b368-1eee114b3b97",
+    "email": "jennifer.davis@corp.net",
+    "full_name": "Jennifer Davis",
+    "role": "user",
+    "department": "Marketing",
+    "is_active": true,
+    "created_at": "2025-10-12T01:34:23.839683",
+    "last_login": "2025-12-25T15:40:52.839685",
+    "preferences": {
+      "theme": "dark",
+      "language": "fr",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 492,
+      "total_messages": 1944,
+      "total_documents_uploaded": 86,
+      "tokens_used_this_month": 163749
+    }
+  },
+  {
+    "id": "9f654358-9891-42f8-8225-6679cfac30d5",
+    "email": "patricia.brown@example.com",
+    "full_name": "Patricia Brown",
+    "role": "viewer",
+    "department": "Research",
+    "is_active": true,
+    "created_at": "2025-08-15T21:25:13.839693",
+    "last_login": null,
+    "preferences": {
+      "theme": "light",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 327,
+      "total_messages": 4735,
+      "total_documents_uploaded": 24,
+      "tokens_used_this_month": 377620
+    }
+  },
+  {
+    "id": "00c8cb3f-7d6e-42cc-b830-3ffd8b14252c",
+    "email": "michael.davis@nexusai.com",
+    "full_name": "Michael Davis",
+    "role": "user",
+    "department": "Finance",
+    "is_active": true,
+    "created_at": "2025-10-03T21:13:06.839700",
+    "last_login": "2025-12-15T13:09:40.839703",
+    "preferences": {
+      "theme": "system",
+      "language": "de",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 132,
+      "total_messages": 1014,
+      "total_documents_uploaded": 58,
+      "tokens_used_this_month": 70908
+    }
+  },
+  {
+    "id": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "email": "linda.rodriguez@corp.net",
+    "full_name": "Linda Rodriguez",
+    "role": "viewer",
+    "department": "Legal",
+    "is_active": true,
+    "created_at": "2025-11-03T19:28:54.839711",
+    "last_login": "2026-01-05T18:20:11.839712",
+    "preferences": {
+      "theme": "light",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 389,
+      "total_messages": 2045,
+      "total_documents_uploaded": 81,
+      "tokens_used_this_month": 146391
+    }
+  },
+  {
+    "id": "3037c033-3a52-4b02-b202-b7eb82957008",
+    "email": "william.davis@nexusai.com",
+    "full_name": "William Davis",
+    "role": "user",
+    "department": "Finance",
+    "is_active": true,
+    "created_at": "2025-11-16T23:33:37.839721",
+    "last_login": "2026-01-05T15:11:23.839722",
+    "preferences": {
+      "theme": "dark",
+      "language": "en",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 123,
+      "total_messages": 3157,
+      "total_documents_uploaded": 88,
+      "tokens_used_this_month": 81113
+    }
+  },
+  {
+    "id": "ff84bfe0-d875-4e32-ac5d-8f42fec2e9ed",
+    "email": "patricia.johnson@corp.net",
+    "full_name": "Patricia Johnson",
+    "role": "user",
+    "department": "Finance",
+    "is_active": true,
+    "created_at": "2025-10-06T20:07:32.839729",
+    "last_login": "2026-01-10T14:53:20.839731",
+    "preferences": {
+      "theme": "dark",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 396,
+      "total_messages": 4736,
+      "total_documents_uploaded": 48,
+      "tokens_used_this_month": 251074
+    }
+  },
+  {
+    "id": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "email": "james.garcia@example.com",
+    "full_name": "James Garcia",
+    "role": "user",
+    "department": "HR",
+    "is_active": true,
+    "created_at": "2025-09-14T06:20:12.839738",
+    "last_login": "2026-01-04T14:53:46.839740",
+    "preferences": {
+      "theme": "light",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 352,
+      "total_messages": 3332,
+      "total_documents_uploaded": 92,
+      "tokens_used_this_month": 87530
+    }
+  },
+  {
+    "id": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "email": "linda.williams@nexusai.com",
+    "full_name": "Linda Williams",
+    "role": "admin",
+    "department": "Product",
+    "is_active": true,
+    "created_at": "2025-11-16T02:37:43.839748",
+    "last_login": "2026-01-03T09:46:04.839749",
+    "preferences": {
+      "theme": "dark",
+      "language": "es",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 199,
+      "total_messages": 2701,
+      "total_documents_uploaded": 27,
+      "tokens_used_this_month": 239393
+    }
+  },
+  {
+    "id": "c45237c9-124c-4efb-bab1-414ca86d079c",
+    "email": "jennifer.garcia@corp.net",
+    "full_name": "Jennifer Garcia",
+    "role": "user",
+    "department": "Sales",
+    "is_active": true,
+    "created_at": "2025-12-13T02:17:19.839758",
+    "last_login": "2025-12-28T18:53:36.839759",
+    "preferences": {
+      "theme": "system",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 184,
+      "total_messages": 1856,
+      "total_documents_uploaded": 83,
+      "tokens_used_this_month": 36975
+    }
+  },
+  {
+    "id": "76830006-41ab-425a-8e4f-54bde1f4a33c",
+    "email": "james.smith@example.com",
+    "full_name": "James Smith",
+    "role": "user",
+    "department": "Customer Success",
+    "is_active": true,
+    "created_at": "2025-09-04T07:07:29.839767",
+    "last_login": "2025-12-16T06:26:43.839769",
+    "preferences": {
+      "theme": "system",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 136,
+      "total_messages": 3041,
+      "total_documents_uploaded": 21,
+      "tokens_used_this_month": 318662
+    }
+  },
+  {
+    "id": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "email": "elizabeth.johnson@nexusai.com",
+    "full_name": "Elizabeth Johnson",
+    "role": "viewer",
+    "department": "Research",
+    "is_active": true,
+    "created_at": "2025-08-19T01:54:18.839776",
+    "last_login": "2025-12-20T12:38:43.839778",
+    "preferences": {
+      "theme": "dark",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 106,
+      "total_messages": 642,
+      "total_documents_uploaded": 75,
+      "tokens_used_this_month": 363080
+    }
+  },
+  {
+    "id": "89efaa85-8087-481e-af10-f1acedb48baf",
+    "email": "patricia.johnson@nexusai.com",
+    "full_name": "Patricia Johnson",
+    "role": "user",
+    "department": "Research",
+    "is_active": true,
+    "created_at": "2025-11-30T15:51:21.839785",
+    "last_login": "2026-01-13T10:13:52.839787",
+    "preferences": {
+      "theme": "dark",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 40,
+      "total_messages": 4164,
+      "total_documents_uploaded": 82,
+      "tokens_used_this_month": 179903
+    }
+  },
+  {
+    "id": "4a3c4f3f-e070-4b4c-96db-1f9fb722a238",
+    "email": "james.miller@corp.net",
+    "full_name": "James Miller",
+    "role": "user",
+    "department": "Product",
+    "is_active": true,
+    "created_at": "2025-10-21T11:12:23.839795",
+    "last_login": "2026-01-01T20:40:50.839796",
+    "preferences": {
+      "theme": "system",
+      "language": "fr",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 475,
+      "total_messages": 4428,
+      "total_documents_uploaded": 99,
+      "tokens_used_this_month": 254491
+    }
+  },
+  {
+    "id": "d32af08c-32a6-452a-b4f8-2fb4f760e050",
+    "email": "linda.miller@example.com",
+    "full_name": "Linda Miller",
+    "role": "viewer",
+    "department": "Sales",
+    "is_active": true,
+    "created_at": "2025-12-07T05:31:48.839806",
+    "last_login": "2025-12-30T22:12:47.839807",
+    "preferences": {
+      "theme": "dark",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 296,
+      "total_messages": 3124,
+      "total_documents_uploaded": 43,
+      "tokens_used_this_month": 16047
+    }
+  },
+  {
+    "id": "b42c1e77-b23a-46f7-b167-fe7a9ca55090",
+    "email": "linda.garcia@company.org",
+    "full_name": "Linda Garcia",
+    "role": "user",
+    "department": "Research",
+    "is_active": true,
+    "created_at": "2025-08-22T14:08:10.839816",
+    "last_login": "2026-01-01T12:06:07.839825",
+    "preferences": {
+      "theme": "dark",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 102,
+      "total_messages": 721,
+      "total_documents_uploaded": 30,
+      "tokens_used_this_month": 378526
+    }
+  },
+  {
+    "id": "9b258240-6ff3-444c-abd2-b5b6e0c8a9d6",
+    "email": "michael.davis@corp.net",
+    "full_name": "Michael Davis",
+    "role": "user",
+    "department": "Engineering",
+    "is_active": true,
+    "created_at": "2025-11-03T02:00:35.839835",
+    "last_login": "2026-01-07T09:23:23.839836",
+    "preferences": {
+      "theme": "light",
+      "language": "de",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 161,
+      "total_messages": 4784,
+      "total_documents_uploaded": 47,
+      "tokens_used_this_month": 249124
+    }
+  },
+  {
+    "id": "545fe39f-6df5-471c-a4f2-36e73dce775d",
+    "email": "william.rodriguez@company.org",
+    "full_name": "William Rodriguez",
+    "role": "user",
+    "department": "Customer Success",
+    "is_active": true,
+    "created_at": "2025-09-23T00:43:36.839844",
+    "last_login": "2026-01-10T23:57:00.839846",
+    "preferences": {
+      "theme": "dark",
+      "language": "es",
+      "notifications_enabled": false
+    },
+    "usage_stats": {
+      "total_conversations": 103,
+      "total_messages": 2604,
+      "total_documents_uploaded": 15,
+      "tokens_used_this_month": 390483
+    }
+  },
+  {
+    "id": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "email": "william.williams@company.org",
+    "full_name": "William Williams",
+    "role": "user",
+    "department": "Legal",
+    "is_active": true,
+    "created_at": "2025-08-24T11:20:48.839856",
+    "last_login": "2026-01-07T18:50:00.839858",
+    "preferences": {
+      "theme": "light",
+      "language": "es",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 189,
+      "total_messages": 1489,
+      "total_documents_uploaded": 38,
+      "tokens_used_this_month": 8417
+    }
+  },
+  {
+    "id": "f4b9b8ce-c190-4d02-ab6f-ca5acfb3324c",
+    "email": "william.williams@nexusai.com",
+    "full_name": "William Williams",
+    "role": "user",
+    "department": "Marketing",
+    "is_active": true,
+    "created_at": "2025-09-09T13:05:04.840385",
+    "last_login": null,
+    "preferences": {
+      "theme": "dark",
+      "language": "en",
+      "notifications_enabled": true
+    },
+    "usage_stats": {
+      "total_conversations": 298,
+      "total_messages": 2349,
+      "total_documents_uploaded": 60,
+      "tokens_used_this_month": 251984
+    }
+  }
+]

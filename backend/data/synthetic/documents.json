@@ -1,0 +1,2396 @@
+[
+  {
+    "id": "5e31ffb1-5452-4119-a735-0c50e6bf3ae5",
+    "name": "API Documentation.csv",
+    "type": "csv",
+    "size_bytes": 551342,
+    "uploaded_by": "89efaa85-8087-481e-af10-f1acedb48baf",
+    "created_at": "2025-11-24T09:36:54.857059",
+    "updated_at": "2025-12-21T09:36:54.857059",
+    "status": "processed",
+    "chunk_count": 15,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 16442,
+      "language": "en",
+      "tags": [
+        "internal",
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 13,
+      "last_referenced": "2026-01-13T16:57:21.857085"
+    }
+  },
+  {
+    "id": "a65949a7-e17e-4887-937d-da76d1dcaedb",
+    "name": "Market Analysis.html",
+    "type": "html",
+    "size_bytes": 2625576,
+    "uploaded_by": "c45237c9-124c-4efb-bab1-414ca86d079c",
+    "created_at": "2025-10-19T03:35:29.857096",
+    "updated_at": "2025-11-06T03:35:29.857096",
+    "status": "processed",
+    "chunk_count": 50,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 19010,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 48,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "73c3c031-967b-4649-9378-2614a890a601",
+    "name": "Project Plan.txt",
+    "type": "txt",
+    "size_bytes": 2081885,
+    "uploaded_by": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "created_at": "2025-11-22T00:30:15.857112",
+    "updated_at": "2025-12-04T00:30:15.857112",
+    "status": "processed",
+    "chunk_count": 19,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 19202,
+      "language": "en",
+      "tags": [
+        "public"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 10,
+      "last_referenced": "2026-01-12T03:32:05.857121"
+    }
+  },
+  {
+    "id": "15f28c71-e10d-464b-8a5d-3af328e02161",
+    "name": "Performance Review.csv",
+    "type": "csv",
+    "size_bytes": 6103060,
+    "uploaded_by": "76830006-41ab-425a-8e4f-54bde1f4a33c",
+    "created_at": "2025-11-16T06:57:54.857131",
+    "updated_at": "2025-11-19T06:57:54.857131",
+    "status": "processed",
+    "chunk_count": 92,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 10912,
+      "language": "en",
+      "tags": [
+        "final",
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 14,
+      "last_referenced": "2026-01-13T06:49:54.857141"
+    }
+  },
+  {
+    "id": "4801ee89-7eba-4dad-88a0-ec9f8db7ff45",
+    "name": "User Research Findings.pptx",
+    "type": "pptx",
+    "size_bytes": 65991,
+    "uploaded_by": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "created_at": "2025-11-13T06:44:24.857147",
+    "updated_at": "2025-12-09T06:44:24.857147",
+    "status": "processed",
+    "chunk_count": 64,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 42,
+      "word_count": 6144,
+      "language": "en",
+      "tags": [
+        "confidential",
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 37,
+      "last_referenced": "2026-01-12T08:31:51.857156"
+    }
+  },
+  {
+    "id": "2aeb0bfd-9578-4a41-8332-8102c51e8b36",
+    "name": "Compliance Report.txt",
+    "type": "txt",
+    "size_bytes": 8455000,
+    "uploaded_by": "fd2506d6-92e3-4da8-ab23-7f127be0f3ea",
+    "created_at": "2025-12-14T11:25:09.857163",
+    "updated_at": "2026-01-02T11:25:09.857163",
+    "status": "processed",
+    "chunk_count": 57,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 1248,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 15,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "04e64d7b-320f-40ee-a9a5-ed08b26424cd",
+    "name": "API Documentation.pptx",
+    "type": "pptx",
+    "size_bytes": 8588785,
+    "uploaded_by": "e2cca01e-58fe-4f37-93b6-53bbc3900fa3",
+    "created_at": "2025-12-08T21:05:16.857177",
+    "updated_at": "2026-01-04T21:05:16.857177",
+    "status": "processing",
+    "chunk_count": 63,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 24,
+      "word_count": 8341,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 30,
+      "last_referenced": "2026-01-09T16:53:34.857186"
+    }
+  },
+  {
+    "id": "e9674a7d-fe0f-4ad1-b64f-2addf09a8539",
+    "name": "Sales Forecast.md",
+    "type": "md",
+    "size_bytes": 7747309,
+    "uploaded_by": "d18d2142-fa6d-4c2e-a834-79ac84e101cd",
+    "created_at": "2025-12-11T08:36:42.857192",
+    "updated_at": "2025-12-18T08:36:42.857192",
+    "status": "processed",
+    "chunk_count": 61,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 8426,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 29,
+      "last_referenced": "2026-01-08T15:04:40.857200"
+    }
+  },
+  {
+    "id": "bc9d9de1-1f83-44ec-9276-2b0eb6c6a6d3",
+    "name": "Sales Forecast.pdf",
+    "type": "pdf",
+    "size_bytes": 552282,
+    "uploaded_by": "4a3c4f3f-e070-4b4c-96db-1f9fb722a238",
+    "created_at": "2025-12-27T23:05:07.857216",
+    "updated_at": "2026-01-17T23:05:07.857216",
+    "status": "processed",
+    "chunk_count": 71,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 31,
+      "word_count": 13126,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 50,
+      "last_referenced": "2026-01-10T10:26:24.857225"
+    }
+  },
+  {
+    "id": "d71ccd16-45af-4c43-b81a-af500db99e50",
+    "name": "Performance Review.html",
+    "type": "html",
+    "size_bytes": 1013047,
+    "uploaded_by": "c78b6237-1244-4527-9487-5327b850f2fe",
+    "created_at": "2025-12-01T23:03:50.857232",
+    "updated_at": "2025-12-26T23:03:50.857232",
+    "status": "processed",
+    "chunk_count": 97,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 1807,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 45,
+      "last_referenced": "2026-01-12T14:52:25.857242"
+    }
+  },
+  {
+    "id": "1191d454-8027-4e5a-a443-6f6525811692",
+    "name": "Compliance Report.docx",
+    "type": "docx",
+    "size_bytes": 2844568,
+    "uploaded_by": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "created_at": "2025-12-25T09:04:10.857250",
+    "updated_at": "2026-01-07T09:04:10.857250",
+    "status": "processed",
+    "chunk_count": 23,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 16,
+      "word_count": 16313,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 16,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "1e0f32a4-d196-48bd-86da-011528092caf",
+    "name": "Meeting Notes - 2026-01-08.xlsx",
+    "type": "xlsx",
+    "size_bytes": 7470359,
+    "uploaded_by": "d7cf97d1-274a-4146-aefd-24eb63ddd226",
+    "created_at": "2025-11-13T22:46:53.857264",
+    "updated_at": "2025-12-08T22:46:53.857264",
+    "status": "processed",
+    "chunk_count": 38,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 19119,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 2,
+      "last_referenced": "2026-01-09T01:48:58.857273"
+    }
+  },
+  {
+    "id": "8863fcc4-b463-4a72-88d6-ec2f41a2ac99",
+    "name": "Security Audit.xlsx",
+    "type": "xlsx",
+    "size_bytes": 4895832,
+    "uploaded_by": "ade41183-8c62-4867-9b95-342487a11e65",
+    "created_at": "2025-12-24T13:58:58.857281",
+    "updated_at": "2026-01-23T13:58:58.857281",
+    "status": "processed",
+    "chunk_count": 77,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 10485,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 43,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "be084739-9751-4285-8ea5-46c93d949c79",
+    "name": "Technical Specification.csv",
+    "type": "csv",
+    "size_bytes": 3833830,
+    "uploaded_by": "9f243db0-1119-4bd3-b225-9faf5cdaed48",
+    "created_at": "2025-12-17T02:27:53.857293",
+    "updated_at": "2026-01-13T02:27:53.857293",
+    "status": "processed",
+    "chunk_count": 43,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 5361,
+      "language": "en",
+      "tags": [
+        "confidential",
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 23,
+      "last_referenced": "2026-01-13T13:14:06.857302"
+    }
+  },
+  {
+    "id": "e684e06e-b667-469b-9153-e1b59ce64b01",
+    "name": "Risk Assessment.xlsx",
+    "type": "xlsx",
+    "size_bytes": 6290761,
+    "uploaded_by": "b5b6022a-3454-4703-aefb-629674eae558",
+    "created_at": "2025-12-06T02:09:56.857308",
+    "updated_at": "2026-01-02T02:09:56.857308",
+    "status": "processing",
+    "chunk_count": 87,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 6041,
+      "language": "en",
+      "tags": [
+        "draft",
+        "public"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 30,
+      "last_referenced": "2026-01-07T10:50:47.857317"
+    }
+  },
+  {
+    "id": "2762ea87-1826-4ada-9935-2f0beaa9a7dd",
+    "name": "Meeting Notes - 2025-12-26.md",
+    "type": "md",
+    "size_bytes": 4679360,
+    "uploaded_by": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "created_at": "2025-10-30T20:25:57.857323",
+    "updated_at": "2025-11-23T20:25:57.857323",
+    "status": "processed",
+    "chunk_count": 20,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 6953,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 29,
+      "last_referenced": "2026-01-07T10:15:17.857331"
+    }
+  },
+  {
+    "id": "84db3e19-b16a-418e-88c6-5c9990a5d0dc",
+    "name": "Security Audit.pptx",
+    "type": "pptx",
+    "size_bytes": 1668260,
+    "uploaded_by": "d7cf97d1-274a-4146-aefd-24eb63ddd226",
+    "created_at": "2025-12-16T02:19:25.857338",
+    "updated_at": "2026-01-01T02:19:25.857338",
+    "status": "processed",
+    "chunk_count": 75,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 35,
+      "word_count": 18120,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 3,
+      "last_referenced": "2026-01-13T15:01:15.857346"
+    }
+  },
+  {
+    "id": "19e877cc-9157-4db5-bfe4-5bbfa8681211",
+    "name": "Competitor Research.md",
+    "type": "md",
+    "size_bytes": 7661518,
+    "uploaded_by": "f92d5823-8a33-4577-8af2-d5a1ae6b4e0a",
+    "created_at": "2025-12-22T05:40:22.857353",
+    "updated_at": "2025-12-23T05:40:22.857353",
+    "status": "processing",
+    "chunk_count": 39,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 18587,
+      "language": "en",
+      "tags": [
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 47,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "f45ae69e-ec79-482a-aaf3-96c196c42815",
+    "name": "Meeting Notes - 2026-01-09.md",
+    "type": "md",
+    "size_bytes": 4102644,
+    "uploaded_by": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "created_at": "2025-11-07T09:00:55.857366",
+    "updated_at": "2025-12-01T09:00:55.857366",
+    "status": "processed",
+    "chunk_count": 64,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 3720,
+      "language": "en",
+      "tags": [
+        "confidential",
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 50,
+      "last_referenced": "2026-01-09T15:54:51.857375"
+    }
+  },
+  {
+    "id": "c8226a9b-cbe5-4cab-9a7b-eaab666872a8",
+    "name": "API Documentation.md",
+    "type": "md",
+    "size_bytes": 9109439,
+    "uploaded_by": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "created_at": "2025-10-25T23:25:43.857381",
+    "updated_at": "2025-10-31T23:25:43.857381",
+    "status": "processed",
+    "chunk_count": 43,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 19155,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 37,
+      "last_referenced": "2026-01-08T15:11:05.857388"
+    }
+  },
+  {
+    "id": "32204679-0a86-4dfc-ba3d-e6bd2b1f4b6a",
+    "name": "User Research Findings.pdf",
+    "type": "pdf",
+    "size_bytes": 6841160,
+    "uploaded_by": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "created_at": "2025-11-09T17:18:57.857395",
+    "updated_at": "2025-11-17T17:18:57.857395",
+    "status": "processed",
+    "chunk_count": 27,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 22,
+      "word_count": 17122,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 18,
+      "last_referenced": "2026-01-10T21:58:36.857403"
+    }
+  },
+  {
+    "id": "a528bfda-0e59-4a05-b780-ce7c499a1425",
+    "name": "Budget Proposal.csv",
+    "type": "csv",
+    "size_bytes": 7392709,
+    "uploaded_by": "55203c1b-bc48-446d-98a4-6a0ba26c0456",
+    "created_at": "2025-12-16T01:12:15.857409",
+    "updated_at": "2026-01-09T01:12:15.857409",
+    "status": "processing",
+    "chunk_count": 67,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 713,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 30,
+      "last_referenced": "2026-01-09T10:46:44.857417"
+    }
+  },
+  {
+    "id": "85ba9103-9ee1-4a76-ba12-a9b187d50fe2",
+    "name": "Meeting Notes - 2025-12-30.xlsx",
+    "type": "xlsx",
+    "size_bytes": 9046042,
+    "uploaded_by": "f92d5823-8a33-4577-8af2-d5a1ae6b4e0a",
+    "created_at": "2025-12-17T05:04:34.857424",
+    "updated_at": "2025-12-23T05:04:34.857424",
+    "status": "processed",
+    "chunk_count": 34,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 7486,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 19,
+      "last_referenced": "2026-01-13T17:11:28.857432"
+    }
+  },
+  {
+    "id": "a8708948-649d-42c9-9758-2ad38c386ec8",
+    "name": "API Documentation.txt",
+    "type": "txt",
+    "size_bytes": 2633750,
+    "uploaded_by": "e2cca01e-58fe-4f37-93b6-53bbc3900fa3",
+    "created_at": "2025-11-16T17:07:45.857439",
+    "updated_at": "2025-12-10T17:07:45.857439",
+    "status": "processed",
+    "chunk_count": 26,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 5675,
+      "language": "en",
+      "tags": [
+        "public",
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 33,
+      "last_referenced": "2026-01-12T08:08:04.857447"
+    }
+  },
+  {
+    "id": "feac28e0-8e36-41d6-9595-e19d27f5cfa9",
+    "name": "Budget Proposal.xlsx",
+    "type": "xlsx",
+    "size_bytes": 5147726,
+    "uploaded_by": "d7cf97d1-274a-4146-aefd-24eb63ddd226",
+    "created_at": "2025-10-30T08:32:39.857455",
+    "updated_at": "2025-11-22T08:32:39.857455",
+    "status": "processed",
+    "chunk_count": 100,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 10833,
+      "language": "en",
+      "tags": [
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 27,
+      "last_referenced": "2026-01-12T08:11:49.857463"
+    }
+  },
+  {
+    "id": "d3b2764d-5c14-4856-9c30-92001a3f160f",
+    "name": "Q4 Financial Report 2024.txt",
+    "type": "txt",
+    "size_bytes": 4610435,
+    "uploaded_by": "9f243db0-1119-4bd3-b225-9faf5cdaed48",
+    "created_at": "2025-11-29T15:19:52.857470",
+    "updated_at": "2025-12-25T15:19:52.857470",
+    "status": "processed",
+    "chunk_count": 31,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 8886,
+      "language": "en",
+      "tags": [
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 1,
+      "last_referenced": "2026-01-11T22:05:06.857478"
+    }
+  },
+  {
+    "id": "12ff869b-32fe-41fc-9e67-7ea4ccf582e7",
+    "name": "Sales Forecast.html",
+    "type": "html",
+    "size_bytes": 4606336,
+    "uploaded_by": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "created_at": "2026-01-07T10:15:56.857485",
+    "updated_at": "2026-01-09T10:15:56.857485",
+    "status": "processed",
+    "chunk_count": 46,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 16218,
+      "language": "en",
+      "tags": [
+        "final",
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 2,
+      "last_referenced": "2026-01-12T00:18:54.857493"
+    }
+  },
+  {
+    "id": "5b9c8474-10c0-4cb2-9778-b90ab3d47972",
+    "name": "API Documentation.pptx",
+    "type": "pptx",
+    "size_bytes": 1711879,
+    "uploaded_by": "e16cebcd-e133-49ec-bde4-69e9e6373ee6",
+    "created_at": "2025-10-22T00:55:09.857501",
+    "updated_at": "2025-11-11T00:55:09.857501",
+    "status": "processed",
+    "chunk_count": 73,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 24,
+      "word_count": 14856,
+      "language": "en",
+      "tags": [
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 30,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "f3ce05a4-a3f8-42d8-9c70-f199ab9f3301",
+    "name": "Meeting Notes - 2026-01-04.csv",
+    "type": "csv",
+    "size_bytes": 3365347,
+    "uploaded_by": "3037c033-3a52-4b02-b202-b7eb82957008",
+    "created_at": "2025-12-11T00:25:24.857515",
+    "updated_at": "2025-12-13T00:25:24.857515",
+    "status": "processed",
+    "chunk_count": 46,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 19267,
+      "language": "en",
+      "tags": [
+        "internal",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 44,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "6a3a34e4-344a-4f01-9ea4-c335d238df9f",
+    "name": "Meeting Notes - 2026-01-01.txt",
+    "type": "txt",
+    "size_bytes": 7867213,
+    "uploaded_by": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "created_at": "2025-11-16T11:18:28.857528",
+    "updated_at": "2025-11-30T11:18:28.857528",
+    "status": "processed",
+    "chunk_count": 30,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 8987,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 47,
+      "last_referenced": "2026-01-08T23:33:27.857536"
+    }
+  },
+  {
+    "id": "fb5b096c-86fd-4f1d-ae20-815930ead061",
+    "name": "Customer Analysis.pdf",
+    "type": "pdf",
+    "size_bytes": 8875037,
+    "uploaded_by": "e16cebcd-e133-49ec-bde4-69e9e6373ee6",
+    "created_at": "2026-01-05T00:38:34.857543",
+    "updated_at": "2026-02-03T00:38:34.857543",
+    "status": "failed",
+    "chunk_count": 52,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 2,
+      "word_count": 19037,
+      "language": "en",
+      "tags": [
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 32,
+      "last_referenced": "2026-01-11T05:58:01.857551"
+    }
+  },
+  {
+    "id": "185435e4-b5b6-424b-ac58-9474544548a2",
+    "name": "Performance Review.docx",
+    "type": "docx",
+    "size_bytes": 1277561,
+    "uploaded_by": "ff84bfe0-d875-4e32-ac5d-8f42fec2e9ed",
+    "created_at": "2025-12-26T14:03:21.857558",
+    "updated_at": "2025-12-28T14:03:21.857558",
+    "status": "processing",
+    "chunk_count": 19,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 35,
+      "word_count": 5684,
+      "language": "en",
+      "tags": [
+        "confidential",
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 39,
+      "last_referenced": "2026-01-09T14:18:04.857568"
+    }
+  },
+  {
+    "id": "06abb023-bb27-40dc-be79-e7728ccb278a",
+    "name": "Meeting Notes - 2025-12-28.txt",
+    "type": "txt",
+    "size_bytes": 5553686,
+    "uploaded_by": "1dddfc60-c75f-4c99-a459-90292206da89",
+    "created_at": "2025-12-18T10:20:41.857575",
+    "updated_at": "2025-12-23T10:20:41.857575",
+    "status": "processed",
+    "chunk_count": 48,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 15378,
+      "language": "en",
+      "tags": [
+        "draft",
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 25,
+      "last_referenced": "2026-01-07T08:33:06.857583"
+    }
+  },
+  {
+    "id": "00624368-c75d-449b-9a25-819b53bb2849",
+    "name": "Risk Assessment.pptx",
+    "type": "pptx",
+    "size_bytes": 4352831,
+    "uploaded_by": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "created_at": "2025-10-30T21:22:46.857590",
+    "updated_at": "2025-11-17T21:22:46.857590",
+    "status": "processed",
+    "chunk_count": 46,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 35,
+      "word_count": 15499,
+      "language": "en",
+      "tags": [
+        "public",
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 45,
+      "last_referenced": "2026-01-09T03:09:01.857599"
+    }
+  },
+  {
+    "id": "7a720ae9-df9b-4219-8e81-61407e15b725",
+    "name": "Training Manual.docx",
+    "type": "docx",
+    "size_bytes": 8959336,
+    "uploaded_by": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "created_at": "2025-10-18T19:48:30.857605",
+    "updated_at": "2025-11-17T19:48:30.857605",
+    "status": "processed",
+    "chunk_count": 21,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 35,
+      "word_count": 11920,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 20,
+      "last_referenced": "2026-01-10T01:43:25.857613"
+    }
+  },
+  {
+    "id": "886d65cb-d887-4755-92dc-59870b771907",
+    "name": "Training Manual.csv",
+    "type": "csv",
+    "size_bytes": 3654612,
+    "uploaded_by": "f4b9b8ce-c190-4d02-ab6f-ca5acfb3324c",
+    "created_at": "2025-11-07T21:34:52.857619",
+    "updated_at": "2025-11-18T21:34:52.857619",
+    "status": "processed",
+    "chunk_count": 61,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 4534,
+      "language": "en",
+      "tags": [
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 28,
+      "last_referenced": "2026-01-09T19:27:20.857629"
+    }
+  },
+  {
+    "id": "cdd6d73a-d650-4749-ae2f-0f84e6c02de4",
+    "name": "Risk Assessment.md",
+    "type": "md",
+    "size_bytes": 6393812,
+    "uploaded_by": "7ec0f043-e655-4bec-acec-816ae21b52c9",
+    "created_at": "2025-11-05T05:51:32.857635",
+    "updated_at": "2025-12-01T05:51:32.857635",
+    "status": "processed",
+    "chunk_count": 27,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 17103,
+      "language": "en",
+      "tags": [
+        "final",
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 10,
+      "last_referenced": "2026-01-08T17:45:28.857645"
+    }
+  },
+  {
+    "id": "b329a1bf-a639-4038-bd68-9292288a708b",
+    "name": "API Documentation.md",
+    "type": "md",
+    "size_bytes": 8514541,
+    "uploaded_by": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "created_at": "2025-10-25T02:15:33.857652",
+    "updated_at": "2025-11-09T02:15:33.857652",
+    "status": "processed",
+    "chunk_count": 19,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 15473,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 0,
+      "last_referenced": "2026-01-12T09:02:20.857660"
+    }
+  },
+  {
+    "id": "a0a69710-6863-46ed-bb49-b1a3f7078aec",
+    "name": "Risk Assessment.docx",
+    "type": "docx",
+    "size_bytes": 5054815,
+    "uploaded_by": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "created_at": "2025-11-27T10:20:28.857668",
+    "updated_at": "2025-12-19T10:20:28.857668",
+    "status": "processed",
+    "chunk_count": 87,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 25,
+      "word_count": 15945,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 17,
+      "last_referenced": "2026-01-11T04:51:38.857677"
+    }
+  },
+  {
+    "id": "4e51ffee-5e13-4f30-a6f5-7cce83144988",
+    "name": "Product Roadmap.pdf",
+    "type": "pdf",
+    "size_bytes": 8711033,
+    "uploaded_by": "4de0bcde-01ec-4a93-8432-ced825a7f4da",
+    "created_at": "2025-10-28T16:50:32.857683",
+    "updated_at": "2025-11-01T16:50:32.857683",
+    "status": "processed",
+    "chunk_count": 9,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 4,
+      "word_count": 7375,
+      "language": "en",
+      "tags": [
+        "internal",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 39,
+      "last_referenced": "2026-01-09T04:34:16.857692"
+    }
+  },
+  {
+    "id": "d019baef-0863-4b9e-b32f-d96ae0b7eda1",
+    "name": "Compliance Report.txt",
+    "type": "txt",
+    "size_bytes": 1845286,
+    "uploaded_by": "c85ddb12-6ee1-46ed-8126-7f8ca53ce3d7",
+    "created_at": "2025-11-20T17:22:16.857698",
+    "updated_at": "2025-11-20T17:22:16.857698",
+    "status": "processed",
+    "chunk_count": 44,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 13726,
+      "language": "en",
+      "tags": [
+        "internal",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 39,
+      "last_referenced": "2026-01-07T14:13:28.857707"
+    }
+  },
+  {
+    "id": "a2b0d11f-1b52-46e7-9872-7f0c9c86505b",
+    "name": "Sales Forecast.pptx",
+    "type": "pptx",
+    "size_bytes": 9060887,
+    "uploaded_by": "b5b6022a-3454-4703-aefb-629674eae558",
+    "created_at": "2025-10-20T19:03:09.857713",
+    "updated_at": "2025-11-13T19:03:09.857713",
+    "status": "processed",
+    "chunk_count": 72,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 11,
+      "word_count": 5682,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 0,
+      "last_referenced": "2026-01-09T23:34:01.857722"
+    }
+  },
+  {
+    "id": "27429a33-b175-48b4-b643-93bd183e25ae",
+    "name": "Meeting Notes - 2025-12-18.html",
+    "type": "html",
+    "size_bytes": 9014788,
+    "uploaded_by": "47b2e619-6f72-41bc-9aba-8b2a01418894",
+    "created_at": "2025-11-25T13:54:00.857728",
+    "updated_at": "2025-11-29T13:54:00.857728",
+    "status": "processed",
+    "chunk_count": 86,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 523,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 30,
+      "last_referenced": "2026-01-10T09:31:02.857737"
+    }
+  },
+  {
+    "id": "6090861a-ae01-46de-b75d-da873d4369b9",
+    "name": "Technical Specification.docx",
+    "type": "docx",
+    "size_bytes": 8277840,
+    "uploaded_by": "545fe39f-6df5-471c-a4f2-36e73dce775d",
+    "created_at": "2025-12-01T16:01:55.857743",
+    "updated_at": "2025-12-27T16:01:55.857743",
+    "status": "processed",
+    "chunk_count": 30,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 9,
+      "word_count": 7686,
+      "language": "en",
+      "tags": [
+        "public",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 14,
+      "last_referenced": "2026-01-08T10:18:37.857752"
+    }
+  },
+  {
+    "id": "c6f4268d-6478-4f5a-ac9d-c02d891cf682",
+    "name": "Risk Assessment.md",
+    "type": "md",
+    "size_bytes": 3107522,
+    "uploaded_by": "9b258240-6ff3-444c-abd2-b5b6e0c8a9d6",
+    "created_at": "2025-11-09T14:48:22.857759",
+    "updated_at": "2025-11-30T14:48:22.857759",
+    "status": "processed",
+    "chunk_count": 95,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 15643,
+      "language": "en",
+      "tags": [
+        "final",
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 48,
+      "last_referenced": "2026-01-11T06:13:18.857767"
+    }
+  },
+  {
+    "id": "7aa68b47-956e-48ad-9139-343cbca84217",
+    "name": "Compliance Report.pptx",
+    "type": "pptx",
+    "size_bytes": 815615,
+    "uploaded_by": "e2cca01e-58fe-4f37-93b6-53bbc3900fa3",
+    "created_at": "2025-12-16T15:05:19.857774",
+    "updated_at": "2025-12-21T15:05:19.857774",
+    "status": "processed",
+    "chunk_count": 86,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 3,
+      "word_count": 8293,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 25,
+      "last_referenced": "2026-01-14T05:20:00.857782"
+    }
+  },
+  {
+    "id": "fa38c82d-a51f-4c2d-8928-bebdada5402f",
+    "name": "API Documentation.pptx",
+    "type": "pptx",
+    "size_bytes": 3614353,
+    "uploaded_by": "d18d2142-fa6d-4c2e-a834-79ac84e101cd",
+    "created_at": "2025-11-29T04:10:48.857788",
+    "updated_at": "2025-12-18T04:10:48.857788",
+    "status": "processed",
+    "chunk_count": 61,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 8,
+      "word_count": 9652,
+      "language": "en",
+      "tags": [
+        "final",
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 21,
+      "last_referenced": "2026-01-09T12:58:14.857797"
+    }
+  },
+  {
+    "id": "9a0e46e0-40b7-48a5-a207-035bcbb7de38",
+    "name": "Budget Proposal.docx",
+    "type": "docx",
+    "size_bytes": 5754099,
+    "uploaded_by": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "created_at": "2025-12-20T03:17:00.857804",
+    "updated_at": "2026-01-05T03:17:00.857804",
+    "status": "processed",
+    "chunk_count": 51,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 28,
+      "word_count": 1332,
+      "language": "en",
+      "tags": [
+        "public",
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 14,
+      "last_referenced": "2026-01-08T15:04:19.857813"
+    }
+  },
+  {
+    "id": "9655728e-a025-4a7a-8396-e2303e108e2c",
+    "name": "Customer Analysis.html",
+    "type": "html",
+    "size_bytes": 9292809,
+    "uploaded_by": "fd2506d6-92e3-4da8-ab23-7f127be0f3ea",
+    "created_at": "2025-11-27T15:02:13.857819",
+    "updated_at": "2025-12-27T15:02:13.857819",
+    "status": "processed",
+    "chunk_count": 69,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 6483,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 12,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "c1be703b-87da-45b9-b03f-a792c6b85f84",
+    "name": "Competitor Research.txt",
+    "type": "txt",
+    "size_bytes": 8911345,
+    "uploaded_by": "00c8cb3f-7d6e-42cc-b830-3ffd8b14252c",
+    "created_at": "2025-12-09T22:18:48.857833",
+    "updated_at": "2025-12-10T22:18:48.857833",
+    "status": "processed",
+    "chunk_count": 51,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 18176,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 44,
+      "last_referenced": "2026-01-13T17:19:41.857842"
+    }
+  },
+  {
+    "id": "baaea458-6611-469d-895f-a68335b9efff",
+    "name": "Policy Document v1.2.md",
+    "type": "md",
+    "size_bytes": 2560993,
+    "uploaded_by": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "created_at": "2026-01-06T03:35:23.857848",
+    "updated_at": "2026-02-05T03:35:23.857848",
+    "status": "processing",
+    "chunk_count": 59,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 7125,
+      "language": "en",
+      "tags": [
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 25,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "ee4b7633-bbe3-4f21-a5a4-a489d4d5dc77",
+    "name": "Security Audit.txt",
+    "type": "txt",
+    "size_bytes": 5043050,
+    "uploaded_by": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "created_at": "2025-12-25T08:01:44.857861",
+    "updated_at": "2025-12-27T08:01:44.857861",
+    "status": "processed",
+    "chunk_count": 76,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 10710,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 46,
+      "last_referenced": "2026-01-08T02:09:44.857869"
+    }
+  },
+  {
+    "id": "05bca193-79cc-4614-a197-602cab07e898",
+    "name": "Product Roadmap.txt",
+    "type": "txt",
+    "size_bytes": 4077855,
+    "uploaded_by": "c50b1690-5fd4-489f-b62b-b46c5de9dcd0",
+    "created_at": "2025-12-29T12:19:54.857876",
+    "updated_at": "2026-01-23T12:19:54.857876",
+    "status": "processed",
+    "chunk_count": 58,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 13312,
+      "language": "en",
+      "tags": [
+        "public",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 22,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "2778095a-3117-4f21-ade2-f21ac95b52d1",
+    "name": "Budget Proposal.txt",
+    "type": "txt",
+    "size_bytes": 7448704,
+    "uploaded_by": "4de0bcde-01ec-4a93-8432-ced825a7f4da",
+    "created_at": "2025-11-05T06:19:20.857889",
+    "updated_at": "2025-11-26T06:19:20.857889",
+    "status": "processed",
+    "chunk_count": 46,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 852,
+      "language": "en",
+      "tags": [
+        "confidential",
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 33,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "d7c3c427-90ca-4bfe-8166-b4734519d143",
+    "name": "API Documentation.html",
+    "type": "html",
+    "size_bytes": 1191161,
+    "uploaded_by": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "created_at": "2025-10-31T04:47:36.857902",
+    "updated_at": "2025-11-29T04:47:36.857902",
+    "status": "processed",
+    "chunk_count": 39,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 1842,
+      "language": "en",
+      "tags": [
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 7,
+      "last_referenced": "2026-01-12T10:45:23.857910"
+    }
+  },
+  {
+    "id": "7f559677-4b07-4054-ab1b-172c63693c9e",
+    "name": "Policy Document v2.8.docx",
+    "type": "docx",
+    "size_bytes": 6092569,
+    "uploaded_by": "f0377fe6-ad54-4308-84c0-be42650dd58d",
+    "created_at": "2025-10-24T21:05:27.857916",
+    "updated_at": "2025-11-20T21:05:27.857916",
+    "status": "processed",
+    "chunk_count": 68,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 45,
+      "word_count": 14671,
+      "language": "en",
+      "tags": [
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 40,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "f344703b-863e-4717-95f4-c022f2148525",
+    "name": "Budget Proposal.pptx",
+    "type": "pptx",
+    "size_bytes": 4225259,
+    "uploaded_by": "0f775567-df8e-411e-82ff-eb013a0b70ed",
+    "created_at": "2025-12-20T00:52:25.857946",
+    "updated_at": "2025-12-22T00:52:25.857946",
+    "status": "processed",
+    "chunk_count": 96,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 32,
+      "word_count": 8454,
+      "language": "en",
+      "tags": [
+        "draft",
+        "public"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 37,
+      "last_referenced": "2026-01-10T12:06:27.857956"
+    }
+  },
+  {
+    "id": "91de9443-c540-4c90-b50b-82d0f219372b",
+    "name": "Customer Analysis.pptx",
+    "type": "pptx",
+    "size_bytes": 8716817,
+    "uploaded_by": "89efaa85-8087-481e-af10-f1acedb48baf",
+    "created_at": "2025-12-14T04:14:47.857962",
+    "updated_at": "2025-12-26T04:14:47.857962",
+    "status": "processed",
+    "chunk_count": 18,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 38,
+      "word_count": 3730,
+      "language": "en",
+      "tags": [
+        "confidential",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 48,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "87e891b4-4ac7-4370-8ed7-9fa4231c92c2",
+    "name": "Compliance Report.html",
+    "type": "html",
+    "size_bytes": 8780547,
+    "uploaded_by": "35028ac8-ce5b-47e9-8292-17910e66608d",
+    "created_at": "2025-12-10T22:41:29.857977",
+    "updated_at": "2026-01-09T22:41:29.857977",
+    "status": "processed",
+    "chunk_count": 85,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 14649,
+      "language": "en",
+      "tags": [
+        "confidential",
+        "public"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 36,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "714dd618-6d68-4cf8-869b-58700f04bff8",
+    "name": "Sales Forecast.html",
+    "type": "html",
+    "size_bytes": 4263262,
+    "uploaded_by": "0f775567-df8e-411e-82ff-eb013a0b70ed",
+    "created_at": "2026-01-06T18:00:59.857992",
+    "updated_at": "2026-02-01T18:00:59.857992",
+    "status": "processed",
+    "chunk_count": 50,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 8649,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 50,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "937fc5f0-cd4f-4814-8e21-c1620d1b568e",
+    "name": "User Research Findings.xlsx",
+    "type": "xlsx",
+    "size_bytes": 6743046,
+    "uploaded_by": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "created_at": "2025-12-27T04:40:05.858005",
+    "updated_at": "2026-01-07T04:40:05.858005",
+    "status": "processed",
+    "chunk_count": 27,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 16878,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 21,
+      "last_referenced": "2026-01-13T19:28:24.858013"
+    }
+  },
+  {
+    "id": "bf4bb518-3fde-4907-8683-4dc08f409011",
+    "name": "Competitor Research.pptx",
+    "type": "pptx",
+    "size_bytes": 8351509,
+    "uploaded_by": "76830006-41ab-425a-8e4f-54bde1f4a33c",
+    "created_at": "2025-11-15T15:52:03.858019",
+    "updated_at": "2025-11-20T15:52:03.858019",
+    "status": "processed",
+    "chunk_count": 30,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 17,
+      "word_count": 16406,
+      "language": "en",
+      "tags": [
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 28,
+      "last_referenced": "2026-01-09T05:04:35.858027"
+    }
+  },
+  {
+    "id": "cd7e032e-929a-4b2c-a06b-fbc2fbaba9af",
+    "name": "Policy Document v1.3.csv",
+    "type": "csv",
+    "size_bytes": 8501272,
+    "uploaded_by": "d32af08c-32a6-452a-b4f8-2fb4f760e050",
+    "created_at": "2026-01-12T12:25:45.858034",
+    "updated_at": "2026-02-01T12:25:45.858034",
+    "status": "processed",
+    "chunk_count": 76,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 18137,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 25,
+      "last_referenced": "2026-01-08T04:49:07.858042"
+    }
+  },
+  {
+    "id": "29562d78-1132-4bc7-83a5-8f34fdeadb25",
+    "name": "Training Manual.csv",
+    "type": "csv",
+    "size_bytes": 5717004,
+    "uploaded_by": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "created_at": "2025-10-30T10:21:33.858048",
+    "updated_at": "2025-11-10T10:21:33.858048",
+    "status": "processed",
+    "chunk_count": 54,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 3895,
+      "language": "en",
+      "tags": [
+        "internal",
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 20,
+      "last_referenced": "2026-01-12T15:35:56.858056"
+    }
+  },
+  {
+    "id": "a84fed16-5799-43a4-ab03-3da8becda9aa",
+    "name": "Product Roadmap.pdf",
+    "type": "pdf",
+    "size_bytes": 3775958,
+    "uploaded_by": "d32af08c-32a6-452a-b4f8-2fb4f760e050",
+    "created_at": "2025-12-03T06:57:11.858063",
+    "updated_at": "2025-12-10T06:57:11.858063",
+    "status": "processed",
+    "chunk_count": 33,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 29,
+      "word_count": 7576,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 0,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "9b13575f-ce09-4014-bb70-49c18b051518",
+    "name": "Q4 Financial Report 2024.md",
+    "type": "md",
+    "size_bytes": 3131535,
+    "uploaded_by": "00c8cb3f-7d6e-42cc-b830-3ffd8b14252c",
+    "created_at": "2025-11-25T07:29:04.858077",
+    "updated_at": "2025-12-13T07:29:04.858077",
+    "status": "processed",
+    "chunk_count": 78,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 13184,
+      "language": "en",
+      "tags": [
+        "internal",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 16,
+      "last_referenced": "2026-01-11T16:52:25.858086"
+    }
+  },
+  {
+    "id": "16bfe3cc-e084-4521-ab78-28d053957ba1",
+    "name": "Competitor Research.txt",
+    "type": "txt",
+    "size_bytes": 4152216,
+    "uploaded_by": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "created_at": "2025-11-16T12:13:45.858092",
+    "updated_at": "2025-12-04T12:13:45.858092",
+    "status": "processed",
+    "chunk_count": 69,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 16088,
+      "language": "en",
+      "tags": [
+        "internal",
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 38,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "49155301-f58f-4879-9a6e-cb5a2639d694",
+    "name": "Market Analysis.pdf",
+    "type": "pdf",
+    "size_bytes": 7356255,
+    "uploaded_by": "26dd68f2-64cd-4308-b368-1eee114b3b97",
+    "created_at": "2025-11-29T23:08:07.858105",
+    "updated_at": "2025-12-17T23:08:07.858105",
+    "status": "processed",
+    "chunk_count": 26,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 2,
+      "word_count": 18848,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 41,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "28f544b8-4801-425e-82ba-3d577044b563",
+    "name": "Market Analysis.docx",
+    "type": "docx",
+    "size_bytes": 4642027,
+    "uploaded_by": "ff84bfe0-d875-4e32-ac5d-8f42fec2e9ed",
+    "created_at": "2025-12-25T01:47:12.858118",
+    "updated_at": "2026-01-02T01:47:12.858118",
+    "status": "processing",
+    "chunk_count": 98,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 2,
+      "word_count": 16582,
+      "language": "en",
+      "tags": [
+        "public"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 25,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "8a613b5c-b17e-44ec-8047-70d5fbaa8f87",
+    "name": "User Research Findings.md",
+    "type": "md",
+    "size_bytes": 8532069,
+    "uploaded_by": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "created_at": "2025-12-10T14:33:54.858131",
+    "updated_at": "2025-12-14T14:33:54.858131",
+    "status": "processed",
+    "chunk_count": 92,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 19730,
+      "language": "en",
+      "tags": [
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 39,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "e12fdcbd-3811-47fb-b066-683e91a27748",
+    "name": "Market Analysis.pptx",
+    "type": "pptx",
+    "size_bytes": 2714608,
+    "uploaded_by": "9b258240-6ff3-444c-abd2-b5b6e0c8a9d6",
+    "created_at": "2025-12-26T04:36:38.858144",
+    "updated_at": "2026-01-01T04:36:38.858144",
+    "status": "processed",
+    "chunk_count": 81,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 50,
+      "word_count": 6376,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 1,
+      "last_referenced": "2026-01-13T06:52:22.858153"
+    }
+  },
+  {
+    "id": "076241aa-24c3-46a2-9924-5568842a6c7c",
+    "name": "Customer Analysis.pptx",
+    "type": "pptx",
+    "size_bytes": 6847960,
+    "uploaded_by": "b5b6022a-3454-4703-aefb-629674eae558",
+    "created_at": "2026-01-02T10:17:11.858160",
+    "updated_at": "2026-01-24T10:17:11.858160",
+    "status": "processed",
+    "chunk_count": 48,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 12,
+      "word_count": 3641,
+      "language": "en",
+      "tags": [
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 11,
+      "last_referenced": "2026-01-10T08:06:19.858168"
+    }
+  },
+  {
+    "id": "dd479434-3e7f-4d91-84eb-6ca1a4132f21",
+    "name": "API Documentation.md",
+    "type": "md",
+    "size_bytes": 5902169,
+    "uploaded_by": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "created_at": "2025-11-07T06:48:39.858175",
+    "updated_at": "2025-11-27T06:48:39.858175",
+    "status": "processed",
+    "chunk_count": 62,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 3581,
+      "language": "en",
+      "tags": [
+        "internal",
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 38,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "a1733c2b-5c62-42d7-a3c9-309f55cc9b17",
+    "name": "Performance Review.pdf",
+    "type": "pdf",
+    "size_bytes": 221031,
+    "uploaded_by": "efd558eb-e8eb-4824-9950-d38edd40d66c",
+    "created_at": "2025-12-06T15:38:32.858187",
+    "updated_at": "2025-12-16T15:38:32.858187",
+    "status": "processed",
+    "chunk_count": 8,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 37,
+      "word_count": 18960,
+      "language": "en",
+      "tags": [
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 11,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "72fb965e-3404-4a20-885d-40e1cbef1459",
+    "name": "API Documentation.docx",
+    "type": "docx",
+    "size_bytes": 2604951,
+    "uploaded_by": "46f03945-d427-4b21-af9a-253c02203f5e",
+    "created_at": "2026-01-08T22:50:04.858200",
+    "updated_at": "2026-01-19T22:50:04.858200",
+    "status": "processed",
+    "chunk_count": 61,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 46,
+      "word_count": 6316,
+      "language": "en",
+      "tags": [
+        "public",
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 1,
+      "last_referenced": "2026-01-13T19:17:07.858211"
+    }
+  },
+  {
+    "id": "065f872f-6c58-45b5-88ec-c8fb3566cd05",
+    "name": "Customer Analysis.txt",
+    "type": "txt",
+    "size_bytes": 8708799,
+    "uploaded_by": "c85ddb12-6ee1-46ed-8126-7f8ca53ce3d7",
+    "created_at": "2025-12-12T13:44:54.858218",
+    "updated_at": "2026-01-09T13:44:54.858218",
+    "status": "processed",
+    "chunk_count": 29,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 5587,
+      "language": "en",
+      "tags": [
+        "internal",
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 42,
+      "last_referenced": "2026-01-11T23:57:38.858226"
+    }
+  },
+  {
+    "id": "41db731d-6a9e-410a-930f-45084f20d1b4",
+    "name": "User Research Findings.md",
+    "type": "md",
+    "size_bytes": 2381985,
+    "uploaded_by": "f0377fe6-ad54-4308-84c0-be42650dd58d",
+    "created_at": "2025-11-20T18:49:43.858233",
+    "updated_at": "2025-12-20T18:49:43.858233",
+    "status": "processed",
+    "chunk_count": 29,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 13747,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 22,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "d04c64b2-9e57-4cd8-bb98-2e653fbf098d",
+    "name": "API Documentation.pptx",
+    "type": "pptx",
+    "size_bytes": 9176754,
+    "uploaded_by": "4e87f50d-0898-418a-8529-47673eb1227a",
+    "created_at": "2025-12-28T18:27:38.858247",
+    "updated_at": "2026-01-03T18:27:38.858247",
+    "status": "processed",
+    "chunk_count": 22,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 29,
+      "word_count": 6989,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 25,
+      "last_referenced": "2026-01-08T06:41:55.858255"
+    }
+  },
+  {
+    "id": "05f9d0f6-181c-4fdf-b21a-94f829a70223",
+    "name": "API Documentation.html",
+    "type": "html",
+    "size_bytes": 6533126,
+    "uploaded_by": "ade41183-8c62-4867-9b95-342487a11e65",
+    "created_at": "2025-12-14T11:19:09.858262",
+    "updated_at": "2025-12-29T11:19:09.858262",
+    "status": "failed",
+    "chunk_count": 41,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 2306,
+      "language": "en",
+      "tags": [
+        "confidential",
+        "public"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 5,
+      "last_referenced": "2026-01-14T05:05:49.858271"
+    }
+  },
+  {
+    "id": "cafe631b-499f-427e-aaf1-c2e7426e125a",
+    "name": "Performance Review.pdf",
+    "type": "pdf",
+    "size_bytes": 5092589,
+    "uploaded_by": "b5b6022a-3454-4703-aefb-629674eae558",
+    "created_at": "2025-10-20T20:42:09.858277",
+    "updated_at": "2025-10-26T20:42:09.858277",
+    "status": "processed",
+    "chunk_count": 73,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 4,
+      "word_count": 14714,
+      "language": "en",
+      "tags": [
+        "final",
+        "public"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 32,
+      "last_referenced": "2026-01-07T19:43:37.858286"
+    }
+  },
+  {
+    "id": "2d05c16f-0fc8-4a9f-a240-ba0e3faa528f",
+    "name": "Training Manual.xlsx",
+    "type": "xlsx",
+    "size_bytes": 3425979,
+    "uploaded_by": "26dd68f2-64cd-4308-b368-1eee114b3b97",
+    "created_at": "2025-10-23T08:43:06.858292",
+    "updated_at": "2025-10-29T08:43:06.858292",
+    "status": "processed",
+    "chunk_count": 83,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 1010,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 24,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "83e0bc41-c1b3-4fb9-ac90-e4bea1dae5b2",
+    "name": "Customer Analysis.txt",
+    "type": "txt",
+    "size_bytes": 3841443,
+    "uploaded_by": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "created_at": "2025-11-23T03:16:14.858304",
+    "updated_at": "2025-12-22T03:16:14.858304",
+    "status": "processed",
+    "chunk_count": 10,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 5609,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 38,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "af7a5faf-63ef-4aed-9203-904e3333a296",
+    "name": "Budget Proposal.csv",
+    "type": "csv",
+    "size_bytes": 181587,
+    "uploaded_by": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "created_at": "2025-11-25T00:12:50.858317",
+    "updated_at": "2025-12-21T00:12:50.858317",
+    "status": "processed",
+    "chunk_count": 40,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 6709,
+      "language": "en",
+      "tags": [
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 38,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "c204a35a-14b1-46d7-bc68-4e99e0b7b0ac",
+    "name": "Risk Assessment.docx",
+    "type": "docx",
+    "size_bytes": 1928984,
+    "uploaded_by": "55203c1b-bc48-446d-98a4-6a0ba26c0456",
+    "created_at": "2025-12-17T04:24:35.858330",
+    "updated_at": "2025-12-22T04:24:35.858330",
+    "status": "processing",
+    "chunk_count": 67,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 5,
+      "word_count": 6508,
+      "language": "en",
+      "tags": [
+        "internal",
+        "public"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 47,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "e09bf3e2-41e0-4c95-90ad-0f8052a52a0a",
+    "name": "Risk Assessment.csv",
+    "type": "csv",
+    "size_bytes": 2013211,
+    "uploaded_by": "c50b1690-5fd4-489f-b62b-b46c5de9dcd0",
+    "created_at": "2025-10-26T19:30:21.858344",
+    "updated_at": "2025-11-21T19:30:21.858344",
+    "status": "processed",
+    "chunk_count": 30,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 3334,
+      "language": "en",
+      "tags": [
+        "draft",
+        "public"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 8,
+      "last_referenced": "2026-01-07T17:05:53.858352"
+    }
+  },
+  {
+    "id": "d2c4e585-0cb9-434e-8380-9551ba4a6e52",
+    "name": "API Documentation.pdf",
+    "type": "pdf",
+    "size_bytes": 6520631,
+    "uploaded_by": "f92d5823-8a33-4577-8af2-d5a1ae6b4e0a",
+    "created_at": "2026-01-05T03:57:09.858358",
+    "updated_at": "2026-01-07T03:57:09.858358",
+    "status": "processed",
+    "chunk_count": 13,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 16,
+      "word_count": 14785,
+      "language": "en",
+      "tags": [
+        "internal",
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 47,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "2824d417-19c9-451a-ba62-352c04531d61",
+    "name": "Product Roadmap.pdf",
+    "type": "pdf",
+    "size_bytes": 5736860,
+    "uploaded_by": "0e0961f9-7565-4f51-91e9-21f9604768d5",
+    "created_at": "2025-10-31T02:32:32.858371",
+    "updated_at": "2025-11-29T02:32:32.858371",
+    "status": "processed",
+    "chunk_count": 64,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 13,
+      "word_count": 2349,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 9,
+      "last_referenced": "2026-01-13T09:57:58.858379"
+    }
+  },
+  {
+    "id": "a6ee5526-a49f-4e52-8632-9bfb4ef8e7e2",
+    "name": "Meeting Notes - 2025-12-24.html",
+    "type": "html",
+    "size_bytes": 7400875,
+    "uploaded_by": "1dddfc60-c75f-4c99-a459-90292206da89",
+    "created_at": "2025-10-18T17:40:36.858386",
+    "updated_at": "2025-11-13T17:40:36.858386",
+    "status": "processed",
+    "chunk_count": 72,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 9930,
+      "language": "en",
+      "tags": [
+        "public",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 35,
+      "last_referenced": "2026-01-07T23:13:12.858394"
+    }
+  },
+  {
+    "id": "b83c0b89-aa26-4a2b-9ab7-c031f69e9537",
+    "name": "Customer Analysis.pdf",
+    "type": "pdf",
+    "size_bytes": 2860704,
+    "uploaded_by": "9b258240-6ff3-444c-abd2-b5b6e0c8a9d6",
+    "created_at": "2025-12-15T08:06:41.858400",
+    "updated_at": "2026-01-13T08:06:41.858400",
+    "status": "processed",
+    "chunk_count": 9,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 10,
+      "word_count": 3901,
+      "language": "en",
+      "tags": [
+        "public",
+        "confidential"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 24,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "1d518152-39c2-4228-9cf6-1b478e566bd4",
+    "name": "Product Roadmap.pdf",
+    "type": "pdf",
+    "size_bytes": 9163356,
+    "uploaded_by": "1dddfc60-c75f-4c99-a459-90292206da89",
+    "created_at": "2025-12-10T00:04:28.858413",
+    "updated_at": "2025-12-10T00:04:28.858413",
+    "status": "processed",
+    "chunk_count": 65,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 37,
+      "word_count": 13150,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 24,
+      "last_referenced": "2026-01-10T03:55:38.858421"
+    }
+  },
+  {
+    "id": "4c250b2d-19f9-4000-bb46-a5881c383850",
+    "name": "API Documentation.txt",
+    "type": "txt",
+    "size_bytes": 9010215,
+    "uploaded_by": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "created_at": "2025-11-29T09:07:04.858428",
+    "updated_at": "2025-12-06T09:07:04.858428",
+    "status": "processed",
+    "chunk_count": 86,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 6213,
+      "language": "en",
+      "tags": [
+        "internal"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 10,
+      "last_referenced": "2026-01-07T12:47:58.858437"
+    }
+  },
+  {
+    "id": "1eb98389-3999-487b-9158-3e876531599b",
+    "name": "Compliance Report.pptx",
+    "type": "pptx",
+    "size_bytes": 9094837,
+    "uploaded_by": "5a3806ae-e8ed-48ac-abde-121edb99ae46",
+    "created_at": "2025-12-24T06:43:08.858445",
+    "updated_at": "2026-01-05T06:43:08.858445",
+    "status": "processed",
+    "chunk_count": 85,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 23,
+      "word_count": 7319,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 26,
+      "last_referenced": "2026-01-12T18:26:47.858454"
+    }
+  },
+  {
+    "id": "5a5d0dcd-edfa-4d75-bb7c-a51361c28c90",
+    "name": "User Research Findings.xlsx",
+    "type": "xlsx",
+    "size_bytes": 6702147,
+    "uploaded_by": "1079c127-6d94-45b6-a46b-357d4005d848",
+    "created_at": "2025-12-19T21:08:00.858460",
+    "updated_at": "2026-01-11T21:08:00.858460",
+    "status": "processed",
+    "chunk_count": 36,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 7609,
+      "language": "en",
+      "tags": [
+        "public",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 46,
+      "last_referenced": "2026-01-11T16:33:12.858469"
+    }
+  },
+  {
+    "id": "3137092a-5bcc-4c18-a0fb-134a2a256304",
+    "name": "User Research Findings.pptx",
+    "type": "pptx",
+    "size_bytes": 7899191,
+    "uploaded_by": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "created_at": "2025-10-30T00:01:38.858478",
+    "updated_at": "2025-11-16T00:01:38.858478",
+    "status": "processed",
+    "chunk_count": 43,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": 50,
+      "word_count": 14004,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 12,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "df883bbd-7f4e-46f1-9ac8-bea3c403fb1b",
+    "name": "Performance Review.txt",
+    "type": "txt",
+    "size_bytes": 409891,
+    "uploaded_by": "d32af08c-32a6-452a-b4f8-2fb4f760e050",
+    "created_at": "2025-11-28T06:55:12.858491",
+    "updated_at": "2025-12-04T06:55:12.858491",
+    "status": "processed",
+    "chunk_count": 90,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 6147,
+      "language": "en",
+      "tags": [
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 49,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "aedc3250-79c4-4d42-816b-511b0e9d091d",
+    "name": "Risk Assessment.html",
+    "type": "html",
+    "size_bytes": 2200350,
+    "uploaded_by": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "created_at": "2025-11-09T03:13:12.858503",
+    "updated_at": "2025-12-08T03:13:12.858503",
+    "status": "processed",
+    "chunk_count": 83,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 17886,
+      "language": "en",
+      "tags": [
+        "confidential",
+        "final"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 50,
+      "last_referenced": null
+    }
+  },
+  {
+    "id": "8a002036-bec6-44ff-a65a-13dddf3f351c",
+    "name": "Q1 Financial Report 2024.xlsx",
+    "type": "xlsx",
+    "size_bytes": 5994371,
+    "uploaded_by": "e2cca01e-58fe-4f37-93b6-53bbc3900fa3",
+    "created_at": "2026-01-11T20:03:22.858516",
+    "updated_at": "2026-02-03T20:03:22.858516",
+    "status": "processed",
+    "chunk_count": 32,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 10578,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 23,
+      "last_referenced": "2026-01-11T02:35:49.858524"
+    }
+  },
+  {
+    "id": "3e022ae2-674a-428a-83ba-2edd061de717",
+    "name": "User Research Findings.csv",
+    "type": "csv",
+    "size_bytes": 9436908,
+    "uploaded_by": "c85ddb12-6ee1-46ed-8126-7f8ca53ce3d7",
+    "created_at": "2025-10-26T03:12:43.858531",
+    "updated_at": "2025-11-23T03:12:43.858531",
+    "status": "processed",
+    "chunk_count": 25,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 14104,
+      "language": "en",
+      "tags": []
+    },
+    "usage_stats": {
+      "times_referenced": 34,
+      "last_referenced": "2026-01-12T06:01:44.858587"
+    }
+  },
+  {
+    "id": "ba7541b2-1fee-4001-9909-a0ca989507ec",
+    "name": "Policy Document v2.1.txt",
+    "type": "txt",
+    "size_bytes": 7474248,
+    "uploaded_by": "82e1bf6f-f9a7-4cff-8609-87a0e1eb10cf",
+    "created_at": "2026-01-12T13:15:19.858595",
+    "updated_at": "2026-02-05T13:15:19.858595",
+    "status": "processed",
+    "chunk_count": 53,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 15993,
+      "language": "en",
+      "tags": [
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 10,
+      "last_referenced": "2026-01-11T16:15:11.858605"
+    }
+  },
+  {
+    "id": "28db4271-481b-484c-ade3-1c13ef3e6881",
+    "name": "User Research Findings.xlsx",
+    "type": "xlsx",
+    "size_bytes": 5710506,
+    "uploaded_by": "fd2506d6-92e3-4da8-ab23-7f127be0f3ea",
+    "created_at": "2026-01-10T06:18:27.858611",
+    "updated_at": "2026-02-07T06:18:27.858611",
+    "status": "processed",
+    "chunk_count": 27,
+    "embedding_model": "text-embedding-3-small",
+    "metadata": {
+      "pages": null,
+      "word_count": 4921,
+      "language": "en",
+      "tags": [
+        "internal",
+        "draft"
+      ]
+    },
+    "usage_stats": {
+      "times_referenced": 9,
+      "last_referenced": null
+    }
+  }
+]

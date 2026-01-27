@@ -1,0 +1,289 @@
+name: 'NexusAI Quality Gate'
+description: 'Run NexusAI code analysis and quality gate checks on your PR'
+author: 'NexusAI'
+branding:
+  icon: 'check-circle'
+  color: 'green'
+
+inputs:
+  nexusai-server:
+    description: 'NexusAI server URL'
+    required: false
+    default: 'https://api.nexusai.dev'
+  api-key:
+    description: 'NexusAI API key'
+    required: true
+  config-name:
+    description: 'Quality gate configuration name'
+    required: false
+    default: 'default'
+  fail-on-quality-gate:
+    description: 'Fail the workflow if quality gate fails'
+    required: false
+    default: 'true'
+  post-pr-comment:
+    description: 'Post quality gate results as PR comment'
+    required: false
+    default: 'true'
+  include-patterns:
+    description: 'File patterns to include (comma-separated)'
+    required: false
+    default: '**/*.py,**/*.ts,**/*.tsx,**/*.js,**/*.jsx,**/*.go,**/*.java'
+  exclude-patterns:
+    description: 'File patterns to exclude (comma-separated)'
+    required: false
+    default: '**/node_modules/**,**/dist/**,**/build/**,**/*.min.js'
+  max-files:
+    description: 'Maximum number of files to analyze'
+    required: false
+    default: '100'
+
+outputs:
+  status:
+    description: 'Quality gate status (passed, failed, warning)'
+  passed:
+    description: 'Whether quality gate passed (true/false)'
+  total-issues:
+    description: 'Total number of issues found'
+  critical-issues:
+    description: 'Number of critical issues'
+  security-issues:
+    description: 'Number of security issues'
+  quality-score:
+    description: 'Code quality score (0-10)'
+  badge-url:
+    description: 'URL for quality gate badge'
+  summary:
+    description: 'Quality gate summary message'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        pip install requests
+
+    - name: Get changed files
+      id: changed-files
+      shell: bash
+      run: |
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          # Get files changed in PR
+          git fetch origin ${{ github.base_ref }} --depth=1
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | head -n ${{ inputs.max-files }})
+        else
+          # Get files in last commit
+          CHANGED_FILES=$(git diff --name-only HEAD~1 | head -n ${{ inputs.max-files }})
+        fi
+
+        # Filter by patterns
+        INCLUDE_PATTERNS="${{ inputs.include-patterns }}"
+        EXCLUDE_PATTERNS="${{ inputs.exclude-patterns }}"
+
+        # Save to file for processing
+        echo "$CHANGED_FILES" > /tmp/changed_files.txt
+        echo "files=$(cat /tmp/changed_files.txt | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
+
+    - name: Run NexusAI Analysis
+      id: analyze
+      shell: python
+      env:
+        NEXUSAI_SERVER: ${{ inputs.nexusai-server }}
+        NEXUSAI_API_KEY: ${{ inputs.api-key }}
+        CONFIG_NAME: ${{ inputs.config-name }}
+        INCLUDE_PATTERNS: ${{ inputs.include-patterns }}
+        EXCLUDE_PATTERNS: ${{ inputs.exclude-patterns }}
+      run: |
+        import os
+        import json
+        import fnmatch
+        import requests
+        from pathlib import Path
+
+        server = os.environ['NEXUSAI_SERVER'].rstrip('/')
+        api_key = os.environ['NEXUSAI_API_KEY']
+        config_name = os.environ['CONFIG_NAME']
+        include_patterns = os.environ['INCLUDE_PATTERNS'].split(',')
+        exclude_patterns = os.environ['EXCLUDE_PATTERNS'].split(',')
+
+        # Read changed files
+        with open('/tmp/changed_files.txt', 'r') as f:
+            changed_files = [l.strip() for l in f.readlines() if l.strip()]
+
+        print(f"Found {len(changed_files)} changed files")
+
+        # Filter files
+        def should_include(filepath):
+            # Check include patterns
+            included = any(fnmatch.fnmatch(filepath, p.strip()) for p in include_patterns)
+            if not included:
+                return False
+            # Check exclude patterns
+            excluded = any(fnmatch.fnmatch(filepath, p.strip()) for p in exclude_patterns)
+            return not excluded
+
+        files_to_analyze = [f for f in changed_files if should_include(f)]
+        print(f"Analyzing {len(files_to_analyze)} files after filtering")
+
+        if not files_to_analyze:
+            print("No files to analyze")
+            # Write outputs for no-op case
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                f.write(f"status=passed\n")
+                f.write(f"passed=true\n")
+                f.write(f"total-issues=0\n")
+                f.write(f"critical-issues=0\n")
+                f.write(f"security-issues=0\n")
+                f.write(f"quality-score=10.0\n")
+                f.write(f"summary=No files to analyze\n")
+            exit(0)
+
+        # Language detection
+        LANG_MAP = {
+            '.py': 'python',
+            '.ts': 'typescript',
+            '.tsx': 'typescriptreact',
+            '.js': 'javascript',
+            '.jsx': 'javascriptreact',
+            '.go': 'go',
+            '.java': 'java',
+            '.rs': 'rust',
+            '.cs': 'csharp',
+            '.cpp': 'cpp',
+            '.c': 'c',
+        }
+
+        def get_language(filepath):
+            ext = Path(filepath).suffix
+            return LANG_MAP.get(ext, 'text')
+
+        # Prepare files for batch analysis
+        files_data = []
+        for filepath in files_to_analyze:
+            try:
+                with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                    content = f.read()
+                files_data.append({
+                    'file_uri': f'file://{os.path.abspath(filepath)}',
+                    'content': content,
+                    'language_id': get_language(filepath),
+                })
+            except Exception as e:
+                print(f"Error reading {filepath}: {e}")
+
+        if not files_data:
+            print("No valid files to analyze")
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                f.write(f"status=passed\n")
+                f.write(f"passed=true\n")
+            exit(0)
+
+        print(f"Sending {len(files_data)} files to NexusAI for analysis...")
+
+        # Call NexusAI API
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json',
+        }
+
+        response = requests.post(
+            f'{server}/api/v1/quality-gate/evaluate/batch',
+            headers=headers,
+            json={
+                'files': files_data,
+                'config_name': config_name,
+            },
+            timeout=300,
+        )
+
+        if response.status_code != 200:
+            print(f"Error from NexusAI API: {response.status_code}")
+            print(response.text)
+            exit(1)
+
+        result = response.json()
+
+        print(f"\n{'='*50}")
+        print(f"Quality Gate: {result['status'].upper()}")
+        print(f"{'='*50}")
+        print(f"Summary: {result['summary']}")
+        print(f"Total Issues: {result['total_issues']}")
+        print(f"Critical Issues: {result['critical_issues']}")
+        print(f"Security Issues: {result['security_issues']}")
+        print(f"Quality Score: {result['quality_score']}/10")
+        print(f"{'='*50}\n")
+
+        # Write outputs
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write(f"status={result['status']}\n")
+            f.write(f"passed={str(result['passed']).lower()}\n")
+            f.write(f"total-issues={result['total_issues']}\n")
+            f.write(f"critical-issues={result['critical_issues']}\n")
+            f.write(f"security-issues={result['security_issues']}\n")
+            f.write(f"quality-score={result['quality_score']}\n")
+            f.write(f"badge-url={result.get('badge_url', '')}\n")
+            f.write(f"summary={result['summary']}\n")
+
+        # Write markdown summary to file for PR comment
+        with open('/tmp/nexusai_summary.md', 'w') as f:
+            f.write(result['markdown_summary'])
+
+        # Exit with error if failed and fail-on-quality-gate is true
+        if not result['passed']:
+            exit(1)
+
+    - name: Post PR Comment
+      if: ${{ github.event_name == 'pull_request' && inputs.post-pr-comment == 'true' && always() }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          let summary;
+          try {
+            summary = fs.readFileSync('/tmp/nexusai_summary.md', 'utf8');
+          } catch (e) {
+            summary = '## NexusAI Quality Gate\n\nAnalysis could not be completed.';
+          }
+
+          // Find existing comment
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+
+          const botComment = comments.find(comment =>
+            comment.body.includes('NexusAI Quality Gate')
+          );
+
+          if (botComment) {
+            // Update existing comment
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: summary
+            });
+          } else {
+            // Create new comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: summary
+            });
+          }
+
+    - name: Set job status
+      if: ${{ inputs.fail-on-quality-gate == 'true' && steps.analyze.outputs.passed == 'false' }}
+      shell: bash
+      run: |
+        echo "Quality gate failed!"
+        exit 1

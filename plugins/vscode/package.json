@@ -1,0 +1,300 @@
+{
+  "name": "nexusai",
+  "displayName": "NexusAI",
+  "description": "AI-powered software intelligence assistant for code analysis, documentation, and review",
+  "version": "1.0.0",
+  "publisher": "nexusai",
+  "icon": "resources/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Machine Learning",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "assistant",
+    "code review",
+    "documentation",
+    "analysis",
+    "copilot",
+    "llm"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "nexusai.openChat",
+        "title": "Open Chat",
+        "category": "NexusAI",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "nexusai.explainCode",
+        "title": "Explain Code",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.reviewCode",
+        "title": "Review Code",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.generateDocs",
+        "title": "Generate Documentation",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.findBugs",
+        "title": "Find Bugs",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.refactorCode",
+        "title": "Suggest Refactoring",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.generateTests",
+        "title": "Generate Tests",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.askQuestion",
+        "title": "Ask Question About Selection",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.analyzeFile",
+        "title": "Analyze Current File",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.analyzeWorkspace",
+        "title": "Analyze Workspace",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.showMetrics",
+        "title": "Show Code Metrics",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.fixIssue",
+        "title": "Fix This Issue",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.reviewPR",
+        "title": "Review Pull Request",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.clearChat",
+        "title": "Clear Chat History",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.signIn",
+        "title": "Sign In",
+        "category": "NexusAI"
+      },
+      {
+        "command": "nexusai.signOut",
+        "title": "Sign Out",
+        "category": "NexusAI"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "nexusai",
+          "title": "NexusAI",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "nexusai": [
+        {
+          "type": "webview",
+          "id": "nexusai.chatView",
+          "name": "Chat"
+        },
+        {
+          "id": "nexusai.analysisView",
+          "name": "Analysis"
+        },
+        {
+          "id": "nexusai.historyView",
+          "name": "History"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "nexusai.submenu",
+          "group": "nexusai"
+        }
+      ],
+      "nexusai.submenu": [
+        {
+          "command": "nexusai.explainCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "nexusai.reviewCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "nexusai.generateDocs",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "nexusai.findBugs",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "nexusai.refactorCode",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "nexusai.generateTests",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "nexusai.askQuestion",
+          "when": "editorHasSelection"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "nexusai.clearChat",
+          "when": "view == nexusai.chatView",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "nexusai.fixIssue",
+          "when": "nexusai.hasIssues"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "nexusai.submenu",
+        "label": "NexusAI"
+      }
+    ],
+    "configuration": {
+      "title": "NexusAI",
+      "properties": {
+        "nexusai.apiEndpoint": {
+          "type": "string",
+          "default": "https://api.nexusai.dev",
+          "description": "NexusAI API endpoint URL"
+        },
+        "nexusai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your NexusAI API key"
+        },
+        "nexusai.model": {
+          "type": "string",
+          "default": "auto",
+          "enum": ["auto", "gpt-4", "gpt-3.5-turbo", "claude-3", "gemini-pro"],
+          "description": "Preferred AI model"
+        },
+        "nexusai.enableInlineHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline code hints and suggestions"
+        },
+        "nexusai.enableAutoAnalysis": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically analyze files on save"
+        },
+        "nexusai.maxContextLines": {
+          "type": "number",
+          "default": 100,
+          "description": "Maximum lines of context to send with requests"
+        },
+        "nexusai.telemetry": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable anonymous usage telemetry"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "nexusai.openChat",
+        "key": "ctrl+shift+n",
+        "mac": "cmd+shift+n"
+      },
+      {
+        "command": "nexusai.explainCode",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "nexusai.askQuestion",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "editorHasSelection"
+      }
+    ],
+    "colors": [
+      {
+        "id": "nexusai.issueHighlight",
+        "description": "Background color for highlighted issues",
+        "defaults": {
+          "dark": "#ff000030",
+          "light": "#ff000020"
+        }
+      },
+      {
+        "id": "nexusai.suggestionHighlight",
+        "description": "Background color for suggestions",
+        "defaults": {
+          "dark": "#00ff0030",
+          "light": "#00ff0020"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^2.22.0",
+    "eslint": "^8.55.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "eventsource": "^2.0.2"
+  }
+}

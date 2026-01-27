@@ -1,0 +1,47 @@
+<testsuites id="" name="" tests="3" failures="1" skipped="2" errors="0" time="6450.293882">
+<testsuite name="auth.setup.ts" timestamp="2026-01-22T20:53:22.190Z" hostname="setup" tests="2" failures="1" skipped="1" time="6447.116" errors="0">
+<testcase name="authenticate" classname="auth.setup.ts" time="6447.116">
+<failure message="auth.setup.ts:14:6 authenticate" type="FAILURE">
+<![CDATA[  [setup] › auth.setup.ts:14:6 › authenticate ──────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      33 |
+      34 |   // Wait for successful redirect to chat
+    > 35 |   await page.waitForURL(/\/chat/, { timeout: 30000 });
+         |              ^
+      36 |
+      37 |   // Verify we're authenticated
+      38 |   await expect(page.locator('textarea, [data-chat-input]')).toBeVisible({ timeout: 10000 });
+        at /Users/dev/projects/nexusai/frontend/e2e/auth.setup.ts:35:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/auth.setup.ts-authenticate-setup/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/auth.setup.ts-authenticate-setup/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|auth.setup.ts-authenticate-setup/test-failed-1.png]]
+
+[[ATTACHMENT|auth.setup.ts-authenticate-setup/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="authenticate admin" classname="auth.setup.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="devlake-chat.spec.ts" timestamp="2026-01-22T20:53:22.190Z" hostname="chromium" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="DevLake Chat Integration › Health Check › should check DevLake service health via chat" classname="devlake-chat.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

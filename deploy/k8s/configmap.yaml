@@ -1,0 +1,137 @@
+---
+# =============================================================================
+# NexusAI ConfigMap - Non-sensitive configuration
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nexusai-config
+  namespace: nexusai
+  labels:
+    app.kubernetes.io/name: nexusai
+    app.kubernetes.io/part-of: nexusai
+data:
+  # Application settings
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "info"
+  DEBUG: "false"
+
+  # API URLs
+  API_URL: "https://api.nexusai.example.com"
+  FRONTEND_URL: "https://nexusai.example.com"
+
+  # Database settings (non-sensitive)
+  DATABASE_HOST: "postgres"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "nexusai"
+  DATABASE_POOL_SIZE: "20"
+  DATABASE_MAX_OVERFLOW: "10"
+
+  # Redis settings (non-sensitive)
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+
+  # Meilisearch settings (non-sensitive)
+  MEILISEARCH_HOST: "meilisearch"
+  MEILISEARCH_PORT: "7700"
+  MEILISEARCH_URL: "http://meilisearch:7700"
+
+  # CORS settings
+  CORS_ORIGINS: "https://nexusai.example.com"
+  CORS_ALLOW_CREDENTIALS: "true"
+
+  # Worker settings
+  WORKER_CONCURRENCY: "10"
+  WORKER_MAX_JOBS: "100"
+
+  # Rate limiting
+  RATE_LIMIT_REQUESTS: "100"
+  RATE_LIMIT_PERIOD: "60"
+
+  # Session settings
+  SESSION_LIFETIME: "86400"
+
+  # Feature flags
+  FEATURE_SEARCH_ENABLED: "true"
+  FEATURE_ANALYTICS_ENABLED: "true"
+
+  # OpenTelemetry
+  OTEL_ENABLED: "true"
+  OTEL_SERVICE_NAME: "nexusai"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+
+---
+# =============================================================================
+# NexusAI PostgreSQL ConfigMap
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: nexusai
+  labels:
+    app.kubernetes.io/name: nexusai
+    app.kubernetes.io/component: postgres
+data:
+  # PostgreSQL configuration
+  POSTGRES_DB: "nexusai"
+  PGDATA: "/var/lib/postgresql/data/pgdata"
+
+  # Performance tuning
+  postgresql.conf: |
+    # Memory
+    shared_buffers = 256MB
+    effective_cache_size = 768MB
+    maintenance_work_mem = 64MB
+    work_mem = 16MB
+
+    # Checkpoints
+    checkpoint_completion_target = 0.9
+    wal_buffers = 16MB
+    default_statistics_target = 100
+
+    # Connections
+    max_connections = 200
+
+    # Logging
+    log_min_duration_statement = 1000
+    log_checkpoints = on
+    log_connections = on
+    log_disconnections = on
+    log_lock_waits = on
+
+    # Extensions
+    shared_preload_libraries = 'pg_stat_statements,vector'
+
+---
+# =============================================================================
+# NexusAI Redis ConfigMap
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+  namespace: nexusai
+  labels:
+    app.kubernetes.io/name: nexusai
+    app.kubernetes.io/component: redis
+data:
+  redis.conf: |
+    # Memory management
+    maxmemory 512mb
+    maxmemory-policy allkeys-lru
+
+    # Persistence
+    appendonly yes
+    appendfsync everysec
+
+    # Security
+    protected-mode yes
+
+    # Performance
+    tcp-keepalive 60
+    timeout 0
+
+    # Logging
+    loglevel notice

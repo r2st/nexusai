@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-01-14T06:42:04.864668",
+  "seed": 42,
+  "counts": {
+    "users": 50,
+    "organizations": 5,
+    "conversations": 200,
+    "messages": 3115,
+    "documents": 100,
+    "api_keys": 20,
+    "audit_logs": 500
+  }
+}

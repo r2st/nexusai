@@ -1,0 +1,143 @@
+# =============================================================================
+# Grafana Datasources Configuration
+# =============================================================================
+# Automatically provisions datasources on Grafana startup
+# =============================================================================
+
+apiVersion: 1
+
+# Delete datasources that are no longer in this file
+deleteDatasources:
+  - name: Prometheus-Old
+    orgId: 1
+
+# Datasource definitions
+datasources:
+  # ---------------------------------------------------------------------------
+  # Prometheus - Primary metrics datasource
+  # ---------------------------------------------------------------------------
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+    uid: prometheus
+    jsonData:
+      httpMethod: POST
+      manageAlerts: true
+      prometheusType: Prometheus
+      prometheusVersion: "2.48.0"
+      cacheLevel: "High"
+      disableRecordingRules: false
+      incrementalQueryOverlapWindow: 10m
+      exemplarTraceIdDestinations:
+        - name: traceID
+          datasourceUid: tempo
+          urlDisplayLabel: "View in Tempo"
+
+  # ---------------------------------------------------------------------------
+  # Loki - Log aggregation
+  # ---------------------------------------------------------------------------
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: false
+    uid: loki
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        - name: TraceID
+          matcherRegex: '"trace_id":"([a-f0-9]+)"'
+          url: "$${__value.raw}"
+          datasourceUid: tempo
+          urlDisplayLabel: "View Trace"
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL - Direct database access
+  # ---------------------------------------------------------------------------
+  - name: PostgreSQL
+    type: postgres
+    access: proxy
+    url: postgres:5432
+    editable: false
+    uid: postgres
+    jsonData:
+      database: nexusai
+      sslmode: disable
+      maxOpenConns: 10
+      maxIdleConns: 5
+      connMaxLifetime: 14400
+      postgresVersion: 1600  # PostgreSQL 16
+      timescaledb: false
+    secureJsonData:
+      user: "${POSTGRES_USER}"
+      password: "${POSTGRES_PASSWORD}"
+
+  # ---------------------------------------------------------------------------
+  # Redis - Cache and queue metrics
+  # ---------------------------------------------------------------------------
+  - name: Redis
+    type: redis-datasource
+    access: proxy
+    url: redis:6379
+    editable: false
+    uid: redis
+    jsonData:
+      client: standalone
+      poolSize: 5
+    secureJsonData:
+      password: "${REDIS_PASSWORD}"
+
+  # ---------------------------------------------------------------------------
+  # Alertmanager
+  # ---------------------------------------------------------------------------
+  - name: Alertmanager
+    type: alertmanager
+    access: proxy
+    url: http://alertmanager:9093
+    editable: false
+    uid: alertmanager
+    jsonData:
+      implementation: prometheus
+      handleGrafanaManagedAlerts: true
+
+  # ---------------------------------------------------------------------------
+  # Tempo - Distributed tracing (if deployed)
+  # ---------------------------------------------------------------------------
+  # - name: Tempo
+  #   type: tempo
+  #   access: proxy
+  #   url: http://tempo:3200
+  #   editable: false
+  #   uid: tempo
+  #   jsonData:
+  #     httpMethod: GET
+  #     tracesToLogs:
+  #       datasourceUid: loki
+  #       tags: ["service.name", "service.namespace"]
+  #       mappedTags:
+  #         - key: service.name
+  #           value: service
+  #       mapTagNamesEnabled: true
+  #       spanStartTimeShift: "-1h"
+  #       spanEndTimeShift: "1h"
+  #       filterByTraceID: true
+  #       filterBySpanID: false
+  #     tracesToMetrics:
+  #       datasourceUid: prometheus
+  #       tags:
+  #         - key: service.name
+  #           value: service
+  #       queries:
+  #         - name: Request rate
+  #           query: sum(rate(traces_spanmetrics_calls_total{$__tags}[5m]))
+  #         - name: Error rate
+  #           query: sum(rate(traces_spanmetrics_calls_total{$__tags, status_code="STATUS_CODE_ERROR"}[5m]))
+  #     serviceMap:
+  #       datasourceUid: prometheus
+  #     nodeGraph:
+  #       enabled: true
+  #     lokiSearch:
+  #       datasourceUid: loki

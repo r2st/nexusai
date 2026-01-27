@@ -1,0 +1,213 @@
+version: "3.9"
+
+# Development overrides for docker-compose.yml
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  # =============================================================================
+  # Traefik - Development Configuration
+  # =============================================================================
+  traefik:
+    ports:
+      - "80:80"
+      - "8080:8080"  # Dashboard exposed in dev
+    command:
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--log.level=DEBUG"
+      - "--accesslog=true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      traefik.http.routers.traefik-dashboard.tls: "false"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+
+  # =============================================================================
+  # Backend API - Development Configuration
+  # =============================================================================
+  backend:
+    build:
+      context: ../../../backend
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - ../../../backend:/app:cached
+      - backend-venv:/app/.venv
+    env_file:
+      - ../../../.env
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - LOG_LEVEL=debug
+      - RELOAD=true
+    ports:
+      - "8000:8000"
+      - "5678:5678"  # debugpy port
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+      --reload-dir /app/app
+      --log-level debug
+    read_only: false
+    labels:
+      traefik.http.routers.backend.rule: "Host(`api.localhost`)"
+      traefik.http.routers.backend.tls: "false"
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 2G
+
+  # =============================================================================
+  # ARQ Worker - Development Configuration
+  # =============================================================================
+  worker:
+    build:
+      context: ../../../backend
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - ../../../backend:/app:cached
+      - backend-venv:/app/.venv
+    env_file:
+      - ../../../.env
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - LOG_LEVEL=debug
+    command: ["watchmedo", "auto-restart", "--directory=/app/app", "--pattern=*.py", "--recursive", "--", "python", "-m", "arq", "app.worker.WorkerSettings"]
+    read_only: false
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+
+  # =============================================================================
+  # Frontend - Development Configuration
+  # =============================================================================
+  frontend:
+    build:
+      context: ../../../frontend
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - ../../../frontend:/app:cached
+      - frontend-node-modules:/app/node_modules
+      - frontend-next:/app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=/api/v1
+      - BACKEND_INTERNAL_URL=http://backend:8000
+      - WATCHPACK_POLLING=true
+    ports:
+      - "3000:3000"
+    command: ["npm", "run", "dev"]
+    read_only: false
+    labels:
+      traefik.http.routers.frontend.rule: "Host(`localhost`)"
+      traefik.http.routers.frontend.tls: "false"
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+
+  # =============================================================================
+  # PostgreSQL - Development Configuration
+  # =============================================================================
+  postgres:
+    ports:
+      - "${DATABASE_PORT:-5434}:5432"
+    # Use env vars from .env file (defaults in docker-compose.yml)
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+
+  # =============================================================================
+  # Redis - Development Configuration
+  # =============================================================================
+  redis:
+    ports:
+      - "6379:6379"
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 128mb
+      --maxmemory-policy allkeys-lru
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # =============================================================================
+  # Meilisearch - Development Configuration
+  # =============================================================================
+  meilisearch:
+    ports:
+      - "7700:7700"
+    environment:
+      - MEILI_ENV=development
+      - MEILI_LOG_LEVEL=DEBUG
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+
+  # =============================================================================
+  # Mailhog - Email Testing (Dev Only)
+  # =============================================================================
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: nexusai-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - nexusai-internal
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+# =============================================================================
+# Additional Development Volumes
+# =============================================================================
+volumes:
+  backend-venv:
+    name: nexusai-backend-venv-dev
+  frontend-node-modules:
+    name: nexusai-frontend-node-modules-dev
+  frontend-next:
+    name: nexusai-frontend-next-dev
+
+# =============================================================================
+# Networks - Allow external access in dev
+# =============================================================================
+networks:
+  nexusai-internal:
+    internal: false

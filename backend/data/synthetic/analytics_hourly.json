@@ -1,0 +1,1346 @@
+[
+  {
+    "timestamp": "2026-01-07T06:42:04.860124",
+    "requests": 51,
+    "active_users": 3,
+    "tokens_used": 23662,
+    "avg_latency_ms": 1302,
+    "error_rate": 0.0156
+  },
+  {
+    "timestamp": "2026-01-07T07:42:04.860124",
+    "requests": 54,
+    "active_users": 20,
+    "tokens_used": 13129,
+    "avg_latency_ms": 332,
+    "error_rate": 0.0183
+  },
+  {
+    "timestamp": "2026-01-07T08:42:04.860124",
+    "requests": 67,
+    "active_users": 24,
+    "tokens_used": 11914,
+    "avg_latency_ms": 835,
+    "error_rate": 0.0067
+  },
+  {
+    "timestamp": "2026-01-07T09:42:04.860124",
+    "requests": 59,
+    "active_users": 24,
+    "tokens_used": 46164,
+    "avg_latency_ms": 545,
+    "error_rate": 0.0263
+  },
+  {
+    "timestamp": "2026-01-07T10:42:04.860124",
+    "requests": 141,
+    "active_users": 41,
+    "tokens_used": 9883,
+    "avg_latency_ms": 531,
+    "error_rate": 0.0274
+  },
+  {
+    "timestamp": "2026-01-07T11:42:04.860124",
+    "requests": 163,
+    "active_users": 35,
+    "tokens_used": 15801,
+    "avg_latency_ms": 396,
+    "error_rate": 0.006
+  },
+  {
+    "timestamp": "2026-01-07T12:42:04.860124",
+    "requests": 190,
+    "active_users": 26,
+    "tokens_used": 43140,
+    "avg_latency_ms": 783,
+    "error_rate": 0.0081
+  },
+  {
+    "timestamp": "2026-01-07T13:42:04.860124",
+    "requests": 19,
+    "active_users": 10,
+    "tokens_used": 28869,
+    "avg_latency_ms": 730,
+    "error_rate": 0.0118
+  },
+  {
+    "timestamp": "2026-01-07T14:42:04.860124",
+    "requests": 32,
+    "active_users": 25,
+    "tokens_used": 24244,
+    "avg_latency_ms": 1229,
+    "error_rate": 0.0032
+  },
+  {
+    "timestamp": "2026-01-07T15:42:04.860124",
+    "requests": 93,
+    "active_users": 17,
+    "tokens_used": 12026,
+    "avg_latency_ms": 743,
+    "error_rate": 0.0219
+  },
+  {
+    "timestamp": "2026-01-07T16:42:04.860124",
+    "requests": 103,
+    "active_users": 44,
+    "tokens_used": 19055,
+    "avg_latency_ms": 1159,
+    "error_rate": 0.0143
+  },
+  {
+    "timestamp": "2026-01-07T17:42:04.860124",
+    "requests": 144,
+    "active_users": 11,
+    "tokens_used": 20607,
+    "avg_latency_ms": 1172,
+    "error_rate": 0.0134
+  },
+  {
+    "timestamp": "2026-01-07T18:42:04.860124",
+    "requests": 45,
+    "active_users": 3,
+    "tokens_used": 3026,
+    "avg_latency_ms": 844,
+    "error_rate": 0.0286
+  },
+  {
+    "timestamp": "2026-01-07T19:42:04.860124",
+    "requests": 24,
+    "active_users": 24,
+    "tokens_used": 23580,
+    "avg_latency_ms": 523,
+    "error_rate": 0.0085
+  },
+  {
+    "timestamp": "2026-01-07T20:42:04.860124",
+    "requests": 16,
+    "active_users": 3,
+    "tokens_used": 14095,
+    "avg_latency_ms": 663,
+    "error_rate": 0.0137
+  },
+  {
+    "timestamp": "2026-01-07T21:42:04.860124",
+    "requests": 83,
+    "active_users": 19,
+    "tokens_used": 6498,
+    "avg_latency_ms": 1372,
+    "error_rate": 0.0142
+  },
+  {
+    "timestamp": "2026-01-07T22:42:04.860124",
+    "requests": 2,
+    "active_users": 4,
+    "tokens_used": 1362,
+    "avg_latency_ms": 1278,
+    "error_rate": 0.0002
+  },
+  {
+    "timestamp": "2026-01-07T23:42:04.860124",
+    "requests": 10,
+    "active_users": 1,
+    "tokens_used": 2040,
+    "avg_latency_ms": 1353,
+    "error_rate": 0.0158
+  },
+  {
+    "timestamp": "2026-01-08T00:42:04.860124",
+    "requests": 9,
+    "active_users": 3,
+    "tokens_used": 1566,
+    "avg_latency_ms": 580,
+    "error_rate": 0.0281
+  },
+  {
+    "timestamp": "2026-01-08T01:42:04.860124",
+    "requests": 15,
+    "active_users": 3,
+    "tokens_used": 3226,
+    "avg_latency_ms": 419,
+    "error_rate": 0.0287
+  },
+  {
+    "timestamp": "2026-01-08T02:42:04.860124",
+    "requests": 15,
+    "active_users": 3,
+    "tokens_used": 3223,
+    "avg_latency_ms": 1221,
+    "error_rate": 0.0162
+  },
+  {
+    "timestamp": "2026-01-08T03:42:04.860124",
+    "requests": 8,
+    "active_users": 2,
+    "tokens_used": 1598,
+    "avg_latency_ms": 583,
+    "error_rate": 0.0148
+  },
+  {
+    "timestamp": "2026-01-08T04:42:04.860124",
+    "requests": 9,
+    "active_users": 3,
+    "tokens_used": 2710,
+    "avg_latency_ms": 872,
+    "error_rate": 0.0162
+  },
+  {
+    "timestamp": "2026-01-08T05:42:04.860124",
+    "requests": 9,
+    "active_users": 4,
+    "tokens_used": 3265,
+    "avg_latency_ms": 1044,
+    "error_rate": 0.0239
+  },
+  {
+    "timestamp": "2026-01-08T06:42:04.860124",
+    "requests": 45,
+    "active_users": 25,
+    "tokens_used": 22608,
+    "avg_latency_ms": 889,
+    "error_rate": 0.0053
+  },
+  {
+    "timestamp": "2026-01-08T07:42:04.860124",
+    "requests": 21,
+    "active_users": 12,
+    "tokens_used": 22632,
+    "avg_latency_ms": 543,
+    "error_rate": 0.029
+  },
+  {
+    "timestamp": "2026-01-08T08:42:04.860124",
+    "requests": 93,
+    "active_users": 16,
+    "tokens_used": 13388,
+    "avg_latency_ms": 352,
+    "error_rate": 0.0041
+  },
+  {
+    "timestamp": "2026-01-08T09:42:04.860124",
+    "requests": 11,
+    "active_users": 7,
+    "tokens_used": 7809,
+    "avg_latency_ms": 619,
+    "error_rate": 0.024
+  },
+  {
+    "timestamp": "2026-01-08T10:42:04.860124",
+    "requests": 105,
+    "active_users": 45,
+    "tokens_used": 20045,
+    "avg_latency_ms": 1500,
+    "error_rate": 0.0194
+  },
+  {
+    "timestamp": "2026-01-08T11:42:04.860124",
+    "requests": 69,
+    "active_users": 9,
+    "tokens_used": 20494,
+    "avg_latency_ms": 568,
+    "error_rate": 0.0193
+  },
+  {
+    "timestamp": "2026-01-08T12:42:04.860124",
+    "requests": 39,
+    "active_users": 25,
+    "tokens_used": 25799,
+    "avg_latency_ms": 441,
+    "error_rate": 0.0063
+  },
+  {
+    "timestamp": "2026-01-08T13:42:04.860124",
+    "requests": 92,
+    "active_users": 26,
+    "tokens_used": 36491,
+    "avg_latency_ms": 369,
+    "error_rate": 0.0157
+  },
+  {
+    "timestamp": "2026-01-08T14:42:04.860124",
+    "requests": 172,
+    "active_users": 45,
+    "tokens_used": 32897,
+    "avg_latency_ms": 1437,
+    "error_rate": 0.0221
+  },
+  {
+    "timestamp": "2026-01-08T15:42:04.860124",
+    "requests": 184,
+    "active_users": 11,
+    "tokens_used": 23606,
+    "avg_latency_ms": 921,
+    "error_rate": 0.0085
+  },
+  {
+    "timestamp": "2026-01-08T16:42:04.860124",
+    "requests": 143,
+    "active_users": 38,
+    "tokens_used": 45429,
+    "avg_latency_ms": 1084,
+    "error_rate": 0.0116
+  },
+  {
+    "timestamp": "2026-01-08T17:42:04.860124",
+    "requests": 168,
+    "active_users": 50,
+    "tokens_used": 37153,
+    "avg_latency_ms": 595,
+    "error_rate": 0.015
+  },
+  {
+    "timestamp": "2026-01-08T18:42:04.860124",
+    "requests": 93,
+    "active_users": 9,
+    "tokens_used": 16363,
+    "avg_latency_ms": 1219,
+    "error_rate": 0.027
+  },
+  {
+    "timestamp": "2026-01-08T19:42:04.860124",
+    "requests": 61,
+    "active_users": 11,
+    "tokens_used": 23574,
+    "avg_latency_ms": 1146,
+    "error_rate": 0.0045
+  },
+  {
+    "timestamp": "2026-01-08T20:42:04.860124",
+    "requests": 5,
+    "active_users": 6,
+    "tokens_used": 14502,
+    "avg_latency_ms": 1355,
+    "error_rate": 0.0295
+  },
+  {
+    "timestamp": "2026-01-08T21:42:04.860124",
+    "requests": 95,
+    "active_users": 7,
+    "tokens_used": 14585,
+    "avg_latency_ms": 889,
+    "error_rate": 0.0063
+  },
+  {
+    "timestamp": "2026-01-08T22:42:04.860124",
+    "requests": 2,
+    "active_users": 3,
+    "tokens_used": 1931,
+    "avg_latency_ms": 654,
+    "error_rate": 0.0212
+  },
+  {
+    "timestamp": "2026-01-08T23:42:04.860124",
+    "requests": 3,
+    "active_users": 1,
+    "tokens_used": 1747,
+    "avg_latency_ms": 428,
+    "error_rate": 0.0038
+  },
+  {
+    "timestamp": "2026-01-09T00:42:04.860124",
+    "requests": 16,
+    "active_users": 1,
+    "tokens_used": 4728,
+    "avg_latency_ms": 314,
+    "error_rate": 0.0188
+  },
+  {
+    "timestamp": "2026-01-09T01:42:04.860124",
+    "requests": 16,
+    "active_users": 1,
+    "tokens_used": 886,
+    "avg_latency_ms": 1072,
+    "error_rate": 0.0221
+  },
+  {
+    "timestamp": "2026-01-09T02:42:04.860124",
+    "requests": 3,
+    "active_users": 3,
+    "tokens_used": 2103,
+    "avg_latency_ms": 1150,
+    "error_rate": 0.0079
+  },
+  {
+    "timestamp": "2026-01-09T03:42:04.860124",
+    "requests": 5,
+    "active_users": 1,
+    "tokens_used": 4122,
+    "avg_latency_ms": 1248,
+    "error_rate": 0.0104
+  },
+  {
+    "timestamp": "2026-01-09T04:42:04.860124",
+    "requests": 14,
+    "active_users": 1,
+    "tokens_used": 3591,
+    "avg_latency_ms": 1127,
+    "error_rate": 0.0156
+  },
+  {
+    "timestamp": "2026-01-09T05:42:04.860124",
+    "requests": 3,
+    "active_users": 4,
+    "tokens_used": 3488,
+    "avg_latency_ms": 662,
+    "error_rate": 0.0236
+  },
+  {
+    "timestamp": "2026-01-09T06:42:04.860124",
+    "requests": 49,
+    "active_users": 17,
+    "tokens_used": 17712,
+    "avg_latency_ms": 957,
+    "error_rate": 0.0078
+  },
+  {
+    "timestamp": "2026-01-09T07:42:04.860124",
+    "requests": 51,
+    "active_users": 20,
+    "tokens_used": 23069,
+    "avg_latency_ms": 844,
+    "error_rate": 0.0145
+  },
+  {
+    "timestamp": "2026-01-09T08:42:04.860124",
+    "requests": 53,
+    "active_users": 7,
+    "tokens_used": 21217,
+    "avg_latency_ms": 366,
+    "error_rate": 0.0098
+  },
+  {
+    "timestamp": "2026-01-09T09:42:04.860124",
+    "requests": 168,
+    "active_users": 10,
+    "tokens_used": 38484,
+    "avg_latency_ms": 1228,
+    "error_rate": 0.0115
+  },
+  {
+    "timestamp": "2026-01-09T10:42:04.860124",
+    "requests": 178,
+    "active_users": 40,
+    "tokens_used": 20800,
+    "avg_latency_ms": 509,
+    "error_rate": 0.0118
+  },
+  {
+    "timestamp": "2026-01-09T11:42:04.860124",
+    "requests": 150,
+    "active_users": 16,
+    "tokens_used": 33805,
+    "avg_latency_ms": 547,
+    "error_rate": 0.0194
+  },
+  {
+    "timestamp": "2026-01-09T12:42:04.860124",
+    "requests": 54,
+    "active_users": 9,
+    "tokens_used": 34960,
+    "avg_latency_ms": 740,
+    "error_rate": 0.0059
+  },
+  {
+    "timestamp": "2026-01-09T13:42:04.860124",
+    "requests": 193,
+    "active_users": 18,
+    "tokens_used": 41994,
+    "avg_latency_ms": 1493,
+    "error_rate": 0.029
+  },
+  {
+    "timestamp": "2026-01-09T14:42:04.860124",
+    "requests": 17,
+    "active_users": 25,
+    "tokens_used": 16913,
+    "avg_latency_ms": 653,
+    "error_rate": 0.0047
+  },
+  {
+    "timestamp": "2026-01-09T15:42:04.860124",
+    "requests": 155,
+    "active_users": 44,
+    "tokens_used": 19031,
+    "avg_latency_ms": 1143,
+    "error_rate": 0.0264
+  },
+  {
+    "timestamp": "2026-01-09T16:42:04.860124",
+    "requests": 35,
+    "active_users": 32,
+    "tokens_used": 26427,
+    "avg_latency_ms": 1498,
+    "error_rate": 0.0023
+  },
+  {
+    "timestamp": "2026-01-09T17:42:04.860124",
+    "requests": 87,
+    "active_users": 20,
+    "tokens_used": 41250,
+    "avg_latency_ms": 1427,
+    "error_rate": 0.0043
+  },
+  {
+    "timestamp": "2026-01-09T18:42:04.860124",
+    "requests": 26,
+    "active_users": 12,
+    "tokens_used": 23907,
+    "avg_latency_ms": 1044,
+    "error_rate": 0.0211
+  },
+  {
+    "timestamp": "2026-01-09T19:42:04.860124",
+    "requests": 36,
+    "active_users": 20,
+    "tokens_used": 20200,
+    "avg_latency_ms": 716,
+    "error_rate": 0.0096
+  },
+  {
+    "timestamp": "2026-01-09T20:42:04.860124",
+    "requests": 44,
+    "active_users": 11,
+    "tokens_used": 16192,
+    "avg_latency_ms": 550,
+    "error_rate": 0.0147
+  },
+  {
+    "timestamp": "2026-01-09T21:42:04.860124",
+    "requests": 87,
+    "active_users": 17,
+    "tokens_used": 18657,
+    "avg_latency_ms": 748,
+    "error_rate": 0.0048
+  },
+  {
+    "timestamp": "2026-01-09T22:42:04.860124",
+    "requests": 11,
+    "active_users": 2,
+    "tokens_used": 2119,
+    "avg_latency_ms": 340,
+    "error_rate": 0.0171
+  },
+  {
+    "timestamp": "2026-01-09T23:42:04.860124",
+    "requests": 7,
+    "active_users": 2,
+    "tokens_used": 4285,
+    "avg_latency_ms": 1320,
+    "error_rate": 0.0183
+  },
+  {
+    "timestamp": "2026-01-10T00:42:04.860124",
+    "requests": 5,
+    "active_users": 0,
+    "tokens_used": 504,
+    "avg_latency_ms": 1215,
+    "error_rate": 0.0181
+  },
+  {
+    "timestamp": "2026-01-10T01:42:04.860124",
+    "requests": 4,
+    "active_users": 0,
+    "tokens_used": 155,
+    "avg_latency_ms": 682,
+    "error_rate": 0.0171
+  },
+  {
+    "timestamp": "2026-01-10T02:42:04.860124",
+    "requests": 3,
+    "active_users": 0,
+    "tokens_used": 468,
+    "avg_latency_ms": 413,
+    "error_rate": 0.0099
+  },
+  {
+    "timestamp": "2026-01-10T03:42:04.860124",
+    "requests": 5,
+    "active_users": 1,
+    "tokens_used": 1071,
+    "avg_latency_ms": 1379,
+    "error_rate": 0.0273
+  },
+  {
+    "timestamp": "2026-01-10T04:42:04.860124",
+    "requests": 5,
+    "active_users": 0,
+    "tokens_used": 571,
+    "avg_latency_ms": 1304,
+    "error_rate": 0.0212
+  },
+  {
+    "timestamp": "2026-01-10T05:42:04.860124",
+    "requests": 2,
+    "active_users": 0,
+    "tokens_used": 1289,
+    "avg_latency_ms": 1443,
+    "error_rate": 0.0284
+  },
+  {
+    "timestamp": "2026-01-10T06:42:04.860124",
+    "requests": 21,
+    "active_users": 3,
+    "tokens_used": 2034,
+    "avg_latency_ms": 605,
+    "error_rate": 0.0008
+  },
+  {
+    "timestamp": "2026-01-10T07:42:04.860124",
+    "requests": 27,
+    "active_users": 1,
+    "tokens_used": 2074,
+    "avg_latency_ms": 1046,
+    "error_rate": 0.0119
+  },
+  {
+    "timestamp": "2026-01-10T08:42:04.860124",
+    "requests": 29,
+    "active_users": 1,
+    "tokens_used": 6136,
+    "avg_latency_ms": 685,
+    "error_rate": 0.0052
+  },
+  {
+    "timestamp": "2026-01-10T09:42:04.860124",
+    "requests": 6,
+    "active_users": 6,
+    "tokens_used": 12396,
+    "avg_latency_ms": 1301,
+    "error_rate": 0.0182
+  },
+  {
+    "timestamp": "2026-01-10T10:42:04.860124",
+    "requests": 55,
+    "active_users": 10,
+    "tokens_used": 11696,
+    "avg_latency_ms": 1331,
+    "error_rate": 0.0152
+  },
+  {
+    "timestamp": "2026-01-10T11:42:04.860124",
+    "requests": 46,
+    "active_users": 9,
+    "tokens_used": 8367,
+    "avg_latency_ms": 731,
+    "error_rate": 0.0208
+  },
+  {
+    "timestamp": "2026-01-10T12:42:04.860124",
+    "requests": 58,
+    "active_users": 15,
+    "tokens_used": 8817,
+    "avg_latency_ms": 1353,
+    "error_rate": 0.0107
+  },
+  {
+    "timestamp": "2026-01-10T13:42:04.860124",
+    "requests": 21,
+    "active_users": 13,
+    "tokens_used": 12018,
+    "avg_latency_ms": 1107,
+    "error_rate": 0.0277
+  },
+  {
+    "timestamp": "2026-01-10T14:42:04.860124",
+    "requests": 6,
+    "active_users": 5,
+    "tokens_used": 1840,
+    "avg_latency_ms": 869,
+    "error_rate": 0.0293
+  },
+  {
+    "timestamp": "2026-01-10T15:42:04.860124",
+    "requests": 21,
+    "active_users": 8,
+    "tokens_used": 14189,
+    "avg_latency_ms": 467,
+    "error_rate": 0.0244
+  },
+  {
+    "timestamp": "2026-01-10T16:42:04.860124",
+    "requests": 46,
+    "active_users": 7,
+    "tokens_used": 3652,
+    "avg_latency_ms": 1242,
+    "error_rate": 0.002
+  },
+  {
+    "timestamp": "2026-01-10T17:42:04.860124",
+    "requests": 15,
+    "active_users": 5,
+    "tokens_used": 12716,
+    "avg_latency_ms": 491,
+    "error_rate": 0.0007
+  },
+  {
+    "timestamp": "2026-01-10T18:42:04.860124",
+    "requests": 7,
+    "active_users": 6,
+    "tokens_used": 6423,
+    "avg_latency_ms": 642,
+    "error_rate": 0.0234
+  },
+  {
+    "timestamp": "2026-01-10T19:42:04.860124",
+    "requests": 29,
+    "active_users": 6,
+    "tokens_used": 4173,
+    "avg_latency_ms": 349,
+    "error_rate": 0.0028
+  },
+  {
+    "timestamp": "2026-01-10T20:42:04.860124",
+    "requests": 9,
+    "active_users": 5,
+    "tokens_used": 3474,
+    "avg_latency_ms": 1347,
+    "error_rate": 0.0058
+  },
+  {
+    "timestamp": "2026-01-10T21:42:04.860124",
+    "requests": 24,
+    "active_users": 2,
+    "tokens_used": 798,
+    "avg_latency_ms": 1480,
+    "error_rate": 0.0125
+  },
+  {
+    "timestamp": "2026-01-10T22:42:04.860124",
+    "requests": 3,
+    "active_users": 0,
+    "tokens_used": 563,
+    "avg_latency_ms": 1323,
+    "error_rate": 0.0028
+  },
+  {
+    "timestamp": "2026-01-10T23:42:04.860124",
+    "requests": 1,
+    "active_users": 0,
+    "tokens_used": 932,
+    "avg_latency_ms": 399,
+    "error_rate": 0.019
+  },
+  {
+    "timestamp": "2026-01-11T00:42:04.860124",
+    "requests": 5,
+    "active_users": 0,
+    "tokens_used": 377,
+    "avg_latency_ms": 724,
+    "error_rate": 0.0047
+  },
+  {
+    "timestamp": "2026-01-11T01:42:04.860124",
+    "requests": 5,
+    "active_users": 1,
+    "tokens_used": 1055,
+    "avg_latency_ms": 1139,
+    "error_rate": 0.014
+  },
+  {
+    "timestamp": "2026-01-11T02:42:04.860124",
+    "requests": 5,
+    "active_users": 0,
+    "tokens_used": 255,
+    "avg_latency_ms": 535,
+    "error_rate": 0.0182
+  },
+  {
+    "timestamp": "2026-01-11T03:42:04.860124",
+    "requests": 6,
+    "active_users": 1,
+    "tokens_used": 325,
+    "avg_latency_ms": 537,
+    "error_rate": 0.0034
+  },
+  {
+    "timestamp": "2026-01-11T04:42:04.860124",
+    "requests": 3,
+    "active_users": 0,
+    "tokens_used": 404,
+    "avg_latency_ms": 670,
+    "error_rate": 0.0013
+  },
+  {
+    "timestamp": "2026-01-11T05:42:04.860124",
+    "requests": 5,
+    "active_users": 0,
+    "tokens_used": 1027,
+    "avg_latency_ms": 578,
+    "error_rate": 0.0217
+  },
+  {
+    "timestamp": "2026-01-11T06:42:04.860124",
+    "requests": 26,
+    "active_users": 5,
+    "tokens_used": 5052,
+    "avg_latency_ms": 809,
+    "error_rate": 0.0059
+  },
+  {
+    "timestamp": "2026-01-11T07:42:04.860124",
+    "requests": 25,
+    "active_users": 2,
+    "tokens_used": 1113,
+    "avg_latency_ms": 901,
+    "error_rate": 0.0172
+  },
+  {
+    "timestamp": "2026-01-11T08:42:04.860124",
+    "requests": 18,
+    "active_users": 4,
+    "tokens_used": 4065,
+    "avg_latency_ms": 726,
+    "error_rate": 0.0161
+  },
+  {
+    "timestamp": "2026-01-11T09:42:04.860124",
+    "requests": 53,
+    "active_users": 4,
+    "tokens_used": 10452,
+    "avg_latency_ms": 917,
+    "error_rate": 0.0233
+  },
+  {
+    "timestamp": "2026-01-11T10:42:04.860124",
+    "requests": 10,
+    "active_users": 4,
+    "tokens_used": 7045,
+    "avg_latency_ms": 660,
+    "error_rate": 0.003
+  },
+  {
+    "timestamp": "2026-01-11T11:42:04.860124",
+    "requests": 24,
+    "active_users": 1,
+    "tokens_used": 12478,
+    "avg_latency_ms": 1108,
+    "error_rate": 0.0188
+  },
+  {
+    "timestamp": "2026-01-11T12:42:04.860124",
+    "requests": 13,
+    "active_users": 7,
+    "tokens_used": 1671,
+    "avg_latency_ms": 1480,
+    "error_rate": 0.0199
+  },
+  {
+    "timestamp": "2026-01-11T13:42:04.860124",
+    "requests": 13,
+    "active_users": 4,
+    "tokens_used": 13224,
+    "avg_latency_ms": 887,
+    "error_rate": 0.0113
+  },
+  {
+    "timestamp": "2026-01-11T14:42:04.860124",
+    "requests": 4,
+    "active_users": 12,
+    "tokens_used": 5307,
+    "avg_latency_ms": 1051,
+    "error_rate": 0.0298
+  },
+  {
+    "timestamp": "2026-01-11T15:42:04.860124",
+    "requests": 29,
+    "active_users": 8,
+    "tokens_used": 2797,
+    "avg_latency_ms": 302,
+    "error_rate": 0.0242
+  },
+  {
+    "timestamp": "2026-01-11T16:42:04.860124",
+    "requests": 19,
+    "active_users": 15,
+    "tokens_used": 14612,
+    "avg_latency_ms": 1465,
+    "error_rate": 0.0179
+  },
+  {
+    "timestamp": "2026-01-11T17:42:04.860124",
+    "requests": 12,
+    "active_users": 14,
+    "tokens_used": 12971,
+    "avg_latency_ms": 1316,
+    "error_rate": 0.0247
+  },
+  {
+    "timestamp": "2026-01-11T18:42:04.860124",
+    "requests": 5,
+    "active_users": 2,
+    "tokens_used": 5210,
+    "avg_latency_ms": 542,
+    "error_rate": 0.0043
+  },
+  {
+    "timestamp": "2026-01-11T19:42:04.860124",
+    "requests": 8,
+    "active_users": 4,
+    "tokens_used": 4279,
+    "avg_latency_ms": 1425,
+    "error_rate": 0.0098
+  },
+  {
+    "timestamp": "2026-01-11T20:42:04.860124",
+    "requests": 15,
+    "active_users": 4,
+    "tokens_used": 3767,
+    "avg_latency_ms": 566,
+    "error_rate": 0.0064
+  },
+  {
+    "timestamp": "2026-01-11T21:42:04.860124",
+    "requests": 2,
+    "active_users": 3,
+    "tokens_used": 1486,
+    "avg_latency_ms": 619,
+    "error_rate": 0.0008
+  },
+  {
+    "timestamp": "2026-01-11T22:42:04.860124",
+    "requests": 3,
+    "active_users": 0,
+    "tokens_used": 980,
+    "avg_latency_ms": 552,
+    "error_rate": 0.0109
+  },
+  {
+    "timestamp": "2026-01-11T23:42:04.860124",
+    "requests": 1,
+    "active_users": 1,
+    "tokens_used": 603,
+    "avg_latency_ms": 1441,
+    "error_rate": 0.0148
+  },
+  {
+    "timestamp": "2026-01-12T00:42:04.860124",
+    "requests": 2,
+    "active_users": 1,
+    "tokens_used": 4426,
+    "avg_latency_ms": 425,
+    "error_rate": 0.0133
+  },
+  {
+    "timestamp": "2026-01-12T01:42:04.860124",
+    "requests": 19,
+    "active_users": 1,
+    "tokens_used": 3326,
+    "avg_latency_ms": 1172,
+    "error_rate": 0.0259
+  },
+  {
+    "timestamp": "2026-01-12T02:42:04.860124",
+    "requests": 1,
+    "active_users": 3,
+    "tokens_used": 1995,
+    "avg_latency_ms": 566,
+    "error_rate": 0.0038
+  },
+  {
+    "timestamp": "2026-01-12T03:42:04.860124",
+    "requests": 8,
+    "active_users": 3,
+    "tokens_used": 4760,
+    "avg_latency_ms": 519,
+    "error_rate": 0.0103
+  },
+  {
+    "timestamp": "2026-01-12T04:42:04.860124",
+    "requests": 7,
+    "active_users": 1,
+    "tokens_used": 4985,
+    "avg_latency_ms": 315,
+    "error_rate": 0.0067
+  },
+  {
+    "timestamp": "2026-01-12T05:42:04.860124",
+    "requests": 19,
+    "active_users": 2,
+    "tokens_used": 712,
+    "avg_latency_ms": 811,
+    "error_rate": 0.0018
+  },
+  {
+    "timestamp": "2026-01-12T06:42:04.860124",
+    "requests": 7,
+    "active_users": 22,
+    "tokens_used": 14400,
+    "avg_latency_ms": 1130,
+    "error_rate": 0.0287
+  },
+  {
+    "timestamp": "2026-01-12T07:42:04.860124",
+    "requests": 77,
+    "active_users": 22,
+    "tokens_used": 17293,
+    "avg_latency_ms": 1054,
+    "error_rate": 0.0127
+  },
+  {
+    "timestamp": "2026-01-12T08:42:04.860124",
+    "requests": 44,
+    "active_users": 22,
+    "tokens_used": 4626,
+    "avg_latency_ms": 1059,
+    "error_rate": 0.0133
+  },
+  {
+    "timestamp": "2026-01-12T09:42:04.860124",
+    "requests": 183,
+    "active_users": 27,
+    "tokens_used": 29377,
+    "avg_latency_ms": 883,
+    "error_rate": 0.0128
+  },
+  {
+    "timestamp": "2026-01-12T10:42:04.860124",
+    "requests": 54,
+    "active_users": 20,
+    "tokens_used": 21467,
+    "avg_latency_ms": 1282,
+    "error_rate": 0.0252
+  },
+  {
+    "timestamp": "2026-01-12T11:42:04.860124",
+    "requests": 45,
+    "active_users": 21,
+    "tokens_used": 35260,
+    "avg_latency_ms": 1189,
+    "error_rate": 0.0001
+  },
+  {
+    "timestamp": "2026-01-12T12:42:04.860124",
+    "requests": 21,
+    "active_users": 40,
+    "tokens_used": 8892,
+    "avg_latency_ms": 542,
+    "error_rate": 0.0239
+  },
+  {
+    "timestamp": "2026-01-12T13:42:04.860124",
+    "requests": 141,
+    "active_users": 12,
+    "tokens_used": 7538,
+    "avg_latency_ms": 724,
+    "error_rate": 0.0008
+  },
+  {
+    "timestamp": "2026-01-12T14:42:04.860124",
+    "requests": 198,
+    "active_users": 31,
+    "tokens_used": 41296,
+    "avg_latency_ms": 770,
+    "error_rate": 0.003
+  },
+  {
+    "timestamp": "2026-01-12T15:42:04.860124",
+    "requests": 112,
+    "active_users": 22,
+    "tokens_used": 10896,
+    "avg_latency_ms": 1301,
+    "error_rate": 0.0049
+  },
+  {
+    "timestamp": "2026-01-12T16:42:04.860124",
+    "requests": 142,
+    "active_users": 7,
+    "tokens_used": 40676,
+    "avg_latency_ms": 326,
+    "error_rate": 0.0155
+  },
+  {
+    "timestamp": "2026-01-12T17:42:04.860124",
+    "requests": 196,
+    "active_users": 47,
+    "tokens_used": 29002,
+    "avg_latency_ms": 1217,
+    "error_rate": 0.0032
+  },
+  {
+    "timestamp": "2026-01-12T18:42:04.860124",
+    "requests": 80,
+    "active_users": 3,
+    "tokens_used": 6044,
+    "avg_latency_ms": 1001,
+    "error_rate": 0.0211
+  },
+  {
+    "timestamp": "2026-01-12T19:42:04.860124",
+    "requests": 64,
+    "active_users": 5,
+    "tokens_used": 8905,
+    "avg_latency_ms": 1341,
+    "error_rate": 0.0013
+  },
+  {
+    "timestamp": "2026-01-12T20:42:04.860124",
+    "requests": 62,
+    "active_users": 5,
+    "tokens_used": 10577,
+    "avg_latency_ms": 410,
+    "error_rate": 0.0139
+  },
+  {
+    "timestamp": "2026-01-12T21:42:04.860124",
+    "requests": 34,
+    "active_users": 13,
+    "tokens_used": 5111,
+    "avg_latency_ms": 397,
+    "error_rate": 0.0244
+  },
+  {
+    "timestamp": "2026-01-12T22:42:04.860124",
+    "requests": 8,
+    "active_users": 2,
+    "tokens_used": 3977,
+    "avg_latency_ms": 864,
+    "error_rate": 0.0148
+  },
+  {
+    "timestamp": "2026-01-12T23:42:04.860124",
+    "requests": 6,
+    "active_users": 3,
+    "tokens_used": 1646,
+    "avg_latency_ms": 533,
+    "error_rate": 0.0211
+  },
+  {
+    "timestamp": "2026-01-13T00:42:04.860124",
+    "requests": 1,
+    "active_users": 0,
+    "tokens_used": 4203,
+    "avg_latency_ms": 1191,
+    "error_rate": 0.0055
+  },
+  {
+    "timestamp": "2026-01-13T01:42:04.860124",
+    "requests": 14,
+    "active_users": 3,
+    "tokens_used": 4932,
+    "avg_latency_ms": 1027,
+    "error_rate": 0.0134
+  },
+  {
+    "timestamp": "2026-01-13T02:42:04.860124",
+    "requests": 19,
+    "active_users": 3,
+    "tokens_used": 4406,
+    "avg_latency_ms": 819,
+    "error_rate": 0.0149
+  },
+  {
+    "timestamp": "2026-01-13T03:42:04.860124",
+    "requests": 6,
+    "active_users": 1,
+    "tokens_used": 4178,
+    "avg_latency_ms": 311,
+    "error_rate": 0.01
+  },
+  {
+    "timestamp": "2026-01-13T04:42:04.860124",
+    "requests": 18,
+    "active_users": 1,
+    "tokens_used": 4477,
+    "avg_latency_ms": 1124,
+    "error_rate": 0.0047
+  },
+  {
+    "timestamp": "2026-01-13T05:42:04.860124",
+    "requests": 12,
+    "active_users": 2,
+    "tokens_used": 3367,
+    "avg_latency_ms": 1106,
+    "error_rate": 0.0131
+  },
+  {
+    "timestamp": "2026-01-13T06:42:04.860124",
+    "requests": 24,
+    "active_users": 5,
+    "tokens_used": 14074,
+    "avg_latency_ms": 1498,
+    "error_rate": 0.0019
+  },
+  {
+    "timestamp": "2026-01-13T07:42:04.860124",
+    "requests": 35,
+    "active_users": 6,
+    "tokens_used": 18064,
+    "avg_latency_ms": 338,
+    "error_rate": 0.001
+  },
+  {
+    "timestamp": "2026-01-13T08:42:04.860124",
+    "requests": 39,
+    "active_users": 15,
+    "tokens_used": 16092,
+    "avg_latency_ms": 1171,
+    "error_rate": 0.003
+  },
+  {
+    "timestamp": "2026-01-13T09:42:04.860124",
+    "requests": 94,
+    "active_users": 45,
+    "tokens_used": 43621,
+    "avg_latency_ms": 351,
+    "error_rate": 0.0227
+  },
+  {
+    "timestamp": "2026-01-13T10:42:04.860124",
+    "requests": 39,
+    "active_users": 8,
+    "tokens_used": 34290,
+    "avg_latency_ms": 1294,
+    "error_rate": 0.02
+  },
+  {
+    "timestamp": "2026-01-13T11:42:04.860124",
+    "requests": 41,
+    "active_users": 21,
+    "tokens_used": 7447,
+    "avg_latency_ms": 340,
+    "error_rate": 0.0225
+  },
+  {
+    "timestamp": "2026-01-13T12:42:04.860124",
+    "requests": 77,
+    "active_users": 42,
+    "tokens_used": 20463,
+    "avg_latency_ms": 1413,
+    "error_rate": 0.023
+  },
+  {
+    "timestamp": "2026-01-13T13:42:04.860124",
+    "requests": 151,
+    "active_users": 9,
+    "tokens_used": 41891,
+    "avg_latency_ms": 852,
+    "error_rate": 0.0172
+  },
+  {
+    "timestamp": "2026-01-13T14:42:04.860124",
+    "requests": 90,
+    "active_users": 20,
+    "tokens_used": 48759,
+    "avg_latency_ms": 434,
+    "error_rate": 0.0095
+  },
+  {
+    "timestamp": "2026-01-13T15:42:04.860124",
+    "requests": 54,
+    "active_users": 7,
+    "tokens_used": 21745,
+    "avg_latency_ms": 1327,
+    "error_rate": 0.0011
+  },
+  {
+    "timestamp": "2026-01-13T16:42:04.860124",
+    "requests": 160,
+    "active_users": 24,
+    "tokens_used": 47374,
+    "avg_latency_ms": 1317,
+    "error_rate": 0.0279
+  },
+  {
+    "timestamp": "2026-01-13T17:42:04.860124",
+    "requests": 111,
+    "active_users": 43,
+    "tokens_used": 39680,
+    "avg_latency_ms": 1309,
+    "error_rate": 0.0192
+  },
+  {
+    "timestamp": "2026-01-13T18:42:04.860124",
+    "requests": 87,
+    "active_users": 4,
+    "tokens_used": 9009,
+    "avg_latency_ms": 1248,
+    "error_rate": 0.0177
+  },
+  {
+    "timestamp": "2026-01-13T19:42:04.860124",
+    "requests": 92,
+    "active_users": 6,
+    "tokens_used": 16084,
+    "avg_latency_ms": 1082,
+    "error_rate": 0.0181
+  },
+  {
+    "timestamp": "2026-01-13T20:42:04.860124",
+    "requests": 42,
+    "active_users": 5,
+    "tokens_used": 15963,
+    "avg_latency_ms": 1082,
+    "error_rate": 0.0287
+  },
+  {
+    "timestamp": "2026-01-13T21:42:04.860124",
+    "requests": 24,
+    "active_users": 9,
+    "tokens_used": 18391,
+    "avg_latency_ms": 887,
+    "error_rate": 0.0286
+  },
+  {
+    "timestamp": "2026-01-13T22:42:04.860124",
+    "requests": 13,
+    "active_users": 3,
+    "tokens_used": 4242,
+    "avg_latency_ms": 845,
+    "error_rate": 0.0074
+  },
+  {
+    "timestamp": "2026-01-13T23:42:04.860124",
+    "requests": 5,
+    "active_users": 2,
+    "tokens_used": 3363,
+    "avg_latency_ms": 674,
+    "error_rate": 0.0063
+  },
+  {
+    "timestamp": "2026-01-14T00:42:04.860124",
+    "requests": 18,
+    "active_users": 3,
+    "tokens_used": 4889,
+    "avg_latency_ms": 892,
+    "error_rate": 0.0175
+  },
+  {
+    "timestamp": "2026-01-14T01:42:04.860124",
+    "requests": 3,
+    "active_users": 4,
+    "tokens_used": 3423,
+    "avg_latency_ms": 330,
+    "error_rate": 0.002
+  },
+  {
+    "timestamp": "2026-01-14T02:42:04.860124",
+    "requests": 7,
+    "active_users": 1,
+    "tokens_used": 3323,
+    "avg_latency_ms": 585,
+    "error_rate": 0.0008
+  },
+  {
+    "timestamp": "2026-01-14T03:42:04.860124",
+    "requests": 12,
+    "active_users": 0,
+    "tokens_used": 3878,
+    "avg_latency_ms": 1243,
+    "error_rate": 0.0246
+  },
+  {
+    "timestamp": "2026-01-14T04:42:04.860124",
+    "requests": 14,
+    "active_users": 1,
+    "tokens_used": 1192,
+    "avg_latency_ms": 482,
+    "error_rate": 0.0123
+  },
+  {
+    "timestamp": "2026-01-14T05:42:04.860124",
+    "requests": 5,
+    "active_users": 4,
+    "tokens_used": 4860,
+    "avg_latency_ms": 356,
+    "error_rate": 0.0189
+  }
+]

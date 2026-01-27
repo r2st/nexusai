@@ -1,0 +1,163 @@
+# =============================================================================
+# Traefik Static Configuration
+# =============================================================================
+# This file contains the static configuration for Traefik reverse proxy
+# For dynamic configuration, see dynamic.yml
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Global Settings
+# -----------------------------------------------------------------------------
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+# -----------------------------------------------------------------------------
+# API and Dashboard
+# -----------------------------------------------------------------------------
+api:
+  dashboard: true
+  insecure: false  # Dashboard only accessible via authenticated route
+
+# -----------------------------------------------------------------------------
+# Logging
+# -----------------------------------------------------------------------------
+log:
+  level: INFO
+  format: json
+  filePath: /var/log/traefik/traefik.log
+
+accessLog:
+  filePath: /var/log/traefik/access.log
+  format: json
+  bufferingSize: 100
+  filters:
+    statusCodes:
+      - "200-299"
+      - "400-499"
+      - "500-599"
+    retryAttempts: true
+    minDuration: "10ms"
+  fields:
+    defaultMode: keep
+    names:
+      ClientUsername: drop
+    headers:
+      defaultMode: drop
+      names:
+        User-Agent: keep
+        Authorization: drop
+        Content-Type: keep
+        X-Request-ID: keep
+
+# -----------------------------------------------------------------------------
+# Entry Points
+# -----------------------------------------------------------------------------
+entryPoints:
+  # HTTP entry point (redirects to HTTPS)
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+
+  # HTTPS entry point
+  websecure:
+    address: ":443"
+    http:
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: "${DOMAIN}"
+            sans:
+              - "*.${DOMAIN}"
+      middlewares:
+        - security-headers@file
+    # Enable HTTP/2
+    http2:
+      maxConcurrentStreams: 250
+
+  # Metrics entry point (internal)
+  metrics:
+    address: ":8082"
+
+# -----------------------------------------------------------------------------
+# Certificate Resolvers (Let's Encrypt)
+# -----------------------------------------------------------------------------
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: "${ACME_EMAIL}"
+      storage: /letsencrypt/acme.json
+      # Use HTTP-01 challenge
+      httpChallenge:
+        entryPoint: web
+      # Or use DNS-01 challenge for wildcards
+      # dnsChallenge:
+      #   provider: cloudflare
+      #   resolvers:
+      #     - "1.1.1.1:53"
+      #     - "8.8.8.8:53"
+
+  letsencrypt-staging:
+    acme:
+      email: "${ACME_EMAIL}"
+      storage: /letsencrypt/acme-staging.json
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      httpChallenge:
+        entryPoint: web
+
+# -----------------------------------------------------------------------------
+# Providers
+# -----------------------------------------------------------------------------
+providers:
+  # Docker provider
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: nexusai-internal
+    watch: true
+
+  # File provider for dynamic configuration
+  file:
+    filename: /etc/traefik/dynamic.yml
+    watch: true
+
+# -----------------------------------------------------------------------------
+# Metrics (Prometheus)
+# -----------------------------------------------------------------------------
+metrics:
+  prometheus:
+    entryPoint: metrics
+    addEntryPointsLabels: true
+    addServicesLabels: true
+    addRoutersLabels: true
+    buckets:
+      - 0.1
+      - 0.3
+      - 1.2
+      - 5.0
+
+# -----------------------------------------------------------------------------
+# Tracing (OpenTelemetry)
+# -----------------------------------------------------------------------------
+tracing:
+  otlp:
+    grpc:
+      endpoint: "otel-collector:4317"
+      insecure: true
+
+# -----------------------------------------------------------------------------
+# Health Check
+# -----------------------------------------------------------------------------
+ping:
+  entryPoint: websecure
+
+# -----------------------------------------------------------------------------
+# Experimental Features (disabled for v3 compatibility)
+# -----------------------------------------------------------------------------
+# experimental:
+#   plugins: {}

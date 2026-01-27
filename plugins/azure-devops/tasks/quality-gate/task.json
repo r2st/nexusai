@@ -1,0 +1,63 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "NexusAIQualityGate",
+    "friendlyName": "NexusAI Quality Gate",
+    "description": "Run quality gate check with NexusAI",
+    "helpMarkDown": "[Learn more](https://docs.nexusai.dev/azure-devops)",
+    "category": "Utility",
+    "visibility": [
+        "Build",
+        "Release"
+    ],
+    "author": "NexusAI",
+    "version": {
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 0
+    },
+    "instanceNameFormat": "NexusAI Quality Gate",
+    "inputs": [
+        {
+            "name": "serviceConnection",
+            "type": "connectedService:nexusai",
+            "label": "NexusAI Service Connection",
+            "required": true,
+            "helpMarkDown": "Select the NexusAI service connection"
+        },
+        {
+            "name": "threshold",
+            "type": "pickList",
+            "label": "Quality Threshold",
+            "defaultValue": "medium",
+            "required": true,
+            "options": {
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High",
+                "critical": "Critical"
+            },
+            "helpMarkDown": "Minimum quality level required to pass"
+        },
+        {
+            "name": "failOnIssues",
+            "type": "boolean",
+            "label": "Fail on Issues",
+            "defaultValue": "true",
+            "required": false,
+            "helpMarkDown": "Fail the build if quality gate does not pass"
+        },
+        {
+            "name": "categories",
+            "type": "string",
+            "label": "Categories",
+            "required": false,
+            "helpMarkDown": "Comma-separated list of categories to check (e.g., security,performance)"
+        }
+    ],
+    "execution": {
+        "Node16": {
+            "target": "index.js"
+        }
+    }
+}

@@ -1,0 +1,435 @@
+[
+  {
+    "id": "0e902f87-1555-4b15-99de-60c21b8776c0",
+    "name": "API Key - Production 1",
+    "key_prefix": "nxai_6cb154b0",
+    "organization_id": "1ec7bcca-9196-4290-9d70-27296c99d35e",
+    "created_by": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "created_at": "2025-11-23T12:34:30.860593",
+    "last_used_at": "2026-01-08T10:23:40.860596",
+    "expires_at": "2026-11-23T12:34:30.860593",
+    "is_active": true,
+    "scopes": [
+      "write",
+      "read",
+      "documents",
+      "analytics"
+    ],
+    "rate_limit": 100,
+    "usage": {
+      "total_requests": 95807,
+      "requests_today": 856,
+      "tokens_used_total": 4508892
+    }
+  },
+  {
+    "id": "10068a20-0bab-485c-be19-d29d25d72fe5",
+    "name": "API Key - Production 2",
+    "key_prefix": "nxai_a08c7b21",
+    "organization_id": "e0eb26f0-ab25-4994-bc7e-b8a2fda8306e",
+    "created_by": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "created_at": "2025-10-24T01:52:40.860622",
+    "last_used_at": "2026-01-10T19:06:06.860624",
+    "expires_at": "2026-10-24T01:52:40.860622",
+    "is_active": true,
+    "scopes": [
+      "documents",
+      "write",
+      "analytics"
+    ],
+    "rate_limit": 100,
+    "usage": {
+      "total_requests": 59151,
+      "requests_today": 969,
+      "tokens_used_total": 2986771
+    }
+  },
+  {
+    "id": "a49468e9-ece8-4eef-8e3e-39d8695bf232",
+    "name": "API Key - Integration 3",
+    "key_prefix": "nxai_be446aef",
+    "organization_id": "3916dbd9-f1fc-443d-8299-780f964b3c00",
+    "created_by": "913fb426-ff2e-4f88-9e02-c0e0bd9a32ff",
+    "created_at": "2025-10-27T15:08:49.860635",
+    "last_used_at": "2026-01-10T02:36:26.860637",
+    "expires_at": "2026-10-27T15:08:49.860635",
+    "is_active": false,
+    "scopes": [
+      "read",
+      "analytics"
+    ],
+    "rate_limit": 1000,
+    "usage": {
+      "total_requests": 70791,
+      "requests_today": 47,
+      "tokens_used_total": 3513044
+    }
+  },
+  {
+    "id": "2e6de40a-dae2-4573-9956-aeb7a2f650e2",
+    "name": "API Key - Development 4",
+    "key_prefix": "nxai_7b2aabfe",
+    "organization_id": "1ec7bcca-9196-4290-9d70-27296c99d35e",
+    "created_by": "b5b6022a-3454-4703-aefb-629674eae558",
+    "created_at": "2025-10-18T09:08:05.860648",
+    "last_used_at": "2026-01-08T09:59:32.860649",
+    "expires_at": "2026-10-18T09:08:05.860648",
+    "is_active": true,
+    "scopes": [
+      "read",
+      "analytics",
+      "write",
+      "admin"
+    ],
+    "rate_limit": 5000,
+    "usage": {
+      "total_requests": 88387,
+      "requests_today": 836,
+      "tokens_used_total": 4952885
+    }
+  },
+  {
+    "id": "459dc6d0-cb03-4005-bde7-235803cba444",
+    "name": "API Key - Development 5",
+    "key_prefix": "nxai_963c2397",
+    "organization_id": "3ce8bb4e-5ea6-4bd9-8e54-18bc4f37ddb2",
+    "created_by": "9b258240-6ff3-444c-abd2-b5b6e0c8a9d6",
+    "created_at": "2025-09-08T18:55:53.860662",
+    "last_used_at": "2026-01-12T10:02:49.860664",
+    "expires_at": "2026-09-08T18:55:53.860662",
+    "is_active": true,
+    "scopes": [
+      "analytics",
+      "read",
+      "admin",
+      "documents"
+    ],
+    "rate_limit": null,
+    "usage": {
+      "total_requests": 46483,
+      "requests_today": 234,
+      "tokens_used_total": 989134
+    }
+  },
+  {
+    "id": "3c5df110-9439-4ef0-beb9-07552eea63b8",
+    "name": "API Key - Integration 6",
+    "key_prefix": "nxai_03a58322",
+    "organization_id": "e0eb26f0-ab25-4994-bc7e-b8a2fda8306e",
+    "created_by": "0f775567-df8e-411e-82ff-eb013a0b70ed",
+    "created_at": "2025-09-06T12:06:15.860675",
+    "last_used_at": "2026-01-08T08:27:36.860677",
+    "expires_at": "2026-09-06T12:06:15.860675",
+    "is_active": true,
+    "scopes": [
+      "write",
+      "chat"
+    ],
+    "rate_limit": 1000,
+    "usage": {
+      "total_requests": 88367,
+      "requests_today": 915,
+      "tokens_used_total": 4640673
+    }
+  },
+  {
+    "id": "b2ba5489-e396-4e39-b676-19c78fce8500",
+    "name": "API Key - Testing 7",
+    "key_prefix": "nxai_50ee0473",
+    "organization_id": "e0eb26f0-ab25-4994-bc7e-b8a2fda8306e",
+    "created_by": "f4b9b8ce-c190-4d02-ab6f-ca5acfb3324c",
+    "created_at": "2025-11-03T16:02:38.860687",
+    "last_used_at": "2026-01-11T20:37:22.860689",
+    "expires_at": "2026-11-03T16:02:38.860687",
+    "is_active": true,
+    "scopes": [
+      "write",
+      "admin",
+      "read",
+      "documents"
+    ],
+    "rate_limit": 5000,
+    "usage": {
+      "total_requests": 92013,
+      "requests_today": 655,
+      "tokens_used_total": 2374311
+    }
+  },
+  {
+    "id": "f89e28a9-4b1d-452c-ac67-468eead75d2a",
+    "name": "API Key - Development 8",
+    "key_prefix": "nxai_9248a720",
+    "organization_id": "29e34d2b-1685-4be1-bc17-6e8540a53642",
+    "created_by": "c45237c9-124c-4efb-bab1-414ca86d079c",
+    "created_at": "2025-12-27T10:29:12.860699",
+    "last_used_at": "2026-01-11T22:28:14.860700",
+    "expires_at": "2026-12-27T10:29:12.860699",
+    "is_active": true,
+    "scopes": [
+      "write",
+      "read",
+      "chat"
+    ],
+    "rate_limit": 100,
+    "usage": {
+      "total_requests": 20047,
+      "requests_today": 574,
+      "tokens_used_total": 2835499
+    }
+  },
+  {
+    "id": "b251a20e-9618-4e29-8565-0b277da473d2",
+    "name": "API Key - Testing 9",
+    "key_prefix": "nxai_5eee71bc",
+    "organization_id": "3916dbd9-f1fc-443d-8299-780f964b3c00",
+    "created_by": "f5d44310-249b-413c-bc1f-0f3d09dedf6b",
+    "created_at": "2025-08-07T03:01:57.860710",
+    "last_used_at": "2026-01-09T05:14:54.860711",
+    "expires_at": null,
+    "is_active": true,
+    "scopes": [
+      "documents",
+      "analytics",
+      "write"
+    ],
+    "rate_limit": 100,
+    "usage": {
+      "total_requests": 65867,
+      "requests_today": 990,
+      "tokens_used_total": 4813973
+    }
+  },
+  {
+    "id": "e1cd152c-77ce-40f6-95c3-23f11f8ff2f1",
+    "name": "API Key - Integration 10",
+    "key_prefix": "nxai_2f754829",
+    "organization_id": "3916dbd9-f1fc-443d-8299-780f964b3c00",
+    "created_by": "d32af08c-32a6-452a-b4f8-2fb4f760e050",
+    "created_at": "2025-12-18T13:18:41.860722",
+    "last_used_at": "2026-01-10T12:09:19.860724",
+    "expires_at": "2026-12-18T13:18:41.860722",
+    "is_active": true,
+    "scopes": [
+      "write",
+      "admin",
+      "chat",
+      "analytics"
+    ],
+    "rate_limit": 500,
+    "usage": {
+      "total_requests": 98683,
+      "requests_today": 539,
+      "tokens_used_total": 3734392
+    }
+  },
+  {
+    "id": "7d822287-e443-4403-80e3-0b91dae586bd",
+    "name": "API Key - Production 11",
+    "key_prefix": "nxai_75a1ebde",
+    "organization_id": "3916dbd9-f1fc-443d-8299-780f964b3c00",
+    "created_by": "1dddfc60-c75f-4c99-a459-90292206da89",
+    "created_at": "2025-11-12T03:57:22.860734",
+    "last_used_at": "2026-01-12T10:27:59.860735",
+    "expires_at": null,
+    "is_active": false,
+    "scopes": [
+      "documents"
+    ],
+    "rate_limit": 500,
+    "usage": {
+      "total_requests": 46890,
+      "requests_today": 677,
+      "tokens_used_total": 1369399
+    }
+  },
+  {
+    "id": "a35bc82b-5f7c-404c-9a1a-bf91ebe4eacd",
+    "name": "API Key - Production 12",
+    "key_prefix": "nxai_76b8d819",
+    "organization_id": "1ec7bcca-9196-4290-9d70-27296c99d35e",
+    "created_by": "ee735570-941a-4169-8c0f-6e07d25c349f",
+    "created_at": "2025-12-24T15:39:58.860744",
+    "last_used_at": "2026-01-12T05:21:32.860746",
+    "expires_at": "2026-12-24T15:39:58.860744",
+    "is_active": true,
+    "scopes": [
+      "admin"
+    ],
+    "rate_limit": 500,
+    "usage": {
+      "total_requests": 32587,
+      "requests_today": 44,
+      "tokens_used_total": 2135005
+    }
+  },
+  {
+    "id": "358d6c24-a1a2-4a27-aa4f-658aead2d884",
+    "name": "API Key - Integration 13",
+    "key_prefix": "nxai_f7d8ee0e",
+    "organization_id": "29e34d2b-1685-4be1-bc17-6e8540a53642",
+    "created_by": "f4b9b8ce-c190-4d02-ab6f-ca5acfb3324c",
+    "created_at": "2025-09-18T15:41:00.860756",
+    "last_used_at": "2026-01-08T10:11:44.860757",
+    "expires_at": "2026-09-18T15:41:00.860756",
+    "is_active": false,
+    "scopes": [
+      "admin",
+      "analytics"
+    ],
+    "rate_limit": 1000,
+    "usage": {
+      "total_requests": 64958,
+      "requests_today": 148,
+      "tokens_used_total": 2199348
+    }
+  },
+  {
+    "id": "9c9cc38c-5a40-4c92-9a10-7238a301b49e",
+    "name": "API Key - Testing 14",
+    "key_prefix": "nxai_d98f8961",
+    "organization_id": "e0eb26f0-ab25-4994-bc7e-b8a2fda8306e",
+    "created_by": "e2cca01e-58fe-4f37-93b6-53bbc3900fa3",
+    "created_at": "2025-08-11T11:14:10.860767",
+    "last_used_at": "2026-01-12T11:37:56.860768",
+    "expires_at": "2026-08-11T11:14:10.860767",
+    "is_active": true,
+    "scopes": [
+      "chat",
+      "read",
+      "analytics",
+      "admin"
+    ],
+    "rate_limit": 5000,
+    "usage": {
+      "total_requests": 97979,
+      "requests_today": 66,
+      "tokens_used_total": 4326736
+    }
+  },
+  {
+    "id": "62a9437b-8cfd-48f5-9015-1ddd48ca5b44",
+    "name": "API Key - Production 15",
+    "key_prefix": "nxai_6b78ca20",
+    "organization_id": "3916dbd9-f1fc-443d-8299-780f964b3c00",
+    "created_by": "838b2235-4e0c-4944-8317-0cb8637394b3",
+    "created_at": "2025-08-11T21:31:33.860778",
+    "last_used_at": "2026-01-13T19:28:29.860779",
+    "expires_at": "2026-08-11T21:31:33.860778",
+    "is_active": true,
+    "scopes": [
+      "chat",
+      "documents",
+      "write",
+      "read"
+    ],
+    "rate_limit": 1000,
+    "usage": {
+      "total_requests": 10435,
+      "requests_today": 453,
+      "tokens_used_total": 2272222
+    }
+  },
+  {
+    "id": "55ad3f2a-e3a9-4209-928c-79edc4f3ac67",
+    "name": "API Key - Development 16",
+    "key_prefix": "nxai_493d99cc",
+    "organization_id": "29e34d2b-1685-4be1-bc17-6e8540a53642",
+    "created_by": "c45237c9-124c-4efb-bab1-414ca86d079c",
+    "created_at": "2025-10-06T14:40:49.860789",
+    "last_used_at": "2026-01-08T13:09:50.860790",
+    "expires_at": null,
+    "is_active": true,
+    "scopes": [
+      "admin",
+      "documents",
+      "chat",
+      "analytics"
+    ],
+    "rate_limit": null,
+    "usage": {
+      "total_requests": 80924,
+      "requests_today": 824,
+      "tokens_used_total": 2088560
+    }
+  },
+  {
+    "id": "09fda9bd-a12a-4081-ba87-90e400b7d655",
+    "name": "API Key - Integration 17",
+    "key_prefix": "nxai_fb8c4c12",
+    "organization_id": "29e34d2b-1685-4be1-bc17-6e8540a53642",
+    "created_by": "9f654358-9891-42f8-8225-6679cfac30d5",
+    "created_at": "2025-11-30T23:43:17.860800",
+    "last_used_at": "2026-01-12T01:59:39.860802",
+    "expires_at": "2026-11-30T23:43:17.860800",
+    "is_active": true,
+    "scopes": [
+      "admin"
+    ],
+    "rate_limit": 1000,
+    "usage": {
+      "total_requests": 77116,
+      "requests_today": 267,
+      "tokens_used_total": 2630295
+    }
+  },
+  {
+    "id": "933f65a9-28e2-4e50-a934-856a6c1fa275",
+    "name": "API Key - Production 18",
+    "key_prefix": "nxai_dab34c09",
+    "organization_id": "3916dbd9-f1fc-443d-8299-780f964b3c00",
+    "created_by": "1079c127-6d94-45b6-a46b-357d4005d848",
+    "created_at": "2025-12-21T07:39:07.860812",
+    "last_used_at": "2026-01-08T14:55:44.860813",
+    "expires_at": "2026-12-21T07:39:07.860812",
+    "is_active": true,
+    "scopes": [
+      "analytics"
+    ],
+    "rate_limit": 5000,
+    "usage": {
+      "total_requests": 47358,
+      "requests_today": 252,
+      "tokens_used_total": 3200169
+    }
+  },
+  {
+    "id": "e478d057-e984-4d60-8773-33a49700cc0b",
+    "name": "API Key - Production 19",
+    "key_prefix": "nxai_06bae655",
+    "organization_id": "e0eb26f0-ab25-4994-bc7e-b8a2fda8306e",
+    "created_by": "abf09b06-22b0-45c5-8abc-a4d01a35e79e",
+    "created_at": "2026-01-06T22:27:29.860823",
+    "last_used_at": "2026-01-11T13:00:47.860824",
+    "expires_at": null,
+    "is_active": true,
+    "scopes": [
+      "write"
+    ],
+    "rate_limit": null,
+    "usage": {
+      "total_requests": 70492,
+      "requests_today": 770,
+      "tokens_used_total": 4657685
+    }
+  },
+  {
+    "id": "499cfeb6-70c2-4fc7-930d-3353f6125f3b",
+    "name": "API Key - Testing 20",
+    "key_prefix": "nxai_69536c9d",
+    "organization_id": "1ec7bcca-9196-4290-9d70-27296c99d35e",
+    "created_by": "e737e0ec-95e3-47f9-bc49-5fc56ec74b2d",
+    "created_at": "2025-12-22T01:56:31.860834",
+    "last_used_at": "2026-01-12T09:23:55.860835",
+    "expires_at": "2026-12-22T01:56:31.860834",
+    "is_active": true,
+    "scopes": [
+      "documents"
+    ],
+    "rate_limit": null,
+    "usage": {
+      "total_requests": 34066,
+      "requests_today": 335,
+      "tokens_used_total": 3123820
+    }
+  }
+]

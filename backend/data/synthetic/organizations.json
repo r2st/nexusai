@@ -1,0 +1,126 @@
+[
+  {
+    "id": "e0eb26f0-ab25-4994-bc7e-b8a2fda8306e",
+    "name": "Quantum Corp",
+    "slug": "quantum-corp",
+    "plan": "enterprise",
+    "created_at": "2025-03-26T21:05:42.840526",
+    "settings": {
+      "allowed_models": [
+        "gemini-pro",
+        "claude-3-opus",
+        "gpt-4",
+        "claude-3-sonnet"
+      ],
+      "max_tokens_per_month": 5000000,
+      "max_documents": 5000,
+      "sso_enabled": false,
+      "audit_logging": true
+    },
+    "usage": {
+      "total_users": 18,
+      "active_users_30d": 41,
+      "tokens_used_this_month": 362890,
+      "documents_count": 1711
+    }
+  },
+  {
+    "id": "1ec7bcca-9196-4290-9d70-27296c99d35e",
+    "name": "Data Solutions",
+    "slug": "data-solutions",
+    "plan": "starter",
+    "created_at": "2025-04-20T16:00:30.840583",
+    "settings": {
+      "allowed_models": [
+        "claude-3-sonnet",
+        "gemini-pro",
+        "claude-3-haiku",
+        "gpt-4-turbo",
+        "gpt-3.5-turbo"
+      ],
+      "max_tokens_per_month": 5000000,
+      "max_documents": 5000,
+      "sso_enabled": true,
+      "audit_logging": false
+    },
+    "usage": {
+      "total_users": 155,
+      "active_users_30d": 112,
+      "tokens_used_this_month": 690428,
+      "documents_count": 1214
+    }
+  },
+  {
+    "id": "29e34d2b-1685-4be1-bc17-6e8540a53642",
+    "name": "Tech Labs",
+    "slug": "tech-labs",
+    "plan": "free",
+    "created_at": "2025-10-28T16:50:00.840601",
+    "settings": {
+      "allowed_models": [
+        "claude-3-haiku",
+        "gpt-4-turbo",
+        "gpt-3.5-turbo"
+      ],
+      "max_tokens_per_month": 100000,
+      "max_documents": 500,
+      "sso_enabled": false,
+      "audit_logging": true
+    },
+    "usage": {
+      "total_users": 45,
+      "active_users_30d": 3,
+      "tokens_used_this_month": 906723,
+      "documents_count": 972
+    }
+  },
+  {
+    "id": "3ce8bb4e-5ea6-4bd9-8e54-18bc4f37ddb2",
+    "name": "Quantum Corp",
+    "slug": "quantum-corp",
+    "plan": "starter",
+    "created_at": "2025-01-26T22:55:35.840612",
+    "settings": {
+      "allowed_models": [
+        "claude-3-haiku",
+        "claude-3-opus",
+        "gpt-4",
+        "gpt-4-turbo"
+      ],
+      "max_tokens_per_month": 1000000,
+      "max_documents": -1,
+      "sso_enabled": false,
+      "audit_logging": true
+    },
+    "usage": {
+      "total_users": 113,
+      "active_users_30d": 32,
+      "tokens_used_this_month": 1192030,
+      "documents_count": 510
+    }
+  },
+  {
+    "id": "3916dbd9-f1fc-443d-8299-780f964b3c00",
+    "name": "Smart Corp",
+    "slug": "smart-corp",
+    "plan": "free",
+    "created_at": "2025-03-10T12:26:21.840622",
+    "settings": {
+      "allowed_models": [
+        "gemini-pro",
+        "gpt-3.5-turbo",
+        "claude-3-sonnet"
+      ],
+      "max_tokens_per_month": -1,
+      "max_documents": 1000,
+      "sso_enabled": false,
+      "audit_logging": false
+    },
+    "usage": {
+      "total_users": 82,
+      "active_users_30d": 106,
+      "tokens_used_this_month": 620941,
+      "documents_count": 1074
+    }
+  }
+]

@@ -1,0 +1,121 @@
+<idea-plugin>
+    <id>com.nexusai.plugin</id>
+    <name>NexusAI</name>
+    <vendor email="support@nexusai.dev" url="https://nexusai.dev">NexusAI</vendor>
+
+    <description><![CDATA[
+    AI-powered software intelligence platform integration for JetBrains IDEs.
+    
+    Features:
+    - Contextual code assistance
+    - AI-powered code review
+    - Automatic documentation generation
+    - Bug and vulnerability detection
+    - Team collaboration
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>Git4Idea</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Settings -->
+        <applicationConfigurable
+            parentId="tools"
+            instance="com.nexusai.plugin.settings.NexusAIConfigurable"
+            id="com.nexusai.plugin.settings"
+            displayName="NexusAI"/>
+        
+        <applicationService 
+            serviceImplementation="com.nexusai.plugin.settings.NexusAISettings"/>
+        
+        <!-- Services -->
+        <applicationService 
+            serviceImplementation="com.nexusai.plugin.services.NexusAIService"/>
+        <projectService 
+            serviceImplementation="com.nexusai.plugin.services.ProjectAnalysisService"/>
+        
+        <!-- Tool Windows -->
+        <toolWindow 
+            id="NexusAI"
+            anchor="right"
+            factoryClass="com.nexusai.plugin.ui.NexusAIToolWindowFactory"
+            icon="/icons/nexusai.svg"/>
+        
+        <!-- Editor Features -->
+        <editorFactoryListener 
+            implementation="com.nexusai.plugin.editor.NexusAIEditorListener"/>
+        
+        <!-- Inspections -->
+        <localInspection
+            language="JAVA"
+            displayName="NexusAI Code Analysis"
+            groupName="NexusAI"
+            enabledByDefault="true"
+            level="WARNING"
+            implementationClass="com.nexusai.plugin.inspections.NexusAIInspection"/>
+        
+        <!-- Completion -->
+        <completion.contributor
+            language="any"
+            implementationClass="com.nexusai.plugin.completion.NexusAICompletionContributor"
+            order="first"/>
+        
+        <!-- Notifications -->
+        <notificationGroup 
+            id="NexusAI Notifications" 
+            displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <group id="NexusAI.Menu" text="NexusAI" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            
+            <action id="NexusAI.Ask"
+                class="com.nexusai.plugin.actions.AskNexusAIAction"
+                text="Ask NexusAI"
+                description="Ask NexusAI about selected code"
+                icon="/icons/ask.svg">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt A"/>
+            </action>
+            
+            <action id="NexusAI.Explain"
+                class="com.nexusai.plugin.actions.ExplainCodeAction"
+                text="Explain Code"
+                description="Get an explanation of the selected code"/>
+            
+            <action id="NexusAI.GenerateDocs"
+                class="com.nexusai.plugin.actions.GenerateDocsAction"
+                text="Generate Documentation"
+                description="Generate documentation for selected code"/>
+            
+            <action id="NexusAI.Review"
+                class="com.nexusai.plugin.actions.ReviewCodeAction"
+                text="Review Code"
+                description="Get AI review of the selected code"/>
+            
+            <action id="NexusAI.Refactor"
+                class="com.nexusai.plugin.actions.RefactorSuggestionsAction"
+                text="Suggest Refactoring"
+                description="Get refactoring suggestions"/>
+            
+            <separator/>
+            
+            <action id="NexusAI.Chat"
+                class="com.nexusai.plugin.actions.OpenChatAction"
+                text="Open Chat"
+                description="Open NexusAI chat window"
+                icon="/icons/chat.svg">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt C"/>
+            </action>
+        </group>
+        
+        <!-- Git Integration -->
+        <action id="NexusAI.ReviewPR"
+            class="com.nexusai.plugin.actions.ReviewPullRequestAction"
+            text="AI Review Pull Request"
+            description="Get AI review of the current pull request">
+            <add-to-group group-id="Git.Menu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

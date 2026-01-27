@@ -1,0 +1,5106 @@
+[
+  {
+    "date": "2025-10-16",
+    "metrics": {
+      "active_users": 58,
+      "new_users": 5,
+      "conversations_started": 117,
+      "messages_sent": 587,
+      "tokens_used": 58700,
+      "documents_uploaded": 6,
+      "api_calls": 2727
+    },
+    "model_usage": {
+      "claude-3-haiku": {
+        "requests": 18,
+        "tokens_input": 86508,
+        "tokens_output": 164749,
+        "avg_latency_ms": 1155,
+        "error_rate": 0.0496
+      },
+      "gpt-4": {
+        "requests": 196,
+        "tokens_input": 38123,
+        "tokens_output": 60337,
+        "avg_latency_ms": 1351,
+        "error_rate": 0.014
+      },
+      "gpt-3.5-turbo": {
+        "requests": 276,
+        "tokens_input": 8072,
+        "tokens_output": 138348,
+        "avg_latency_ms": 952,
+        "error_rate": 0.0453
+      },
+      "claude-3-opus": {
+        "requests": 36,
+        "tokens_input": 90118,
+        "tokens_output": 72601,
+        "avg_latency_ms": 1734,
+        "error_rate": 0.0153
+      }
+    },
+    "costs": {
+      "total_usd": 229.98,
+      "by_model": {
+        "gpt-3.5-turbo": 75.25,
+        "gpt-4": 76.22,
+        "gemini-pro": 46.35
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 664,
+      "p95_response_time_ms": 3363,
+      "p99_response_time_ms": 8516,
+      "error_count": 1,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-10-17",
+    "metrics": {
+      "active_users": 57,
+      "new_users": 4,
+      "conversations_started": 115,
+      "messages_sent": 576,
+      "tokens_used": 57632,
+      "documents_uploaded": 0,
+      "api_calls": 4799
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 473,
+        "tokens_input": 66619,
+        "tokens_output": 109619,
+        "avg_latency_ms": 1095,
+        "error_rate": 0.0018
+      },
+      "claude-3-opus": {
+        "requests": 354,
+        "tokens_input": 40426,
+        "tokens_output": 192676,
+        "avg_latency_ms": 1068,
+        "error_rate": 0.0168
+      },
+      "gpt-4-turbo": {
+        "requests": 421,
+        "tokens_input": 72185,
+        "tokens_output": 121283,
+        "avg_latency_ms": 1133,
+        "error_rate": 0.0354
+      }
+    },
+    "costs": {
+      "total_usd": 74.85,
+      "by_model": {
+        "claude-3-haiku": 20.1,
+        "gpt-3.5-turbo": 28.88,
+        "claude-3-sonnet": 9.25
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1421,
+      "p95_response_time_ms": 4751,
+      "p99_response_time_ms": 4694,
+      "error_count": 10,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-10-18",
+    "metrics": {
+      "active_users": 23,
+      "new_users": 0,
+      "conversations_started": 46,
+      "messages_sent": 233,
+      "tokens_used": 23320,
+      "documents_uploaded": 4,
+      "api_calls": 976
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 43,
+        "tokens_input": 25185,
+        "tokens_output": 159922,
+        "avg_latency_ms": 1941,
+        "error_rate": 0.0118
+      },
+      "gpt-4-turbo": {
+        "requests": 54,
+        "tokens_input": 14884,
+        "tokens_output": 12528,
+        "avg_latency_ms": 1780,
+        "error_rate": 0.0007
+      },
+      "gpt-3.5-turbo": {
+        "requests": 423,
+        "tokens_input": 49713,
+        "tokens_output": 171863,
+        "avg_latency_ms": 444,
+        "error_rate": 0.0078
+      }
+    },
+    "costs": {
+      "total_usd": 316.8,
+      "by_model": {
+        "claude-3-haiku": 61.64,
+        "gpt-3.5-turbo": 6.56,
+        "gpt-4": 14.73
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2380,
+      "p95_response_time_ms": 2332,
+      "p99_response_time_ms": 5520,
+      "error_count": 2,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-10-19",
+    "metrics": {
+      "active_users": 23,
+      "new_users": 0,
+      "conversations_started": 47,
+      "messages_sent": 238,
+      "tokens_used": 23847,
+      "documents_uploaded": 13,
+      "api_calls": 2009
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 208,
+        "tokens_input": 46996,
+        "tokens_output": 173958,
+        "avg_latency_ms": 1384,
+        "error_rate": 0.0096
+      },
+      "claude-3-haiku": {
+        "requests": 428,
+        "tokens_input": 30860,
+        "tokens_output": 195660,
+        "avg_latency_ms": 1314,
+        "error_rate": 0.0303
+      },
+      "gemini-pro": {
+        "requests": 105,
+        "tokens_input": 66500,
+        "tokens_output": 85514,
+        "avg_latency_ms": 1798,
+        "error_rate": 0.0338
+      }
+    },
+    "costs": {
+      "total_usd": 433.85,
+      "by_model": {
+        "claude-3-opus": 51.25,
+        "gpt-4-turbo": 8.88
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2495,
+      "p95_response_time_ms": 2809,
+      "p99_response_time_ms": 6156,
+      "error_count": 4,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-10-20",
+    "metrics": {
+      "active_users": 52,
+      "new_users": 1,
+      "conversations_started": 104,
+      "messages_sent": 521,
+      "tokens_used": 52195,
+      "documents_uploaded": 3,
+      "api_calls": 720
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 93,
+        "tokens_input": 56729,
+        "tokens_output": 176539,
+        "avg_latency_ms": 1513,
+        "error_rate": 0.0148
+      },
+      "gpt-3.5-turbo": {
+        "requests": 221,
+        "tokens_input": 71408,
+        "tokens_output": 177928,
+        "avg_latency_ms": 884,
+        "error_rate": 0.0109
+      },
+      "gemini-pro": {
+        "requests": 138,
+        "tokens_input": 50188,
+        "tokens_output": 73116,
+        "avg_latency_ms": 1386,
+        "error_rate": 0.0003
+      }
+    },
+    "costs": {
+      "total_usd": 446.37,
+      "by_model": {
+        "gpt-3.5-turbo": 7.1,
+        "gemini-pro": 49.9,
+        "gpt-4-turbo": 90.37,
+        "gpt-4": 6.98
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2047,
+      "p95_response_time_ms": 3761,
+      "p99_response_time_ms": 4654,
+      "error_count": 14,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2025-10-21",
+    "metrics": {
+      "active_users": 60,
+      "new_users": 5,
+      "conversations_started": 121,
+      "messages_sent": 605,
+      "tokens_used": 60535,
+      "documents_uploaded": 2,
+      "api_calls": 2708
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 144,
+        "tokens_input": 46820,
+        "tokens_output": 128171,
+        "avg_latency_ms": 1033,
+        "error_rate": 0.0371
+      },
+      "gpt-3.5-turbo": {
+        "requests": 255,
+        "tokens_input": 53554,
+        "tokens_output": 140992,
+        "avg_latency_ms": 914,
+        "error_rate": 0.0382
+      },
+      "claude-3-sonnet": {
+        "requests": 170,
+        "tokens_input": 76554,
+        "tokens_output": 59882,
+        "avg_latency_ms": 767,
+        "error_rate": 0.0294
+      },
+      "gpt-4": {
+        "requests": 31,
+        "tokens_input": 95553,
+        "tokens_output": 102509,
+        "avg_latency_ms": 1139,
+        "error_rate": 0.0232
+      },
+      "claude-3-haiku": {
+        "requests": 246,
+        "tokens_input": 47515,
+        "tokens_output": 115707,
+        "avg_latency_ms": 1249,
+        "error_rate": 0.0434
+      }
+    },
+    "costs": {
+      "total_usd": 237.55,
+      "by_model": {
+        "gpt-4-turbo": 75.3,
+        "claude-3-haiku": 42.54
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 550,
+      "p95_response_time_ms": 2571,
+      "p99_response_time_ms": 6594,
+      "error_count": 12,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-10-22",
+    "metrics": {
+      "active_users": 43,
+      "new_users": 2,
+      "conversations_started": 87,
+      "messages_sent": 438,
+      "tokens_used": 43847,
+      "documents_uploaded": 0,
+      "api_calls": 3658
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 58,
+        "tokens_input": 7148,
+        "tokens_output": 112574,
+        "avg_latency_ms": 1267,
+        "error_rate": 0.0075
+      },
+      "gemini-pro": {
+        "requests": 182,
+        "tokens_input": 30920,
+        "tokens_output": 15683,
+        "avg_latency_ms": 1318,
+        "error_rate": 0.0196
+      },
+      "claude-3-sonnet": {
+        "requests": 165,
+        "tokens_input": 77001,
+        "tokens_output": 82789,
+        "avg_latency_ms": 766,
+        "error_rate": 0.0095
+      },
+      "claude-3-haiku": {
+        "requests": 320,
+        "tokens_input": 99860,
+        "tokens_output": 140845,
+        "avg_latency_ms": 1186,
+        "error_rate": 0.0218
+      },
+      "gpt-4": {
+        "requests": 446,
+        "tokens_input": 25948,
+        "tokens_output": 137753,
+        "avg_latency_ms": 1663,
+        "error_rate": 0.003
+      }
+    },
+    "costs": {
+      "total_usd": 481.11,
+      "by_model": {
+        "gpt-3.5-turbo": 48.19,
+        "claude-3-haiku": 29.64
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 981,
+      "p95_response_time_ms": 4124,
+      "p99_response_time_ms": 8048,
+      "error_count": 6,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-10-23",
+    "metrics": {
+      "active_users": 50,
+      "new_users": 2,
+      "conversations_started": 101,
+      "messages_sent": 509,
+      "tokens_used": 50972,
+      "documents_uploaded": 20,
+      "api_calls": 1399
+    },
+    "model_usage": {
+      "claude-3-haiku": {
+        "requests": 323,
+        "tokens_input": 20970,
+        "tokens_output": 167054,
+        "avg_latency_ms": 565,
+        "error_rate": 0.0265
+      },
+      "gpt-3.5-turbo": {
+        "requests": 184,
+        "tokens_input": 99995,
+        "tokens_output": 107872,
+        "avg_latency_ms": 1952,
+        "error_rate": 0.0344
+      },
+      "claude-3-sonnet": {
+        "requests": 75,
+        "tokens_input": 53439,
+        "tokens_output": 158197,
+        "avg_latency_ms": 1269,
+        "error_rate": 0.0032
+      },
+      "claude-3-opus": {
+        "requests": 238,
+        "tokens_input": 53497,
+        "tokens_output": 119314,
+        "avg_latency_ms": 804,
+        "error_rate": 0.0105
+      }
+    },
+    "costs": {
+      "total_usd": 169.84,
+      "by_model": {
+        "gemini-pro": 63.75,
+        "gpt-3.5-turbo": 90.28
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1475,
+      "p95_response_time_ms": 3149,
+      "p99_response_time_ms": 8546,
+      "error_count": 10,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-10-24",
+    "metrics": {
+      "active_users": 57,
+      "new_users": 5,
+      "conversations_started": 114,
+      "messages_sent": 573,
+      "tokens_used": 57366,
+      "documents_uploaded": 6,
+      "api_calls": 1141
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 372,
+        "tokens_input": 82704,
+        "tokens_output": 169747,
+        "avg_latency_ms": 785,
+        "error_rate": 0.0407
+      },
+      "claude-3-haiku": {
+        "requests": 137,
+        "tokens_input": 69040,
+        "tokens_output": 157665,
+        "avg_latency_ms": 1262,
+        "error_rate": 0.0445
+      },
+      "claude-3-sonnet": {
+        "requests": 170,
+        "tokens_input": 71972,
+        "tokens_output": 35056,
+        "avg_latency_ms": 1086,
+        "error_rate": 0.0375
+      },
+      "gpt-4-turbo": {
+        "requests": 329,
+        "tokens_input": 47159,
+        "tokens_output": 31314,
+        "avg_latency_ms": 1383,
+        "error_rate": 0.0245
+      }
+    },
+    "costs": {
+      "total_usd": 305.27,
+      "by_model": {
+        "gpt-3.5-turbo": 77.97,
+        "gpt-4": 79.34,
+        "claude-3-opus": 28.34,
+        "claude-3-sonnet": 15.17
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2236,
+      "p95_response_time_ms": 2241,
+      "p99_response_time_ms": 7880,
+      "error_count": 7,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-10-25",
+    "metrics": {
+      "active_users": 21,
+      "new_users": 1,
+      "conversations_started": 43,
+      "messages_sent": 216,
+      "tokens_used": 21696,
+      "documents_uploaded": 11,
+      "api_calls": 4053
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 319,
+        "tokens_input": 75295,
+        "tokens_output": 62444,
+        "avg_latency_ms": 1987,
+        "error_rate": 0.0405
+      },
+      "gpt-3.5-turbo": {
+        "requests": 106,
+        "tokens_input": 83326,
+        "tokens_output": 168618,
+        "avg_latency_ms": 546,
+        "error_rate": 0.0148
+      },
+      "claude-3-haiku": {
+        "requests": 41,
+        "tokens_input": 30551,
+        "tokens_output": 147232,
+        "avg_latency_ms": 1936,
+        "error_rate": 0.0252
+      },
+      "claude-3-opus": {
+        "requests": 137,
+        "tokens_input": 54284,
+        "tokens_output": 120884,
+        "avg_latency_ms": 1734,
+        "error_rate": 0.0409
+      },
+      "gemini-pro": {
+        "requests": 15,
+        "tokens_input": 44082,
+        "tokens_output": 78416,
+        "avg_latency_ms": 718,
+        "error_rate": 0.0072
+      }
+    },
+    "costs": {
+      "total_usd": 22.39,
+      "by_model": {
+        "claude-3-haiku": 47.03,
+        "claude-3-opus": 91.07,
+        "gpt-4": 15.61,
+        "gpt-3.5-turbo": 62.96
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1637,
+      "p95_response_time_ms": 2642,
+      "p99_response_time_ms": 8864,
+      "error_count": 14,
+      "timeout_count": 2
+    }
+  },
+  {
+    "date": "2025-10-26",
+    "metrics": {
+      "active_users": 17,
+      "new_users": 1,
+      "conversations_started": 34,
+      "messages_sent": 174,
+      "tokens_used": 17424,
+      "documents_uploaded": 14,
+      "api_calls": 2360
+    },
+    "model_usage": {
+      "claude-3-haiku": {
+        "requests": 155,
+        "tokens_input": 26351,
+        "tokens_output": 163742,
+        "avg_latency_ms": 563,
+        "error_rate": 0.0161
+      },
+      "claude-3-sonnet": {
+        "requests": 18,
+        "tokens_input": 21241,
+        "tokens_output": 23742,
+        "avg_latency_ms": 968,
+        "error_rate": 0.0276
+      },
+      "claude-3-opus": {
+        "requests": 198,
+        "tokens_input": 23579,
+        "tokens_output": 92645,
+        "avg_latency_ms": 1775,
+        "error_rate": 0.0188
+      }
+    },
+    "costs": {
+      "total_usd": 22.48,
+      "by_model": {
+        "claude-3-haiku": 18.62,
+        "gpt-3.5-turbo": 61.7,
+        "claude-3-opus": 76.29
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1818,
+      "p95_response_time_ms": 3158,
+      "p99_response_time_ms": 6654,
+      "error_count": 18,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-10-27",
+    "metrics": {
+      "active_users": 42,
+      "new_users": 4,
+      "conversations_started": 84,
+      "messages_sent": 422,
+      "tokens_used": 42283,
+      "documents_uploaded": 1,
+      "api_calls": 1180
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 62,
+        "tokens_input": 73521,
+        "tokens_output": 52829,
+        "avg_latency_ms": 1761,
+        "error_rate": 0.0118
+      },
+      "gemini-pro": {
+        "requests": 396,
+        "tokens_input": 52227,
+        "tokens_output": 103606,
+        "avg_latency_ms": 992,
+        "error_rate": 0.0041
+      },
+      "gpt-4-turbo": {
+        "requests": 185,
+        "tokens_input": 14119,
+        "tokens_output": 139094,
+        "avg_latency_ms": 1120,
+        "error_rate": 0.0273
+      },
+      "claude-3-sonnet": {
+        "requests": 278,
+        "tokens_input": 59572,
+        "tokens_output": 178248,
+        "avg_latency_ms": 1917,
+        "error_rate": 0.0198
+      }
+    },
+    "costs": {
+      "total_usd": 85.94,
+      "by_model": {
+        "gemini-pro": 45.4,
+        "gpt-4-turbo": 12.41
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2366,
+      "p95_response_time_ms": 3068,
+      "p99_response_time_ms": 5862,
+      "error_count": 7,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2025-10-28",
+    "metrics": {
+      "active_users": 55,
+      "new_users": 4,
+      "conversations_started": 110,
+      "messages_sent": 550,
+      "tokens_used": 55010,
+      "documents_uploaded": 0,
+      "api_calls": 529
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 31,
+        "tokens_input": 33704,
+        "tokens_output": 70991,
+        "avg_latency_ms": 612,
+        "error_rate": 0.0477
+      },
+      "claude-3-haiku": {
+        "requests": 80,
+        "tokens_input": 70612,
+        "tokens_output": 93744,
+        "avg_latency_ms": 961,
+        "error_rate": 0.0194
+      },
+      "gpt-4-turbo": {
+        "requests": 334,
+        "tokens_input": 92852,
+        "tokens_output": 113758,
+        "avg_latency_ms": 339,
+        "error_rate": 0.0255
+      },
+      "claude-3-opus": {
+        "requests": 158,
+        "tokens_input": 69517,
+        "tokens_output": 16163,
+        "avg_latency_ms": 1671,
+        "error_rate": 0.0357
+      },
+      "gpt-4": {
+        "requests": 222,
+        "tokens_input": 77093,
+        "tokens_output": 27815,
+        "avg_latency_ms": 382,
+        "error_rate": 0.01
+      }
+    },
+    "costs": {
+      "total_usd": 27.64,
+      "by_model": {
+        "claude-3-sonnet": 1.71,
+        "claude-3-opus": 70.48
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1691,
+      "p95_response_time_ms": 3507,
+      "p99_response_time_ms": 8170,
+      "error_count": 5,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-10-29",
+    "metrics": {
+      "active_users": 46,
+      "new_users": 4,
+      "conversations_started": 92,
+      "messages_sent": 461,
+      "tokens_used": 46173,
+      "documents_uploaded": 0,
+      "api_calls": 2405
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 91,
+        "tokens_input": 31422,
+        "tokens_output": 169283,
+        "avg_latency_ms": 824,
+        "error_rate": 0.0167
+      },
+      "gpt-3.5-turbo": {
+        "requests": 177,
+        "tokens_input": 39123,
+        "tokens_output": 112926,
+        "avg_latency_ms": 544,
+        "error_rate": 0.0325
+      },
+      "gemini-pro": {
+        "requests": 241,
+        "tokens_input": 8777,
+        "tokens_output": 126796,
+        "avg_latency_ms": 1535,
+        "error_rate": 0.0484
+      },
+      "claude-3-opus": {
+        "requests": 353,
+        "tokens_input": 72083,
+        "tokens_output": 116349,
+        "avg_latency_ms": 719,
+        "error_rate": 0.0092
+      }
+    },
+    "costs": {
+      "total_usd": 30.41,
+      "by_model": {
+        "claude-3-haiku": 20.81,
+        "gpt-4-turbo": 57.45
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2030,
+      "p95_response_time_ms": 3223,
+      "p99_response_time_ms": 9650,
+      "error_count": 6,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-10-30",
+    "metrics": {
+      "active_users": 58,
+      "new_users": 2,
+      "conversations_started": 117,
+      "messages_sent": 589,
+      "tokens_used": 58987,
+      "documents_uploaded": 14,
+      "api_calls": 545
+    },
+    "model_usage": {
+      "claude-3-haiku": {
+        "requests": 271,
+        "tokens_input": 8121,
+        "tokens_output": 91238,
+        "avg_latency_ms": 325,
+        "error_rate": 0.0108
+      },
+      "gpt-4-turbo": {
+        "requests": 102,
+        "tokens_input": 48769,
+        "tokens_output": 64094,
+        "avg_latency_ms": 1323,
+        "error_rate": 0.0473
+      },
+      "claude-3-sonnet": {
+        "requests": 208,
+        "tokens_input": 99367,
+        "tokens_output": 95815,
+        "avg_latency_ms": 1237,
+        "error_rate": 0.0492
+      },
+      "gpt-3.5-turbo": {
+        "requests": 318,
+        "tokens_input": 26660,
+        "tokens_output": 138891,
+        "avg_latency_ms": 1283,
+        "error_rate": 0.028
+      },
+      "gpt-4": {
+        "requests": 156,
+        "tokens_input": 92428,
+        "tokens_output": 75147,
+        "avg_latency_ms": 459,
+        "error_rate": 0.0308
+      }
+    },
+    "costs": {
+      "total_usd": 443.36,
+      "by_model": {
+        "claude-3-sonnet": 85.86,
+        "gpt-4": 94.73
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2404,
+      "p95_response_time_ms": 2000,
+      "p99_response_time_ms": 6485,
+      "error_count": 14,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-10-31",
+    "metrics": {
+      "active_users": 57,
+      "new_users": 1,
+      "conversations_started": 114,
+      "messages_sent": 573,
+      "tokens_used": 57303,
+      "documents_uploaded": 3,
+      "api_calls": 538
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 389,
+        "tokens_input": 53866,
+        "tokens_output": 29949,
+        "avg_latency_ms": 873,
+        "error_rate": 0.0209
+      },
+      "claude-3-haiku": {
+        "requests": 21,
+        "tokens_input": 43989,
+        "tokens_output": 19173,
+        "avg_latency_ms": 545,
+        "error_rate": 0.0151
+      },
+      "gemini-pro": {
+        "requests": 144,
+        "tokens_input": 64890,
+        "tokens_output": 63651,
+        "avg_latency_ms": 546,
+        "error_rate": 0.046
+      },
+      "claude-3-opus": {
+        "requests": 391,
+        "tokens_input": 94368,
+        "tokens_output": 17960,
+        "avg_latency_ms": 1275,
+        "error_rate": 0.0087
+      }
+    },
+    "costs": {
+      "total_usd": 65.17,
+      "by_model": {
+        "gpt-4-turbo": 27.74,
+        "claude-3-opus": 70.58,
+        "claude-3-sonnet": 48.49,
+        "gpt-3.5-turbo": 73.41
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 813,
+      "p95_response_time_ms": 2882,
+      "p99_response_time_ms": 4533,
+      "error_count": 12,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-11-01",
+    "metrics": {
+      "active_users": 20,
+      "new_users": 0,
+      "conversations_started": 40,
+      "messages_sent": 200,
+      "tokens_used": 20033,
+      "documents_uploaded": 15,
+      "api_calls": 3642
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 346,
+        "tokens_input": 13258,
+        "tokens_output": 83616,
+        "avg_latency_ms": 1753,
+        "error_rate": 0.0141
+      },
+      "gpt-4-turbo": {
+        "requests": 255,
+        "tokens_input": 31568,
+        "tokens_output": 80067,
+        "avg_latency_ms": 349,
+        "error_rate": 0.0336
+      },
+      "gpt-4": {
+        "requests": 456,
+        "tokens_input": 29650,
+        "tokens_output": 71556,
+        "avg_latency_ms": 1712,
+        "error_rate": 0.0224
+      },
+      "claude-3-sonnet": {
+        "requests": 10,
+        "tokens_input": 90220,
+        "tokens_output": 21566,
+        "avg_latency_ms": 1453,
+        "error_rate": 0.0418
+      }
+    },
+    "costs": {
+      "total_usd": 223.32,
+      "by_model": {
+        "claude-3-opus": 37.04,
+        "gpt-4-turbo": 60.21,
+        "gpt-4": 46.17,
+        "gpt-3.5-turbo": 47.78
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 835,
+      "p95_response_time_ms": 3528,
+      "p99_response_time_ms": 9395,
+      "error_count": 11,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-11-02",
+    "metrics": {
+      "active_users": 21,
+      "new_users": 0,
+      "conversations_started": 43,
+      "messages_sent": 215,
+      "tokens_used": 21564,
+      "documents_uploaded": 10,
+      "api_calls": 2940
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 249,
+        "tokens_input": 50539,
+        "tokens_output": 86663,
+        "avg_latency_ms": 602,
+        "error_rate": 0.0407
+      },
+      "claude-3-sonnet": {
+        "requests": 394,
+        "tokens_input": 69816,
+        "tokens_output": 187133,
+        "avg_latency_ms": 1410,
+        "error_rate": 0.0204
+      },
+      "claude-3-opus": {
+        "requests": 231,
+        "tokens_input": 16330,
+        "tokens_output": 167850,
+        "avg_latency_ms": 818,
+        "error_rate": 0.0442
+      },
+      "gpt-3.5-turbo": {
+        "requests": 180,
+        "tokens_input": 52011,
+        "tokens_output": 179204,
+        "avg_latency_ms": 1255,
+        "error_rate": 0.0225
+      }
+    },
+    "costs": {
+      "total_usd": 274.21,
+      "by_model": {
+        "gpt-4-turbo": 60.28,
+        "gpt-4": 54.48,
+        "gpt-3.5-turbo": 83.37,
+        "gemini-pro": 16.78
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2135,
+      "p95_response_time_ms": 4349,
+      "p99_response_time_ms": 5142,
+      "error_count": 6,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-11-03",
+    "metrics": {
+      "active_users": 50,
+      "new_users": 3,
+      "conversations_started": 101,
+      "messages_sent": 508,
+      "tokens_used": 50802,
+      "documents_uploaded": 3,
+      "api_calls": 4207
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 488,
+        "tokens_input": 77148,
+        "tokens_output": 184230,
+        "avg_latency_ms": 637,
+        "error_rate": 0.037
+      },
+      "claude-3-sonnet": {
+        "requests": 360,
+        "tokens_input": 98028,
+        "tokens_output": 97791,
+        "avg_latency_ms": 1301,
+        "error_rate": 0.0058
+      },
+      "gemini-pro": {
+        "requests": 384,
+        "tokens_input": 53932,
+        "tokens_output": 153773,
+        "avg_latency_ms": 1108,
+        "error_rate": 0.0262
+      },
+      "claude-3-haiku": {
+        "requests": 429,
+        "tokens_input": 56485,
+        "tokens_output": 67428,
+        "avg_latency_ms": 1481,
+        "error_rate": 0.0176
+      },
+      "gpt-4-turbo": {
+        "requests": 218,
+        "tokens_input": 95151,
+        "tokens_output": 37899,
+        "avg_latency_ms": 762,
+        "error_rate": 0.032
+      }
+    },
+    "costs": {
+      "total_usd": 232.29,
+      "by_model": {
+        "gemini-pro": 50.03,
+        "gpt-4-turbo": 91.67,
+        "gpt-4": 69.8,
+        "claude-3-sonnet": 31.35
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2047,
+      "p95_response_time_ms": 3663,
+      "p99_response_time_ms": 6481,
+      "error_count": 6,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-11-04",
+    "metrics": {
+      "active_users": 56,
+      "new_users": 1,
+      "conversations_started": 112,
+      "messages_sent": 561,
+      "tokens_used": 56106,
+      "documents_uploaded": 0,
+      "api_calls": 232
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 105,
+        "tokens_input": 94192,
+        "tokens_output": 28700,
+        "avg_latency_ms": 437,
+        "error_rate": 0.0127
+      },
+      "gpt-4": {
+        "requests": 496,
+        "tokens_input": 20591,
+        "tokens_output": 120603,
+        "avg_latency_ms": 1032,
+        "error_rate": 0.0331
+      },
+      "gpt-4-turbo": {
+        "requests": 15,
+        "tokens_input": 96464,
+        "tokens_output": 166646,
+        "avg_latency_ms": 914,
+        "error_rate": 0.0172
+      }
+    },
+    "costs": {
+      "total_usd": 193.71,
+      "by_model": {
+        "claude-3-opus": 92.04,
+        "claude-3-sonnet": 63.89,
+        "claude-3-haiku": 59.74
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1890,
+      "p95_response_time_ms": 4012,
+      "p99_response_time_ms": 4258,
+      "error_count": 15,
+      "timeout_count": 2
+    }
+  },
+  {
+    "date": "2025-11-05",
+    "metrics": {
+      "active_users": 50,
+      "new_users": 2,
+      "conversations_started": 100,
+      "messages_sent": 501,
+      "tokens_used": 50165,
+      "documents_uploaded": 15,
+      "api_calls": 3243
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 261,
+        "tokens_input": 8581,
+        "tokens_output": 109606,
+        "avg_latency_ms": 379,
+        "error_rate": 0.0481
+      },
+      "gpt-4": {
+        "requests": 398,
+        "tokens_input": 16380,
+        "tokens_output": 134484,
+        "avg_latency_ms": 816,
+        "error_rate": 0.0272
+      },
+      "claude-3-opus": {
+        "requests": 52,
+        "tokens_input": 37163,
+        "tokens_output": 199865,
+        "avg_latency_ms": 1765,
+        "error_rate": 0.0316
+      },
+      "gpt-3.5-turbo": {
+        "requests": 58,
+        "tokens_input": 64596,
+        "tokens_output": 109575,
+        "avg_latency_ms": 1834,
+        "error_rate": 0.0169
+      },
+      "claude-3-sonnet": {
+        "requests": 319,
+        "tokens_input": 66509,
+        "tokens_output": 19002,
+        "avg_latency_ms": 961,
+        "error_rate": 0.0155
+      }
+    },
+    "costs": {
+      "total_usd": 390.81,
+      "by_model": {
+        "gpt-4-turbo": 10.4,
+        "claude-3-sonnet": 68.7,
+        "claude-3-opus": 59.75
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1882,
+      "p95_response_time_ms": 2115,
+      "p99_response_time_ms": 8147,
+      "error_count": 14,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2025-11-06",
+    "metrics": {
+      "active_users": 53,
+      "new_users": 3,
+      "conversations_started": 107,
+      "messages_sent": 535,
+      "tokens_used": 53544,
+      "documents_uploaded": 8,
+      "api_calls": 4728
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 309,
+        "tokens_input": 20423,
+        "tokens_output": 193033,
+        "avg_latency_ms": 1358,
+        "error_rate": 0.0246
+      },
+      "claude-3-sonnet": {
+        "requests": 471,
+        "tokens_input": 64208,
+        "tokens_output": 86910,
+        "avg_latency_ms": 633,
+        "error_rate": 0.002
+      },
+      "gpt-4": {
+        "requests": 317,
+        "tokens_input": 48439,
+        "tokens_output": 121865,
+        "avg_latency_ms": 524,
+        "error_rate": 0.0343
+      },
+      "gpt-3.5-turbo": {
+        "requests": 438,
+        "tokens_input": 15069,
+        "tokens_output": 62198,
+        "avg_latency_ms": 1287,
+        "error_rate": 0.0243
+      }
+    },
+    "costs": {
+      "total_usd": 12.79,
+      "by_model": {
+        "gemini-pro": 5.34,
+        "claude-3-haiku": 19.09,
+        "gpt-4-turbo": 34.67,
+        "claude-3-opus": 68.62
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2231,
+      "p95_response_time_ms": 4020,
+      "p99_response_time_ms": 5873,
+      "error_count": 14,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-11-07",
+    "metrics": {
+      "active_users": 63,
+      "new_users": 0,
+      "conversations_started": 126,
+      "messages_sent": 632,
+      "tokens_used": 63284,
+      "documents_uploaded": 3,
+      "api_calls": 1447
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 298,
+        "tokens_input": 8103,
+        "tokens_output": 124844,
+        "avg_latency_ms": 1316,
+        "error_rate": 0.0183
+      },
+      "claude-3-haiku": {
+        "requests": 367,
+        "tokens_input": 61357,
+        "tokens_output": 15383,
+        "avg_latency_ms": 1750,
+        "error_rate": 0.0263
+      },
+      "claude-3-sonnet": {
+        "requests": 365,
+        "tokens_input": 53272,
+        "tokens_output": 176417,
+        "avg_latency_ms": 1413,
+        "error_rate": 0.0053
+      }
+    },
+    "costs": {
+      "total_usd": 242.09,
+      "by_model": {
+        "claude-3-opus": 7.63,
+        "claude-3-sonnet": 9.64,
+        "gemini-pro": 87.9
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1861,
+      "p95_response_time_ms": 3464,
+      "p99_response_time_ms": 7888,
+      "error_count": 12,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-11-08",
+    "metrics": {
+      "active_users": 25,
+      "new_users": 0,
+      "conversations_started": 50,
+      "messages_sent": 251,
+      "tokens_used": 25144,
+      "documents_uploaded": 3,
+      "api_calls": 297
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 350,
+        "tokens_input": 30757,
+        "tokens_output": 126942,
+        "avg_latency_ms": 1651,
+        "error_rate": 0.0498
+      },
+      "claude-3-sonnet": {
+        "requests": 201,
+        "tokens_input": 78055,
+        "tokens_output": 78945,
+        "avg_latency_ms": 1278,
+        "error_rate": 0.0033
+      },
+      "gpt-4-turbo": {
+        "requests": 414,
+        "tokens_input": 91017,
+        "tokens_output": 58630,
+        "avg_latency_ms": 1492,
+        "error_rate": 0.0207
+      }
+    },
+    "costs": {
+      "total_usd": 284.24,
+      "by_model": {
+        "gpt-4-turbo": 30.73,
+        "gemini-pro": 74.92
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1300,
+      "p95_response_time_ms": 2045,
+      "p99_response_time_ms": 7046,
+      "error_count": 1,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-11-09",
+    "metrics": {
+      "active_users": 24,
+      "new_users": 0,
+      "conversations_started": 48,
+      "messages_sent": 240,
+      "tokens_used": 24089,
+      "documents_uploaded": 16,
+      "api_calls": 2278
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 481,
+        "tokens_input": 36939,
+        "tokens_output": 135931,
+        "avg_latency_ms": 1940,
+        "error_rate": 0.0107
+      },
+      "gpt-4": {
+        "requests": 349,
+        "tokens_input": 67227,
+        "tokens_output": 135377,
+        "avg_latency_ms": 1280,
+        "error_rate": 0.0107
+      },
+      "gpt-3.5-turbo": {
+        "requests": 98,
+        "tokens_input": 55837,
+        "tokens_output": 154974,
+        "avg_latency_ms": 1597,
+        "error_rate": 0.0314
+      },
+      "gpt-4-turbo": {
+        "requests": 449,
+        "tokens_input": 14295,
+        "tokens_output": 48302,
+        "avg_latency_ms": 1666,
+        "error_rate": 0.0063
+      },
+      "claude-3-opus": {
+        "requests": 271,
+        "tokens_input": 24058,
+        "tokens_output": 27824,
+        "avg_latency_ms": 1278,
+        "error_rate": 0.0257
+      }
+    },
+    "costs": {
+      "total_usd": 493.81,
+      "by_model": {
+        "gpt-4-turbo": 93.82,
+        "gemini-pro": 82.97,
+        "claude-3-opus": 41.23,
+        "gpt-3.5-turbo": 75.48
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 587,
+      "p95_response_time_ms": 3312,
+      "p99_response_time_ms": 7232,
+      "error_count": 0,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-11-10",
+    "metrics": {
+      "active_users": 57,
+      "new_users": 2,
+      "conversations_started": 115,
+      "messages_sent": 578,
+      "tokens_used": 57885,
+      "documents_uploaded": 12,
+      "api_calls": 3784
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 496,
+        "tokens_input": 71787,
+        "tokens_output": 116569,
+        "avg_latency_ms": 1623,
+        "error_rate": 0.0436
+      },
+      "gpt-4-turbo": {
+        "requests": 335,
+        "tokens_input": 25615,
+        "tokens_output": 73265,
+        "avg_latency_ms": 1526,
+        "error_rate": 0.0261
+      },
+      "claude-3-haiku": {
+        "requests": 264,
+        "tokens_input": 14837,
+        "tokens_output": 123440,
+        "avg_latency_ms": 1528,
+        "error_rate": 0.0015
+      },
+      "claude-3-opus": {
+        "requests": 43,
+        "tokens_input": 78621,
+        "tokens_output": 32240,
+        "avg_latency_ms": 1742,
+        "error_rate": 0.0446
+      },
+      "gpt-3.5-turbo": {
+        "requests": 84,
+        "tokens_input": 89069,
+        "tokens_output": 20472,
+        "avg_latency_ms": 1056,
+        "error_rate": 0.0139
+      }
+    },
+    "costs": {
+      "total_usd": 147.61,
+      "by_model": {
+        "gemini-pro": 92.01,
+        "gpt-3.5-turbo": 85.68,
+        "claude-3-haiku": 47.52,
+        "claude-3-sonnet": 49.29
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2051,
+      "p95_response_time_ms": 4819,
+      "p99_response_time_ms": 8829,
+      "error_count": 17,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-11-11",
+    "metrics": {
+      "active_users": 56,
+      "new_users": 5,
+      "conversations_started": 113,
+      "messages_sent": 566,
+      "tokens_used": 56619,
+      "documents_uploaded": 18,
+      "api_calls": 1224
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 282,
+        "tokens_input": 72763,
+        "tokens_output": 171576,
+        "avg_latency_ms": 1593,
+        "error_rate": 0.0031
+      },
+      "gpt-4": {
+        "requests": 332,
+        "tokens_input": 40155,
+        "tokens_output": 81106,
+        "avg_latency_ms": 891,
+        "error_rate": 0.0297
+      },
+      "claude-3-opus": {
+        "requests": 126,
+        "tokens_input": 46032,
+        "tokens_output": 94977,
+        "avg_latency_ms": 790,
+        "error_rate": 0.0283
+      },
+      "gemini-pro": {
+        "requests": 188,
+        "tokens_input": 45153,
+        "tokens_output": 60291,
+        "avg_latency_ms": 1991,
+        "error_rate": 0.0167
+      }
+    },
+    "costs": {
+      "total_usd": 341.29,
+      "by_model": {
+        "gpt-3.5-turbo": 67.3,
+        "claude-3-sonnet": 19.65,
+        "claude-3-opus": 61.69
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2111,
+      "p95_response_time_ms": 2570,
+      "p99_response_time_ms": 9638,
+      "error_count": 9,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-11-12",
+    "metrics": {
+      "active_users": 58,
+      "new_users": 2,
+      "conversations_started": 117,
+      "messages_sent": 585,
+      "tokens_used": 58578,
+      "documents_uploaded": 17,
+      "api_calls": 4629
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 70,
+        "tokens_input": 99973,
+        "tokens_output": 199462,
+        "avg_latency_ms": 896,
+        "error_rate": 0.0319
+      },
+      "claude-3-opus": {
+        "requests": 115,
+        "tokens_input": 83398,
+        "tokens_output": 176053,
+        "avg_latency_ms": 2000,
+        "error_rate": 0.0169
+      },
+      "claude-3-sonnet": {
+        "requests": 464,
+        "tokens_input": 89866,
+        "tokens_output": 140273,
+        "avg_latency_ms": 1067,
+        "error_rate": 0.0123
+      },
+      "gemini-pro": {
+        "requests": 257,
+        "tokens_input": 98984,
+        "tokens_output": 80972,
+        "avg_latency_ms": 1463,
+        "error_rate": 0.023
+      }
+    },
+    "costs": {
+      "total_usd": 177.29,
+      "by_model": {
+        "claude-3-sonnet": 13.32,
+        "gpt-4": 38.28,
+        "gpt-3.5-turbo": 55.52
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1305,
+      "p95_response_time_ms": 2013,
+      "p99_response_time_ms": 4545,
+      "error_count": 6,
+      "timeout_count": 2
+    }
+  },
+  {
+    "date": "2025-11-13",
+    "metrics": {
+      "active_users": 64,
+      "new_users": 3,
+      "conversations_started": 128,
+      "messages_sent": 640,
+      "tokens_used": 64021,
+      "documents_uploaded": 17,
+      "api_calls": 4880
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 146,
+        "tokens_input": 11683,
+        "tokens_output": 122120,
+        "avg_latency_ms": 1586,
+        "error_rate": 0.0491
+      },
+      "gemini-pro": {
+        "requests": 314,
+        "tokens_input": 19166,
+        "tokens_output": 134877,
+        "avg_latency_ms": 1195,
+        "error_rate": 0.0193
+      },
+      "claude-3-opus": {
+        "requests": 71,
+        "tokens_input": 23314,
+        "tokens_output": 57475,
+        "avg_latency_ms": 551,
+        "error_rate": 0.0181
+      },
+      "gpt-4-turbo": {
+        "requests": 420,
+        "tokens_input": 12143,
+        "tokens_output": 20756,
+        "avg_latency_ms": 443,
+        "error_rate": 0.0139
+      }
+    },
+    "costs": {
+      "total_usd": 278.76,
+      "by_model": {
+        "gpt-4-turbo": 21.28,
+        "gpt-4": 89.24,
+        "claude-3-opus": 57.09
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 520,
+      "p95_response_time_ms": 2456,
+      "p99_response_time_ms": 6765,
+      "error_count": 19,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-11-14",
+    "metrics": {
+      "active_users": 49,
+      "new_users": 3,
+      "conversations_started": 99,
+      "messages_sent": 499,
+      "tokens_used": 49946,
+      "documents_uploaded": 7,
+      "api_calls": 1988
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 394,
+        "tokens_input": 39961,
+        "tokens_output": 154864,
+        "avg_latency_ms": 1024,
+        "error_rate": 0.042
+      },
+      "gemini-pro": {
+        "requests": 87,
+        "tokens_input": 8008,
+        "tokens_output": 155151,
+        "avg_latency_ms": 1496,
+        "error_rate": 0.0158
+      },
+      "claude-3-haiku": {
+        "requests": 122,
+        "tokens_input": 27523,
+        "tokens_output": 110472,
+        "avg_latency_ms": 716,
+        "error_rate": 0.0271
+      }
+    },
+    "costs": {
+      "total_usd": 18.55,
+      "by_model": {
+        "gpt-4": 74.31,
+        "claude-3-sonnet": 97.89
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1052,
+      "p95_response_time_ms": 3991,
+      "p99_response_time_ms": 5020,
+      "error_count": 3,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-11-15",
+    "metrics": {
+      "active_users": 25,
+      "new_users": 0,
+      "conversations_started": 50,
+      "messages_sent": 250,
+      "tokens_used": 25039,
+      "documents_uploaded": 7,
+      "api_calls": 3864
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 11,
+        "tokens_input": 36296,
+        "tokens_output": 185940,
+        "avg_latency_ms": 931,
+        "error_rate": 0.0218
+      },
+      "gemini-pro": {
+        "requests": 450,
+        "tokens_input": 83606,
+        "tokens_output": 111371,
+        "avg_latency_ms": 1213,
+        "error_rate": 0.0107
+      },
+      "claude-3-haiku": {
+        "requests": 61,
+        "tokens_input": 15747,
+        "tokens_output": 117094,
+        "avg_latency_ms": 1759,
+        "error_rate": 0.0222
+      },
+      "gpt-3.5-turbo": {
+        "requests": 86,
+        "tokens_input": 55393,
+        "tokens_output": 171232,
+        "avg_latency_ms": 1837,
+        "error_rate": 0.019
+      },
+      "gpt-4": {
+        "requests": 287,
+        "tokens_input": 40615,
+        "tokens_output": 63773,
+        "avg_latency_ms": 1678,
+        "error_rate": 0.0246
+      }
+    },
+    "costs": {
+      "total_usd": 396.9,
+      "by_model": {
+        "gpt-3.5-turbo": 51.25,
+        "gemini-pro": 39.4,
+        "gpt-4": 44.78,
+        "claude-3-opus": 21.34
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 795,
+      "p95_response_time_ms": 4881,
+      "p99_response_time_ms": 4633,
+      "error_count": 19,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-11-16",
+    "metrics": {
+      "active_users": 23,
+      "new_users": 0,
+      "conversations_started": 47,
+      "messages_sent": 236,
+      "tokens_used": 23684,
+      "documents_uploaded": 12,
+      "api_calls": 1796
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 150,
+        "tokens_input": 37606,
+        "tokens_output": 197415,
+        "avg_latency_ms": 895,
+        "error_rate": 0.0449
+      },
+      "gemini-pro": {
+        "requests": 204,
+        "tokens_input": 83700,
+        "tokens_output": 133132,
+        "avg_latency_ms": 349,
+        "error_rate": 0.0343
+      },
+      "claude-3-opus": {
+        "requests": 298,
+        "tokens_input": 36991,
+        "tokens_output": 179207,
+        "avg_latency_ms": 1728,
+        "error_rate": 0.0032
+      }
+    },
+    "costs": {
+      "total_usd": 359.4,
+      "by_model": {
+        "claude-3-opus": 35.17,
+        "claude-3-sonnet": 38.72
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1505,
+      "p95_response_time_ms": 3787,
+      "p99_response_time_ms": 9932,
+      "error_count": 14,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-11-17",
+    "metrics": {
+      "active_users": 46,
+      "new_users": 2,
+      "conversations_started": 92,
+      "messages_sent": 462,
+      "tokens_used": 46246,
+      "documents_uploaded": 11,
+      "api_calls": 1972
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 96,
+        "tokens_input": 33722,
+        "tokens_output": 163483,
+        "avg_latency_ms": 1620,
+        "error_rate": 0.0259
+      },
+      "gemini-pro": {
+        "requests": 281,
+        "tokens_input": 30652,
+        "tokens_output": 19514,
+        "avg_latency_ms": 1081,
+        "error_rate": 0.0182
+      },
+      "claude-3-opus": {
+        "requests": 399,
+        "tokens_input": 34960,
+        "tokens_output": 33585,
+        "avg_latency_ms": 1748,
+        "error_rate": 0.0458
+      },
+      "gpt-4-turbo": {
+        "requests": 57,
+        "tokens_input": 85668,
+        "tokens_output": 192272,
+        "avg_latency_ms": 1432,
+        "error_rate": 0.0025
+      }
+    },
+    "costs": {
+      "total_usd": 48.84,
+      "by_model": {
+        "claude-3-opus": 15.02,
+        "gpt-4-turbo": 44.15,
+        "gpt-3.5-turbo": 87.23
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 880,
+      "p95_response_time_ms": 2938,
+      "p99_response_time_ms": 7354,
+      "error_count": 9,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-11-18",
+    "metrics": {
+      "active_users": 55,
+      "new_users": 1,
+      "conversations_started": 111,
+      "messages_sent": 559,
+      "tokens_used": 55955,
+      "documents_uploaded": 2,
+      "api_calls": 527
+    },
+    "model_usage": {
+      "claude-3-haiku": {
+        "requests": 250,
+        "tokens_input": 60478,
+        "tokens_output": 54020,
+        "avg_latency_ms": 783,
+        "error_rate": 0.0009
+      },
+      "gemini-pro": {
+        "requests": 110,
+        "tokens_input": 83988,
+        "tokens_output": 196785,
+        "avg_latency_ms": 457,
+        "error_rate": 0.0034
+      },
+      "gpt-4-turbo": {
+        "requests": 61,
+        "tokens_input": 40264,
+        "tokens_output": 56853,
+        "avg_latency_ms": 1393,
+        "error_rate": 0.0062
+      },
+      "gpt-3.5-turbo": {
+        "requests": 246,
+        "tokens_input": 77540,
+        "tokens_output": 106712,
+        "avg_latency_ms": 1781,
+        "error_rate": 0.0089
+      },
+      "claude-3-opus": {
+        "requests": 283,
+        "tokens_input": 29485,
+        "tokens_output": 74394,
+        "avg_latency_ms": 1911,
+        "error_rate": 0.0004
+      }
+    },
+    "costs": {
+      "total_usd": 429.15,
+      "by_model": {
+        "claude-3-sonnet": 50.95,
+        "gpt-4": 6.63,
+        "gemini-pro": 14.36
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 599,
+      "p95_response_time_ms": 3921,
+      "p99_response_time_ms": 5277,
+      "error_count": 4,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-11-19",
+    "metrics": {
+      "active_users": 63,
+      "new_users": 6,
+      "conversations_started": 127,
+      "messages_sent": 637,
+      "tokens_used": 63720,
+      "documents_uploaded": 11,
+      "api_calls": 4801
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 373,
+        "tokens_input": 19401,
+        "tokens_output": 197021,
+        "avg_latency_ms": 808,
+        "error_rate": 0.0081
+      },
+      "gpt-4-turbo": {
+        "requests": 320,
+        "tokens_input": 10540,
+        "tokens_output": 27583,
+        "avg_latency_ms": 1072,
+        "error_rate": 0.0068
+      },
+      "gemini-pro": {
+        "requests": 157,
+        "tokens_input": 65394,
+        "tokens_output": 148646,
+        "avg_latency_ms": 1936,
+        "error_rate": 0.0245
+      },
+      "claude-3-haiku": {
+        "requests": 396,
+        "tokens_input": 56775,
+        "tokens_output": 154261,
+        "avg_latency_ms": 1408,
+        "error_rate": 0.0363
+      }
+    },
+    "costs": {
+      "total_usd": 445.51,
+      "by_model": {
+        "claude-3-haiku": 78.85,
+        "claude-3-sonnet": 58.17,
+        "gpt-3.5-turbo": 83.93
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1329,
+      "p95_response_time_ms": 3029,
+      "p99_response_time_ms": 8288,
+      "error_count": 13,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-11-20",
+    "metrics": {
+      "active_users": 55,
+      "new_users": 3,
+      "conversations_started": 111,
+      "messages_sent": 559,
+      "tokens_used": 55903,
+      "documents_uploaded": 4,
+      "api_calls": 398
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 441,
+        "tokens_input": 44117,
+        "tokens_output": 40287,
+        "avg_latency_ms": 1537,
+        "error_rate": 0.0452
+      },
+      "claude-3-sonnet": {
+        "requests": 205,
+        "tokens_input": 54275,
+        "tokens_output": 88516,
+        "avg_latency_ms": 1065,
+        "error_rate": 0.0012
+      },
+      "gpt-3.5-turbo": {
+        "requests": 259,
+        "tokens_input": 31044,
+        "tokens_output": 14205,
+        "avg_latency_ms": 741,
+        "error_rate": 0.0218
+      }
+    },
+    "costs": {
+      "total_usd": 322.84,
+      "by_model": {
+        "claude-3-opus": 79.26,
+        "claude-3-sonnet": 75.17
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1829,
+      "p95_response_time_ms": 3236,
+      "p99_response_time_ms": 7246,
+      "error_count": 7,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-11-21",
+    "metrics": {
+      "active_users": 45,
+      "new_users": 1,
+      "conversations_started": 90,
+      "messages_sent": 451,
+      "tokens_used": 45166,
+      "documents_uploaded": 14,
+      "api_calls": 2171
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 461,
+        "tokens_input": 31829,
+        "tokens_output": 131451,
+        "avg_latency_ms": 567,
+        "error_rate": 0.0208
+      },
+      "gemini-pro": {
+        "requests": 36,
+        "tokens_input": 37160,
+        "tokens_output": 48151,
+        "avg_latency_ms": 1610,
+        "error_rate": 0.0461
+      },
+      "claude-3-haiku": {
+        "requests": 161,
+        "tokens_input": 54025,
+        "tokens_output": 23924,
+        "avg_latency_ms": 1017,
+        "error_rate": 0.0233
+      },
+      "gpt-3.5-turbo": {
+        "requests": 207,
+        "tokens_input": 90646,
+        "tokens_output": 123608,
+        "avg_latency_ms": 459,
+        "error_rate": 0.0299
+      }
+    },
+    "costs": {
+      "total_usd": 183.84,
+      "by_model": {
+        "claude-3-sonnet": 7.71,
+        "claude-3-opus": 33.81,
+        "gpt-4": 31.72,
+        "claude-3-haiku": 51.17
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 522,
+      "p95_response_time_ms": 2414,
+      "p99_response_time_ms": 5195,
+      "error_count": 17,
+      "timeout_count": 2
+    }
+  },
+  {
+    "date": "2025-11-22",
+    "metrics": {
+      "active_users": 18,
+      "new_users": 0,
+      "conversations_started": 37,
+      "messages_sent": 185,
+      "tokens_used": 18511,
+      "documents_uploaded": 20,
+      "api_calls": 4368
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 418,
+        "tokens_input": 85337,
+        "tokens_output": 130662,
+        "avg_latency_ms": 1010,
+        "error_rate": 0.0311
+      },
+      "claude-3-opus": {
+        "requests": 155,
+        "tokens_input": 53230,
+        "tokens_output": 23347,
+        "avg_latency_ms": 1940,
+        "error_rate": 0.0258
+      },
+      "claude-3-haiku": {
+        "requests": 73,
+        "tokens_input": 62461,
+        "tokens_output": 137799,
+        "avg_latency_ms": 1187,
+        "error_rate": 0.0382
+      },
+      "gpt-3.5-turbo": {
+        "requests": 28,
+        "tokens_input": 92335,
+        "tokens_output": 153652,
+        "avg_latency_ms": 1792,
+        "error_rate": 0.0374
+      }
+    },
+    "costs": {
+      "total_usd": 257.91,
+      "by_model": {
+        "gemini-pro": 33.69,
+        "claude-3-opus": 71.71
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1998,
+      "p95_response_time_ms": 4959,
+      "p99_response_time_ms": 9203,
+      "error_count": 8,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-11-23",
+    "metrics": {
+      "active_users": 19,
+      "new_users": 0,
+      "conversations_started": 38,
+      "messages_sent": 193,
+      "tokens_used": 19308,
+      "documents_uploaded": 2,
+      "api_calls": 3244
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 165,
+        "tokens_input": 6587,
+        "tokens_output": 44849,
+        "avg_latency_ms": 698,
+        "error_rate": 0.0209
+      },
+      "gpt-4-turbo": {
+        "requests": 109,
+        "tokens_input": 59734,
+        "tokens_output": 49753,
+        "avg_latency_ms": 1174,
+        "error_rate": 0.0274
+      },
+      "gpt-4": {
+        "requests": 140,
+        "tokens_input": 32605,
+        "tokens_output": 10148,
+        "avg_latency_ms": 435,
+        "error_rate": 0.0082
+      },
+      "claude-3-sonnet": {
+        "requests": 29,
+        "tokens_input": 39800,
+        "tokens_output": 136527,
+        "avg_latency_ms": 1911,
+        "error_rate": 0.0033
+      }
+    },
+    "costs": {
+      "total_usd": 239.47,
+      "by_model": {
+        "claude-3-haiku": 12.31,
+        "claude-3-opus": 67.27
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2162,
+      "p95_response_time_ms": 3403,
+      "p99_response_time_ms": 9052,
+      "error_count": 11,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-11-24",
+    "metrics": {
+      "active_users": 66,
+      "new_users": 2,
+      "conversations_started": 133,
+      "messages_sent": 667,
+      "tokens_used": 66798,
+      "documents_uploaded": 18,
+      "api_calls": 4675
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 89,
+        "tokens_input": 92523,
+        "tokens_output": 188771,
+        "avg_latency_ms": 1767,
+        "error_rate": 0.0295
+      },
+      "claude-3-haiku": {
+        "requests": 359,
+        "tokens_input": 41564,
+        "tokens_output": 165674,
+        "avg_latency_ms": 1893,
+        "error_rate": 0.0448
+      },
+      "gpt-3.5-turbo": {
+        "requests": 125,
+        "tokens_input": 7913,
+        "tokens_output": 123737,
+        "avg_latency_ms": 1289,
+        "error_rate": 0.0136
+      },
+      "claude-3-sonnet": {
+        "requests": 491,
+        "tokens_input": 71694,
+        "tokens_output": 88792,
+        "avg_latency_ms": 1321,
+        "error_rate": 0.0486
+      },
+      "claude-3-opus": {
+        "requests": 217,
+        "tokens_input": 11722,
+        "tokens_output": 165108,
+        "avg_latency_ms": 915,
+        "error_rate": 0.0401
+      }
+    },
+    "costs": {
+      "total_usd": 136.24,
+      "by_model": {
+        "claude-3-sonnet": 84.6,
+        "gpt-4-turbo": 22.68
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2458,
+      "p95_response_time_ms": 3018,
+      "p99_response_time_ms": 7803,
+      "error_count": 4,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2025-11-25",
+    "metrics": {
+      "active_users": 61,
+      "new_users": 4,
+      "conversations_started": 122,
+      "messages_sent": 611,
+      "tokens_used": 61140,
+      "documents_uploaded": 11,
+      "api_calls": 3480
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 51,
+        "tokens_input": 36784,
+        "tokens_output": 52584,
+        "avg_latency_ms": 1576,
+        "error_rate": 0.0241
+      },
+      "gemini-pro": {
+        "requests": 485,
+        "tokens_input": 91885,
+        "tokens_output": 27385,
+        "avg_latency_ms": 1887,
+        "error_rate": 0.0157
+      },
+      "claude-3-sonnet": {
+        "requests": 465,
+        "tokens_input": 12458,
+        "tokens_output": 124196,
+        "avg_latency_ms": 1131,
+        "error_rate": 0.0408
+      },
+      "gpt-3.5-turbo": {
+        "requests": 88,
+        "tokens_input": 59293,
+        "tokens_output": 134039,
+        "avg_latency_ms": 362,
+        "error_rate": 0.0167
+      },
+      "gpt-4-turbo": {
+        "requests": 199,
+        "tokens_input": 20496,
+        "tokens_output": 90742,
+        "avg_latency_ms": 782,
+        "error_rate": 0.0243
+      }
+    },
+    "costs": {
+      "total_usd": 498.92,
+      "by_model": {
+        "claude-3-sonnet": 43.58,
+        "gpt-4-turbo": 24.28,
+        "claude-3-opus": 25.08
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2147,
+      "p95_response_time_ms": 2675,
+      "p99_response_time_ms": 6753,
+      "error_count": 5,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-11-26",
+    "metrics": {
+      "active_users": 52,
+      "new_users": 3,
+      "conversations_started": 105,
+      "messages_sent": 529,
+      "tokens_used": 52903,
+      "documents_uploaded": 2,
+      "api_calls": 924
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 86,
+        "tokens_input": 75827,
+        "tokens_output": 122339,
+        "avg_latency_ms": 1308,
+        "error_rate": 0.0448
+      },
+      "claude-3-haiku": {
+        "requests": 488,
+        "tokens_input": 96407,
+        "tokens_output": 179861,
+        "avg_latency_ms": 611,
+        "error_rate": 0.0496
+      },
+      "gemini-pro": {
+        "requests": 11,
+        "tokens_input": 66762,
+        "tokens_output": 56549,
+        "avg_latency_ms": 366,
+        "error_rate": 0.0067
+      }
+    },
+    "costs": {
+      "total_usd": 492.01,
+      "by_model": {
+        "claude-3-haiku": 66.94,
+        "gemini-pro": 9.66,
+        "gpt-3.5-turbo": 17.36
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1134,
+      "p95_response_time_ms": 3352,
+      "p99_response_time_ms": 4818,
+      "error_count": 1,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-11-27",
+    "metrics": {
+      "active_users": 47,
+      "new_users": 0,
+      "conversations_started": 94,
+      "messages_sent": 474,
+      "tokens_used": 47477,
+      "documents_uploaded": 19,
+      "api_calls": 101
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 431,
+        "tokens_input": 69272,
+        "tokens_output": 38190,
+        "avg_latency_ms": 847,
+        "error_rate": 0.0297
+      },
+      "gpt-4-turbo": {
+        "requests": 325,
+        "tokens_input": 73955,
+        "tokens_output": 28791,
+        "avg_latency_ms": 1554,
+        "error_rate": 0.0142
+      },
+      "claude-3-opus": {
+        "requests": 43,
+        "tokens_input": 65599,
+        "tokens_output": 168903,
+        "avg_latency_ms": 832,
+        "error_rate": 0.0079
+      }
+    },
+    "costs": {
+      "total_usd": 390.28,
+      "by_model": {
+        "gpt-4": 69.21,
+        "claude-3-opus": 4.17,
+        "claude-3-sonnet": 85.36,
+        "gpt-4-turbo": 66.84
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1923,
+      "p95_response_time_ms": 3936,
+      "p99_response_time_ms": 7706,
+      "error_count": 11,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-11-28",
+    "metrics": {
+      "active_users": 52,
+      "new_users": 5,
+      "conversations_started": 105,
+      "messages_sent": 527,
+      "tokens_used": 52739,
+      "documents_uploaded": 12,
+      "api_calls": 3524
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 117,
+        "tokens_input": 36546,
+        "tokens_output": 130923,
+        "avg_latency_ms": 604,
+        "error_rate": 0.0352
+      },
+      "gpt-3.5-turbo": {
+        "requests": 28,
+        "tokens_input": 15414,
+        "tokens_output": 25400,
+        "avg_latency_ms": 1503,
+        "error_rate": 0.0438
+      },
+      "claude-3-haiku": {
+        "requests": 85,
+        "tokens_input": 19113,
+        "tokens_output": 127681,
+        "avg_latency_ms": 558,
+        "error_rate": 0.0075
+      }
+    },
+    "costs": {
+      "total_usd": 45.99,
+      "by_model": {
+        "claude-3-haiku": 24.69,
+        "gpt-3.5-turbo": 48.68,
+        "claude-3-sonnet": 41.58
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2404,
+      "p95_response_time_ms": 4639,
+      "p99_response_time_ms": 9474,
+      "error_count": 17,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-11-29",
+    "metrics": {
+      "active_users": 23,
+      "new_users": 2,
+      "conversations_started": 47,
+      "messages_sent": 237,
+      "tokens_used": 23737,
+      "documents_uploaded": 6,
+      "api_calls": 3976
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 186,
+        "tokens_input": 13658,
+        "tokens_output": 22822,
+        "avg_latency_ms": 364,
+        "error_rate": 0.0421
+      },
+      "gpt-3.5-turbo": {
+        "requests": 421,
+        "tokens_input": 38053,
+        "tokens_output": 112120,
+        "avg_latency_ms": 682,
+        "error_rate": 0.0406
+      },
+      "gpt-4-turbo": {
+        "requests": 247,
+        "tokens_input": 91288,
+        "tokens_output": 114199,
+        "avg_latency_ms": 1905,
+        "error_rate": 0.0355
+      },
+      "claude-3-opus": {
+        "requests": 175,
+        "tokens_input": 63931,
+        "tokens_output": 44839,
+        "avg_latency_ms": 1970,
+        "error_rate": 0.0163
+      },
+      "gemini-pro": {
+        "requests": 372,
+        "tokens_input": 60358,
+        "tokens_output": 182596,
+        "avg_latency_ms": 944,
+        "error_rate": 0.0479
+      }
+    },
+    "costs": {
+      "total_usd": 378.24,
+      "by_model": {
+        "gpt-4-turbo": 42.16,
+        "gpt-4": 49.2,
+        "gemini-pro": 98.85,
+        "gpt-3.5-turbo": 15.67
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2310,
+      "p95_response_time_ms": 2574,
+      "p99_response_time_ms": 5966,
+      "error_count": 16,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-11-30",
+    "metrics": {
+      "active_users": 22,
+      "new_users": 1,
+      "conversations_started": 45,
+      "messages_sent": 229,
+      "tokens_used": 22957,
+      "documents_uploaded": 6,
+      "api_calls": 1578
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 419,
+        "tokens_input": 85593,
+        "tokens_output": 107785,
+        "avg_latency_ms": 990,
+        "error_rate": 0.0001
+      },
+      "gemini-pro": {
+        "requests": 257,
+        "tokens_input": 70677,
+        "tokens_output": 62877,
+        "avg_latency_ms": 732,
+        "error_rate": 0.0074
+      },
+      "gpt-3.5-turbo": {
+        "requests": 358,
+        "tokens_input": 91332,
+        "tokens_output": 142377,
+        "avg_latency_ms": 860,
+        "error_rate": 0.0265
+      },
+      "claude-3-sonnet": {
+        "requests": 465,
+        "tokens_input": 74302,
+        "tokens_output": 164792,
+        "avg_latency_ms": 1554,
+        "error_rate": 0.0463
+      }
+    },
+    "costs": {
+      "total_usd": 106.36,
+      "by_model": {
+        "gemini-pro": 54.34,
+        "gpt-4": 75.82,
+        "claude-3-opus": 5.41,
+        "gpt-3.5-turbo": 33.93
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1334,
+      "p95_response_time_ms": 4413,
+      "p99_response_time_ms": 9136,
+      "error_count": 2,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-12-01",
+    "metrics": {
+      "active_users": 65,
+      "new_users": 3,
+      "conversations_started": 130,
+      "messages_sent": 652,
+      "tokens_used": 65268,
+      "documents_uploaded": 14,
+      "api_calls": 4784
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 240,
+        "tokens_input": 39694,
+        "tokens_output": 88717,
+        "avg_latency_ms": 1635,
+        "error_rate": 0.0426
+      },
+      "claude-3-sonnet": {
+        "requests": 428,
+        "tokens_input": 35077,
+        "tokens_output": 185225,
+        "avg_latency_ms": 1486,
+        "error_rate": 0.0127
+      },
+      "gpt-4-turbo": {
+        "requests": 145,
+        "tokens_input": 5561,
+        "tokens_output": 149131,
+        "avg_latency_ms": 769,
+        "error_rate": 0.002
+      }
+    },
+    "costs": {
+      "total_usd": 476.48,
+      "by_model": {
+        "gpt-4-turbo": 43.57,
+        "claude-3-opus": 95.91,
+        "gpt-4": 80.44
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1060,
+      "p95_response_time_ms": 4192,
+      "p99_response_time_ms": 8477,
+      "error_count": 13,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2025-12-02",
+    "metrics": {
+      "active_users": 57,
+      "new_users": 5,
+      "conversations_started": 115,
+      "messages_sent": 578,
+      "tokens_used": 57873,
+      "documents_uploaded": 20,
+      "api_calls": 2608
+    },
+    "model_usage": {
+      "claude-3-haiku": {
+        "requests": 348,
+        "tokens_input": 77398,
+        "tokens_output": 85381,
+        "avg_latency_ms": 1896,
+        "error_rate": 0.0058
+      },
+      "gpt-4": {
+        "requests": 130,
+        "tokens_input": 55990,
+        "tokens_output": 156998,
+        "avg_latency_ms": 1786,
+        "error_rate": 0.0164
+      },
+      "claude-3-opus": {
+        "requests": 289,
+        "tokens_input": 90996,
+        "tokens_output": 62496,
+        "avg_latency_ms": 329,
+        "error_rate": 0.0343
+      },
+      "gpt-4-turbo": {
+        "requests": 50,
+        "tokens_input": 48093,
+        "tokens_output": 179566,
+        "avg_latency_ms": 802,
+        "error_rate": 0.0473
+      },
+      "gpt-3.5-turbo": {
+        "requests": 20,
+        "tokens_input": 18036,
+        "tokens_output": 44046,
+        "avg_latency_ms": 1834,
+        "error_rate": 0.0366
+      }
+    },
+    "costs": {
+      "total_usd": 92.82,
+      "by_model": {
+        "claude-3-haiku": 17.02,
+        "gpt-3.5-turbo": 43.22,
+        "claude-3-opus": 73.19
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1240,
+      "p95_response_time_ms": 2399,
+      "p99_response_time_ms": 6365,
+      "error_count": 9,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-12-03",
+    "metrics": {
+      "active_users": 62,
+      "new_users": 5,
+      "conversations_started": 124,
+      "messages_sent": 624,
+      "tokens_used": 62444,
+      "documents_uploaded": 2,
+      "api_calls": 724
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 498,
+        "tokens_input": 36398,
+        "tokens_output": 27296,
+        "avg_latency_ms": 1894,
+        "error_rate": 0.0385
+      },
+      "gpt-4": {
+        "requests": 398,
+        "tokens_input": 40396,
+        "tokens_output": 56916,
+        "avg_latency_ms": 532,
+        "error_rate": 0.0382
+      },
+      "claude-3-haiku": {
+        "requests": 182,
+        "tokens_input": 20917,
+        "tokens_output": 141193,
+        "avg_latency_ms": 1868,
+        "error_rate": 0.0418
+      }
+    },
+    "costs": {
+      "total_usd": 271.95,
+      "by_model": {
+        "gpt-4": 78.76,
+        "claude-3-opus": 36.27,
+        "claude-3-sonnet": 10.11,
+        "gpt-3.5-turbo": 18.46
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2151,
+      "p95_response_time_ms": 2775,
+      "p99_response_time_ms": 8467,
+      "error_count": 8,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-12-04",
+    "metrics": {
+      "active_users": 46,
+      "new_users": 4,
+      "conversations_started": 93,
+      "messages_sent": 469,
+      "tokens_used": 46957,
+      "documents_uploaded": 2,
+      "api_calls": 619
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 277,
+        "tokens_input": 95378,
+        "tokens_output": 150197,
+        "avg_latency_ms": 697,
+        "error_rate": 0.0239
+      },
+      "gpt-3.5-turbo": {
+        "requests": 483,
+        "tokens_input": 87781,
+        "tokens_output": 102112,
+        "avg_latency_ms": 361,
+        "error_rate": 0.017
+      },
+      "gemini-pro": {
+        "requests": 209,
+        "tokens_input": 61675,
+        "tokens_output": 37150,
+        "avg_latency_ms": 1953,
+        "error_rate": 0.0256
+      }
+    },
+    "costs": {
+      "total_usd": 407.79,
+      "by_model": {
+        "gpt-4-turbo": 62.49,
+        "gemini-pro": 48.86
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1700,
+      "p95_response_time_ms": 4856,
+      "p99_response_time_ms": 4548,
+      "error_count": 7,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-12-05",
+    "metrics": {
+      "active_users": 68,
+      "new_users": 6,
+      "conversations_started": 136,
+      "messages_sent": 684,
+      "tokens_used": 68455,
+      "documents_uploaded": 15,
+      "api_calls": 4666
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 470,
+        "tokens_input": 10500,
+        "tokens_output": 19536,
+        "avg_latency_ms": 1227,
+        "error_rate": 0.0094
+      },
+      "gpt-3.5-turbo": {
+        "requests": 302,
+        "tokens_input": 51585,
+        "tokens_output": 14488,
+        "avg_latency_ms": 1661,
+        "error_rate": 0.0467
+      },
+      "claude-3-haiku": {
+        "requests": 342,
+        "tokens_input": 49397,
+        "tokens_output": 118929,
+        "avg_latency_ms": 1835,
+        "error_rate": 0.0419
+      },
+      "gpt-4-turbo": {
+        "requests": 171,
+        "tokens_input": 65749,
+        "tokens_output": 32341,
+        "avg_latency_ms": 574,
+        "error_rate": 0.0422
+      }
+    },
+    "costs": {
+      "total_usd": 301.38,
+      "by_model": {
+        "gemini-pro": 47.87,
+        "gpt-4": 55.8,
+        "claude-3-sonnet": 55.61,
+        "gpt-4-turbo": 76.4
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 745,
+      "p95_response_time_ms": 4559,
+      "p99_response_time_ms": 4266,
+      "error_count": 20,
+      "timeout_count": 2
+    }
+  },
+  {
+    "date": "2025-12-06",
+    "metrics": {
+      "active_users": 21,
+      "new_users": 2,
+      "conversations_started": 42,
+      "messages_sent": 210,
+      "tokens_used": 21022,
+      "documents_uploaded": 13,
+      "api_calls": 2503
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 490,
+        "tokens_input": 44348,
+        "tokens_output": 184279,
+        "avg_latency_ms": 580,
+        "error_rate": 0.0348
+      },
+      "gpt-4": {
+        "requests": 427,
+        "tokens_input": 54752,
+        "tokens_output": 50117,
+        "avg_latency_ms": 874,
+        "error_rate": 0.017
+      },
+      "claude-3-haiku": {
+        "requests": 220,
+        "tokens_input": 14751,
+        "tokens_output": 149188,
+        "avg_latency_ms": 1045,
+        "error_rate": 0.0038
+      }
+    },
+    "costs": {
+      "total_usd": 161.11,
+      "by_model": {
+        "claude-3-opus": 98.14,
+        "gpt-4": 33.45,
+        "claude-3-haiku": 71.47
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2280,
+      "p95_response_time_ms": 2562,
+      "p99_response_time_ms": 8300,
+      "error_count": 19,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-12-07",
+    "metrics": {
+      "active_users": 26,
+      "new_users": 1,
+      "conversations_started": 53,
+      "messages_sent": 267,
+      "tokens_used": 26766,
+      "documents_uploaded": 3,
+      "api_calls": 879
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 103,
+        "tokens_input": 80551,
+        "tokens_output": 65655,
+        "avg_latency_ms": 1492,
+        "error_rate": 0.04
+      },
+      "gpt-3.5-turbo": {
+        "requests": 128,
+        "tokens_input": 11432,
+        "tokens_output": 82486,
+        "avg_latency_ms": 937,
+        "error_rate": 0.0421
+      },
+      "claude-3-haiku": {
+        "requests": 291,
+        "tokens_input": 75950,
+        "tokens_output": 30883,
+        "avg_latency_ms": 1962,
+        "error_rate": 0.0356
+      },
+      "gpt-4": {
+        "requests": 488,
+        "tokens_input": 80675,
+        "tokens_output": 191005,
+        "avg_latency_ms": 1418,
+        "error_rate": 0.0149
+      }
+    },
+    "costs": {
+      "total_usd": 280.66,
+      "by_model": {
+        "gpt-4": 31.88,
+        "claude-3-opus": 87.92,
+        "gemini-pro": 10.2
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1182,
+      "p95_response_time_ms": 3102,
+      "p99_response_time_ms": 4426,
+      "error_count": 4,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2025-12-08",
+    "metrics": {
+      "active_users": 49,
+      "new_users": 4,
+      "conversations_started": 98,
+      "messages_sent": 492,
+      "tokens_used": 49286,
+      "documents_uploaded": 0,
+      "api_calls": 975
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 287,
+        "tokens_input": 19010,
+        "tokens_output": 79280,
+        "avg_latency_ms": 625,
+        "error_rate": 0.0295
+      },
+      "claude-3-opus": {
+        "requests": 297,
+        "tokens_input": 37450,
+        "tokens_output": 31498,
+        "avg_latency_ms": 984,
+        "error_rate": 0.0084
+      },
+      "gpt-3.5-turbo": {
+        "requests": 342,
+        "tokens_input": 79581,
+        "tokens_output": 193683,
+        "avg_latency_ms": 512,
+        "error_rate": 0.0315
+      },
+      "claude-3-haiku": {
+        "requests": 18,
+        "tokens_input": 66645,
+        "tokens_output": 67256,
+        "avg_latency_ms": 1792,
+        "error_rate": 0.0354
+      }
+    },
+    "costs": {
+      "total_usd": 92.99,
+      "by_model": {
+        "claude-3-sonnet": 68.46,
+        "gpt-4-turbo": 87.63,
+        "claude-3-opus": 58.09,
+        "gpt-4": 73.26
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2224,
+      "p95_response_time_ms": 2768,
+      "p99_response_time_ms": 8035,
+      "error_count": 17,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-12-09",
+    "metrics": {
+      "active_users": 48,
+      "new_users": 1,
+      "conversations_started": 97,
+      "messages_sent": 486,
+      "tokens_used": 48601,
+      "documents_uploaded": 19,
+      "api_calls": 3282
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 186,
+        "tokens_input": 22853,
+        "tokens_output": 116042,
+        "avg_latency_ms": 1509,
+        "error_rate": 0.0206
+      },
+      "claude-3-sonnet": {
+        "requests": 306,
+        "tokens_input": 42704,
+        "tokens_output": 80611,
+        "avg_latency_ms": 810,
+        "error_rate": 0.0308
+      },
+      "gpt-3.5-turbo": {
+        "requests": 465,
+        "tokens_input": 21337,
+        "tokens_output": 195310,
+        "avg_latency_ms": 1160,
+        "error_rate": 0.0127
+      }
+    },
+    "costs": {
+      "total_usd": 306.58,
+      "by_model": {
+        "gpt-4": 59.48,
+        "claude-3-opus": 74.93
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1915,
+      "p95_response_time_ms": 2525,
+      "p99_response_time_ms": 8723,
+      "error_count": 5,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2025-12-10",
+    "metrics": {
+      "active_users": 61,
+      "new_users": 5,
+      "conversations_started": 122,
+      "messages_sent": 610,
+      "tokens_used": 61064,
+      "documents_uploaded": 7,
+      "api_calls": 1185
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 46,
+        "tokens_input": 94662,
+        "tokens_output": 113473,
+        "avg_latency_ms": 572,
+        "error_rate": 0.0483
+      },
+      "gpt-4-turbo": {
+        "requests": 151,
+        "tokens_input": 19760,
+        "tokens_output": 160621,
+        "avg_latency_ms": 305,
+        "error_rate": 0.0326
+      },
+      "claude-3-haiku": {
+        "requests": 377,
+        "tokens_input": 19519,
+        "tokens_output": 192510,
+        "avg_latency_ms": 328,
+        "error_rate": 0.0207
+      },
+      "gemini-pro": {
+        "requests": 184,
+        "tokens_input": 32044,
+        "tokens_output": 127197,
+        "avg_latency_ms": 595,
+        "error_rate": 0.0073
+      },
+      "gpt-3.5-turbo": {
+        "requests": 341,
+        "tokens_input": 21153,
+        "tokens_output": 106667,
+        "avg_latency_ms": 965,
+        "error_rate": 0.0489
+      }
+    },
+    "costs": {
+      "total_usd": 195.58,
+      "by_model": {
+        "claude-3-haiku": 85.92,
+        "gpt-3.5-turbo": 15.45,
+        "claude-3-opus": 39.53,
+        "gpt-4-turbo": 19.61
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1863,
+      "p95_response_time_ms": 4712,
+      "p99_response_time_ms": 5988,
+      "error_count": 15,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-12-11",
+    "metrics": {
+      "active_users": 69,
+      "new_users": 3,
+      "conversations_started": 139,
+      "messages_sent": 699,
+      "tokens_used": 69992,
+      "documents_uploaded": 1,
+      "api_calls": 2165
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 41,
+        "tokens_input": 12810,
+        "tokens_output": 130257,
+        "avg_latency_ms": 1373,
+        "error_rate": 0.0145
+      },
+      "gemini-pro": {
+        "requests": 221,
+        "tokens_input": 19472,
+        "tokens_output": 85290,
+        "avg_latency_ms": 588,
+        "error_rate": 0.0142
+      },
+      "gpt-4-turbo": {
+        "requests": 100,
+        "tokens_input": 60856,
+        "tokens_output": 13609,
+        "avg_latency_ms": 1269,
+        "error_rate": 0.0393
+      }
+    },
+    "costs": {
+      "total_usd": 269.5,
+      "by_model": {
+        "claude-3-opus": 45.48,
+        "gpt-3.5-turbo": 69.15,
+        "claude-3-haiku": 28.29,
+        "gpt-4-turbo": 48.21
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1299,
+      "p95_response_time_ms": 3104,
+      "p99_response_time_ms": 5314,
+      "error_count": 15,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-12-12",
+    "metrics": {
+      "active_users": 58,
+      "new_users": 1,
+      "conversations_started": 116,
+      "messages_sent": 580,
+      "tokens_used": 58027,
+      "documents_uploaded": 0,
+      "api_calls": 2020
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 147,
+        "tokens_input": 99534,
+        "tokens_output": 107211,
+        "avg_latency_ms": 1369,
+        "error_rate": 0.0127
+      },
+      "gemini-pro": {
+        "requests": 60,
+        "tokens_input": 40626,
+        "tokens_output": 182567,
+        "avg_latency_ms": 1357,
+        "error_rate": 0.04
+      },
+      "gpt-4-turbo": {
+        "requests": 392,
+        "tokens_input": 57915,
+        "tokens_output": 15321,
+        "avg_latency_ms": 428,
+        "error_rate": 0.0284
+      },
+      "claude-3-sonnet": {
+        "requests": 463,
+        "tokens_input": 19040,
+        "tokens_output": 73235,
+        "avg_latency_ms": 879,
+        "error_rate": 0.0126
+      },
+      "gpt-4": {
+        "requests": 135,
+        "tokens_input": 92614,
+        "tokens_output": 155741,
+        "avg_latency_ms": 1556,
+        "error_rate": 0.0287
+      }
+    },
+    "costs": {
+      "total_usd": 462.97,
+      "by_model": {
+        "claude-3-haiku": 97.77,
+        "claude-3-opus": 1.33
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2463,
+      "p95_response_time_ms": 2080,
+      "p99_response_time_ms": 6681,
+      "error_count": 17,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-12-13",
+    "metrics": {
+      "active_users": 24,
+      "new_users": 0,
+      "conversations_started": 49,
+      "messages_sent": 245,
+      "tokens_used": 24515,
+      "documents_uploaded": 15,
+      "api_calls": 1684
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 379,
+        "tokens_input": 60685,
+        "tokens_output": 75842,
+        "avg_latency_ms": 1725,
+        "error_rate": 0.0402
+      },
+      "claude-3-haiku": {
+        "requests": 310,
+        "tokens_input": 31144,
+        "tokens_output": 174848,
+        "avg_latency_ms": 1123,
+        "error_rate": 0.0335
+      },
+      "gpt-3.5-turbo": {
+        "requests": 318,
+        "tokens_input": 79083,
+        "tokens_output": 157854,
+        "avg_latency_ms": 1030,
+        "error_rate": 0.0048
+      }
+    },
+    "costs": {
+      "total_usd": 241.21,
+      "by_model": {
+        "gpt-4-turbo": 5.53,
+        "gpt-3.5-turbo": 34.28
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1465,
+      "p95_response_time_ms": 2987,
+      "p99_response_time_ms": 8362,
+      "error_count": 10,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-12-14",
+    "metrics": {
+      "active_users": 21,
+      "new_users": 2,
+      "conversations_started": 42,
+      "messages_sent": 213,
+      "tokens_used": 21325,
+      "documents_uploaded": 0,
+      "api_calls": 724
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 220,
+        "tokens_input": 10751,
+        "tokens_output": 63728,
+        "avg_latency_ms": 1256,
+        "error_rate": 0.0206
+      },
+      "gpt-4-turbo": {
+        "requests": 388,
+        "tokens_input": 14516,
+        "tokens_output": 36899,
+        "avg_latency_ms": 1694,
+        "error_rate": 0.0495
+      },
+      "claude-3-haiku": {
+        "requests": 290,
+        "tokens_input": 62839,
+        "tokens_output": 198332,
+        "avg_latency_ms": 577,
+        "error_rate": 0.011
+      }
+    },
+    "costs": {
+      "total_usd": 115.12,
+      "by_model": {
+        "gpt-4": 2.16,
+        "gemini-pro": 59.16,
+        "gpt-3.5-turbo": 12.91
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1074,
+      "p95_response_time_ms": 4633,
+      "p99_response_time_ms": 8822,
+      "error_count": 14,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-12-15",
+    "metrics": {
+      "active_users": 50,
+      "new_users": 1,
+      "conversations_started": 100,
+      "messages_sent": 502,
+      "tokens_used": 50243,
+      "documents_uploaded": 19,
+      "api_calls": 1073
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 284,
+        "tokens_input": 87458,
+        "tokens_output": 73231,
+        "avg_latency_ms": 390,
+        "error_rate": 0.0238
+      },
+      "gpt-3.5-turbo": {
+        "requests": 151,
+        "tokens_input": 75919,
+        "tokens_output": 53787,
+        "avg_latency_ms": 1646,
+        "error_rate": 0.0379
+      },
+      "claude-3-sonnet": {
+        "requests": 383,
+        "tokens_input": 5833,
+        "tokens_output": 138332,
+        "avg_latency_ms": 1973,
+        "error_rate": 0.0496
+      }
+    },
+    "costs": {
+      "total_usd": 399.9,
+      "by_model": {
+        "gpt-4": 58.71,
+        "gemini-pro": 92.56,
+        "claude-3-sonnet": 28.49
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1374,
+      "p95_response_time_ms": 4852,
+      "p99_response_time_ms": 6858,
+      "error_count": 11,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-12-16",
+    "metrics": {
+      "active_users": 61,
+      "new_users": 1,
+      "conversations_started": 123,
+      "messages_sent": 615,
+      "tokens_used": 61521,
+      "documents_uploaded": 0,
+      "api_calls": 898
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 431,
+        "tokens_input": 25572,
+        "tokens_output": 71399,
+        "avg_latency_ms": 1810,
+        "error_rate": 0.0023
+      },
+      "gpt-4": {
+        "requests": 101,
+        "tokens_input": 30671,
+        "tokens_output": 64806,
+        "avg_latency_ms": 704,
+        "error_rate": 0.0066
+      },
+      "gpt-3.5-turbo": {
+        "requests": 245,
+        "tokens_input": 13031,
+        "tokens_output": 183450,
+        "avg_latency_ms": 1220,
+        "error_rate": 0.0113
+      },
+      "gpt-4-turbo": {
+        "requests": 78,
+        "tokens_input": 9127,
+        "tokens_output": 40900,
+        "avg_latency_ms": 1786,
+        "error_rate": 0.0456
+      },
+      "claude-3-haiku": {
+        "requests": 114,
+        "tokens_input": 53056,
+        "tokens_output": 174398,
+        "avg_latency_ms": 1849,
+        "error_rate": 0.044
+      }
+    },
+    "costs": {
+      "total_usd": 156.8,
+      "by_model": {
+        "claude-3-opus": 47.9,
+        "gpt-4-turbo": 1.75,
+        "gpt-4": 38.08,
+        "claude-3-haiku": 53.77
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1901,
+      "p95_response_time_ms": 3721,
+      "p99_response_time_ms": 4889,
+      "error_count": 2,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-12-17",
+    "metrics": {
+      "active_users": 53,
+      "new_users": 1,
+      "conversations_started": 106,
+      "messages_sent": 533,
+      "tokens_used": 53377,
+      "documents_uploaded": 13,
+      "api_calls": 988
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 375,
+        "tokens_input": 73191,
+        "tokens_output": 197098,
+        "avg_latency_ms": 1436,
+        "error_rate": 0.0442
+      },
+      "claude-3-haiku": {
+        "requests": 281,
+        "tokens_input": 82553,
+        "tokens_output": 163516,
+        "avg_latency_ms": 975,
+        "error_rate": 0.0443
+      },
+      "gemini-pro": {
+        "requests": 90,
+        "tokens_input": 82892,
+        "tokens_output": 149682,
+        "avg_latency_ms": 1652,
+        "error_rate": 0.0284
+      },
+      "gpt-3.5-turbo": {
+        "requests": 498,
+        "tokens_input": 63859,
+        "tokens_output": 121381,
+        "avg_latency_ms": 652,
+        "error_rate": 0.0305
+      }
+    },
+    "costs": {
+      "total_usd": 399.41,
+      "by_model": {
+        "gpt-3.5-turbo": 22.2,
+        "gemini-pro": 73.61,
+        "claude-3-sonnet": 77.41
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 541,
+      "p95_response_time_ms": 2803,
+      "p99_response_time_ms": 7324,
+      "error_count": 9,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-12-18",
+    "metrics": {
+      "active_users": 67,
+      "new_users": 3,
+      "conversations_started": 134,
+      "messages_sent": 670,
+      "tokens_used": 67095,
+      "documents_uploaded": 2,
+      "api_calls": 4862
+    },
+    "model_usage": {
+      "gemini-pro": {
+        "requests": 471,
+        "tokens_input": 12050,
+        "tokens_output": 70224,
+        "avg_latency_ms": 1809,
+        "error_rate": 0.035
+      },
+      "claude-3-haiku": {
+        "requests": 496,
+        "tokens_input": 19832,
+        "tokens_output": 156817,
+        "avg_latency_ms": 1281,
+        "error_rate": 0.0197
+      },
+      "gpt-4-turbo": {
+        "requests": 342,
+        "tokens_input": 81108,
+        "tokens_output": 196764,
+        "avg_latency_ms": 1810,
+        "error_rate": 0.0408
+      }
+    },
+    "costs": {
+      "total_usd": 35.89,
+      "by_model": {
+        "claude-3-sonnet": 80.1,
+        "gpt-4-turbo": 24.81
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 603,
+      "p95_response_time_ms": 4082,
+      "p99_response_time_ms": 8971,
+      "error_count": 17,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2025-12-19",
+    "metrics": {
+      "active_users": 54,
+      "new_users": 4,
+      "conversations_started": 108,
+      "messages_sent": 543,
+      "tokens_used": 54393,
+      "documents_uploaded": 2,
+      "api_calls": 2878
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 291,
+        "tokens_input": 22849,
+        "tokens_output": 56742,
+        "avg_latency_ms": 390,
+        "error_rate": 0.0214
+      },
+      "gpt-4": {
+        "requests": 445,
+        "tokens_input": 31909,
+        "tokens_output": 46624,
+        "avg_latency_ms": 1944,
+        "error_rate": 0.0395
+      },
+      "gpt-3.5-turbo": {
+        "requests": 367,
+        "tokens_input": 88394,
+        "tokens_output": 33431,
+        "avg_latency_ms": 1360,
+        "error_rate": 0.0074
+      },
+      "gemini-pro": {
+        "requests": 236,
+        "tokens_input": 14363,
+        "tokens_output": 120656,
+        "avg_latency_ms": 1776,
+        "error_rate": 0.0317
+      },
+      "gpt-4-turbo": {
+        "requests": 51,
+        "tokens_input": 47184,
+        "tokens_output": 130821,
+        "avg_latency_ms": 637,
+        "error_rate": 0.0341
+      }
+    },
+    "costs": {
+      "total_usd": 496.45,
+      "by_model": {
+        "gpt-4": 78.22,
+        "gemini-pro": 77.76,
+        "claude-3-haiku": 69.4
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2267,
+      "p95_response_time_ms": 4961,
+      "p99_response_time_ms": 4248,
+      "error_count": 2,
+      "timeout_count": 2
+    }
+  },
+  {
+    "date": "2025-12-20",
+    "metrics": {
+      "active_users": 21,
+      "new_users": 2,
+      "conversations_started": 42,
+      "messages_sent": 210,
+      "tokens_used": 21071,
+      "documents_uploaded": 20,
+      "api_calls": 4899
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 256,
+        "tokens_input": 17879,
+        "tokens_output": 125075,
+        "avg_latency_ms": 1904,
+        "error_rate": 0.0447
+      },
+      "claude-3-haiku": {
+        "requests": 341,
+        "tokens_input": 53698,
+        "tokens_output": 25007,
+        "avg_latency_ms": 1912,
+        "error_rate": 0.0315
+      },
+      "gpt-4-turbo": {
+        "requests": 319,
+        "tokens_input": 8387,
+        "tokens_output": 198540,
+        "avg_latency_ms": 606,
+        "error_rate": 0.0494
+      }
+    },
+    "costs": {
+      "total_usd": 163.29,
+      "by_model": {
+        "gpt-4": 26.82,
+        "claude-3-sonnet": 9.42,
+        "gpt-3.5-turbo": 81.46,
+        "claude-3-haiku": 60.43
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1680,
+      "p95_response_time_ms": 4211,
+      "p99_response_time_ms": 7905,
+      "error_count": 9,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-12-21",
+    "metrics": {
+      "active_users": 24,
+      "new_users": 0,
+      "conversations_started": 49,
+      "messages_sent": 246,
+      "tokens_used": 24616,
+      "documents_uploaded": 4,
+      "api_calls": 1539
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 204,
+        "tokens_input": 66456,
+        "tokens_output": 20586,
+        "avg_latency_ms": 1338,
+        "error_rate": 0.0217
+      },
+      "gemini-pro": {
+        "requests": 23,
+        "tokens_input": 10786,
+        "tokens_output": 167079,
+        "avg_latency_ms": 400,
+        "error_rate": 0.0001
+      },
+      "gpt-4": {
+        "requests": 143,
+        "tokens_input": 37192,
+        "tokens_output": 109063,
+        "avg_latency_ms": 1007,
+        "error_rate": 0.0318
+      },
+      "gpt-3.5-turbo": {
+        "requests": 55,
+        "tokens_input": 52378,
+        "tokens_output": 199765,
+        "avg_latency_ms": 1356,
+        "error_rate": 0.0138
+      }
+    },
+    "costs": {
+      "total_usd": 83.48,
+      "by_model": {
+        "claude-3-sonnet": 41.88,
+        "gpt-4": 79.97,
+        "gpt-4-turbo": 51.66
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1158,
+      "p95_response_time_ms": 3513,
+      "p99_response_time_ms": 9417,
+      "error_count": 1,
+      "timeout_count": 2
+    }
+  },
+  {
+    "date": "2025-12-22",
+    "metrics": {
+      "active_users": 56,
+      "new_users": 1,
+      "conversations_started": 113,
+      "messages_sent": 565,
+      "tokens_used": 56521,
+      "documents_uploaded": 18,
+      "api_calls": 3174
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 218,
+        "tokens_input": 32252,
+        "tokens_output": 73016,
+        "avg_latency_ms": 1140,
+        "error_rate": 0.0301
+      },
+      "claude-3-sonnet": {
+        "requests": 324,
+        "tokens_input": 78172,
+        "tokens_output": 130592,
+        "avg_latency_ms": 1565,
+        "error_rate": 0.0178
+      },
+      "gemini-pro": {
+        "requests": 18,
+        "tokens_input": 86841,
+        "tokens_output": 176787,
+        "avg_latency_ms": 1376,
+        "error_rate": 0.0092
+      },
+      "claude-3-opus": {
+        "requests": 43,
+        "tokens_input": 12957,
+        "tokens_output": 80204,
+        "avg_latency_ms": 1942,
+        "error_rate": 0.0023
+      },
+      "claude-3-haiku": {
+        "requests": 72,
+        "tokens_input": 56337,
+        "tokens_output": 76273,
+        "avg_latency_ms": 1382,
+        "error_rate": 0.0062
+      }
+    },
+    "costs": {
+      "total_usd": 282.34,
+      "by_model": {
+        "claude-3-haiku": 96.25,
+        "gpt-4": 64.73,
+        "gpt-3.5-turbo": 55.2,
+        "claude-3-sonnet": 47.89
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2303,
+      "p95_response_time_ms": 3019,
+      "p99_response_time_ms": 8224,
+      "error_count": 6,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-12-23",
+    "metrics": {
+      "active_users": 66,
+      "new_users": 1,
+      "conversations_started": 133,
+      "messages_sent": 666,
+      "tokens_used": 66686,
+      "documents_uploaded": 16,
+      "api_calls": 625
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 82,
+        "tokens_input": 96310,
+        "tokens_output": 114879,
+        "avg_latency_ms": 1567,
+        "error_rate": 0.0339
+      },
+      "gpt-4-turbo": {
+        "requests": 381,
+        "tokens_input": 27396,
+        "tokens_output": 146766,
+        "avg_latency_ms": 1470,
+        "error_rate": 0.0323
+      },
+      "claude-3-haiku": {
+        "requests": 351,
+        "tokens_input": 45304,
+        "tokens_output": 116860,
+        "avg_latency_ms": 909,
+        "error_rate": 0.0079
+      },
+      "gpt-4": {
+        "requests": 134,
+        "tokens_input": 60023,
+        "tokens_output": 197954,
+        "avg_latency_ms": 567,
+        "error_rate": 0.0184
+      }
+    },
+    "costs": {
+      "total_usd": 365.36,
+      "by_model": {
+        "claude-3-opus": 96.12,
+        "gpt-4-turbo": 25.93,
+        "gpt-4": 46.73,
+        "gpt-3.5-turbo": 5.04
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1299,
+      "p95_response_time_ms": 3194,
+      "p99_response_time_ms": 9174,
+      "error_count": 12,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-12-24",
+    "metrics": {
+      "active_users": 57,
+      "new_users": 2,
+      "conversations_started": 115,
+      "messages_sent": 579,
+      "tokens_used": 57925,
+      "documents_uploaded": 9,
+      "api_calls": 446
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 184,
+        "tokens_input": 76233,
+        "tokens_output": 189092,
+        "avg_latency_ms": 682,
+        "error_rate": 0.0147
+      },
+      "gpt-4-turbo": {
+        "requests": 453,
+        "tokens_input": 8049,
+        "tokens_output": 185286,
+        "avg_latency_ms": 473,
+        "error_rate": 0.0235
+      },
+      "gpt-3.5-turbo": {
+        "requests": 167,
+        "tokens_input": 58895,
+        "tokens_output": 83344,
+        "avg_latency_ms": 895,
+        "error_rate": 0.0256
+      }
+    },
+    "costs": {
+      "total_usd": 480.39,
+      "by_model": {
+        "claude-3-sonnet": 37.47,
+        "gpt-4": 56.05,
+        "gpt-4-turbo": 50.6,
+        "claude-3-haiku": 18.67
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1064,
+      "p95_response_time_ms": 3358,
+      "p99_response_time_ms": 9943,
+      "error_count": 4,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2025-12-25",
+    "metrics": {
+      "active_users": 64,
+      "new_users": 5,
+      "conversations_started": 128,
+      "messages_sent": 643,
+      "tokens_used": 64382,
+      "documents_uploaded": 1,
+      "api_calls": 2884
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 446,
+        "tokens_input": 43191,
+        "tokens_output": 72604,
+        "avg_latency_ms": 719,
+        "error_rate": 0.0458
+      },
+      "claude-3-haiku": {
+        "requests": 116,
+        "tokens_input": 51538,
+        "tokens_output": 60942,
+        "avg_latency_ms": 1996,
+        "error_rate": 0.0263
+      },
+      "gpt-4": {
+        "requests": 310,
+        "tokens_input": 46297,
+        "tokens_output": 195828,
+        "avg_latency_ms": 550,
+        "error_rate": 0.0197
+      }
+    },
+    "costs": {
+      "total_usd": 118.72,
+      "by_model": {
+        "gemini-pro": 9.92,
+        "gpt-4": 71.42
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1431,
+      "p95_response_time_ms": 4155,
+      "p99_response_time_ms": 7821,
+      "error_count": 3,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-12-26",
+    "metrics": {
+      "active_users": 50,
+      "new_users": 1,
+      "conversations_started": 101,
+      "messages_sent": 506,
+      "tokens_used": 50662,
+      "documents_uploaded": 7,
+      "api_calls": 4960
+    },
+    "model_usage": {
+      "claude-3-haiku": {
+        "requests": 262,
+        "tokens_input": 33414,
+        "tokens_output": 45312,
+        "avg_latency_ms": 1129,
+        "error_rate": 0.0322
+      },
+      "gemini-pro": {
+        "requests": 125,
+        "tokens_input": 10139,
+        "tokens_output": 116600,
+        "avg_latency_ms": 371,
+        "error_rate": 0.0362
+      },
+      "gpt-4-turbo": {
+        "requests": 499,
+        "tokens_input": 15992,
+        "tokens_output": 170399,
+        "avg_latency_ms": 1859,
+        "error_rate": 0.0252
+      }
+    },
+    "costs": {
+      "total_usd": 381.62,
+      "by_model": {
+        "claude-3-opus": 96.11,
+        "gpt-4": 85.98,
+        "gemini-pro": 78.11
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1975,
+      "p95_response_time_ms": 4148,
+      "p99_response_time_ms": 4068,
+      "error_count": 0,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2025-12-27",
+    "metrics": {
+      "active_users": 21,
+      "new_users": 0,
+      "conversations_started": 43,
+      "messages_sent": 219,
+      "tokens_used": 21910,
+      "documents_uploaded": 0,
+      "api_calls": 4901
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 291,
+        "tokens_input": 21765,
+        "tokens_output": 166551,
+        "avg_latency_ms": 1372,
+        "error_rate": 0.0462
+      },
+      "claude-3-opus": {
+        "requests": 135,
+        "tokens_input": 95229,
+        "tokens_output": 108904,
+        "avg_latency_ms": 983,
+        "error_rate": 0.0236
+      },
+      "gpt-4": {
+        "requests": 369,
+        "tokens_input": 70188,
+        "tokens_output": 79176,
+        "avg_latency_ms": 1793,
+        "error_rate": 0.0142
+      }
+    },
+    "costs": {
+      "total_usd": 489.71,
+      "by_model": {
+        "claude-3-haiku": 91.75,
+        "claude-3-opus": 88.35
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1892,
+      "p95_response_time_ms": 2875,
+      "p99_response_time_ms": 7209,
+      "error_count": 11,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-12-28",
+    "metrics": {
+      "active_users": 27,
+      "new_users": 0,
+      "conversations_started": 55,
+      "messages_sent": 277,
+      "tokens_used": 27771,
+      "documents_uploaded": 1,
+      "api_calls": 724
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 65,
+        "tokens_input": 75677,
+        "tokens_output": 86609,
+        "avg_latency_ms": 762,
+        "error_rate": 0.0116
+      },
+      "gpt-4": {
+        "requests": 281,
+        "tokens_input": 67566,
+        "tokens_output": 99902,
+        "avg_latency_ms": 354,
+        "error_rate": 0.0293
+      },
+      "claude-3-haiku": {
+        "requests": 397,
+        "tokens_input": 58382,
+        "tokens_output": 61040,
+        "avg_latency_ms": 649,
+        "error_rate": 0.0407
+      },
+      "gpt-3.5-turbo": {
+        "requests": 90,
+        "tokens_input": 33257,
+        "tokens_output": 169008,
+        "avg_latency_ms": 1532,
+        "error_rate": 0.0253
+      }
+    },
+    "costs": {
+      "total_usd": 46.02,
+      "by_model": {
+        "gpt-3.5-turbo": 42.41,
+        "gemini-pro": 10.13,
+        "claude-3-haiku": 93.44
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1924,
+      "p95_response_time_ms": 4993,
+      "p99_response_time_ms": 6408,
+      "error_count": 4,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2025-12-29",
+    "metrics": {
+      "active_users": 63,
+      "new_users": 5,
+      "conversations_started": 126,
+      "messages_sent": 632,
+      "tokens_used": 63233,
+      "documents_uploaded": 1,
+      "api_calls": 3105
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 229,
+        "tokens_input": 62064,
+        "tokens_output": 22152,
+        "avg_latency_ms": 1363,
+        "error_rate": 0.0347
+      },
+      "gpt-3.5-turbo": {
+        "requests": 69,
+        "tokens_input": 21880,
+        "tokens_output": 121808,
+        "avg_latency_ms": 1898,
+        "error_rate": 0.0423
+      },
+      "gpt-4-turbo": {
+        "requests": 490,
+        "tokens_input": 10525,
+        "tokens_output": 60577,
+        "avg_latency_ms": 413,
+        "error_rate": 0.026
+      },
+      "claude-3-opus": {
+        "requests": 114,
+        "tokens_input": 52359,
+        "tokens_output": 112390,
+        "avg_latency_ms": 1114,
+        "error_rate": 0.0442
+      },
+      "claude-3-sonnet": {
+        "requests": 55,
+        "tokens_input": 8574,
+        "tokens_output": 111262,
+        "avg_latency_ms": 615,
+        "error_rate": 0.0342
+      }
+    },
+    "costs": {
+      "total_usd": 45.61,
+      "by_model": {
+        "gpt-4-turbo": 26.15,
+        "gpt-4": 34.71,
+        "gemini-pro": 6.15,
+        "claude-3-sonnet": 43.55
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1626,
+      "p95_response_time_ms": 2751,
+      "p99_response_time_ms": 7573,
+      "error_count": 18,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2025-12-30",
+    "metrics": {
+      "active_users": 62,
+      "new_users": 6,
+      "conversations_started": 124,
+      "messages_sent": 621,
+      "tokens_used": 62134,
+      "documents_uploaded": 15,
+      "api_calls": 3577
+    },
+    "model_usage": {
+      "claude-3-haiku": {
+        "requests": 435,
+        "tokens_input": 39574,
+        "tokens_output": 86126,
+        "avg_latency_ms": 1835,
+        "error_rate": 0.0482
+      },
+      "gpt-4-turbo": {
+        "requests": 69,
+        "tokens_input": 36732,
+        "tokens_output": 89693,
+        "avg_latency_ms": 1435,
+        "error_rate": 0.0002
+      },
+      "claude-3-sonnet": {
+        "requests": 280,
+        "tokens_input": 63645,
+        "tokens_output": 60874,
+        "avg_latency_ms": 1001,
+        "error_rate": 0.0149
+      },
+      "gemini-pro": {
+        "requests": 254,
+        "tokens_input": 92439,
+        "tokens_output": 154254,
+        "avg_latency_ms": 1808,
+        "error_rate": 0.0447
+      },
+      "gpt-3.5-turbo": {
+        "requests": 79,
+        "tokens_input": 58406,
+        "tokens_output": 22090,
+        "avg_latency_ms": 734,
+        "error_rate": 0.0117
+      }
+    },
+    "costs": {
+      "total_usd": 193.41,
+      "by_model": {
+        "gpt-4": 45.7,
+        "gemini-pro": 69.7,
+        "claude-3-haiku": 60.96,
+        "gpt-3.5-turbo": 5.7
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1254,
+      "p95_response_time_ms": 4312,
+      "p99_response_time_ms": 8758,
+      "error_count": 2,
+      "timeout_count": 2
+    }
+  },
+  {
+    "date": "2025-12-31",
+    "metrics": {
+      "active_users": 57,
+      "new_users": 1,
+      "conversations_started": 114,
+      "messages_sent": 572,
+      "tokens_used": 57296,
+      "documents_uploaded": 0,
+      "api_calls": 3811
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 402,
+        "tokens_input": 86852,
+        "tokens_output": 160133,
+        "avg_latency_ms": 1954,
+        "error_rate": 0.0188
+      },
+      "gpt-4-turbo": {
+        "requests": 409,
+        "tokens_input": 91084,
+        "tokens_output": 87702,
+        "avg_latency_ms": 2000,
+        "error_rate": 0.0276
+      },
+      "claude-3-opus": {
+        "requests": 319,
+        "tokens_input": 83683,
+        "tokens_output": 187185,
+        "avg_latency_ms": 1689,
+        "error_rate": 0.0381
+      },
+      "gemini-pro": {
+        "requests": 447,
+        "tokens_input": 64795,
+        "tokens_output": 33502,
+        "avg_latency_ms": 1369,
+        "error_rate": 0.0148
+      }
+    },
+    "costs": {
+      "total_usd": 272.28,
+      "by_model": {
+        "claude-3-sonnet": 25.57,
+        "claude-3-opus": 33.71,
+        "gemini-pro": 11.19
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 543,
+      "p95_response_time_ms": 4049,
+      "p99_response_time_ms": 6536,
+      "error_count": 18,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2026-01-01",
+    "metrics": {
+      "active_users": 70,
+      "new_users": 3,
+      "conversations_started": 140,
+      "messages_sent": 701,
+      "tokens_used": 70179,
+      "documents_uploaded": 5,
+      "api_calls": 1659
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 409,
+        "tokens_input": 23519,
+        "tokens_output": 122689,
+        "avg_latency_ms": 1127,
+        "error_rate": 0.0282
+      },
+      "gemini-pro": {
+        "requests": 490,
+        "tokens_input": 12179,
+        "tokens_output": 116907,
+        "avg_latency_ms": 1574,
+        "error_rate": 0.035
+      },
+      "gpt-3.5-turbo": {
+        "requests": 295,
+        "tokens_input": 66994,
+        "tokens_output": 50632,
+        "avg_latency_ms": 1115,
+        "error_rate": 0.032
+      }
+    },
+    "costs": {
+      "total_usd": 234.02,
+      "by_model": {
+        "gpt-4": 18.22,
+        "claude-3-haiku": 22.37,
+        "claude-3-opus": 56.6
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1983,
+      "p95_response_time_ms": 2934,
+      "p99_response_time_ms": 8259,
+      "error_count": 19,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2026-01-02",
+    "metrics": {
+      "active_users": 58,
+      "new_users": 5,
+      "conversations_started": 117,
+      "messages_sent": 586,
+      "tokens_used": 58609,
+      "documents_uploaded": 19,
+      "api_calls": 3063
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 433,
+        "tokens_input": 5402,
+        "tokens_output": 100356,
+        "avg_latency_ms": 1134,
+        "error_rate": 0.0444
+      },
+      "claude-3-sonnet": {
+        "requests": 70,
+        "tokens_input": 23672,
+        "tokens_output": 192227,
+        "avg_latency_ms": 1459,
+        "error_rate": 0.0305
+      },
+      "gemini-pro": {
+        "requests": 184,
+        "tokens_input": 8924,
+        "tokens_output": 153983,
+        "avg_latency_ms": 1947,
+        "error_rate": 0.0424
+      },
+      "gpt-4": {
+        "requests": 85,
+        "tokens_input": 58245,
+        "tokens_output": 164799,
+        "avg_latency_ms": 1862,
+        "error_rate": 0.0179
+      },
+      "claude-3-haiku": {
+        "requests": 356,
+        "tokens_input": 24216,
+        "tokens_output": 123808,
+        "avg_latency_ms": 1653,
+        "error_rate": 0.0133
+      }
+    },
+    "costs": {
+      "total_usd": 393.96,
+      "by_model": {
+        "claude-3-sonnet": 41.29,
+        "claude-3-opus": 8.21,
+        "gpt-3.5-turbo": 83.09
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 530,
+      "p95_response_time_ms": 4301,
+      "p99_response_time_ms": 7947,
+      "error_count": 13,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2026-01-03",
+    "metrics": {
+      "active_users": 27,
+      "new_users": 2,
+      "conversations_started": 54,
+      "messages_sent": 270,
+      "tokens_used": 27005,
+      "documents_uploaded": 4,
+      "api_calls": 1658
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 441,
+        "tokens_input": 30171,
+        "tokens_output": 80004,
+        "avg_latency_ms": 1116,
+        "error_rate": 0.0271
+      },
+      "claude-3-sonnet": {
+        "requests": 133,
+        "tokens_input": 82019,
+        "tokens_output": 91459,
+        "avg_latency_ms": 1342,
+        "error_rate": 0.0136
+      },
+      "gemini-pro": {
+        "requests": 470,
+        "tokens_input": 10316,
+        "tokens_output": 17721,
+        "avg_latency_ms": 636,
+        "error_rate": 0.0239
+      },
+      "gpt-4": {
+        "requests": 124,
+        "tokens_input": 5128,
+        "tokens_output": 11707,
+        "avg_latency_ms": 1667,
+        "error_rate": 0.0426
+      },
+      "gpt-4-turbo": {
+        "requests": 232,
+        "tokens_input": 83694,
+        "tokens_output": 112412,
+        "avg_latency_ms": 1097,
+        "error_rate": 0.0031
+      }
+    },
+    "costs": {
+      "total_usd": 37.02,
+      "by_model": {
+        "claude-3-sonnet": 9.04,
+        "gpt-4-turbo": 20.14,
+        "gpt-4": 61.58
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2186,
+      "p95_response_time_ms": 2104,
+      "p99_response_time_ms": 4392,
+      "error_count": 2,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2026-01-04",
+    "metrics": {
+      "active_users": 25,
+      "new_users": 2,
+      "conversations_started": 51,
+      "messages_sent": 256,
+      "tokens_used": 25615,
+      "documents_uploaded": 20,
+      "api_calls": 2387
+    },
+    "model_usage": {
+      "gpt-3.5-turbo": {
+        "requests": 47,
+        "tokens_input": 47125,
+        "tokens_output": 24240,
+        "avg_latency_ms": 1228,
+        "error_rate": 0.0204
+      },
+      "claude-3-haiku": {
+        "requests": 100,
+        "tokens_input": 87514,
+        "tokens_output": 146788,
+        "avg_latency_ms": 701,
+        "error_rate": 0.0436
+      },
+      "claude-3-sonnet": {
+        "requests": 496,
+        "tokens_input": 63106,
+        "tokens_output": 178315,
+        "avg_latency_ms": 1142,
+        "error_rate": 0.0313
+      }
+    },
+    "costs": {
+      "total_usd": 34.65,
+      "by_model": {
+        "gpt-4-turbo": 27.74,
+        "claude-3-haiku": 89.68,
+        "gpt-3.5-turbo": 44.62
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1726,
+      "p95_response_time_ms": 3153,
+      "p99_response_time_ms": 7200,
+      "error_count": 5,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2026-01-05",
+    "metrics": {
+      "active_users": 68,
+      "new_users": 3,
+      "conversations_started": 137,
+      "messages_sent": 689,
+      "tokens_used": 68943,
+      "documents_uploaded": 4,
+      "api_calls": 3403
+    },
+    "model_usage": {
+      "claude-3-haiku": {
+        "requests": 186,
+        "tokens_input": 7550,
+        "tokens_output": 155611,
+        "avg_latency_ms": 1935,
+        "error_rate": 0.0046
+      },
+      "gpt-4-turbo": {
+        "requests": 456,
+        "tokens_input": 69499,
+        "tokens_output": 173942,
+        "avg_latency_ms": 1991,
+        "error_rate": 0.0237
+      },
+      "claude-3-sonnet": {
+        "requests": 206,
+        "tokens_input": 11251,
+        "tokens_output": 52197,
+        "avg_latency_ms": 1457,
+        "error_rate": 0.035
+      },
+      "gemini-pro": {
+        "requests": 318,
+        "tokens_input": 13754,
+        "tokens_output": 79086,
+        "avg_latency_ms": 346,
+        "error_rate": 0.0199
+      }
+    },
+    "costs": {
+      "total_usd": 266.75,
+      "by_model": {
+        "gpt-3.5-turbo": 21.06,
+        "gpt-4": 23.98,
+        "gpt-4-turbo": 93.79,
+        "claude-3-sonnet": 95.47
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1143,
+      "p95_response_time_ms": 3465,
+      "p99_response_time_ms": 9856,
+      "error_count": 5,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2026-01-06",
+    "metrics": {
+      "active_users": 59,
+      "new_users": 3,
+      "conversations_started": 119,
+      "messages_sent": 597,
+      "tokens_used": 59712,
+      "documents_uploaded": 3,
+      "api_calls": 3927
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 357,
+        "tokens_input": 18324,
+        "tokens_output": 30603,
+        "avg_latency_ms": 1534,
+        "error_rate": 0.0082
+      },
+      "claude-3-opus": {
+        "requests": 204,
+        "tokens_input": 19761,
+        "tokens_output": 67375,
+        "avg_latency_ms": 1836,
+        "error_rate": 0.0211
+      },
+      "gemini-pro": {
+        "requests": 432,
+        "tokens_input": 72278,
+        "tokens_output": 185540,
+        "avg_latency_ms": 950,
+        "error_rate": 0.0066
+      },
+      "gpt-4-turbo": {
+        "requests": 263,
+        "tokens_input": 76580,
+        "tokens_output": 160322,
+        "avg_latency_ms": 1006,
+        "error_rate": 0.0188
+      },
+      "claude-3-sonnet": {
+        "requests": 107,
+        "tokens_input": 33606,
+        "tokens_output": 127306,
+        "avg_latency_ms": 452,
+        "error_rate": 0.0446
+      }
+    },
+    "costs": {
+      "total_usd": 277.14,
+      "by_model": {
+        "gpt-3.5-turbo": 72.87,
+        "claude-3-sonnet": 17.7,
+        "gpt-4": 58.3
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 597,
+      "p95_response_time_ms": 2576,
+      "p99_response_time_ms": 7240,
+      "error_count": 9,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2026-01-07",
+    "metrics": {
+      "active_users": 52,
+      "new_users": 0,
+      "conversations_started": 104,
+      "messages_sent": 521,
+      "tokens_used": 52164,
+      "documents_uploaded": 13,
+      "api_calls": 2356
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 359,
+        "tokens_input": 37784,
+        "tokens_output": 36637,
+        "avg_latency_ms": 1115,
+        "error_rate": 0.0235
+      },
+      "gpt-4-turbo": {
+        "requests": 65,
+        "tokens_input": 23582,
+        "tokens_output": 131426,
+        "avg_latency_ms": 1817,
+        "error_rate": 0.0395
+      },
+      "claude-3-opus": {
+        "requests": 351,
+        "tokens_input": 72291,
+        "tokens_output": 54647,
+        "avg_latency_ms": 682,
+        "error_rate": 0.0038
+      },
+      "claude-3-haiku": {
+        "requests": 436,
+        "tokens_input": 26165,
+        "tokens_output": 177526,
+        "avg_latency_ms": 488,
+        "error_rate": 0.0439
+      }
+    },
+    "costs": {
+      "total_usd": 448.19,
+      "by_model": {
+        "claude-3-sonnet": 26.85,
+        "gpt-4-turbo": 93.13,
+        "gpt-4": 42.57,
+        "claude-3-haiku": 57.68
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1196,
+      "p95_response_time_ms": 4012,
+      "p99_response_time_ms": 9990,
+      "error_count": 19,
+      "timeout_count": 3
+    }
+  },
+  {
+    "date": "2026-01-08",
+    "metrics": {
+      "active_users": 57,
+      "new_users": 3,
+      "conversations_started": 114,
+      "messages_sent": 571,
+      "tokens_used": 57186,
+      "documents_uploaded": 7,
+      "api_calls": 4518
+    },
+    "model_usage": {
+      "gpt-4": {
+        "requests": 288,
+        "tokens_input": 94329,
+        "tokens_output": 93477,
+        "avg_latency_ms": 1136,
+        "error_rate": 0.0015
+      },
+      "claude-3-sonnet": {
+        "requests": 127,
+        "tokens_input": 80028,
+        "tokens_output": 127871,
+        "avg_latency_ms": 1813,
+        "error_rate": 0.0011
+      },
+      "gpt-4-turbo": {
+        "requests": 412,
+        "tokens_input": 97119,
+        "tokens_output": 164300,
+        "avg_latency_ms": 1415,
+        "error_rate": 0.036
+      }
+    },
+    "costs": {
+      "total_usd": 220.06,
+      "by_model": {
+        "gpt-4": 40.86,
+        "claude-3-opus": 93.88,
+        "claude-3-haiku": 24.36,
+        "gemini-pro": 41.1
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2097,
+      "p95_response_time_ms": 2600,
+      "p99_response_time_ms": 4126,
+      "error_count": 11,
+      "timeout_count": 0
+    }
+  },
+  {
+    "date": "2026-01-09",
+    "metrics": {
+      "active_users": 60,
+      "new_users": 1,
+      "conversations_started": 121,
+      "messages_sent": 609,
+      "tokens_used": 60986,
+      "documents_uploaded": 2,
+      "api_calls": 1500
+    },
+    "model_usage": {
+      "gpt-4-turbo": {
+        "requests": 177,
+        "tokens_input": 93327,
+        "tokens_output": 51737,
+        "avg_latency_ms": 476,
+        "error_rate": 0.0496
+      },
+      "claude-3-haiku": {
+        "requests": 357,
+        "tokens_input": 91449,
+        "tokens_output": 105955,
+        "avg_latency_ms": 330,
+        "error_rate": 0.0389
+      },
+      "gpt-3.5-turbo": {
+        "requests": 286,
+        "tokens_input": 63626,
+        "tokens_output": 37499,
+        "avg_latency_ms": 1706,
+        "error_rate": 0.0132
+      }
+    },
+    "costs": {
+      "total_usd": 289.02,
+      "by_model": {
+        "gpt-4": 98.19,
+        "claude-3-sonnet": 14.74,
+        "gpt-4-turbo": 57.22,
+        "gemini-pro": 96.92
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 2046,
+      "p95_response_time_ms": 4433,
+      "p99_response_time_ms": 4323,
+      "error_count": 17,
+      "timeout_count": 4
+    }
+  },
+  {
+    "date": "2026-01-10",
+    "metrics": {
+      "active_users": 26,
+      "new_users": 2,
+      "conversations_started": 52,
+      "messages_sent": 260,
+      "tokens_used": 26085,
+      "documents_uploaded": 8,
+      "api_calls": 2026
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 411,
+        "tokens_input": 76660,
+        "tokens_output": 14237,
+        "avg_latency_ms": 624,
+        "error_rate": 0.0063
+      },
+      "gemini-pro": {
+        "requests": 480,
+        "tokens_input": 9952,
+        "tokens_output": 96738,
+        "avg_latency_ms": 1935,
+        "error_rate": 0.0017
+      },
+      "claude-3-haiku": {
+        "requests": 319,
+        "tokens_input": 95674,
+        "tokens_output": 70240,
+        "avg_latency_ms": 1656,
+        "error_rate": 0.0421
+      },
+      "gpt-3.5-turbo": {
+        "requests": 231,
+        "tokens_input": 99265,
+        "tokens_output": 166820,
+        "avg_latency_ms": 1767,
+        "error_rate": 0.0346
+      }
+    },
+    "costs": {
+      "total_usd": 258.61,
+      "by_model": {
+        "claude-3-haiku": 88.37,
+        "gpt-4-turbo": 34.43,
+        "gpt-3.5-turbo": 73.81
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1548,
+      "p95_response_time_ms": 4267,
+      "p99_response_time_ms": 9156,
+      "error_count": 2,
+      "timeout_count": 5
+    }
+  },
+  {
+    "date": "2026-01-11",
+    "metrics": {
+      "active_users": 21,
+      "new_users": 1,
+      "conversations_started": 43,
+      "messages_sent": 215,
+      "tokens_used": 21507,
+      "documents_uploaded": 14,
+      "api_calls": 4570
+    },
+    "model_usage": {
+      "claude-3-opus": {
+        "requests": 482,
+        "tokens_input": 28467,
+        "tokens_output": 71677,
+        "avg_latency_ms": 1414,
+        "error_rate": 0.0201
+      },
+      "gpt-4": {
+        "requests": 209,
+        "tokens_input": 67600,
+        "tokens_output": 61377,
+        "avg_latency_ms": 1404,
+        "error_rate": 0.0385
+      },
+      "gemini-pro": {
+        "requests": 346,
+        "tokens_input": 29479,
+        "tokens_output": 16872,
+        "avg_latency_ms": 1560,
+        "error_rate": 0.0226
+      },
+      "claude-3-haiku": {
+        "requests": 204,
+        "tokens_input": 15222,
+        "tokens_output": 170962,
+        "avg_latency_ms": 430,
+        "error_rate": 0.036
+      },
+      "gpt-4-turbo": {
+        "requests": 349,
+        "tokens_input": 65477,
+        "tokens_output": 139734,
+        "avg_latency_ms": 1550,
+        "error_rate": 0.0266
+      }
+    },
+    "costs": {
+      "total_usd": 198.39,
+      "by_model": {
+        "gemini-pro": 57.88,
+        "claude-3-sonnet": 44.21
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 1518,
+      "p95_response_time_ms": 4943,
+      "p99_response_time_ms": 5260,
+      "error_count": 4,
+      "timeout_count": 2
+    }
+  },
+  {
+    "date": "2026-01-12",
+    "metrics": {
+      "active_users": 65,
+      "new_users": 1,
+      "conversations_started": 130,
+      "messages_sent": 650,
+      "tokens_used": 65083,
+      "documents_uploaded": 15,
+      "api_calls": 412
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 339,
+        "tokens_input": 29410,
+        "tokens_output": 188871,
+        "avg_latency_ms": 1580,
+        "error_rate": 0.0396
+      },
+      "gpt-3.5-turbo": {
+        "requests": 198,
+        "tokens_input": 11798,
+        "tokens_output": 192321,
+        "avg_latency_ms": 851,
+        "error_rate": 0.0442
+      },
+      "gemini-pro": {
+        "requests": 349,
+        "tokens_input": 52232,
+        "tokens_output": 112276,
+        "avg_latency_ms": 1080,
+        "error_rate": 0.0364
+      },
+      "gpt-4": {
+        "requests": 179,
+        "tokens_input": 94864,
+        "tokens_output": 129704,
+        "avg_latency_ms": 1465,
+        "error_rate": 0.0019
+      },
+      "gpt-4-turbo": {
+        "requests": 354,
+        "tokens_input": 21361,
+        "tokens_output": 54019,
+        "avg_latency_ms": 872,
+        "error_rate": 0.045
+      }
+    },
+    "costs": {
+      "total_usd": 96.19,
+      "by_model": {
+        "gpt-3.5-turbo": 19.07,
+        "gemini-pro": 52.83,
+        "claude-3-haiku": 46.61,
+        "claude-3-sonnet": 40.01
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 787,
+      "p95_response_time_ms": 3445,
+      "p99_response_time_ms": 9008,
+      "error_count": 9,
+      "timeout_count": 1
+    }
+  },
+  {
+    "date": "2026-01-13",
+    "metrics": {
+      "active_users": 68,
+      "new_users": 5,
+      "conversations_started": 136,
+      "messages_sent": 684,
+      "tokens_used": 68419,
+      "documents_uploaded": 4,
+      "api_calls": 4463
+    },
+    "model_usage": {
+      "claude-3-sonnet": {
+        "requests": 289,
+        "tokens_input": 80051,
+        "tokens_output": 37027,
+        "avg_latency_ms": 996,
+        "error_rate": 0.0202
+      },
+      "gpt-3.5-turbo": {
+        "requests": 143,
+        "tokens_input": 15434,
+        "tokens_output": 189429,
+        "avg_latency_ms": 1693,
+        "error_rate": 0.0458
+      },
+      "claude-3-opus": {
+        "requests": 105,
+        "tokens_input": 74866,
+        "tokens_output": 98575,
+        "avg_latency_ms": 1779,
+        "error_rate": 0.0495
+      },
+      "gpt-4-turbo": {
+        "requests": 257,
+        "tokens_input": 28317,
+        "tokens_output": 100007,
+        "avg_latency_ms": 1096,
+        "error_rate": 0.0084
+      },
+      "gpt-4": {
+        "requests": 304,
+        "tokens_input": 27525,
+        "tokens_output": 115814,
+        "avg_latency_ms": 1506,
+        "error_rate": 0.0111
+      }
+    },
+    "costs": {
+      "total_usd": 350.35,
+      "by_model": {
+        "claude-3-sonnet": 11.12,
+        "gemini-pro": 86.18,
+        "gpt-3.5-turbo": 94.02
+      }
+    },
+    "performance": {
+      "avg_response_time_ms": 717,
+      "p95_response_time_ms": 4293,
+      "p99_response_time_ms": 9821,
+      "error_count": 12,
+      "timeout_count": 2
+    }
+  }
+]

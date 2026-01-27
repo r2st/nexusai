@@ -1,0 +1,244 @@
+# =============================================================================
+# NexusAI Helm Chart - Production Environment Values
+# =============================================================================
+
+# Global settings
+global:
+  imageRegistry: "ghcr.io/nexusai"
+  imagePullSecrets:
+    - name: ghcr-secret
+
+# Application configuration
+config:
+  appName: "NexusAI"
+  environment: "production"
+  debug: "false"
+  logLevel: "warning"
+  enableMetrics: "true"
+  enableTracing: "true"
+  tenantIsolation: "true"
+  rateLimitRequests: "1000"
+  rateLimitWindow: "60"
+
+# Backend configuration
+backend:
+  enabled: true
+  replicaCount: 3
+
+  image:
+    tag: ""  # Uses Chart.AppVersion
+    pullPolicy: IfNotPresent
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 65
+    targetMemoryUtilizationPercentage: 75
+
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 2
+
+  nodeSelector:
+    workload-type: api
+
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: backend
+            topologyKey: topology.kubernetes.io/zone
+
+  tolerations:
+    - key: "workload-type"
+      operator: "Equal"
+      value: "api"
+      effect: "NoSchedule"
+
+# Frontend configuration
+frontend:
+  enabled: true
+  replicaCount: 3
+
+  image:
+    tag: ""  # Uses Chart.AppVersion
+    pullPolicy: IfNotPresent
+
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 15
+    targetCPUUtilizationPercentage: 65
+
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 2
+
+  nodeSelector:
+    workload-type: frontend
+
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: frontend
+            topologyKey: topology.kubernetes.io/zone
+
+# Worker configuration
+worker:
+  enabled: true
+  replicaCount: 3
+  terminationGracePeriodSeconds: 300
+
+  image:
+    tag: ""  # Uses Chart.AppVersion
+    pullPolicy: IfNotPresent
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 30
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 70
+
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 2
+
+  nodeSelector:
+    workload-type: worker
+
+  tolerations:
+    - key: "workload-type"
+      operator: "Equal"
+      value: "worker"
+      effect: "NoSchedule"
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/rate-limit: "1000"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: nexusai.example.com
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: backend
+          port: 8000
+        - path: /
+          pathType: Prefix
+          service: frontend
+          port: 3000
+  tls:
+    - secretName: nexusai-prod-tls
+      hosts:
+        - nexusai.example.com
+
+# Service account with Azure Workload Identity
+serviceAccount:
+  create: true
+  annotations:
+    azure.workload.identity/client-id: ""  # Set via --set
+
+# Security contexts (hardened)
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# Network policy (strict)
+networkPolicy:
+  enabled: true
+
+# Service monitor
+serviceMonitor:
+  enabled: true
+  interval: "30s"
+  scrapeTimeout: "10s"
+  labels:
+    release: prometheus
+
+# External database (managed PostgreSQL)
+postgresql:
+  enabled: false
+
+externalDatabase:
+  host: ""  # Set via --set
+  port: 5432
+  username: nexusai_prod
+  database: nexusai_production
+
+# External Redis (managed Redis)
+redis:
+  enabled: false
+
+externalRedis:
+  host: ""  # Set via --set
+  port: 6379
+
+# External Meilisearch (or disable)
+meilisearch:
+  enabled: false
+
+# Secrets (provided externally via Azure Key Vault or sealed secrets)
+secrets: {}
+
+# Additional pod labels for production
+podLabels:
+  environment: production
+  compliance: soc2

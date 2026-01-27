@@ -1,0 +1,376 @@
+# =============================================================================
+# NexusAI Deployment Pipeline
+# =============================================================================
+# Builds and deploys the application to various environments
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - prod
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ===========================================================================
+  # Build and Push Images
+  # ===========================================================================
+  build:
+    name: Build Images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      backend_image: ${{ steps.meta-backend.outputs.tags }}
+      frontend_image: ${{ steps.meta-frontend.outputs.tags }}
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          else
+            echo "version=sha-${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (backend)
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+
+      - name: Build and push backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            APP_VERSION=${{ steps.version.outputs.version }}
+
+      - name: Extract metadata (frontend)
+        id: meta-frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+
+      - name: Build and push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ===========================================================================
+  # Deploy to Staging
+  # ===========================================================================
+  deploy-staging:
+    name: Deploy to Staging
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'staging'
+    environment:
+      name: staging
+      url: https://staging.nexusai.example.com
+    concurrency:
+      group: staging-deploy
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.28.0"
+
+      - name: Configure kubeconfig (Azure)
+        if: vars.CLOUD_PROVIDER == 'azure'
+        uses: azure/k8s-set-context@v3
+        with:
+          method: service-account
+          k8s-url: ${{ secrets.K8S_URL }}
+          k8s-secret: ${{ secrets.K8S_SECRET }}
+
+      - name: Configure kubeconfig (AWS)
+        if: vars.CLOUD_PROVIDER == 'aws'
+        run: |
+          aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }} --region ${{ vars.AWS_REGION }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Deploy to Kubernetes
+        run: |
+          # Update image tags
+          cd deploy/k8s
+
+          # Set image versions
+          kubectl set image deployment/nexusai-backend \
+            backend=${{ needs.build.outputs.backend_image }} \
+            -n nexusai-staging
+
+          kubectl set image deployment/nexusai-frontend \
+            frontend=${{ needs.build.outputs.frontend_image }} \
+            -n nexusai-staging
+
+          kubectl set image deployment/nexusai-worker \
+            worker=${{ needs.build.outputs.backend_image }} \
+            -n nexusai-staging
+
+          # Wait for rollout
+          kubectl rollout status deployment/nexusai-backend -n nexusai-staging --timeout=300s
+          kubectl rollout status deployment/nexusai-frontend -n nexusai-staging --timeout=300s
+          kubectl rollout status deployment/nexusai-worker -n nexusai-staging --timeout=300s
+
+      - name: Run health check
+        run: |
+          # Wait for services to be ready
+          sleep 30
+
+          # Health check
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://staging.nexusai.example.com/api/v1/health)
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "Health check failed with status: $HTTP_STATUS"
+            exit 1
+          fi
+
+          echo "Health check passed!"
+
+      - name: Notify on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "🚨 Staging deployment failed!",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Staging Deployment Failed*\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # ===========================================================================
+  # Deploy to Production
+  # ===========================================================================
+  deploy-prod:
+    name: Deploy to Production
+    needs: [build, deploy-staging]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.environment == 'prod'
+    environment:
+      name: production
+      url: https://nexusai.example.com
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.28.0"
+
+      - name: Configure kubeconfig (Azure)
+        if: vars.CLOUD_PROVIDER == 'azure'
+        uses: azure/k8s-set-context@v3
+        with:
+          method: service-account
+          k8s-url: ${{ secrets.K8S_URL }}
+          k8s-secret: ${{ secrets.K8S_SECRET }}
+
+      - name: Configure kubeconfig (AWS)
+        if: vars.CLOUD_PROVIDER == 'aws'
+        run: |
+          aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }} --region ${{ vars.AWS_REGION }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Create deployment record
+        run: |
+          echo "Deploying version ${{ needs.build.outputs.version }} to production"
+          echo "Backend: ${{ needs.build.outputs.backend_image }}"
+          echo "Frontend: ${{ needs.build.outputs.frontend_image }}"
+
+      - name: Deploy to Kubernetes
+        run: |
+          cd deploy/k8s
+
+          # Set image versions
+          kubectl set image deployment/nexusai-backend \
+            backend=${{ needs.build.outputs.backend_image }} \
+            -n nexusai
+
+          kubectl set image deployment/nexusai-frontend \
+            frontend=${{ needs.build.outputs.frontend_image }} \
+            -n nexusai
+
+          kubectl set image deployment/nexusai-worker \
+            worker=${{ needs.build.outputs.backend_image }} \
+            -n nexusai
+
+          # Wait for rollout with extended timeout for prod
+          kubectl rollout status deployment/nexusai-backend -n nexusai --timeout=600s
+          kubectl rollout status deployment/nexusai-frontend -n nexusai --timeout=600s
+          kubectl rollout status deployment/nexusai-worker -n nexusai --timeout=600s
+
+      - name: Run smoke tests
+        run: |
+          # Wait for load balancers
+          sleep 60
+
+          # Health check
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://nexusai.example.com/api/v1/health)
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "Health check failed with status: $HTTP_STATUS"
+            exit 1
+          fi
+
+          # Detailed health check
+          curl -s https://nexusai.example.com/api/v1/health/detailed | jq .
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          body: |
+            ## Deployment Info
+            - **Version**: ${{ needs.build.outputs.version }}
+            - **Backend Image**: `${{ needs.build.outputs.backend_image }}`
+            - **Frontend Image**: `${{ needs.build.outputs.frontend_image }}`
+
+      - name: Notify on success
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "✅ Production deployment successful!",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Production Deployment Successful*\nVersion: ${{ needs.build.outputs.version }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Notify on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "🚨 Production deployment failed!",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Production Deployment Failed*\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # ===========================================================================
+  # Rollback (Manual)
+  # ===========================================================================
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && failure()
+    needs: [deploy-prod]
+    environment: production
+
+    steps:
+      - name: Rollback to previous version
+        run: |
+          kubectl rollout undo deployment/nexusai-backend -n nexusai
+          kubectl rollout undo deployment/nexusai-frontend -n nexusai
+          kubectl rollout undo deployment/nexusai-worker -n nexusai
+
+          # Wait for rollback
+          kubectl rollout status deployment/nexusai-backend -n nexusai --timeout=300s
+          kubectl rollout status deployment/nexusai-frontend -n nexusai --timeout=300s
+          kubectl rollout status deployment/nexusai-worker -n nexusai --timeout=300s
+
+      - name: Notify rollback
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "⚠️ Production rollback executed"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

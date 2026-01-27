@@ -1,0 +1,15 @@
+# Playwright
+node_modules/
+test-results/
+playwright-report/
+playwright/.auth/
+!playwright/.auth/.gitkeep
+blob-report/
+.cache/
+
+# Test artifacts
+screenshots/
+videos/
+
+# Coverage
+coverage/

@@ -1,0 +1,114 @@
+{
+  "summary": {
+    "total_users": 50,
+    "active_users_30d": 50,
+    "total_conversations": 200,
+    "total_documents": 100,
+    "total_tokens_30d": 1522329,
+    "total_messages_30d": 15208,
+    "total_cost_30d": 7515.03
+  },
+  "changes": {
+    "users_change": 11.1,
+    "conversations_change": 17.6,
+    "tokens_change": 11.7,
+    "messages_change": 11.7,
+    "cost_change": -10.6
+  },
+  "top_models": [
+    {
+      "model": "Claude 3 Sonnet",
+      "requests": 49866,
+      "tokens": 468639,
+      "cost": 140.23
+    },
+    {
+      "model": "GPT-3.5 Turbo",
+      "requests": 35234,
+      "tokens": 400572,
+      "cost": 256.23
+    },
+    {
+      "model": "GPT-4",
+      "requests": 28949,
+      "tokens": 956473,
+      "cost": 60.59
+    },
+    {
+      "model": "GPT-4 Turbo",
+      "requests": 6587,
+      "tokens": 367988,
+      "cost": 302.7
+    },
+    {
+      "model": "Claude 3 Opus",
+      "requests": 2941,
+      "tokens": 288179,
+      "cost": 375.53
+    }
+  ],
+  "recent_activity": [
+    {
+      "type": "conversation",
+      "description": "The findings suggests significant growth.",
+      "timestamp": "2026-01-13T19:28:30.864625",
+      "user": "Mary Williams"
+    },
+    {
+      "type": "conversation",
+      "description": "The report demonstrates key insights.",
+      "timestamp": "2026-01-13T07:07:15.864632",
+      "user": "Linda Miller"
+    },
+    {
+      "type": "document",
+      "description": "The report indicates key insights.",
+      "timestamp": "2026-01-13T18:03:45.864636",
+      "user": "Michael Smith"
+    },
+    {
+      "type": "document",
+      "description": "Our analysis indicates important trends.",
+      "timestamp": "2026-01-13T21:57:18.864641",
+      "user": "Patricia Jones"
+    },
+    {
+      "type": "document",
+      "description": "The team shows actionable recommendations.",
+      "timestamp": "2026-01-13T09:54:33.864645",
+      "user": "Jennifer Brown"
+    },
+    {
+      "type": "conversation",
+      "description": "The report suggests improvement potential.",
+      "timestamp": "2026-01-13T17:57:21.864648",
+      "user": "Linda Williams"
+    },
+    {
+      "type": "document",
+      "description": "Our analysis reveals actionable recommendations.",
+      "timestamp": "2026-01-13T22:03:37.864652",
+      "user": "Mary Davis"
+    },
+    {
+      "type": "document",
+      "description": "The findings indicates improvement potential.",
+      "timestamp": "2026-01-13T18:16:25.864655",
+      "user": "Mary Williams"
+    },
+    {
+      "type": "document",
+      "description": "Our analysis suggests important trends.",
+      "timestamp": "2026-01-13T06:50:21.864659",
+      "user": "William Miller"
+    },
+    {
+      "type": "document",
+      "description": "This data reveals important trends.",
+      "timestamp": "2026-01-13T12:15:31.864663",
+      "user": "John Jones"
+    }
+  ],
+  "alerts": [],
+  "generated_at": "2026-01-14T06:42:04.864667"
+}

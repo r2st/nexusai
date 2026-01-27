@@ -1,0 +1,110 @@
+version: "3.9"
+
+# =============================================================================
+# MongoDB Services (Optional)
+# Use when document-based storage is preferred over PostgreSQL
+# =============================================================================
+
+x-common-labels: &common-labels
+  app.kubernetes.io/part-of: nexusai
+  app.kubernetes.io/managed-by: docker-compose
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-healthcheck-defaults: &healthcheck-defaults
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 60s
+
+services:
+  # =============================================================================
+  # MongoDB - Document Database
+  # =============================================================================
+  mongodb:
+    image: mongo:7.0
+    container_name: nexusai-mongodb
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USERNAME:-root}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGODB_DATABASE:-nexusai}
+    volumes:
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+      - ./deploy/mongodb/init.js:/docker-entrypoint-initdb.d/init.js:ro
+    networks:
+      - nexusai-internal
+    expose:
+      - "27017"
+    labels:
+      <<: *common-labels
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+    command: >
+      mongod
+      --auth
+      --bind_ip_all
+      --wiredTigerCacheSizeGB 1
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    logging: *default-logging
+
+  # =============================================================================
+  # MongoDB Express - Web-based Admin UI (Optional)
+  # =============================================================================
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: nexusai-mongo-express
+    restart: unless-stopped
+    profiles:
+      - admin  # Only start with: docker compose --profile admin up
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGODB_ROOT_USERNAME:-root}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGODB_ROOT_PASSWORD}
+      - ME_CONFIG_MONGODB_URL=mongodb://${MONGODB_ROOT_USERNAME:-root}:${MONGODB_ROOT_PASSWORD}@mongodb:27017/
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USERNAME:-admin}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - nexusai-internal
+      - nexusai-public
+    expose:
+      - "8081"
+    labels:
+      <<: *common-labels
+      traefik.enable: "true"
+      traefik.http.routers.mongo-express.rule: "Host(`mongo.${DOMAIN:-localhost}`)"
+      traefik.http.routers.mongo-express.tls.certresolver: "letsencrypt"
+      traefik.http.routers.mongo-express.middlewares: "auth@file"
+      traefik.http.services.mongo-express.loadbalancer.server.port: "8081"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+        reservations:
+          cpus: "0.05"
+          memory: 32M
+    logging: *default-logging
+
+volumes:
+  mongodb-data:
+    name: nexusai-mongodb-data
+  mongodb-config:
+    name: nexusai-mongodb-config

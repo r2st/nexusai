@@ -1,0 +1,127 @@
+---
+# =============================================================================
+# NexusAI Backend Pod Disruption Budget
+# =============================================================================
+# Ensures high availability during voluntary disruptions
+# (node maintenance, cluster upgrades, etc.)
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: backend-pdb
+  namespace: nexusai
+  labels:
+    app.kubernetes.io/name: nexusai
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: nexusai
+spec:
+  # At least 2 pods must be available at all times
+  minAvailable: 2
+  # Alternative: Allow at most 1 pod to be unavailable
+  # maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nexusai
+      app.kubernetes.io/component: backend
+
+---
+# =============================================================================
+# NexusAI Frontend Pod Disruption Budget
+# =============================================================================
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: frontend-pdb
+  namespace: nexusai
+  labels:
+    app.kubernetes.io/name: nexusai
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: nexusai
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nexusai
+      app.kubernetes.io/component: frontend
+
+---
+# =============================================================================
+# NexusAI Worker Pod Disruption Budget
+# =============================================================================
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: worker-pdb
+  namespace: nexusai
+  labels:
+    app.kubernetes.io/name: nexusai
+    app.kubernetes.io/component: worker
+    app.kubernetes.io/part-of: nexusai
+spec:
+  # Workers can handle 1 being down
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nexusai
+      app.kubernetes.io/component: worker
+
+---
+# =============================================================================
+# PostgreSQL Pod Disruption Budget
+# =============================================================================
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: postgres-pdb
+  namespace: nexusai
+  labels:
+    app.kubernetes.io/name: nexusai
+    app.kubernetes.io/component: postgres
+    app.kubernetes.io/part-of: nexusai
+spec:
+  # PostgreSQL must always be available (single instance)
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nexusai
+      app.kubernetes.io/component: postgres
+
+---
+# =============================================================================
+# Redis Pod Disruption Budget
+# =============================================================================
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: redis-pdb
+  namespace: nexusai
+  labels:
+    app.kubernetes.io/name: nexusai
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/part-of: nexusai
+spec:
+  # Redis must always be available (single instance)
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nexusai
+      app.kubernetes.io/component: redis
+
+---
+# =============================================================================
+# Meilisearch Pod Disruption Budget
+# =============================================================================
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: meilisearch-pdb
+  namespace: nexusai
+  labels:
+    app.kubernetes.io/name: nexusai
+    app.kubernetes.io/component: meilisearch
+    app.kubernetes.io/part-of: nexusai
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nexusai
+      app.kubernetes.io/component: meilisearch

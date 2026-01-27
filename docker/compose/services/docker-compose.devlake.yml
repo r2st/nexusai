@@ -1,0 +1,123 @@
+# DevLake - Engineering Analytics Data Collection
+# Apache DevLake collects data from GitHub, GitLab, Jira, Jenkins, and 40+ other sources
+#
+# Usage:
+#   make devlake-up    # Start DevLake
+#   make devlake-down  # Stop DevLake
+#
+# Access:
+#   DevLake UI: http://localhost:4000
+#   DevLake API: http://localhost:8080
+
+services:
+  # ======================
+  # DevLake MySQL Database
+  # ======================
+  devlake-mysql:
+    image: mysql:8
+    container_name: nexusai-devlake-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DEVLAKE_MYSQL_ROOT_PASSWORD:-admin}
+      MYSQL_DATABASE: lake
+      MYSQL_USER: merico
+      MYSQL_PASSWORD: ${DEVLAKE_MYSQL_PASSWORD:-merico}
+    volumes:
+      - devlake_mysql_data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --skip-log-bin --sql-mode=NO_ENGINE_SUBSTITUTION,ALLOW_INVALID_DATES
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DEVLAKE_MYSQL_ROOT_PASSWORD:-admin}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexusai-internal
+
+  # ======================
+  # DevLake Backend API
+  # ======================
+  devlake:
+    image: devlake.docker.scarf.sh/apache/devlake:latest
+    container_name: nexusai-devlake
+    restart: unless-stopped
+    environment:
+      DB_URL: mysql://merico:${DEVLAKE_MYSQL_PASSWORD:-merico}@devlake-mysql:3306/lake?charset=utf8mb4&parseTime=True
+      E2E_DB_URL: mysql://merico:${DEVLAKE_MYSQL_PASSWORD:-merico}@devlake-mysql:3306/lake?charset=utf8mb4&parseTime=True
+      ENCRYPTION_SECRET: ${DEVLAKE_ENCRYPTION_SECRET:-change-this-to-32-char-secret!!}
+      API_TIMEOUT: 120s
+      API_RETRY: 3
+      API_PORT: 8080
+      LOGGING_LEVEL: info
+    ports:
+      - "${DEVLAKE_API_PORT:-8080}:8080"
+    depends_on:
+      devlake-mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - nexusai-internal
+      - nexusai-public
+
+  # ======================
+  # DevLake Config UI
+  # ======================
+  devlake-config-ui:
+    image: devlake.docker.scarf.sh/apache/devlake-config-ui:latest
+    container_name: nexusai-devlake-ui
+    restart: unless-stopped
+    environment:
+      DEVLAKE_ENDPOINT: http://devlake:8080
+      GRAFANA_ENDPOINT: http://grafana:3000
+      ADMIN_USER: ${DEVLAKE_ADMIN_USER:-admin}
+      ADMIN_PASS: ${DEVLAKE_ADMIN_PASS:-admin}
+    ports:
+      - "${DEVLAKE_UI_PORT:-4000}:4000"
+    depends_on:
+      devlake:
+        condition: service_healthy
+    networks:
+      - nexusai-internal
+      - nexusai-public
+
+  # ======================
+  # Grafana for Dashboards
+  # ======================
+  grafana:
+    image: devlake.docker.scarf.sh/apache/devlake-dashboard:latest
+    container_name: nexusai-grafana
+    restart: unless-stopped
+    environment:
+      GF_SERVER_ROOT_URL: http://localhost:${GRAFANA_PORT:-3002}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      MYSQL_URL: devlake-mysql:3306
+      MYSQL_DATABASE: lake
+      MYSQL_USER: merico
+      MYSQL_PASSWORD: ${DEVLAKE_MYSQL_PASSWORD:-merico}
+    ports:
+      - "${GRAFANA_PORT:-3002}:3000"
+    volumes:
+      - devlake_grafana_data:/var/lib/grafana
+    depends_on:
+      devlake-mysql:
+        condition: service_healthy
+    networks:
+      - nexusai-internal
+      - nexusai-public
+
+volumes:
+  devlake_mysql_data:
+  devlake_grafana_data:
+
+networks:
+  nexusai-internal:
+    name: nexusai-internal
+    external: true
+  nexusai-public:
+    name: nexusai-public
+    external: true

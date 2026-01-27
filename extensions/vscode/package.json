@@ -1,0 +1,262 @@
+{
+  "name": "nexusai-vscode",
+  "displayName": "NexusAI - AI Code Intelligence",
+  "description": "AI-powered code analysis, review, and suggestions for your IDE",
+  "version": "0.1.0",
+  "publisher": "nexusai",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages",
+    "Machine Learning",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "code review",
+    "code analysis",
+    "security",
+    "linting",
+    "copilot",
+    "assistant"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nexusai/vscode-extension"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "nexusai.analyzeFile",
+        "title": "NexusAI: Analyze Current File"
+      },
+      {
+        "command": "nexusai.analyzeWorkspace",
+        "title": "NexusAI: Analyze Workspace"
+      },
+      {
+        "command": "nexusai.explainCode",
+        "title": "NexusAI: Explain Selected Code"
+      },
+      {
+        "command": "nexusai.fixCode",
+        "title": "NexusAI: Fix Selected Code"
+      },
+      {
+        "command": "nexusai.refactorCode",
+        "title": "NexusAI: Refactor Selected Code"
+      },
+      {
+        "command": "nexusai.documentCode",
+        "title": "NexusAI: Add Documentation"
+      },
+      {
+        "command": "nexusai.generateTests",
+        "title": "NexusAI: Generate Tests"
+      },
+      {
+        "command": "nexusai.openChat",
+        "title": "NexusAI: Open Chat"
+      },
+      {
+        "command": "nexusai.showSecurityDocs",
+        "title": "NexusAI: Show Security Documentation"
+      },
+      {
+        "command": "nexusai.applySuggestion",
+        "title": "NexusAI: Apply Suggestion"
+      },
+      {
+        "command": "nexusai.toggleAutoAnalysis",
+        "title": "NexusAI: Toggle Auto-Analysis"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "nexusai.explainCode",
+          "when": "editorHasSelection",
+          "group": "nexusai@1"
+        },
+        {
+          "command": "nexusai.fixCode",
+          "when": "editorHasSelection",
+          "group": "nexusai@2"
+        },
+        {
+          "command": "nexusai.refactorCode",
+          "when": "editorHasSelection",
+          "group": "nexusai@3"
+        },
+        {
+          "command": "nexusai.documentCode",
+          "when": "editorHasSelection",
+          "group": "nexusai@4"
+        },
+        {
+          "command": "nexusai.generateTests",
+          "when": "editorHasSelection",
+          "group": "nexusai@5"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "nexusai.analyzeFile",
+          "when": "editorIsOpen"
+        },
+        {
+          "command": "nexusai.analyzeWorkspace"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "NexusAI",
+      "properties": {
+        "nexusai.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable NexusAI extension"
+        },
+        "nexusai.serverUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "NexusAI server URL"
+        },
+        "nexusai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "NexusAI API key for authentication"
+        },
+        "nexusai.autoAnalyze": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically analyze files on save"
+        },
+        "nexusai.analyzeOnType": {
+          "type": "boolean",
+          "default": false,
+          "description": "Analyze files while typing (may impact performance)"
+        },
+        "nexusai.analyzeDelay": {
+          "type": "number",
+          "default": 500,
+          "description": "Delay in milliseconds before analyzing after typing"
+        },
+        "nexusai.maxFileSize": {
+          "type": "number",
+          "default": 500,
+          "description": "Maximum file size in KB to analyze"
+        },
+        "nexusai.enabledLanguages": {
+          "type": "array",
+          "default": [
+            "python",
+            "typescript",
+            "javascript",
+            "typescriptreact",
+            "javascriptreact",
+            "go",
+            "rust",
+            "java"
+          ],
+          "description": "Languages to analyze"
+        },
+        "nexusai.severityThreshold": {
+          "type": "string",
+          "enum": ["error", "warning", "info", "hint"],
+          "default": "info",
+          "description": "Minimum severity level to show"
+        },
+        "nexusai.showInlineHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline hints for issues"
+        },
+        "nexusai.enableTelemetry": {
+          "type": "boolean",
+          "default": true,
+          "description": "Send anonymous usage telemetry"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "nexusai",
+          "title": "NexusAI",
+          "icon": "images/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "nexusai": [
+        {
+          "id": "nexusai.chat",
+          "name": "Chat",
+          "type": "webview"
+        },
+        {
+          "id": "nexusai.issues",
+          "name": "Issues"
+        },
+        {
+          "id": "nexusai.metrics",
+          "name": "Code Metrics"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "nexusai.analyzeFile",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "nexusai.openChat",
+        "key": "ctrl+shift+c",
+        "mac": "cmd+shift+c"
+      },
+      {
+        "command": "nexusai.explainCode",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorHasSelection"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^2.22.0",
+    "eslint": "^8.54.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.2.0",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "ws": "^8.14.2"
+  }
+}

@@ -1,0 +1,151 @@
+# =============================================================================
+# NexusAI Helm Chart - Development Environment Values
+# =============================================================================
+
+# Global settings
+global:
+  imageRegistry: "ghcr.io/nexusai"
+
+# Application configuration
+config:
+  appName: "NexusAI Dev"
+  environment: "development"
+  debug: "true"
+  logLevel: "debug"
+  enableMetrics: "true"
+  enableTracing: "true"
+
+# Backend configuration
+backend:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    tag: "dev"
+    pullPolicy: Always
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+  autoscaling:
+    enabled: false
+
+  podDisruptionBudget:
+    enabled: false
+
+# Frontend configuration
+frontend:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    tag: "dev"
+    pullPolicy: Always
+
+  resources:
+    limits:
+      cpu: 300m
+      memory: 384Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  autoscaling:
+    enabled: false
+
+  podDisruptionBudget:
+    enabled: false
+
+# Worker configuration
+worker:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    tag: "dev"
+    pullPolicy: Always
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+  autoscaling:
+    enabled: false
+
+  podDisruptionBudget:
+    enabled: false
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+  hosts:
+    - host: nexusai.local
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: backend
+          port: 8000
+        - path: /
+          pathType: Prefix
+          service: frontend
+          port: 3000
+
+# Service account
+serviceAccount:
+  create: true
+
+# Security contexts (relaxed for development)
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+
+# Network policy (disabled for easier debugging)
+networkPolicy:
+  enabled: false
+
+# Service monitor (enabled for local Prometheus)
+serviceMonitor:
+  enabled: true
+  interval: "15s"
+
+# Dependencies - use embedded services
+postgresql:
+  enabled: true
+  auth:
+    username: nexusai
+    password: devpassword123
+    database: nexusai_dev
+  primary:
+    persistence:
+      size: 5Gi
+
+redis:
+  enabled: true
+  auth:
+    password: devpassword123
+  master:
+    persistence:
+      size: 1Gi
+
+meilisearch:
+  enabled: true
+  environment:
+    MEILI_ENV: development
+  persistence:
+    size: 2Gi

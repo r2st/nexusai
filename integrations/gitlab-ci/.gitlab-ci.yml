@@ -1,0 +1,212 @@
+# NexusAI GitLab CI Integration
+# Add this template to your .gitlab-ci.yml
+
+include:
+  - remote: 'https://raw.githubusercontent.com/nexusai/integrations/main/gitlab-ci/templates/quality-gate.yml'
+
+# Or copy the configuration below directly
+
+variables:
+  NEXUSAI_API_URL: ${NEXUSAI_API_URL}
+  NEXUSAI_API_KEY: ${NEXUSAI_API_KEY}
+  NEXUSAI_FAIL_ON_CRITICAL: "true"
+  NEXUSAI_FAIL_ON_SECURITY: "true"
+
+stages:
+  - test
+  - analyze
+  - deploy
+
+# Quality Gate Analysis Job
+nexusai-quality-gate:
+  stage: analyze
+  image: curlimages/curl:latest
+  variables:
+    GIT_DEPTH: 0
+  script:
+    - |
+      echo "Running NexusAI Quality Gate Analysis..."
+
+      # Get commit info
+      COMMIT_SHA="${CI_COMMIT_SHA}"
+      BRANCH="${CI_COMMIT_REF_NAME}"
+      REPO_URL="${CI_PROJECT_URL}"
+
+      # Build file list
+      if [ "$CI_PIPELINE_SOURCE" == "merge_request_event" ]; then
+        FILES=$(git diff --name-only origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}...HEAD | tr '\n' ',')
+      else
+        FILES=$(git diff --name-only HEAD~1 | tr '\n' ',')
+      fi
+
+      # Submit for analysis
+      RESPONSE=$(curl -s -X POST "${NEXUSAI_API_URL}/api/quality-gate/evaluate" \
+        -H "Authorization: Bearer ${NEXUSAI_API_KEY}" \
+        -H "Content-Type: application/json" \
+        -d "{
+          \"repository\": \"${CI_PROJECT_PATH}\",
+          \"ref\": \"${BRANCH}\",
+          \"commit_sha\": \"${COMMIT_SHA}\",
+          \"files_changed\": [$(echo $FILES | sed 's/,$//' | sed 's/,/","/g' | sed 's/^/"/' | sed 's/$/"/')],
+          \"context\": {
+            \"pipeline_id\": \"${CI_PIPELINE_ID}\",
+            \"job_id\": \"${CI_JOB_ID}\",
+            \"project_url\": \"${CI_PROJECT_URL}\",
+            \"merge_request_iid\": \"${CI_MERGE_REQUEST_IID:-}\",
+            \"ci_provider\": \"gitlab\"
+          }
+        }")
+
+      echo "Analysis Response:"
+      echo "$RESPONSE" | jq '.'
+
+      # Extract results
+      PASSED=$(echo "$RESPONSE" | jq -r '.result.passed')
+      TOTAL_ISSUES=$(echo "$RESPONSE" | jq -r '.result.total_issues')
+      CRITICAL_ISSUES=$(echo "$RESPONSE" | jq -r '.result.critical_issues')
+      SECURITY_ISSUES=$(echo "$RESPONSE" | jq -r '.result.security_issues')
+
+      # Print summary
+      echo ""
+      echo "═══════════════════════════════════════════════════════════════"
+      echo "                    NexusAI Quality Gate Results"
+      echo "═══════════════════════════════════════════════════════════════"
+      echo "Status: $([ "$PASSED" == "true" ] && echo "✅ PASSED" || echo "❌ FAILED")"
+      echo "Total Issues: $TOTAL_ISSUES"
+      echo "Critical Issues: $CRITICAL_ISSUES"
+      echo "Security Issues: $SECURITY_ISSUES"
+      echo "═══════════════════════════════════════════════════════════════"
+
+      # Check thresholds
+      if [ "$PASSED" != "true" ]; then
+        echo ""
+        echo "Quality gate failed. Review the issues above."
+
+        # Post comment on MR if applicable
+        if [ -n "$CI_MERGE_REQUEST_IID" ]; then
+          curl -s -X POST "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
+            -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+            -d "body=## 🔍 NexusAI Quality Gate Results
+
+**Status**: ❌ Failed
+
+| Metric | Count |
+|--------|-------|
+| Total Issues | $TOTAL_ISSUES |
+| Critical | $CRITICAL_ISSUES |
+| Security | $SECURITY_ISSUES |
+
+Please review and fix the issues before merging."
+        fi
+
+        exit 1
+      fi
+
+      echo ""
+      echo "Quality gate passed! ✅"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  artifacts:
+    reports:
+      dotenv: nexusai.env
+    paths:
+      - nexusai-report.json
+    expire_in: 1 week
+  allow_failure: false
+
+# DORA Metrics Collection
+nexusai-dora-metrics:
+  stage: deploy
+  image: curlimages/curl:latest
+  script:
+    - |
+      echo "Reporting deployment to NexusAI for DORA metrics..."
+
+      curl -s -X POST "${NEXUSAI_API_URL}/api/events/ingest" \
+        -H "Authorization: Bearer ${NEXUSAI_API_KEY}" \
+        -H "Content-Type: application/json" \
+        -d "{
+          \"event_type\": \"deployment\",
+          \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+          \"source\": \"gitlab-ci\",
+          \"data\": {
+            \"repository\": \"${CI_PROJECT_PATH}\",
+            \"environment\": \"${CI_ENVIRONMENT_NAME:-production}\",
+            \"commit_sha\": \"${CI_COMMIT_SHA}\",
+            \"branch\": \"${CI_COMMIT_REF_NAME}\",
+            \"pipeline_id\": \"${CI_PIPELINE_ID}\",
+            \"job_id\": \"${CI_JOB_ID}\",
+            \"deployer\": \"${GITLAB_USER_LOGIN}\",
+            \"status\": \"success\"
+          }
+        }"
+
+      echo "Deployment event recorded for DORA metrics calculation."
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success
+  needs:
+    - job: nexusai-quality-gate
+      optional: true
+
+# Code Review Request
+nexusai-code-review:
+  stage: analyze
+  image: curlimages/curl:latest
+  variables:
+    GIT_DEPTH: 0
+  script:
+    - |
+      echo "Requesting NexusAI Code Review..."
+
+      # Get diff
+      if [ "$CI_PIPELINE_SOURCE" == "merge_request_event" ]; then
+        DIFF=$(git diff origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}...HEAD)
+      else
+        DIFF=$(git diff HEAD~1)
+      fi
+
+      # Request review
+      RESPONSE=$(curl -s -X POST "${NEXUSAI_API_URL}/api/code-review/analyze" \
+        -H "Authorization: Bearer ${NEXUSAI_API_KEY}" \
+        -H "Content-Type: application/json" \
+        -d "{
+          \"repository\": \"${CI_PROJECT_PATH}\",
+          \"ref\": \"${CI_COMMIT_REF_NAME}\",
+          \"commit_sha\": \"${CI_COMMIT_SHA}\",
+          \"diff\": $(echo "$DIFF" | jq -Rs .),
+          \"context\": {
+            \"merge_request_iid\": \"${CI_MERGE_REQUEST_IID:-}\",
+            \"author\": \"${GITLAB_USER_LOGIN}\",
+            \"title\": \"${CI_MERGE_REQUEST_TITLE:-}\",
+            \"ci_provider\": \"gitlab\"
+          }
+        }")
+
+      echo "Code Review Response:"
+      echo "$RESPONSE" | jq '.'
+
+      # Post review as MR comment
+      if [ -n "$CI_MERGE_REQUEST_IID" ] && [ -n "$GITLAB_TOKEN" ]; then
+        SUMMARY=$(echo "$RESPONSE" | jq -r '.summary // "Review completed"')
+        SUGGESTIONS=$(echo "$RESPONSE" | jq -r '.suggestions // []')
+
+        COMMENT="## 🤖 NexusAI Code Review
+
+$SUMMARY
+
+### Suggestions
+
+$SUGGESTIONS
+
+---
+*Automated code review by NexusAI*"
+
+        curl -s -X POST "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${CI_MERGE_REQUEST_IID}/notes" \
+          -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+          -d "body=$COMMENT"
+      fi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  allow_failure: true

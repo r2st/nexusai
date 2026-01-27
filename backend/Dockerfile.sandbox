@@ -1,0 +1,260 @@
+# Code Interpreter Sandbox Dockerfile
+# This runs a sandbox manager that creates isolated containers for code execution
+
+FROM python:3.12-slim
+
+# Install Docker CLI for managing sandbox containers
+RUN apt-get update && apt-get install -y \
+    curl \
+    docker.io \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir \
+    fastapi>=0.115.0 \
+    uvicorn[standard]>=0.32.0 \
+    docker>=7.0.0 \
+    aiofiles>=24.1.0 \
+    structlog>=24.4.0 \
+    pydantic>=2.10.0
+
+# Copy sandbox service code
+COPY app/services/code_interpreter /app/services/code_interpreter
+
+# Create sandbox API server
+RUN cat > /app/sandbox_server.py << 'EOF'
+"""Sandbox Manager API Server.
+
+Provides HTTP API for managing sandboxed code execution containers.
+"""
+
+import asyncio
+import uuid
+from datetime import datetime, UTC
+from pathlib import Path
+from typing import Any
+
+import docker
+import structlog
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+logger = structlog.get_logger()
+
+app = FastAPI(title="NexusAI Code Sandbox", version="1.0.0")
+
+# Docker client
+docker_client = docker.from_env()
+
+# Sandbox configurations
+LANGUAGE_IMAGES = {
+    "python": "python:3.12-slim",
+    "node": "node:20-slim",
+    "typescript": "node:20-slim",
+    "javascript": "node:20-slim",
+    "go": "golang:1.22-alpine",
+    "rust": "rust:1.75-slim",
+    "ruby": "ruby:3.3-slim",
+    "php": "php:8.3-cli",
+    "java": "eclipse-temurin:21-jdk",
+    "cpp": "gcc:13",
+    "c": "gcc:13",
+    "r": "r-base:4.3.2",
+}
+
+# Active containers
+active_containers: dict[str, Any] = {}
+
+
+class ExecuteRequest(BaseModel):
+    """Code execution request."""
+    code: str
+    language: str
+    timeout: int = 30
+    memory_limit: str = "512m"
+    cpu_limit: float = 1.0
+    session_id: str | None = None
+
+
+class ExecuteResponse(BaseModel):
+    """Code execution response."""
+    execution_id: str
+    status: str
+    stdout: str
+    stderr: str
+    exit_code: int
+    execution_time: float
+    memory_used: int | None = None
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint."""
+    return {"status": "healthy", "timestamp": datetime.now(UTC).isoformat()}
+
+
+@app.post("/execute", response_model=ExecuteResponse)
+async def execute_code(request: ExecuteRequest):
+    """Execute code in a sandboxed container."""
+    execution_id = str(uuid.uuid4())
+    language = request.language.lower()
+
+    if language not in LANGUAGE_IMAGES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported language: {language}. Supported: {list(LANGUAGE_IMAGES.keys())}"
+        )
+
+    image = LANGUAGE_IMAGES[language]
+
+    # Build command based on language
+    if language == "python":
+        cmd = ["python", "-c", request.code]
+    elif language in ("node", "javascript"):
+        cmd = ["node", "-e", request.code]
+    elif language == "typescript":
+        # TypeScript needs compilation first
+        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/code.ts && npx ts-node /tmp/code.ts"]
+    elif language == "go":
+        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/main.go && go run /tmp/main.go"]
+    elif language == "rust":
+        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/main.rs && rustc /tmp/main.rs -o /tmp/main && /tmp/main"]
+    elif language == "ruby":
+        cmd = ["ruby", "-e", request.code]
+    elif language == "php":
+        cmd = ["php", "-r", request.code]
+    elif language == "java":
+        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/Main.java && javac /tmp/Main.java -d /tmp && java -cp /tmp Main"]
+    elif language in ("c", "cpp"):
+        ext = "cpp" if language == "cpp" else "c"
+        compiler = "g++" if language == "cpp" else "gcc"
+        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/code.{ext} && {compiler} /tmp/code.{ext} -o /tmp/code && /tmp/code"]
+    elif language == "r":
+        cmd = ["Rscript", "-e", request.code]
+    else:
+        raise HTTPException(status_code=400, detail=f"Unsupported language: {language}")
+
+    start_time = datetime.now(UTC)
+
+    try:
+        # Pull image if not available
+        try:
+            docker_client.images.get(image)
+        except docker.errors.ImageNotFound:
+            logger.info("Pulling image", image=image)
+            docker_client.images.pull(image)
+
+        # Create and run container
+        container = docker_client.containers.run(
+            image=image,
+            command=cmd,
+            detach=True,
+            mem_limit=request.memory_limit,
+            cpu_period=100000,
+            cpu_quota=int(100000 * request.cpu_limit),
+            network_disabled=True,  # No network access for security
+            read_only=False,
+            remove=False,
+            stdout=True,
+            stderr=True,
+        )
+
+        active_containers[execution_id] = container
+
+        # Wait for completion with timeout
+        try:
+            result = container.wait(timeout=request.timeout)
+            exit_code = result.get("StatusCode", -1)
+        except Exception as e:
+            logger.warning("Container timeout or error", error=str(e))
+            container.kill()
+            exit_code = -1
+
+        # Get output
+        stdout = container.logs(stdout=True, stderr=False).decode("utf-8", errors="replace")
+        stderr = container.logs(stdout=False, stderr=True).decode("utf-8", errors="replace")
+
+        # Get stats
+        try:
+            stats = container.stats(stream=False)
+            memory_used = stats.get("memory_stats", {}).get("usage")
+        except:
+            memory_used = None
+
+        # Cleanup
+        container.remove(force=True)
+        del active_containers[execution_id]
+
+        execution_time = (datetime.now(UTC) - start_time).total_seconds()
+
+        return ExecuteResponse(
+            execution_id=execution_id,
+            status="completed" if exit_code == 0 else "error",
+            stdout=stdout[:100000],  # Limit output size
+            stderr=stderr[:100000],
+            exit_code=exit_code,
+            execution_time=execution_time,
+            memory_used=memory_used,
+        )
+
+    except docker.errors.ContainerError as e:
+        return ExecuteResponse(
+            execution_id=execution_id,
+            status="error",
+            stdout="",
+            stderr=str(e),
+            exit_code=-1,
+            execution_time=(datetime.now(UTC) - start_time).total_seconds(),
+        )
+    except Exception as e:
+        logger.error("Execution failed", error=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/containers/{execution_id}")
+async def kill_container(execution_id: str):
+    """Kill a running container."""
+    if execution_id in active_containers:
+        try:
+            active_containers[execution_id].kill()
+            active_containers[execution_id].remove(force=True)
+            del active_containers[execution_id]
+            return {"status": "killed"}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    raise HTTPException(status_code=404, detail="Container not found")
+
+
+@app.get("/containers")
+async def list_containers():
+    """List active containers."""
+    return {
+        "containers": [
+            {"id": k, "status": v.status}
+            for k, v in active_containers.items()
+        ]
+    }
+
+
+@app.get("/languages")
+async def list_languages():
+    """List supported languages."""
+    return {"languages": list(LANGUAGE_IMAGES.keys())}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8090)
+EOF
+
+# Expose port
+EXPOSE 8090
+
+# Run the sandbox server
+CMD ["python", "/app/sandbox_server.py"]

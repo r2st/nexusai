@@ -1,0 +1,134 @@
+===============================================================================
+                          NexusAI Deployment Notes
+===============================================================================
+
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named: {{ .Release.Name }}
+Namespace: {{ .Release.Namespace }}
+
+-------------------------------------------------------------------------------
+                            Component Status
+-------------------------------------------------------------------------------
+
+{{- if .Values.backend.enabled }}
+Backend:    ✓ Enabled ({{ .Values.backend.replicaCount }} replica(s))
+{{- else }}
+Backend:    ✗ Disabled
+{{- end }}
+
+{{- if .Values.frontend.enabled }}
+Frontend:   ✓ Enabled ({{ .Values.frontend.replicaCount }} replica(s))
+{{- else }}
+Frontend:   ✗ Disabled
+{{- end }}
+
+{{- if .Values.worker.enabled }}
+Worker:     ✓ Enabled ({{ .Values.worker.replicaCount }} replica(s))
+{{- else }}
+Worker:     ✗ Disabled
+{{- end }}
+
+-------------------------------------------------------------------------------
+                            Accessing NexusAI
+-------------------------------------------------------------------------------
+
+{{- if .Values.ingress.enabled }}
+The application is accessible via Ingress:
+
+{{- range .Values.ingress.hosts }}
+  {{- if $.Values.ingress.tls }}
+  https://{{ .host }}
+  {{- else }}
+  http://{{ .host }}
+  {{- end }}
+{{- end }}
+
+{{- else }}
+
+To access the application, use port-forwarding:
+
+Backend API:
+  kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "nexusai.fullname" . }}-backend 8000:{{ .Values.backend.service.port }}
+
+  Then access: http://localhost:8000
+
+Frontend:
+  kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "nexusai.fullname" . }}-frontend 3000:{{ .Values.frontend.service.port }}
+
+  Then access: http://localhost:3000
+
+{{- end }}
+
+-------------------------------------------------------------------------------
+                            Dependencies
+-------------------------------------------------------------------------------
+
+{{- if .Values.postgresql.enabled }}
+PostgreSQL: ✓ Enabled (embedded)
+  Host: {{ include "nexusai.fullname" . }}-postgresql
+  Port: 5432
+{{- else }}
+PostgreSQL: External
+  Host: {{ .Values.externalDatabase.host }}
+  Port: {{ .Values.externalDatabase.port }}
+{{- end }}
+
+{{- if .Values.redis.enabled }}
+Redis:      ✓ Enabled (embedded)
+  Host: {{ include "nexusai.fullname" . }}-redis-master
+  Port: 6379
+{{- else }}
+Redis:      External
+  Host: {{ .Values.externalRedis.host }}
+  Port: {{ .Values.externalRedis.port }}
+{{- end }}
+
+{{- if .Values.meilisearch.enabled }}
+Meilisearch: ✓ Enabled
+  Host: {{ include "nexusai.fullname" . }}-meilisearch
+  Port: 7700
+{{- else }}
+Meilisearch: ✗ Disabled
+{{- end }}
+
+-------------------------------------------------------------------------------
+                            Monitoring
+-------------------------------------------------------------------------------
+
+{{- if .Values.serviceMonitor.enabled }}
+ServiceMonitor: ✓ Enabled
+  Prometheus will automatically scrape metrics from:
+  - {{ include "nexusai.fullname" . }}-backend:8000/metrics
+{{- if .Values.frontend.enabled }}
+  - {{ include "nexusai.fullname" . }}-frontend:3000/api/metrics
+{{- end }}
+{{- else }}
+ServiceMonitor: ✗ Disabled
+  To enable Prometheus integration, set serviceMonitor.enabled=true
+{{- end }}
+
+-------------------------------------------------------------------------------
+                            Useful Commands
+-------------------------------------------------------------------------------
+
+# Check pod status
+kubectl get pods -n {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+# View logs
+kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/component=backend -f
+kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/component=frontend -f
+kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/component=worker -f
+
+# Check HPA status
+{{- if or .Values.backend.autoscaling.enabled .Values.frontend.autoscaling.enabled .Values.worker.autoscaling.enabled }}
+kubectl get hpa -n {{ .Release.Namespace }}
+{{- end }}
+
+# Upgrade the release
+helm upgrade {{ .Release.Name }} nexusai/nexusai -n {{ .Release.Namespace }} -f values.yaml
+
+# Rollback to previous version
+helm rollback {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+===============================================================================

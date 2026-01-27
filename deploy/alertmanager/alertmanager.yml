@@ -1,0 +1,176 @@
+# =============================================================================
+# Alertmanager Configuration
+# =============================================================================
+
+global:
+  # How long to wait before sending a notification again
+  resolve_timeout: 5m
+
+  # SMTP configuration for email notifications
+  smtp_smarthost: 'smtp.example.com:587'
+  smtp_from: 'alerts@nexusai.example.com'
+  smtp_auth_username: 'alerts@nexusai.example.com'
+  smtp_auth_password: '${SMTP_PASSWORD}'
+  smtp_require_tls: true
+
+  # Slack webhook URL
+  slack_api_url: '${SLACK_WEBHOOK_URL}'
+
+  # PagerDuty integration key
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+# Route tree
+route:
+  # Default receiver
+  receiver: 'default-receiver'
+
+  # How long to initially wait before sending notifications
+  group_wait: 30s
+
+  # How long to wait before sending notifications about new alerts
+  group_interval: 5m
+
+  # How long to wait before resending notifications
+  repeat_interval: 4h
+
+  # Group by these labels
+  group_by: ['alertname', 'cluster', 'service']
+
+  # Child routes for specific alerts
+  routes:
+    # Critical alerts go to PagerDuty
+    - match:
+        severity: critical
+      receiver: 'pagerduty-critical'
+      continue: true
+
+    # Infrastructure alerts go to ops team
+    - match:
+        team: infrastructure
+      receiver: 'slack-infrastructure'
+      group_by: ['alertname', 'instance']
+
+    # Database alerts go to DBA team
+    - match:
+        team: database
+      receiver: 'slack-database'
+
+    # Backend alerts go to backend team
+    - match:
+        team: backend
+      receiver: 'slack-backend'
+
+    # Silence certain alerts during maintenance windows
+    - match_re:
+        alertname: '^(HighCPUUsage|HighMemoryUsage)$'
+      receiver: 'null'
+      mute_time_intervals:
+        - maintenance-window
+
+# Receivers
+receivers:
+  # Default receiver - sends to Slack
+  - name: 'default-receiver'
+    slack_configs:
+      - channel: '#alerts'
+        send_resolved: true
+        title: '{{ template "slack.default.title" . }}'
+        text: '{{ template "slack.default.text" . }}'
+        actions:
+          - type: button
+            text: 'View in Grafana'
+            url: 'https://grafana.nexusai.example.com'
+          - type: button
+            text: 'Silence'
+            url: '{{ template "slack.default.silenceurl" . }}'
+
+  # Null receiver for silenced alerts
+  - name: 'null'
+
+  # PagerDuty for critical alerts
+  - name: 'pagerduty-critical'
+    pagerduty_configs:
+      - service_key: '${PAGERDUTY_SERVICE_KEY}'
+        severity: critical
+        description: '{{ .CommonAnnotations.summary }}'
+        details:
+          firing: '{{ template "pagerduty.default.instances" .Alerts.Firing }}'
+          resolved: '{{ template "pagerduty.default.instances" .Alerts.Resolved }}'
+          num_firing: '{{ .Alerts.Firing | len }}'
+          num_resolved: '{{ .Alerts.Resolved | len }}'
+
+  # Slack for infrastructure team
+  - name: 'slack-infrastructure'
+    slack_configs:
+      - channel: '#ops-alerts'
+        send_resolved: true
+        color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+        title: '[{{ .Status | toUpper }}] Infrastructure Alert'
+        text: >-
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Severity:* {{ .Labels.severity }}
+          {{ end }}
+
+  # Slack for database team
+  - name: 'slack-database'
+    slack_configs:
+      - channel: '#dba-alerts'
+        send_resolved: true
+        color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+        title: '[{{ .Status | toUpper }}] Database Alert'
+        text: >-
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          {{ end }}
+
+  # Slack for backend team
+  - name: 'slack-backend'
+    slack_configs:
+      - channel: '#backend-alerts'
+        send_resolved: true
+        title: '[{{ .Status | toUpper }}] Backend Alert'
+        text: >-
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          {{ end }}
+
+  # Email receiver
+  - name: 'email-oncall'
+    email_configs:
+      - to: 'oncall@nexusai.example.com'
+        send_resolved: true
+        headers:
+          Subject: '[{{ .Status | toUpper }}] {{ .GroupLabels.alertname }}'
+
+# Inhibition rules
+inhibit_rules:
+  # If a critical alert is firing, suppress warnings for the same service
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'service']
+
+  # If a cluster is down, suppress individual node alerts
+  - source_match:
+      alertname: 'ClusterDown'
+    target_match_re:
+      alertname: '(NodeDown|HighCPUUsage|HighMemoryUsage)'
+    equal: ['cluster']
+
+# Mute time intervals
+time_intervals:
+  - name: maintenance-window
+    time_intervals:
+      - weekdays: ['sunday']
+        times:
+          - start_time: '02:00'
+            end_time: '06:00'
+
+# Templates
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'

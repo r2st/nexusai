@@ -1,0 +1,28 @@
+{
+    "name": "nexusai-azure-devops",
+    "version": "1.0.0",
+    "description": "NexusAI Azure DevOps Extension",
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc",
+        "clean": "rimraf dist",
+        "package": "tfx extension create --manifest-globs vss-extension.json",
+        "publish": "tfx extension publish --token $ADO_PAT"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nexusai/azure-devops-extension"
+    },
+    "author": "NexusAI",
+    "license": "MIT",
+    "dependencies": {
+        "azure-pipelines-task-lib": "^4.6.0",
+        "axios": "^1.6.2"
+    },
+    "devDependencies": {
+        "@types/node": "^20.10.0",
+        "rimraf": "^5.0.5",
+        "tfx-cli": "^0.16.0",
+        "typescript": "^5.3.2"
+    }
+}

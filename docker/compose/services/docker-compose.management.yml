@@ -1,0 +1,104 @@
+version: "3.9"
+
+# =============================================================================
+# Management & Operations Services
+# Includes: Portainer, Documentation (Docusaurus)
+# =============================================================================
+
+x-common-labels: &common-labels
+  app.kubernetes.io/part-of: nexusai
+  app.kubernetes.io/managed-by: docker-compose
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-healthcheck-defaults: &healthcheck-defaults
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 30s
+
+services:
+  # =============================================================================
+  # Portainer - Container Management UI
+  # =============================================================================
+  portainer:
+    image: portainer/portainer-ce:2.19.4
+    container_name: nexusai-portainer
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - portainer-data:/data
+    networks:
+      - nexusai-internal
+      - nexusai-public
+    expose:
+      - "9000"
+    labels:
+      <<: *common-labels
+      traefik.enable: "true"
+      traefik.http.routers.portainer.rule: "Host(`portainer.${DOMAIN:-localhost}`)"
+      traefik.http.routers.portainer.tls.certresolver: "letsencrypt"
+      traefik.http.routers.portainer.middlewares: "auth@file"
+      traefik.http.services.portainer.loadbalancer.server.port: "9000"
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9000/api/system/status"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.1"
+          memory: 64M
+    logging: *default-logging
+
+  # =============================================================================
+  # Documentation Site - Docusaurus
+  # =============================================================================
+  docs:
+    build:
+      context: ./docs
+      dockerfile: Dockerfile
+    image: nexusai/docs:${VERSION:-latest}
+    container_name: nexusai-docs
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=10m
+    environment:
+      - NODE_ENV=production
+    networks:
+      - nexusai-internal
+    expose:
+      - "3000"
+    labels:
+      <<: *common-labels
+      traefik.enable: "true"
+      traefik.http.routers.docs.rule: "Host(`docs.${DOMAIN:-localhost}`)"
+      traefik.http.routers.docs.tls.certresolver: "letsencrypt"
+      traefik.http.services.docs.loadbalancer.server.port: "3000"
+    healthcheck:
+      <<: *healthcheck-defaults
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.1"
+          memory: 64M
+    logging: *default-logging
+
+volumes:
+  portainer-data:
+    name: nexusai-portainer-data

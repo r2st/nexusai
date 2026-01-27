@@ -1,0 +1,168 @@
+{
+    "manifestVersion": 1,
+    "id": "nexusai-extension",
+    "version": "1.0.0",
+    "name": "NexusAI",
+    "description": "AI-powered software intelligence for Azure DevOps",
+    "publisher": "nexusai",
+    "public": false,
+    "categories": [
+        "Azure Pipelines",
+        "Azure Boards"
+    ],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "icons": {
+        "default": "images/icon.png"
+    },
+    "content": {
+        "details": {
+            "path": "README.md"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/nexusai/azure-devops-extension"
+    },
+    "badges": [],
+    "screenshots": [],
+    "branding": {
+        "color": "#0078d4",
+        "theme": "dark"
+    },
+    "contributions": [
+        {
+            "id": "nexusai-service-endpoint",
+            "description": "Service endpoint for NexusAI",
+            "type": "ms.vss-endpoint.service-endpoint-type",
+            "targets": [
+                "ms.vss-endpoint.endpoint-types"
+            ],
+            "properties": {
+                "name": "nexusai",
+                "displayName": "NexusAI",
+                "url": {
+                    "displayName": "API Endpoint",
+                    "value": "https://api.nexusai.dev",
+                    "isVisible": true
+                },
+                "authenticationSchemes": [
+                    {
+                        "type": "ms.vss-endpoint.endpoint-auth-scheme-token",
+                        "inputDescriptors": [
+                            {
+                                "id": "apitoken",
+                                "name": "API Token",
+                                "description": "NexusAI API Token",
+                                "inputMode": "passwordBox",
+                                "isConfidential": true,
+                                "validation": {
+                                    "isRequired": true
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "nexusai-analyze-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/analyze"
+            }
+        },
+        {
+            "id": "nexusai-quality-gate-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/quality-gate"
+            }
+        },
+        {
+            "id": "nexusai-pr-review-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/pr-review"
+            }
+        },
+        {
+            "id": "nexusai-notify-task",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "tasks/notify"
+            }
+        },
+        {
+            "id": "nexusai-dora-widget",
+            "type": "ms.vss-dashboards-web.widget",
+            "targets": [
+                "ms.vss-dashboards-web.widget-catalog"
+            ],
+            "properties": {
+                "name": "DORA Metrics",
+                "description": "Display DORA metrics from NexusAI",
+                "catalogIconUrl": "images/widget-icon.png",
+                "uri": "widgets/dora.html",
+                "supportedSizes": [
+                    { "rowSpan": 2, "columnSpan": 2 },
+                    { "rowSpan": 2, "columnSpan": 3 }
+                ],
+                "supportedScopes": ["project_team"]
+            }
+        },
+        {
+            "id": "nexusai-health-widget",
+            "type": "ms.vss-dashboards-web.widget",
+            "targets": [
+                "ms.vss-dashboards-web.widget-catalog"
+            ],
+            "properties": {
+                "name": "Code Health",
+                "description": "Display code health metrics from NexusAI",
+                "catalogIconUrl": "images/widget-icon.png",
+                "uri": "widgets/health.html",
+                "supportedSizes": [
+                    { "rowSpan": 2, "columnSpan": 2 }
+                ],
+                "supportedScopes": ["project_team"]
+            }
+        }
+    ],
+    "files": [
+        {
+            "path": "tasks/analyze"
+        },
+        {
+            "path": "tasks/quality-gate"
+        },
+        {
+            "path": "tasks/pr-review"
+        },
+        {
+            "path": "tasks/notify"
+        },
+        {
+            "path": "widgets"
+        },
+        {
+            "path": "images",
+            "addressable": true
+        }
+    ]
+}

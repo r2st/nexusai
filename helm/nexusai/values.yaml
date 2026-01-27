@@ -1,0 +1,409 @@
+# =============================================================================
+# NexusAI Helm Chart - Default Values
+# =============================================================================
+
+# Global settings
+global:
+  imageRegistry: ghcr.io
+  imagePullSecrets: []
+  storageClass: ""
+
+# =============================================================================
+# Backend Configuration
+# =============================================================================
+backend:
+  enabled: true
+  replicaCount: 3
+
+  image:
+    repository: your-org/nexusai/backend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 8000
+
+  resources:
+    limits:
+      cpu: "2"
+      memory: 2Gi
+    requests:
+      cpu: "500m"
+      memory: 512Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+  env:
+    ENVIRONMENT: "production"
+    DEBUG: "false"
+    WORKERS: "4"
+    LOG_LEVEL: "INFO"
+
+  # Sensitive values - override in secrets
+  secretEnv:
+    SECRET_KEY: ""
+    DATABASE_URL: ""
+    REDIS_URL: ""
+    OPENAI_API_KEY: ""
+    ANTHROPIC_API_KEY: ""
+
+  livenessProbe:
+    httpGet:
+      path: /api/v1/health/live
+      port: 8000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /api/v1/health/ready
+      port: 8000
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 2
+
+  nodeSelector: {}
+  tolerations: []
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - backend
+            topologyKey: kubernetes.io/hostname
+
+# =============================================================================
+# Frontend Configuration
+# =============================================================================
+frontend:
+  enabled: true
+  replicaCount: 2
+
+  image:
+    repository: your-org/nexusai/frontend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 3000
+
+  resources:
+    limits:
+      cpu: "1"
+      memory: 512Mi
+    requests:
+      cpu: "100m"
+      memory: 128Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+
+  env:
+    NEXT_PUBLIC_API_URL: "/api/v1"
+
+  livenessProbe:
+    httpGet:
+      path: /
+      port: 3000
+    initialDelaySeconds: 20
+    periodSeconds: 10
+
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 3000
+    initialDelaySeconds: 10
+    periodSeconds: 5
+
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+  nodeSelector: {}
+  tolerations: []
+
+# =============================================================================
+# Worker Configuration (Background Tasks)
+# =============================================================================
+worker:
+  enabled: true
+  replicaCount: 2
+
+  image:
+    repository: your-org/nexusai/backend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+  command: ["python", "-m", "arq", "app.core.tasks.WorkerSettings"]
+
+  resources:
+    limits:
+      cpu: "2"
+      memory: 2Gi
+    requests:
+      cpu: "250m"
+      memory: 512Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 15
+    targetCPUUtilizationPercentage: 70
+
+  terminationGracePeriodSeconds: 300
+
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+  nodeSelector: {}
+  tolerations: []
+
+# =============================================================================
+# Ingress Configuration
+# =============================================================================
+ingress:
+  enabled: true
+  className: "nginx"  # or "traefik"
+
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+  hosts:
+    - host: nexusai.example.com
+      paths:
+        - path: /api
+          pathType: Prefix
+          service: backend
+          port: 8000
+        - path: /
+          pathType: Prefix
+          service: frontend
+          port: 3000
+
+  tls:
+    - secretName: nexusai-tls
+      hosts:
+        - nexusai.example.com
+
+# =============================================================================
+# Service Account
+# =============================================================================
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# =============================================================================
+# PostgreSQL (Bitnami)
+# =============================================================================
+postgresql:
+  enabled: true  # Set to false if using external database
+
+  auth:
+    postgresPassword: ""  # Set in secrets
+    username: nexusai
+    password: ""  # Set in secrets
+    database: nexusai
+
+  primary:
+    persistence:
+      enabled: true
+      size: 50Gi
+
+    resources:
+      limits:
+        cpu: "2"
+        memory: 4Gi
+      requests:
+        cpu: "500m"
+        memory: 1Gi
+
+    # Enable pgvector extension
+    initdb:
+      scripts:
+        init-extensions.sql: |
+          CREATE EXTENSION IF NOT EXISTS vector;
+          CREATE EXTENSION IF NOT EXISTS pg_trgm;
+          CREATE EXTENSION IF NOT EXISTS btree_gin;
+          CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+  readReplicas:
+    replicaCount: 1
+    persistence:
+      enabled: true
+      size: 50Gi
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+# =============================================================================
+# Redis (Bitnami)
+# =============================================================================
+redis:
+  enabled: true  # Set to false if using external Redis
+
+  auth:
+    enabled: true
+    password: ""  # Set in secrets
+
+  master:
+    persistence:
+      enabled: true
+      size: 10Gi
+
+    resources:
+      limits:
+        cpu: "1"
+        memory: 2Gi
+      requests:
+        cpu: "100m"
+        memory: 256Mi
+
+  replica:
+    replicaCount: 2
+    persistence:
+      enabled: true
+      size: 10Gi
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+# =============================================================================
+# Meilisearch
+# =============================================================================
+meilisearch:
+  enabled: true
+
+  environment:
+    MEILI_ENV: production
+
+  auth:
+    existingMasterKeySecret: ""
+
+  persistence:
+    enabled: true
+    size: 20Gi
+
+  resources:
+    limits:
+      cpu: "1"
+      memory: 2Gi
+    requests:
+      cpu: "100m"
+      memory: 256Mi
+
+# =============================================================================
+# External Database Configuration (when postgresql.enabled=false)
+# =============================================================================
+externalDatabase:
+  host: ""
+  port: 5432
+  database: nexusai
+  username: nexusai
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "password"
+
+# =============================================================================
+# External Redis Configuration (when redis.enabled=false)
+# =============================================================================
+externalRedis:
+  host: ""
+  port: 6379
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: "password"
+
+# =============================================================================
+# Application Configuration (ConfigMap)
+# =============================================================================
+config:
+  appName: "NexusAI"
+  environment: "production"
+  debug: "false"
+  logLevel: "info"
+  enableMetrics: "true"
+  enableTracing: "false"
+  openaiModel: "gpt-4"
+  anthropicModel: "claude-3-sonnet"
+  cacheTtl: "3600"
+  rateLimitRequests: "100"
+  rateLimitWindow: "60"
+  corsOrigins: "*"
+  tenantIsolation: "true"
+  extra: {}
+
+# =============================================================================
+# Secrets Configuration
+# =============================================================================
+secrets:
+  secretKey: ""
+  openaiApiKey: ""
+  anthropicApiKey: ""
+  databasePassword: ""
+  redisPassword: ""
+  meilisearchApiKey: ""
+  jwtSecret: ""
+  extra: {}
+
+# =============================================================================
+# Monitoring
+# =============================================================================
+serviceMonitor:
+  enabled: true
+  interval: "30s"
+  scrapeTimeout: "10s"
+  labels: {}
+
+# =============================================================================
+# Network Policies
+# =============================================================================
+networkPolicy:
+  enabled: true
+  allowExternal: true
+
+# =============================================================================
+# Pod Security
+# =============================================================================
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
