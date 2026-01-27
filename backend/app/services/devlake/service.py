@@ -408,6 +408,113 @@ class DevLakeService:
 
         return None
 
+    async def _query_weekly_pr_metrics(
+        self,
+        project_name: str,
+        days: int,
+    ) -> list[dict[str, Any]] | None:
+        """Query weekly PR metrics from DevLake MySQL database for chart data.
+
+        Returns a list of weekly data points with deployment frequency and lead time.
+
+        Args:
+            project_name: Name of the project
+            days: Number of days to look back
+
+        Returns:
+            List of dicts with date, deploymentFrequency, leadTimeForChanges, or None
+        """
+        import asyncio
+        import os
+
+        try:
+            # Find GitHub repo ID from project scope
+            github_id = None
+            try:
+                project = await self.get_project(project_name)
+                blueprint = project.get("blueprint", {})
+                connections = blueprint.get("connections", [])
+                for conn in connections:
+                    if conn.get("pluginName") == "github":
+                        scopes = conn.get("scopes", [])
+                        if scopes:
+                            scope_id = scopes[0].get("scopeId")
+                            if scope_id:
+                                github_id = scope_id
+                                break
+            except Exception as e:
+                logger.debug(f"Could not get project scopes for chart data: {e}")
+
+            if not github_id:
+                return None
+
+            mysql_container = os.getenv("DEVLAKE_MYSQL_CONTAINER", "nexusai-devlake-mysql")
+
+            # Query weekly aggregated metrics
+            query = f"""
+            SELECT
+                DATE_FORMAT(week_start, '%Y-%m-%d') as week_date,
+                deploys_count,
+                ROUND(deploys_count / 7, 4) as deploys_per_day,
+                ROUND(avg_lead_time, 1) as avg_lead_time_hours
+            FROM (
+                SELECT
+                    DATE(DATE_SUB(merged_date, INTERVAL WEEKDAY(merged_date) DAY)) as week_start,
+                    COUNT(*) as deploys_count,
+                    AVG(TIMESTAMPDIFF(HOUR, created_date, merged_date)) as avg_lead_time
+                FROM pull_requests
+                WHERE base_repo_id LIKE '%{github_id}%'
+                AND merged_date IS NOT NULL
+                AND merged_date > DATE_SUB(NOW(), INTERVAL {days} DAY)
+                AND TIMESTAMPDIFF(DAY, created_date, merged_date) < 30
+                GROUP BY week_start
+                ORDER BY week_start ASC
+            ) subq
+            """
+
+            cmd = [
+                "docker", "exec", mysql_container,
+                "sh", "-c",
+                f'mysql -uroot -p$MYSQL_ROOT_PASSWORD lake -N -e "{query}"'
+            ]
+
+            proc = await asyncio.create_subprocess_exec(
+                *cmd,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            stdout, stderr = await proc.communicate()
+
+            if proc.returncode != 0:
+                logger.warning(f"Weekly metrics query failed: {stderr.decode()}")
+                return None
+
+            output = stdout.decode().strip()
+            if not output:
+                return None
+
+            data_points = []
+            for line in output.split('\n'):
+                parts = line.strip().split('\t')
+                if len(parts) >= 4:
+                    week_date = parts[0] if parts[0] and parts[0] != 'NULL' else None
+                    deploys_per_day = float(parts[2]) if parts[2] and parts[2] != 'NULL' else 0.0
+                    avg_lead_time = float(parts[3]) if parts[3] and parts[3] != 'NULL' else 0.0
+
+                    if week_date:
+                        data_points.append({
+                            "date": week_date,
+                            "deploymentFrequency": deploys_per_day,
+                            "leadTimeForChanges": avg_lead_time,
+                        })
+
+            return data_points if data_points else None
+
+        except Exception as e:
+            logger.error(f"Error querying weekly PR metrics: {e}")
+
+        return None
+
     def _rate_deployment_frequency(self, freq: float) -> str:
         """Rate deployment frequency (deployments per day)."""
         if freq >= 1.0:

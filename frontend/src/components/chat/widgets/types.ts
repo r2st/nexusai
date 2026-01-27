@@ -1,14 +1,34 @@
 export type DORAMetricValue = number | string | null;
+export type DORATrend = 'up' | 'down' | 'flat';
+export type DORAPerformanceLevel = 'elite' | 'high' | 'medium' | 'low';
+
+export interface DORAMetricDetail {
+  value?: DORAMetricValue;
+  trend?: DORATrend;
+  trendValue?: number | string; // e.g. 12 for "12%"
+  level?: DORAPerformanceLevel;
+  sparkline?: number[]; // array of numbers for mini chart
+  description?: string;
+}
+
+export interface DORAChartDataPoint {
+  date: string; // ISO date or label like "Jan 5"
+  deploymentFrequency?: number;
+  leadTimeForChanges?: number;
+  timeToRestoreService?: number;
+  changeFailureRate?: number;
+}
 
 export interface DORAWidgetPayload {
   type: 'dora';
   title?: string;
   timeframe?: string;
+  overallLevel?: DORAPerformanceLevel;
   metrics: {
-    deploymentFrequency?: DORAMetricValue;
-    leadTimeForChanges?: DORAMetricValue;
-    meanTimeToRecovery?: DORAMetricValue;
-    changeFailureRate?: DORAMetricValue;
+    deploymentFrequency?: DORAMetricValue | DORAMetricDetail;
+    leadTimeForChanges?: DORAMetricValue | DORAMetricDetail;
+    meanTimeToRecovery?: DORAMetricValue | DORAMetricDetail;
+    changeFailureRate?: DORAMetricValue | DORAMetricDetail;
   };
   units?: {
     deploymentFrequency?: string;
@@ -16,6 +36,7 @@ export interface DORAWidgetPayload {
     meanTimeToRecovery?: string;
     changeFailureRate?: string;
   };
+  chartData?: DORAChartDataPoint[]; // time-series data for full charts
 }
 
 export interface SPACEWidgetPayload {

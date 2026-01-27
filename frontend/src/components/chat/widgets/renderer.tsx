@@ -3,15 +3,10 @@
 import { cn } from '@/lib/utils';
 import type { WidgetPayload } from './types';
 import { PipelineProgressWidget } from './pipeline-progress';
+import { DORAMetricsWidget } from './dora-metrics';
 
 interface WidgetRendererProps {
   widget: WidgetPayload;
-}
-
-function formatMetric(value: number | string | null | undefined, fallback = 'n/a'): string {
-  if (value === null || value === undefined || value === '') return fallback;
-  if (typeof value === 'number') return Number.isFinite(value) ? value.toString() : fallback;
-  return value;
 }
 
 export function WidgetRenderer({ widget }: WidgetRendererProps) {
@@ -20,48 +15,7 @@ export function WidgetRenderer({ widget }: WidgetRendererProps) {
 
   switch (widget.type) {
     case 'dora':
-      return (
-        <section className="rounded-xl border border-border bg-background p-4 shadow-sm">
-          <header className="mb-3 flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-foreground">
-              {widget.title || 'DORA Metrics'}
-            </h4>
-            {widget.timeframe && (
-              <span className="text-xs text-muted-foreground">{widget.timeframe}</span>
-            )}
-          </header>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-lg border border-border/70 bg-muted/30 p-3">
-              <p className="text-xs text-muted-foreground">Deployment Frequency</p>
-              <p className="text-lg font-semibold">
-                {formatMetric(widget.metrics.deploymentFrequency)}
-                {widget.units?.deploymentFrequency ? ` ${widget.units.deploymentFrequency}` : ''}
-              </p>
-            </div>
-            <div className="rounded-lg border border-border/70 bg-muted/30 p-3">
-              <p className="text-xs text-muted-foreground">Lead Time for Changes</p>
-              <p className="text-lg font-semibold">
-                {formatMetric(widget.metrics.leadTimeForChanges)}
-                {widget.units?.leadTimeForChanges ? ` ${widget.units.leadTimeForChanges}` : ''}
-              </p>
-            </div>
-            <div className="rounded-lg border border-border/70 bg-muted/30 p-3">
-              <p className="text-xs text-muted-foreground">Mean Time to Recovery</p>
-              <p className="text-lg font-semibold">
-                {formatMetric(widget.metrics.meanTimeToRecovery)}
-                {widget.units?.meanTimeToRecovery ? ` ${widget.units.meanTimeToRecovery}` : ''}
-              </p>
-            </div>
-            <div className="rounded-lg border border-border/70 bg-muted/30 p-3">
-              <p className="text-xs text-muted-foreground">Change Failure Rate</p>
-              <p className="text-lg font-semibold">
-                {formatMetric(widget.metrics.changeFailureRate)}
-                {widget.units?.changeFailureRate ? ` ${widget.units.changeFailureRate}` : ''}
-              </p>
-            </div>
-          </div>
-        </section>
-      );
+      return <DORAMetricsWidget widget={widget} />;
     case 'space': {
       const dimensions = [
         { key: 'satisfaction', label: 'Satisfaction', value: widget.dimensions.satisfaction },
