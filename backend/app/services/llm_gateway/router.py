@@ -2,19 +2,27 @@
 
 import asyncio
 import random
-from collections import defaultdict
+from collections import defaultdict, deque
 from datetime import datetime, timedelta
 from typing import Any
 
 import structlog
 
 from app.services.llm_gateway.config import (
+    AllowlistConfig,
     GatewayConfig,
     ModelConfig,
     ProviderPriority,
     RouteStrategy,
 )
 from app.services.llm_gateway.models import ProviderHealth, ProviderStatus
+from app.services.llm_gateway.circuit_breaker import (
+    CircuitBreaker,
+    CircuitBreakerConfig,
+    CircuitBreakerRegistry,
+    CircuitState,
+)
+from app.services.llm_gateway.exceptions import LLMProviderError, classify_error
 
 logger = structlog.get_logger()
 
@@ -23,9 +31,9 @@ class ProviderMetrics:
     """Track provider performance metrics."""
 
     def __init__(self):
-        self.requests: list[datetime] = []
-        self.errors: list[datetime] = []
-        self.latencies: list[float] = []
+        self.requests: deque[datetime] = deque(maxlen=500)
+        self.errors: deque[datetime] = deque(maxlen=500)
+        self.latencies: deque[float] = deque(maxlen=100)
         self.last_error: str | None = None
         self.last_check: datetime | None = None
         self.health: ProviderHealth = ProviderHealth.UNKNOWN
@@ -40,19 +48,13 @@ class ProviderMetrics:
             self.errors.append(now)
             self.last_error = error
 
-        # Keep only last 5 minutes of data
-        cutoff = now - timedelta(minutes=5)
-        self.requests = [r for r in self.requests if r > cutoff]
-        self.errors = [e for e in self.errors if e > cutoff]
-        self.latencies = self.latencies[-100:]  # Keep last 100
-
     def get_stats(self) -> dict[str, Any]:
         """Get current statistics."""
         now = datetime.utcnow()
         minute_ago = now - timedelta(minutes=1)
 
-        requests_last_minute = len([r for r in self.requests if r > minute_ago])
-        errors_last_minute = len([e for e in self.errors if e > minute_ago])
+        requests_last_minute = sum(1 for r in self.requests if r > minute_ago)
+        errors_last_minute = sum(1 for e in self.errors if e > minute_ago)
         avg_latency = sum(self.latencies) / len(self.latencies) if self.latencies else 0
 
         return {
@@ -83,12 +85,16 @@ class ProviderMetrics:
 class ProviderRouter:
     """Routes requests to appropriate LLM providers."""
 
-    def __init__(self, config: GatewayConfig):
+    def __init__(self, config: GatewayConfig, redis_cache: Any = None):
         self.config = config
         self.metrics: dict[str, ProviderMetrics] = defaultdict(ProviderMetrics)
         self._round_robin_index = 0
         self._model_to_provider: dict[str, str] = {}
         self._provider_models: dict[str, list[str]] = {}
+        self._model_configs: dict[str, ModelConfig] = {}
+
+        # Circuit breaker registry
+        self._circuit_breakers = CircuitBreakerRegistry(redis=redis_cache)
 
         # Build model -> provider mapping
         self._build_model_mapping()
@@ -98,6 +104,7 @@ class ProviderRouter:
         # From model configs
         for model in self.config.models:
             self._model_to_provider[model.name] = model.provider
+            self._model_configs[model.name] = model
 
         # From provider configs
         for provider in self.config.providers:
@@ -112,10 +119,7 @@ class ProviderRouter:
 
     def get_model_config(self, model: str) -> ModelConfig | None:
         """Get configuration for a model."""
-        for m in self.config.models:
-            if m.name == model:
-                return m
-        return None
+        return self._model_configs.get(model)
 
     def get_available_providers(self) -> list[str]:
         """Get list of available (enabled) providers."""
@@ -130,15 +134,35 @@ class ProviderRouter:
         """
         Select a provider and model for a request.
 
+        Enforces allowlist / blocklist constraints defined in ``GatewayConfig.allowlist``.
+
         Returns:
             Tuple of (provider_name, model_name)
+
+        Raises:
+            ValueError: If no providers are available or the requested
+                model / provider is blocked by the allowlist.
         """
         exclude = set(exclude_providers or [])
+        allowlist = self.config.allowlist
+
+        # ----- Allowlist pre-checks -----
+        if model and not allowlist.is_model_allowed(model):
+            raise ValueError(
+                f"Model '{model}' is not permitted by the allowlist configuration"
+            )
+
+        if preferred_provider and not allowlist.is_provider_allowed(preferred_provider):
+            logger.warning(
+                "provider_blocked_by_allowlist",
+                provider=preferred_provider,
+            )
+            preferred_provider = None  # Fall through to routing
 
         # If specific model requested, find its provider
         if model:
             provider = self.get_provider_for_model(model)
-            if provider and provider not in exclude:
+            if provider and provider not in exclude and allowlist.is_provider_allowed(provider):
                 return provider, model
 
         # If specific provider requested
@@ -148,15 +172,27 @@ class ProviderRouter:
                 model_to_use = model or (
                     provider_config.models[0] if provider_config.models else self.config.default_model
                 )
+                if not allowlist.is_model_allowed(model_to_use):
+                    # Pick first allowed model from this provider
+                    model_to_use = next(
+                        (m for m in provider_config.models if allowlist.is_model_allowed(m)),
+                        None,
+                    )
+                    if model_to_use is None:
+                        raise ValueError(
+                            f"No allowed models available from provider '{preferred_provider}'"
+                        )
                 return preferred_provider, model_to_use
 
-        # Use routing strategy
+        # Use routing strategy — filter by allowlist
         available = [
-            p for p in self.config.providers if p.enabled and p.name not in exclude
+            p
+            for p in self.config.providers
+            if p.enabled and p.name not in exclude and allowlist.is_provider_allowed(p.name)
         ]
 
         if not available:
-            raise ValueError("No available providers")
+            raise ValueError("No available providers (allowlist may be too restrictive)")
 
         if self.config.route_strategy == RouteStrategy.PRIORITY:
             provider = self._select_by_priority(available)
@@ -169,10 +205,19 @@ class ProviderRouter:
         else:
             provider = self._select_by_priority(available)
 
-        # Determine model
+        # Determine model — respect allowlist
         model_to_use = model or (
             provider.models[0] if provider.models else self.config.default_model
         )
+        if not allowlist.is_model_allowed(model_to_use):
+            model_to_use = next(
+                (m for m in provider.models if allowlist.is_model_allowed(m)),
+                None,
+            )
+            if model_to_use is None:
+                raise ValueError(
+                    f"No allowed models available from provider '{provider.name}'"
+                )
 
         return provider.name, model_to_use
 
@@ -314,3 +359,119 @@ class ProviderRouter:
             return self.select_provider(model=model, exclude_providers=list(exclude))
         except ValueError:
             return None
+
+    # =========================================================================
+    # CIRCUIT BREAKER INTEGRATION
+    # =========================================================================
+
+    async def get_circuit_breaker(self, provider: str) -> CircuitBreaker:
+        """Get circuit breaker for a provider."""
+        return await self._circuit_breakers.get(provider)
+
+    async def check_circuit(self, provider: str) -> tuple[bool, str]:
+        """
+        Check if a provider's circuit allows requests.
+
+        Returns:
+            Tuple of (allowed, reason)
+        """
+        cb = await self.get_circuit_breaker(provider)
+        return await cb.can_execute()
+
+    async def record_circuit_success(self, provider: str) -> None:
+        """Record a successful request in the circuit breaker."""
+        cb = await self.get_circuit_breaker(provider)
+        await cb.record_success()
+
+    async def record_circuit_failure(
+        self,
+        provider: str,
+        error: Exception,
+    ) -> None:
+        """Record a failed request in the circuit breaker."""
+        # Classify the error
+        if isinstance(error, LLMProviderError):
+            classified_error = error
+        else:
+            classified_error = classify_error(provider, error)
+
+        cb = await self.get_circuit_breaker(provider)
+        await cb.record_failure(classified_error)
+
+    async def get_circuit_status(self, provider: str) -> dict[str, Any]:
+        """Get circuit breaker status for a provider."""
+        cb = await self.get_circuit_breaker(provider)
+        return await cb.get_status()
+
+    async def get_all_circuit_statuses(self) -> dict[str, dict[str, Any]]:
+        """Get circuit breaker status for all providers."""
+        return await self._circuit_breakers.get_all_statuses()
+
+    async def reset_circuit(self, provider: str) -> None:
+        """Manually reset a provider's circuit breaker."""
+        cb = await self.get_circuit_breaker(provider)
+        await cb.reset()
+
+    async def select_provider_with_circuit(
+        self,
+        model: str | None = None,
+        preferred_provider: str | None = None,
+        exclude_providers: list[str] | None = None,
+    ) -> tuple[str, str]:
+        """
+        Select a provider, respecting circuit breaker states.
+
+        Like select_provider, but also checks circuit breakers.
+        """
+        exclude = set(exclude_providers or [])
+
+        # Add providers with open circuits to exclusion
+        for provider_config in self.config.providers:
+            if provider_config.enabled:
+                allowed, reason = await self.check_circuit(provider_config.name)
+                if not allowed:
+                    exclude.add(provider_config.name)
+                    logger.debug(
+                        "provider_excluded_circuit_open",
+                        provider=provider_config.name,
+                        reason=reason,
+                    )
+
+        return self.select_provider(
+            model=model,
+            preferred_provider=preferred_provider,
+            exclude_providers=list(exclude),
+        )
+
+    def should_failover_with_circuit(
+        self,
+        provider: str,
+        error: Exception,
+    ) -> bool:
+        """
+        Determine if we should failover, considering both error type and circuit state.
+
+        Uses the new exception classification for smarter decisions.
+        """
+        if not self.config.enable_failover:
+            return False
+
+        # Classify the error
+        classified = classify_error(provider, error)
+
+        # If not retryable, no point in failover
+        if not classified.retryable:
+            logger.debug(
+                "no_failover_non_retryable",
+                provider=provider,
+                error_type=type(classified).__name__,
+            )
+            return False
+
+        # Check provider health
+        metrics = self.metrics[provider]
+        if metrics.health == ProviderHealth.UNHEALTHY:
+            return True
+
+        # Retryable errors should trigger failover
+        return True

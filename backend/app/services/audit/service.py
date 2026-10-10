@@ -475,54 +475,48 @@ class AuditService:
 
         where_clause = and_(*conditions) if conditions else True
 
-        # Total invocations
-        total_query = select(func.count(AuditLog.id)).where(
-            and_(where_clause, AuditLog.event_type == AuditEventType.TOOL_INVOCATION.value)
-        )
-        total_result = await self.db.execute(total_query)
-        total_invocations = total_result.scalar() or 0
+        inv_val = AuditEventType.TOOL_INVOCATION.value
+        ok_val = AuditEventType.TOOL_SUCCESS.value
+        fail_val = AuditEventType.TOOL_FAILURE.value
+        rl_val = AuditEventType.RATE_LIMIT_EXCEEDED.value
 
-        # Success count
-        success_query = select(func.count(AuditLog.id)).where(
-            and_(where_clause, AuditLog.event_type == AuditEventType.TOOL_SUCCESS.value)
-        )
-        success_result = await self.db.execute(success_query)
-        success_count = success_result.scalar() or 0
+        stats_query = select(
+            func.count(AuditLog.id).filter(
+                AuditLog.event_type == inv_val
+            ).label("total_invocations"),
+            func.count(AuditLog.id).filter(
+                AuditLog.event_type == ok_val
+            ).label("success_count"),
+            func.count(AuditLog.id).filter(
+                AuditLog.event_type == fail_val
+            ).label("failure_count"),
+            func.count(AuditLog.id).filter(
+                AuditLog.event_type == rl_val
+            ).label("rate_limit_count"),
+            func.avg(AuditLog.duration_ms).filter(
+                and_(
+                    AuditLog.event_type == ok_val,
+                    AuditLog.duration_ms.isnot(None),
+                )
+            ).label("avg_duration"),
+        ).where(where_clause)
 
-        # Failure count
-        failure_query = select(func.count(AuditLog.id)).where(
-            and_(where_clause, AuditLog.event_type == AuditEventType.TOOL_FAILURE.value)
-        )
-        failure_result = await self.db.execute(failure_query)
-        failure_count = failure_result.scalar() or 0
+        result = await self.db.execute(stats_query)
+        row = result.one()
 
-        # Rate limit count
-        rate_limit_query = select(func.count(AuditLog.id)).where(
-            and_(
-                where_clause, AuditLog.event_type == AuditEventType.RATE_LIMIT_EXCEEDED.value
-            )
-        )
-        rate_limit_result = await self.db.execute(rate_limit_query)
-        rate_limit_count = rate_limit_result.scalar() or 0
+        total_invocations = row.total_invocations or 0
+        success_count = row.success_count or 0
+        failure_count = row.failure_count or 0
+        rate_limit_count = row.rate_limit_count or 0
+        avg_duration = row.avg_duration or 0
 
-        # Average duration
-        avg_duration_query = select(func.avg(AuditLog.duration_ms)).where(
-            and_(
-                where_clause,
-                AuditLog.event_type == AuditEventType.TOOL_SUCCESS.value,
-                AuditLog.duration_ms.isnot(None),
-            )
-        )
-        avg_duration_result = await self.db.execute(avg_duration_query)
-        avg_duration = avg_duration_result.scalar() or 0
-
-        # Top tools by usage
+        # Top tools (separate query since it needs GROUP BY)
         top_tools_query = (
             select(AuditLog.tool_name, func.count(AuditLog.id).label("count"))
             .where(
                 and_(
                     where_clause,
-                    AuditLog.event_type == AuditEventType.TOOL_INVOCATION.value,
+                    AuditLog.event_type == inv_val,
                     AuditLog.tool_name.isnot(None),
                 )
             )
