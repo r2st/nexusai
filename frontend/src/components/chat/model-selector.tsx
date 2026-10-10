@@ -58,17 +58,17 @@ const MODEL_CATALOG: Record<string, Omit<AIModel, 'id' | 'isDefault' | 'isAvaila
     costTier: 'medium',
     capabilities: ['Vision', 'Code', 'Analysis', 'Reasoning'],
   },
-  'gemini-2.0-flash-exp': {
+  'gemini-2.5-flash': {
     provider: 'google',
-    name: 'gemini-2.0-flash-exp',
-    displayName: 'Gemini 2.0 Flash',
-    description: 'Next-gen Gemini with improved capabilities',
+    name: 'gemini-2.5-flash',
+    displayName: 'Gemini 2.5 Flash',
+    description: 'Latest Gemini with thinking capabilities',
     contextWindow: 1000000,
     maxTokens: 8192,
     speed: 'fast',
     quality: 'best',
     costTier: 'low',
-    capabilities: ['Vision', 'Code', 'Analysis', 'Agents'],
+    capabilities: ['Vision', 'Code', 'Analysis', 'Agents', 'Thinking'],
     isNew: true,
   },
   'gemini-pro': {
@@ -473,7 +473,7 @@ export function ModelSelector({
   if (isLoading) {
     return (
       <div className={cn('flex items-center gap-2 rounded-lg border bg-background px-3 py-2', compact ? 'h-8' : 'h-10', className)}>
-        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-hidden="true" />
         <span className="text-sm text-muted-foreground">Loading models...</span>
       </div>
     );
@@ -482,7 +482,7 @@ export function ModelSelector({
   if (error && !modelsData) {
     return (
       <div className={cn('flex items-center gap-2 rounded-lg border border-destructive/50 bg-background px-3 py-2', compact ? 'h-8' : 'h-10', className)}>
-        <AlertCircle className="h-4 w-4 text-destructive" />
+        <AlertCircle className="h-4 w-4 text-destructive" aria-hidden="true" />
         <span className="text-sm text-destructive">{error}</span>
       </div>
     );
@@ -492,12 +492,15 @@ export function ModelSelector({
     <div className={cn('relative', className)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={`Model: ${currentModel?.displayName || 'Select Model'}`}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
         className={cn(
           'flex items-center gap-2 rounded-lg border bg-background px-3 py-2 text-sm font-medium transition-colors hover:bg-muted',
           compact ? 'h-8' : 'h-10'
         )}
       >
-        <ProviderIcon className="h-4 w-4 text-muted-foreground" />
+        <ProviderIcon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
         <span className="truncate">{currentModel?.displayName || 'Select Model'}</span>
         {currentModel?.isDefault && (
           <span className="text-[10px] bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 py-0.5 rounded">

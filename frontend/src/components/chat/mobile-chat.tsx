@@ -128,6 +128,12 @@ export function MobileChat({
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') setSidebarOpen(false);
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Close sidebar overlay"
         />
       )}
 
@@ -146,8 +152,9 @@ export function MobileChat({
             size="icon"
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden"
+            aria-label="Close sidebar"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </Button>
         </div>
 
@@ -160,13 +167,13 @@ export function MobileChat({
             }}
             className="w-full"
           >
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
             New Chat
           </Button>
         </div>
 
         {/* Conversation List */}
-        <nav className="flex-1 overflow-y-auto p-2">
+        <nav className="flex-1 overflow-y-auto p-2" aria-label="Conversation history">
           {conversations.length === 0 ? (
             <p className="text-center text-muted-foreground text-sm p-4">
               No conversations yet
@@ -190,13 +197,13 @@ export function MobileChat({
                     <span className="flex-1 truncate text-sm">{conv.title}</span>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0">
-                          <MoreVertical className="h-4 w-4" />
+                        <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0" aria-label="Conversation options">
+                          <MoreVertical className="h-4 w-4" aria-hidden="true" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>
-                          <Share2 className="h-4 w-4 mr-2" />
+                          <Share2 className="h-4 w-4 mr-2" aria-hidden="true" />
                           Share
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -204,7 +211,7 @@ export function MobileChat({
                           className="text-destructive"
                           onClick={() => onDeleteConversation(conv.id)}
                         >
-                          <Trash2 className="h-4 w-4 mr-2" />
+                          <Trash2 className="h-4 w-4 mr-2" aria-hidden="true" />
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -226,8 +233,9 @@ export function MobileChat({
             size="icon"
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden"
+            aria-label="Open sidebar"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-5 w-5" aria-hidden="true" />
           </Button>
 
           <div className="flex-1 min-w-0">
@@ -238,17 +246,17 @@ export function MobileChat({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreVertical className="h-5 w-5" />
+              <Button variant="ghost" size="icon" aria-label="Chat options">
+                <MoreVertical className="h-5 w-5" aria-hidden="true" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={onNewChat}>
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
                 New Chat
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Settings className="h-4 w-4 mr-2" />
+                <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
                 Settings
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -304,6 +312,13 @@ export function MobileChat({
           </div>
         )}
 
+        {/* Loading announcement for screen readers */}
+        {isLoading && (
+          <div className="sr-only" role="status" aria-live="assertive">
+            Loading response...
+          </div>
+        )}
+
         {/* Input Area */}
         <div className="p-3 border-t bg-background sticky bottom-0">
           <div className="flex items-end gap-2">
@@ -328,6 +343,7 @@ export function MobileChat({
                 placeholder="Message..."
                 disabled={isLoading}
                 rows={1}
+                aria-label="Message input"
                 className="flex-1 bg-transparent resize-none outline-none text-sm min-h-[24px] max-h-[120px]"
               />
 
@@ -336,8 +352,9 @@ export function MobileChat({
                 onClick={handleSend}
                 disabled={!inputValue.trim() || isLoading}
                 className="h-8 w-8 shrink-0"
+                aria-label="Send message"
               >
-                <Send className="h-4 w-4" />
+                <Send className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           </div>

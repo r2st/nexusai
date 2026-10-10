@@ -139,9 +139,9 @@ export function ShareConversation({
 
         <div className="space-y-4 py-4">
           {/* Visibility Options */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Visibility</label>
-            <div className="grid grid-cols-3 gap-2">
+          <fieldset className="space-y-2">
+            <legend className="text-sm font-medium">Visibility</legend>
+            <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Sharing visibility">
               <VisibilityOption
                 icon={<Globe className="h-4 w-4" />}
                 label="Public"
@@ -164,12 +164,13 @@ export function ShareConversation({
                 onClick={() => setVisibility('team')}
               />
             </div>
-          </div>
+          </fieldset>
 
           {/* Expiration */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Link Expires</label>
+            <label htmlFor="share-expiry" className="text-sm font-medium">Link Expires</label>
             <select
+              id="share-expiry"
               value={expiresIn}
               onChange={(e) => setExpiresIn(e.target.value as typeof expiresIn)}
               className="w-full rounded-md border bg-background px-3 py-2 text-sm"
@@ -196,11 +197,12 @@ export function ShareConversation({
                   size="icon"
                   variant="outline"
                   onClick={handleCopyLink}
+                  aria-label={copied ? 'Link copied' : 'Copy link'}
                 >
                   {copied ? (
-                    <Check className="h-4 w-4 text-green-500" />
+                    <Check className="h-4 w-4 text-green-500" aria-hidden="true" />
                   ) : (
-                    <Copy className="h-4 w-4" />
+                    <Copy className="h-4 w-4" aria-hidden="true" />
                   )}
                 </Button>
               </div>
@@ -234,8 +236,9 @@ export function ShareConversation({
                 size="sm"
                 onClick={() => handleExport('markdown')}
                 className="flex-col h-auto py-3"
+                aria-label="Export as Markdown"
               >
-                <FileText className="h-5 w-5 mb-1" />
+                <FileText className="h-5 w-5 mb-1" aria-hidden="true" />
                 <span className="text-xs">Markdown</span>
               </Button>
               <Button
@@ -243,8 +246,9 @@ export function ShareConversation({
                 size="sm"
                 onClick={() => handleExport('json')}
                 className="flex-col h-auto py-3"
+                aria-label="Export as JSON"
               >
-                <FileJson className="h-5 w-5 mb-1" />
+                <FileJson className="h-5 w-5 mb-1" aria-hidden="true" />
                 <span className="text-xs">JSON</span>
               </Button>
               <Button
@@ -252,8 +256,9 @@ export function ShareConversation({
                 size="sm"
                 onClick={() => handleExport('text')}
                 className="flex-col h-auto py-3"
+                aria-label="Export as plain text"
               >
-                <Download className="h-5 w-5 mb-1" />
+                <Download className="h-5 w-5 mb-1" aria-hidden="true" />
                 <span className="text-xs">Plain Text</span>
               </Button>
             </div>
@@ -289,6 +294,9 @@ function VisibilityOption({
   return (
     <button
       onClick={onClick}
+      role="radio"
+      aria-checked={selected}
+      aria-label={`${label}: ${description}`}
       className={cn(
         'flex flex-col items-center gap-1 p-3 rounded-lg border text-center transition-colors',
         selected

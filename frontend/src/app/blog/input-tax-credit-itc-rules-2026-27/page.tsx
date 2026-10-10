@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ShareButtons } from '@/components/blog/share-buttons';
 
 export const metadata: Metadata = {
   title: 'Input Tax Credit (ITC) Rules 2026-27 | Guide',
@@ -24,11 +25,17 @@ export default function ITCRulesGuide() {
         <span className="text-sm text-gray-500 ml-3">14 min read</span>
       </div>
 
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">
+      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         Input Tax Credit (ITC) Rules 2026-27: Complete Guide to Claiming ITC Under GST
       </h1>
 
-      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+      <ShareButtons
+        title="Input Tax Credit (ITC) Rules 2026-27: Complete Guide"
+        url="/blog/input-tax-credit-itc-rules-2026-27"
+        className="mb-8"
+      />
+
+      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
         Input Tax Credit (ITC) is one of the most important features of India&apos;s GST system. It allows businesses to reduce their tax liability by claiming credit for the tax paid on purchases and expenses used in the course of business. Understanding ITC rules correctly is essential to maximise your legitimate credit claims, avoid compliance issues, and reduce your overall tax burden. This comprehensive guide covers everything about ITC under GST for the financial year 2026-27.
       </p>
 
@@ -723,6 +730,13 @@ export default function ITCRulesGuide() {
           }),
         }}
       />
+      <div className="mt-8 pt-8 border-t dark:border-gray-800">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Found this guide helpful? Share it:</p>
+        <ShareButtons
+          title="Input Tax Credit (ITC) Rules 2026-27: Complete Guide"
+          url="/blog/input-tax-credit-itc-rules-2026-27"
+        />
+      </div>
     </article>
   );
 }

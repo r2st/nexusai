@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ShareButtons } from '@/components/blog/share-buttons';
 
 export const metadata: Metadata = {
   title: 'GST Return Filing Guide 2026-27 | Step-by-Step',
@@ -24,11 +25,17 @@ export default function GSTReturnFilingGuide() {
         <span className="text-sm text-gray-500 ml-3">15 min read</span>
       </div>
 
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">
+      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         GST Return Filing Guide 2026-27: Step-by-Step Process, Due Dates &amp; Penalties
       </h1>
 
-      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+      <ShareButtons
+        title="GST Return Filing Guide 2026-27: Step-by-Step Process"
+        url="/blog/gst-return-filing-guide-2026-27"
+        className="mb-8"
+      />
+
+      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
         Filing GST returns is a mandatory compliance requirement for every registered taxpayer in India. Whether you are a small business owner, a freelancer, or a large corporation, understanding how to file GST returns correctly and on time is essential to avoid penalties and maintain your GST registration. This comprehensive guide covers everything you need to know about GST return filing for the financial year 2026-27.
       </p>
 
@@ -784,6 +791,13 @@ export default function GSTReturnFilingGuide() {
           }),
         }}
       />
+      <div className="mt-8 pt-8 border-t dark:border-gray-800">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Found this guide helpful? Share it:</p>
+        <ShareButtons
+          title="GST Return Filing Guide 2026-27: Step-by-Step Process"
+          url="/blog/gst-return-filing-guide-2026-27"
+        />
+      </div>
     </article>
   );
 }

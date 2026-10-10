@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ShareButtons } from '@/components/blog/share-buttons';
 
 export const metadata: Metadata = {
   title: 'GST Composition Scheme 2026: Rules & Benefits',
@@ -24,11 +25,17 @@ export default function GSTCompositionSchemeGuide() {
         <span className="text-sm text-gray-500 ml-3">15 min read</span>
       </div>
 
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">
+      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         GST Composition Scheme 2026: Eligibility, Tax Rates &amp; Filing Guide
       </h1>
 
-      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+      <ShareButtons
+        title="GST Composition Scheme 2026: Eligibility, Tax Rates & Filing Guide"
+        url="/blog/gst-composition-scheme-guide"
+        className="mb-8"
+      />
+
+      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
         The GST Composition Scheme is a simplified tax scheme designed for small businesses in India. Instead of charging GST on each sale and filing monthly returns, composition dealers pay a flat percentage of tax on their total turnover and file only quarterly and annual returns. This guide explains who can opt for the scheme, the tax rates, how to file returns, and whether the composition scheme is right for your business in 2026-27.
       </p>
 
@@ -927,6 +934,13 @@ export default function GSTCompositionSchemeGuide() {
           }),
         }}
       />
+      <div className="mt-8 pt-8 border-t dark:border-gray-800">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Found this guide helpful? Share it:</p>
+        <ShareButtons
+          title="GST Composition Scheme 2026: Eligibility, Tax Rates & Filing Guide"
+          url="/blog/gst-composition-scheme-guide"
+        />
+      </div>
     </article>
   );
 }

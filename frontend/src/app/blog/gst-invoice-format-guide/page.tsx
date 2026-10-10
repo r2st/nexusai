@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ShareButtons } from '@/components/blog/share-buttons';
 
 export const metadata: Metadata = {
   title: 'GST Invoice Format 2026: Rules & Templates',
@@ -24,11 +25,17 @@ export default function GSTInvoiceFormatGuide() {
         <span className="text-sm text-gray-500 ml-3">16 min read</span>
       </div>
 
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">
+      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         GST Invoice Format 2026: Mandatory Fields, Templates &amp; E-Invoicing Rules
       </h1>
 
-      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+      <ShareButtons
+        title="GST Invoice Format 2026: Rules, Mandatory Fields & Templates"
+        url="/blog/gst-invoice-format-guide"
+        className="mb-8"
+      />
+
+      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
         A GST invoice is the most important document in the Goods and Services Tax framework. Every registered business must issue a properly formatted tax invoice for every taxable supply of goods or services. Getting your invoice format wrong can lead to ITC denial for your buyers, penalties from the tax department, and compliance headaches. This guide covers every aspect of GST invoice format, mandatory fields, templates, and the latest e-invoicing rules for 2026-27.
       </p>
 
@@ -834,6 +841,13 @@ export default function GSTInvoiceFormatGuide() {
           }),
         }}
       />
+      <div className="mt-8 pt-8 border-t dark:border-gray-800">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Found this guide helpful? Share it:</p>
+        <ShareButtons
+          title="GST Invoice Format 2026: Rules, Mandatory Fields & Templates"
+          url="/blog/gst-invoice-format-guide"
+        />
+      </div>
     </article>
   );
 }

@@ -67,29 +67,31 @@ const blogPosts = [
 export default function BlogIndex() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">GST Blog</h1>
-      <p className="text-lg text-gray-600 mb-12">Expert guides, latest updates, and practical tips for GST compliance in India.</p>
+      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">GST Blog</h1>
+      <p className="text-lg text-gray-600 dark:text-gray-400 mb-12">Expert guides, latest updates, and practical tips for GST compliance in India.</p>
 
       <div className="space-y-8">
         {blogPosts.map((post) => (
-          <article key={post.slug} className="border rounded-xl p-6 hover:shadow-lg transition-shadow bg-white">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{post.category}</span>
-              <span className="flex items-center gap-1 text-xs text-gray-500">
-                <Calendar className="h-3 w-3" />
-                {new Date(post.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+          <article key={post.slug} className="border dark:border-gray-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow bg-white dark:bg-gray-900">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
+              <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-3 py-1 rounded-full">{post.category}</span>
+              <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                <Calendar className="h-3 w-3" aria-hidden="true" />
+                <time dateTime={post.date}>
+                  {new Date(post.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </time>
               </span>
-              <span className="flex items-center gap-1 text-xs text-gray-500">
-                <Clock className="h-3 w-3" />
+              <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                <Clock className="h-3 w-3" aria-hidden="true" />
                 {post.readTime}
               </span>
             </div>
             <Link href={`/blog/${post.slug}`}>
-              <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">{post.title}</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{post.title}</h2>
             </Link>
-            <p className="text-gray-600 mb-4">{post.description}</p>
-            <Link href={`/blog/${post.slug}`} className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700">
-              Read full guide <ArrowRight className="h-4 w-4" />
+            <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm sm:text-base">{post.description}</p>
+            <Link href={`/blog/${post.slug}`} className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">
+              Read full guide <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </article>
         ))}

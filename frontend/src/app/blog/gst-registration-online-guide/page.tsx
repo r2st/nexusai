@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ShareButtons } from '@/components/blog/share-buttons';
 
 export const metadata: Metadata = {
   title: 'GST Registration Online: Complete Guide 2026',
@@ -24,11 +25,17 @@ export default function GSTRegistrationGuide() {
         <span className="text-sm text-gray-500 ml-3">12 min read</span>
       </div>
 
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">
+      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         GST Registration Online: Complete Guide to Getting Your GST Number in 2026
       </h1>
 
-      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+      <ShareButtons
+        title="GST Registration Online: Complete Guide 2026"
+        url="/blog/gst-registration-online-guide"
+        className="mb-8"
+      />
+
+      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
         GST registration is the first step for any business to become a part of India&apos;s Goods and Services Tax system. Whether you are starting a new business, crossing the turnover threshold, or selling online, obtaining a GSTIN (GST Identification Number) is mandatory. This guide walks you through the complete GST registration process online — from eligibility and documents to step-by-step application on the GST portal.
       </p>
 
@@ -605,9 +612,17 @@ export default function GSTRegistrationGuide() {
         GST registration is a straightforward process that can be completed entirely online within a few hours, with approval typically within a week. The key to a smooth registration is having all your documents ready and ensuring consistency across PAN, Aadhaar, and business details. Once registered, make sure to comply with all filing requirements — use the <Link href="/blog/gst-return-filing-guide-2026-27" className="text-blue-600 underline">GST Return Filing Guide</Link> to understand your ongoing obligations.
       </p>
 
-      <p className="text-gray-700 leading-relaxed mb-4">
+      <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
         Remember, GST registration is free and the portal is designed for self-service. However, if you need assistance, consult a qualified Chartered Accountant or GST practitioner. And for all your GST calculations, HSN code lookups, and GSTIN verification, the <Link href="/" className="text-blue-600 hover:text-blue-700 underline">GSTIndia tools</Link> are always available to help — completely free.
       </p>
+
+      <div className="mt-8 pt-8 border-t dark:border-gray-800">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Found this guide helpful? Share it:</p>
+        <ShareButtons
+          title="GST Registration Online: Complete Guide 2026"
+          url="/blog/gst-registration-online-guide"
+        />
+      </div>
 
       {/* JSON-LD Structured Data */}
       <script

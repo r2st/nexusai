@@ -15,7 +15,7 @@ export default function NotFound() {
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center animate-pulse">
-              <Search className="h-10 w-10 text-primary" />
+              <Search className="h-10 w-10 text-primary" aria-hidden="true" />
             </div>
           </div>
         </div>
@@ -29,13 +29,13 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/">
             <Button>
-              <Home className="mr-2 h-4 w-4" />
+              <Home className="mr-2 h-4 w-4" aria-hidden="true" />
               Go Home
             </Button>
           </Link>
           <Link href="/chat">
             <Button variant="outline">
-              <MessageSquare className="mr-2 h-4 w-4" />
+              <MessageSquare className="mr-2 h-4 w-4" aria-hidden="true" />
               Start Chatting
             </Button>
           </Link>

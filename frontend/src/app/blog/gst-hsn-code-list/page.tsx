@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ShareButtons } from '@/components/blog/share-buttons';
 
 export const metadata: Metadata = {
   title: 'GST HSN Code List 2026: Find Your HSN/SAC Code',
@@ -24,11 +25,17 @@ export default function GSTHSNCodeListGuide() {
         <span className="text-sm text-gray-500 ml-3">18 min read</span>
       </div>
 
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">
+      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         GST HSN Code List 2026: Complete Guide to Finding HSN &amp; SAC Codes
       </h1>
 
-      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+      <ShareButtons
+        title="GST HSN Code List 2026: Complete Guide"
+        url="/blog/gst-hsn-code-list"
+        className="mb-8"
+      />
+
+      <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
         HSN codes are the backbone of product classification under GST. Every registered business in India must use the correct HSN (Harmonized System of Nomenclature) code on their invoices, GSTR-1 returns, and e-invoices. Using the wrong HSN code can lead to incorrect tax rates, ITC denial, and scrutiny notices from the tax department. This comprehensive guide covers everything about HSN codes — from the structure and classification to a complete chapter-wise list of HSN codes and SAC codes for services.
       </p>
 
@@ -959,6 +966,13 @@ export default function GSTHSNCodeListGuide() {
           }),
         }}
       />
+      <div className="mt-8 pt-8 border-t dark:border-gray-800">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Found this guide helpful? Share it:</p>
+        <ShareButtons
+          title="GST HSN Code List 2026: Complete Guide"
+          url="/blog/gst-hsn-code-list"
+        />
+      </div>
     </article>
   );
 }

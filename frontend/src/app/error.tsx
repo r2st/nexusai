@@ -21,7 +21,7 @@ export default function Error({ error, reset }: ErrorProps) {
       <div className="text-center max-w-md">
         {/* Error Illustration */}
         <div className="mx-auto w-20 h-20 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-6">
-          <AlertTriangle className="h-10 w-10 text-red-600 dark:text-red-400" />
+          <AlertTriangle className="h-10 w-10 text-red-600 dark:text-red-400" aria-hidden="true" />
         </div>
 
         <h1 className="text-3xl font-bold mb-2">Something went wrong</h1>
@@ -48,12 +48,12 @@ export default function Error({ error, reset }: ErrorProps) {
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={reset}>
-            <RefreshCw className="mr-2 h-4 w-4" />
+            <RefreshCw className="mr-2 h-4 w-4" aria-hidden="true" />
             Try Again
           </Button>
           <Link href="/">
             <Button variant="outline">
-              <Home className="mr-2 h-4 w-4" />
+              <Home className="mr-2 h-4 w-4" aria-hidden="true" />
               Go Home
             </Button>
           </Link>
@@ -68,7 +68,7 @@ export default function Error({ error, reset }: ErrorProps) {
             href="mailto:support@nexusai.com?subject=Bug%20Report"
             className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
           >
-            <Bug className="h-4 w-4" />
+            <Bug className="h-4 w-4" aria-hidden="true" />
             Report this issue
           </a>
         </div>

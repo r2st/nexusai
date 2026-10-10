@@ -359,12 +359,12 @@ export default function ChatPage() {
           </div>
 
           {/* Connection Status */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" role="status" aria-live="polite">
             <div
               className={`h-2 w-2 rounded-full ${
-                isConnected ? 'bg-green-500' : isConnecting ? 'bg-yellow-500' : 'bg-red-500'
+                isConnected ? 'bg-green-500' : isConnecting ? 'bg-yellow-500 animate-pulse' : 'bg-red-500'
               }`}
-              title={isConnected ? 'Connected' : isConnecting ? 'Connecting...' : 'Disconnected'}
+              aria-hidden="true"
             />
             <span className="text-xs text-muted-foreground">
               {isConnected ? 'Live' : isConnecting ? 'Connecting...' : 'Offline'}
