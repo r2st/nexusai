@@ -204,7 +204,11 @@ class SemanticCache:
         import numpy as np
         a = np.array(a)
         b = np.array(b)
-        return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+        norm_a = np.linalg.norm(a)
+        norm_b = np.linalg.norm(b)
+        if norm_a == 0 or norm_b == 0:
+            return 0.0
+        return float(np.dot(a, b) / (norm_a * norm_b))
     
     async def invalidate(self, key: str) -> None:
         """Invalidate a cache entry."""
