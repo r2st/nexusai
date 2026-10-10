@@ -93,19 +93,23 @@ class Settings(BaseSettings):
     # ==========================================================================
     # Database - ALL from .env, no defaults
     # ==========================================================================
-    DATABASE_HOST: str  # REQUIRED
-    DATABASE_PORT: int  # REQUIRED
-    DATABASE_USER: str  # REQUIRED
-    DATABASE_PASSWORD: str  # REQUIRED
-    DATABASE_NAME: str  # REQUIRED
-    DATABASE_URL: str | None = None  # Optional - built from components if not provided
+    DATABASE_HOST: str | None = None
+    DATABASE_PORT: int = 5432
+    DATABASE_USER: str | None = None
+    DATABASE_PASSWORD: str | None = None
+    DATABASE_NAME: str | None = None
+    DATABASE_URL: str | None = None
     DATABASE_POOL_SIZE: int = 20
     DATABASE_MAX_OVERFLOW: int = 10
 
     @model_validator(mode="after")
     def build_database_url(self) -> "Settings":
-        """Build DATABASE_URL from components if not provided."""
+        """Build DATABASE_URL from components, or use DATABASE_URL directly."""
         if not self.DATABASE_URL:
+            if not all([self.DATABASE_HOST, self.DATABASE_USER, self.DATABASE_PASSWORD, self.DATABASE_NAME]):
+                raise ValueError(
+                    "Either DATABASE_URL or DATABASE_HOST/USER/PASSWORD/NAME must be set"
+                )
             self.DATABASE_URL = (
                 f"postgresql+asyncpg://{self.DATABASE_USER}:{self.DATABASE_PASSWORD}"
                 f"@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
@@ -115,16 +119,18 @@ class Settings(BaseSettings):
     # ==========================================================================
     # Redis - ALL from .env, no defaults
     # ==========================================================================
-    REDIS_HOST: str  # REQUIRED
-    REDIS_PORT: int  # REQUIRED
-    REDIS_PASSWORD: str = ""  # Optional - empty string means no auth
+    REDIS_HOST: str | None = None
+    REDIS_PORT: int = 6379
+    REDIS_PASSWORD: str = ""
     REDIS_DB: int = 0
-    REDIS_URL: str | None = None  # Optional - built from components if not provided
+    REDIS_URL: str | None = None
 
     @model_validator(mode="after")
     def build_redis_url(self) -> "Settings":
-        """Build REDIS_URL from components if not provided."""
+        """Build REDIS_URL from components, or use REDIS_URL directly."""
         if not self.REDIS_URL:
+            if not self.REDIS_HOST:
+                raise ValueError("Either REDIS_URL or REDIS_HOST must be set")
             auth = f":{self.REDIS_PASSWORD}@" if self.REDIS_PASSWORD else ""
             self.REDIS_URL = f"redis://{auth}{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
         return self
@@ -153,7 +159,7 @@ class Settings(BaseSettings):
     ANTHROPIC_DEFAULT_MODEL: str = "claude-sonnet-4-20250514"
 
     GOOGLE_API_KEY: str | None = None
-    GOOGLE_DEFAULT_MODEL: str = "gemini-2.0-flash-exp"
+    GOOGLE_DEFAULT_MODEL: str = "gemini-2.5-flash"
 
     GROQ_API_KEY: str | None = None
     GROQ_DEFAULT_MODEL: str = "llama-3.3-70b-versatile"
@@ -387,7 +393,7 @@ class Settings(BaseSettings):
     # Agents Configuration
     AGENTS_ENABLED: bool = True
     AGENT_DEFAULT_LLM_PROVIDER: str = "google"
-    AGENT_DEFAULT_LLM_MODEL: str = "gemini-2.0-flash-exp"
+    AGENT_DEFAULT_LLM_MODEL: str = "gemini-2.5-flash"
     AGENT_MAX_EXECUTION_TIME: int = 300  # 5 minutes
     AGENT_MAX_STEPS: int = 20
     AGENT_MEMORY_ENABLED: bool = True
@@ -431,6 +437,15 @@ class Settings(BaseSettings):
     FEATURE_KNOWLEDGE_GRAPH: bool = True
     FEATURE_DEVOPS_AGENTS: bool = True
     FEATURE_OPENAPI_ACTIONS: bool = True
+
+    # Guardrails
+    GUARDRAILS_ENABLED: bool = True
+    NEMO_GUARDRAILS_ENABLED: bool = False
+    NEMO_GUARDRAILS_CONFIG_PATH: str | None = None
+    # JSON map keyed by tenant_id, e.g.
+    # {"tenant-a":{"enable_content_filter":true,"injection_block_threshold":0.9}}
+    GUARDRAILS_TENANT_POLICIES: str = "{}"
+    GUARDRAILS_STREAM_HOLDBACK_CHARS: int = 80
 
     @property
     def is_development(self) -> bool:
