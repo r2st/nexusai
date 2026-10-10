@@ -301,7 +301,7 @@ class EmbeddingsService:
     def _estimate_tokens(self, text: str) -> int:
         """Rough token estimation."""
         return len(text) // 4
-    
+
     def cosine_similarity(
         self,
         embedding1: List[float],
@@ -310,4 +310,34 @@ class EmbeddingsService:
         """Calculate cosine similarity between two embeddings."""
         a = np.array(embedding1)
         b = np.array(embedding2)
-        return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+        norm_a = np.linalg.norm(a)
+        norm_b = np.linalg.norm(b)
+        if norm_a == 0 or norm_b == 0:
+            return 0.0
+        return float(np.dot(a, b) / (norm_a * norm_b))
+
+
+_embeddings_service: Optional[EmbeddingsService] = None
+
+
+async def get_embeddings_service() -> Optional[EmbeddingsService]:
+    """Get or create the global EmbeddingsService instance.
+
+    Returns None if no OpenAI API key is configured.
+    """
+    global _embeddings_service
+
+    if _embeddings_service is not None:
+        return _embeddings_service
+
+    from app.core.config import settings
+
+    if not settings.OPENAI_API_KEY:
+        return None
+
+    provider = OpenAIEmbeddingProvider(
+        api_key=settings.OPENAI_API_KEY,
+        model=EmbeddingModel(settings.EMBEDDING_MODEL),
+    )
+    _embeddings_service = EmbeddingsService(primary_provider=provider)
+    return _embeddings_service

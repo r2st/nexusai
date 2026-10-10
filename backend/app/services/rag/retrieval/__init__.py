@@ -179,12 +179,15 @@ class Retriever:
                 # Calculate max similarity to selected chunks
                 if chunk.embedding:
                     chunk_emb = np.array(chunk.embedding)
-                    max_sim = max(
-                        np.dot(chunk_emb, np.array(s[0].embedding))
-                        / (np.linalg.norm(chunk_emb) * np.linalg.norm(s[0].embedding))
-                        for s in selected
-                        if s[0].embedding
-                    ) if selected else 0
+                    norm_chunk = np.linalg.norm(chunk_emb)
+                    sims = []
+                    for s in selected:
+                        if s[0].embedding:
+                            s_emb = np.array(s[0].embedding)
+                            norm_s = np.linalg.norm(s_emb)
+                            if norm_chunk > 0 and norm_s > 0:
+                                sims.append(np.dot(chunk_emb, s_emb) / (norm_chunk * norm_s))
+                    max_sim = max(sims) if sims else 0
                 else:
                     max_sim = 0
 
