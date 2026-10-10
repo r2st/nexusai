@@ -77,6 +77,15 @@ class ConversationResponse(BaseModel):
         from_attributes = True
 
 
+class ConversationListResponse(BaseModel):
+    """Paginated response for conversations."""
+
+    items: list[ConversationResponse]
+    total: int
+    limit: int
+    offset: int
+
+
 class MessageResponse(BaseModel):
     """Message response model."""
 
@@ -194,18 +203,19 @@ async def create_conversation(
     )
 
 
-@router.get("/conversations", response_model=list[ConversationResponse])
+@router.get("/conversations", response_model=ConversationListResponse)
 async def list_conversations(
     limit: int = 50,
     offset: int = 0,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-) -> list[ConversationResponse]:
+) -> ConversationListResponse:
     """List user's conversations."""
     chat_service = ChatService(db)
     conversations = await chat_service.list_conversations(user.id, limit, offset)
+    total = await chat_service.count_conversations(user.id)
 
-    return [
+    items = [
         ConversationResponse(
             id=c.id,
             title=c.title,
@@ -218,6 +228,13 @@ async def list_conversations(
         )
         for c in conversations
     ]
+
+    return ConversationListResponse(
+        items=items,
+        total=total,
+        limit=limit,
+        offset=offset,
+    )
 
 
 @router.get("/conversations/{conversation_id}", response_model=ConversationResponse)

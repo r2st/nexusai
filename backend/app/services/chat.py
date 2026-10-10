@@ -1340,6 +1340,14 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
         )
         return list(result.scalars().all())
 
+    async def count_conversations(self, user_id: str) -> int:
+        """Count total conversations for a user."""
+        from sqlalchemy import func
+        result = await self.db.execute(
+            select(func.count()).select_from(Conversation).where(Conversation.user_id == user_id)
+        )
+        return result.scalar() or 0
+
     async def add_message(
         self,
         conversation: Conversation,
