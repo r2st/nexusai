@@ -2,6 +2,7 @@
 
 import asyncio
 import time
+from collections import deque
 from collections.abc import AsyncGenerator
 from datetime import datetime
 from typing import Any
@@ -53,6 +54,20 @@ except ImportError:
     get_phoenix_client = None
     get_observability_config = None
 
+# Try to import LangFuse for tracing
+try:
+    from app.services.observability.langfuse_client import (
+        LangfuseClient,
+        TraceContext,
+        get_langfuse_client,
+    )
+    LANGFUSE_AVAILABLE = True
+except ImportError:
+    LANGFUSE_AVAILABLE = False
+    LangfuseClient = None
+    TraceContext = None
+    get_langfuse_client = None
+
 
 class LLMGateway:
     """
@@ -71,14 +86,16 @@ class LLMGateway:
         self.router = ProviderRouter(self.config)
         self.cost_tracker = CostTracker(self.config)
         self._providers: dict[str, BaseAIProvider] = {}
-        self._rate_limits: dict[str, list[datetime]] = {}
+        self._rate_limits: dict[str, deque[datetime]] = {}
         self._phoenix_client: PhoenixClient | None = None
+        self._langfuse_client: LangfuseClient | None = None
         self._observability_config = None
+        self._langfuse_initialized = False
 
         # Initialize providers
         self._init_providers()
 
-        # Initialize Phoenix for hallucination detection
+        # Initialize observability
         if PHOENIX_AVAILABLE:
             self._observability_config = get_observability_config()
 
@@ -218,18 +235,22 @@ class LLMGateway:
 
         now = datetime.utcnow()
         minute_ago = now.replace(second=0, microsecond=0)
-
-        # Get user's requests in the last minute
-        if user_id not in self._rate_limits:
-            self._rate_limits[user_id] = []
-
-        # Clean old entries
-        self._rate_limits[user_id] = [
-            t for t in self._rate_limits[user_id] if t > minute_ago
-        ]
-
-        requests_count = len(self._rate_limits[user_id])
         limit = self.config.user_rate_limit_per_minute
+
+        user_requests = self._rate_limits.get(user_id)
+        if not user_requests:
+            return RateLimitInfo(
+                user_id=user_id,
+                requests_remaining=limit,
+                requests_limit=limit,
+                is_limited=False,
+            )
+
+        # Deque is sorted chronologically; pop expired entries from left
+        while user_requests and user_requests[0] <= minute_ago:
+            user_requests.popleft()
+
+        requests_count = len(user_requests)
 
         return RateLimitInfo(
             user_id=user_id,
@@ -242,7 +263,7 @@ class LLMGateway:
         """Record a request for rate limiting."""
         if user_id:
             if user_id not in self._rate_limits:
-                self._rate_limits[user_id] = []
+                self._rate_limits[user_id] = deque(maxlen=500)
             self._rate_limits[user_id].append(datetime.utcnow())
 
     def _convert_messages(self, messages: list[Message]) -> list[ChatMessage]:
@@ -271,6 +292,22 @@ class LLMGateway:
                 return None
 
         return self._phoenix_client
+
+    async def _get_langfuse_client(self) -> LangfuseClient | None:
+        """Get or initialize LangFuse client for tracing."""
+        if not LANGFUSE_AVAILABLE:
+            return None
+
+        if self._langfuse_client is None and not self._langfuse_initialized:
+            try:
+                self._langfuse_client = await get_langfuse_client(self._observability_config)
+                self._langfuse_initialized = True
+            except Exception as e:
+                logger.warning("Failed to initialize LangFuse client", error=str(e))
+                self._langfuse_initialized = True  # Don't retry
+                return None
+
+        return self._langfuse_client
 
     async def _check_hallucination(
         self,
@@ -353,14 +390,35 @@ class LLMGateway:
         if not within_budget:
             raise Exception(f"Budget exceeded: {reason}")
 
-        # Route to provider
-        provider_name, model = self.router.select_provider(
+        # Initialize LangFuse trace
+        langfuse = await self._get_langfuse_client()
+        trace: TraceContext | None = None
+        if langfuse:
+            trace = langfuse.create_trace(
+                name="llm_completion",
+                user_id=request.user_id,
+                session_id=request.metadata.get("session_id") if request.metadata else None,
+                metadata={
+                    "request_id": str(request.request_id),
+                    "tenant_id": request.tenant_id,
+                    "requested_model": request.model,
+                    "requested_provider": request.provider,
+                },
+                tags=["llm_gateway", request.provider or "auto"] + (
+                    request.metadata.get("tags", []) if request.metadata else []
+                ),
+            )
+
+        # Route to provider (with circuit breaker awareness)
+        provider_name, model = await self.router.select_provider_with_circuit(
             model=request.model,
             preferred_provider=request.provider,
         )
 
         provider = self._providers.get(provider_name)
         if not provider:
+            if trace and langfuse:
+                langfuse.end_trace(trace, status="error", error=f"Provider {provider_name} not available")
             raise Exception(f"Provider {provider_name} not available")
 
         # Attempt request with failover
@@ -388,6 +446,8 @@ class LLMGateway:
                     latency_ms=latency_ms,
                     success=True,
                 )
+                # Record circuit breaker success
+                await self.router.record_circuit_success(provider_name)
                 self._record_rate_limit(request.user_id)
 
                 # Calculate and record cost
@@ -401,6 +461,30 @@ class LLMGateway:
                     prompt_tokens=usage.prompt_tokens,
                     completion_tokens=usage.completion_tokens,
                 )
+
+                # Log generation to LangFuse
+                if trace and langfuse:
+                    langfuse.log_generation(
+                        trace=trace,
+                        name="chat_completion",
+                        model=model,
+                        input_messages=[
+                            {"role": m.role.value, "content": m.content}
+                            for m in request.messages
+                        ],
+                        output=response.content,
+                        usage={
+                            "prompt_tokens": usage.prompt_tokens,
+                            "completion_tokens": usage.completion_tokens,
+                            "total_tokens": usage.total_tokens,
+                        },
+                        model_parameters={
+                            "temperature": request.temperature,
+                            "max_tokens": request.max_tokens,
+                            "top_p": request.top_p,
+                        },
+                        latency_ms=int(latency_ms),
+                    )
 
                 # Perform hallucination check if requested
                 hallucination_check = None
@@ -416,6 +500,32 @@ class LLMGateway:
                         query=query,
                         response=response.content,
                         context=request.rag_context,
+                    )
+
+                    # Log hallucination scores to LangFuse
+                    if trace and langfuse and hallucination_check.checked:
+                        langfuse.log_hallucination_score(
+                            trace=trace,
+                            hallucination_score=hallucination_check.hallucination_score or 0.0,
+                            grounding_score=hallucination_check.grounding_score,
+                            relevance_score=hallucination_check.relevance_score,
+                            factuality_score=hallucination_check.factuality_score,
+                            is_hallucination=hallucination_check.is_hallucination,
+                            issues=hallucination_check.issues,
+                            check_type="integrated",
+                        )
+
+                # End LangFuse trace with success
+                if trace and langfuse:
+                    langfuse.end_trace(
+                        trace,
+                        output={
+                            "content": response.content[:500],  # Truncate for logging
+                            "finish_reason": response.finish_reason,
+                            "provider": provider_name,
+                            "model": model,
+                        },
+                        status="success",
                     )
 
                 return LLMResponse(
@@ -441,13 +551,16 @@ class LLMGateway:
                 last_error = e
                 attempted_providers.append(provider_name)
 
-                # Record failure
+                # Record failure in metrics
                 self.router.record_request(
                     provider=provider_name,
                     latency_ms=(time.time() - start_time) * 1000,
                     success=False,
                     error=str(e),
                 )
+
+                # Record failure in circuit breaker
+                await self.router.record_circuit_failure(provider_name, e)
 
                 logger.warning(
                     "Provider request failed",
@@ -456,8 +569,8 @@ class LLMGateway:
                     attempt=len(attempted_providers),
                 )
 
-                # Check if we should failover
-                if self.router.should_failover(provider_name, e):
+                # Check if we should failover (using improved classification)
+                if self.router.should_failover_with_circuit(provider_name, e):
                     failover = self.router.get_failover_provider(
                         provider_name, model, attempted_providers
                     )
@@ -474,6 +587,14 @@ class LLMGateway:
 
                 # No more failover options
                 break
+
+        # End LangFuse trace with error
+        if trace and langfuse:
+            langfuse.end_trace(
+                trace,
+                status="error",
+                error=f"All providers failed: {str(last_error)}",
+            )
 
         raise Exception(f"All providers failed. Last error: {last_error}")
 
@@ -494,6 +615,22 @@ class LLMGateway:
         if rate_info.is_limited:
             raise Exception("Rate limit exceeded")
 
+        # Initialize LangFuse trace for streaming
+        langfuse = await self._get_langfuse_client()
+        trace: TraceContext | None = None
+        if langfuse:
+            trace = langfuse.create_trace(
+                name="llm_stream_completion",
+                user_id=request.user_id,
+                session_id=request.metadata.get("session_id") if request.metadata else None,
+                metadata={
+                    "request_id": str(request.request_id),
+                    "tenant_id": request.tenant_id,
+                    "stream": True,
+                },
+                tags=["llm_gateway", "streaming"],
+            )
+
         # Route to provider
         provider_name, model = self.router.select_provider(
             model=request.model,
@@ -502,6 +639,8 @@ class LLMGateway:
 
         provider = self._providers.get(provider_name)
         if not provider:
+            if trace and langfuse:
+                langfuse.end_trace(trace, status="error", error=f"Provider {provider_name} not available")
             raise Exception(f"Provider {provider_name} not available")
 
         # Stream the response
@@ -547,6 +686,38 @@ class LLMGateway:
             )
             self._record_rate_limit(request.user_id)
 
+            # Log generation to LangFuse
+            if trace and langfuse:
+                langfuse.log_generation(
+                    trace=trace,
+                    name="stream_completion",
+                    model=model,
+                    input_messages=[
+                        {"role": m.role.value, "content": m.content}
+                        for m in request.messages
+                    ],
+                    output=content_buffer[:1000],  # Truncate for logging
+                    usage={
+                        "prompt_tokens": int(estimated_prompt_tokens),
+                        "completion_tokens": int(estimated_completion_tokens),
+                        "total_tokens": int(estimated_prompt_tokens + estimated_completion_tokens),
+                    },
+                    model_parameters={
+                        "temperature": request.temperature,
+                        "max_tokens": request.max_tokens,
+                    },
+                    latency_ms=int(latency_ms),
+                )
+                langfuse.end_trace(
+                    trace,
+                    output={
+                        "content_length": len(content_buffer),
+                        "provider": provider_name,
+                        "model": model,
+                    },
+                    status="success",
+                )
+
             yield LLMStreamChunk(
                 request_id=request.request_id,
                 content="",
@@ -566,6 +737,9 @@ class LLMGateway:
                 success=False,
                 error=str(e),
             )
+            # End LangFuse trace with error
+            if trace and langfuse:
+                langfuse.end_trace(trace, status="error", error=str(e))
             raise
 
     async def get_status(self) -> GatewayStatus:

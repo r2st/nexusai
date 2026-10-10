@@ -1,10 +1,13 @@
 """Main guardrails service."""
 
+import re
 import time
+from collections import deque
 from typing import Any
 
 import structlog
 
+from app.core.config import settings
 from app.services.guardrails.models import (
     GuardrailConfig,
     GuardrailResult,
@@ -43,8 +46,7 @@ class GuardrailsService:
         self.pii_redactor = PIIRedactor(partial_redact=False)
         self.content_filter = ContentFilter()
 
-        # Event log (in production, this would go to a database)
-        self._events: list[SecurityEvent] = []
+        self._events: deque[SecurityEvent] = deque(maxlen=1000)
 
     async def check_input(
         self,
@@ -113,6 +115,51 @@ class GuardrailsService:
         result.check_time_ms = (time.time() - start_time) * 1000
         return result
 
+    async def check_stream_output(
+        self,
+        text: str,
+        user_id: str | None = None,
+        tenant_id: str | None = None,
+        context: dict[str, Any] | None = None,
+    ) -> GuardrailResult:
+        """
+        Lightweight stream-time output check.
+
+        This intentionally focuses on harmful content blocking only to avoid
+        rewriting already-streamed content during incremental token emission.
+        """
+        start_time = time.time()
+        result = GuardrailResult(original_content=text)
+
+        if not self.config.enable_content_filter:
+            result.check_time_ms = (time.time() - start_time) * 1000
+            return result
+
+        if self._is_allowlisted_context(text):
+            result.check_time_ms = (time.time() - start_time) * 1000
+            return result
+
+        issues = self.content_filter.check_output(text)
+        if self.content_filter.should_block_output(issues):
+            result.passed = False
+            result.blocked = True
+            result.threat_level = ThreatLevel.HIGH
+            result.message = "Response blocked due to potentially harmful content."
+
+            self._log_event(
+                SecurityEventType.HARMFUL_CONTENT,
+                ThreatLevel.HIGH,
+                "Blocked harmful content during streaming output",
+                user_id,
+                tenant_id,
+                {"issues": [(i[0], i[2]) for i in issues[:5]]},
+                blocked=True,
+            )
+            result.events.append(self._events[-1])
+
+        result.check_time_ms = (time.time() - start_time) * 1000
+        return result
+
     async def check_output(
         self,
         text: str,
@@ -130,8 +177,16 @@ class GuardrailsService:
         # 1. Check for harmful content in output
         if self.config.enable_content_filter:
             issues = self.content_filter.check_output(text)
+            # Privacy issues are handled by deterministic PII redaction below.
+            blocking_issues = [
+                issue for issue in issues if issue[0] != "output_privacy_violation"
+            ]
 
-            if self.content_filter.should_block_output(issues):
+            if self.content_filter.should_block_output(blocking_issues):
+                if self._is_allowlisted_context(text):
+                    result.check_time_ms = (time.time() - start_time) * 1000
+                    return result
+
                 result.passed = False
                 result.blocked = True
                 result.threat_level = ThreatLevel.HIGH
@@ -142,10 +197,10 @@ class GuardrailsService:
                 self._log_event(
                     SecurityEventType.HARMFUL_CONTENT,
                     ThreatLevel.HIGH,
-                    f"Blocked output with issues: {[i[0] for i in issues]}",
+                    f"Blocked output with issues: {[i[0] for i in blocking_issues]}",
                     user_id,
                     tenant_id,
-                    {"issues": [(i[0], i[2]) for i in issues]},
+                    {"issues": [(i[0], i[2]) for i in blocking_issues]},
                     blocked=True,
                 )
                 result.events.append(self._events[-1])
@@ -211,6 +266,18 @@ class GuardrailsService:
         if self.injection_detector.should_block(
             detections, self.config.injection_block_threshold
         ):
+            if self._is_allowlisted_context(text):
+                self._log_event(
+                    SecurityEventType.POLICY_VIOLATION,
+                    ThreatLevel.LOW,
+                    "Bypassed injection block due to allowlisted context",
+                    user_id,
+                    tenant_id,
+                    {"patterns": [d[0].name for d in detections]},
+                )
+                result.events.append(self._events[-1])
+                return result
+
             result.passed = False
             result.blocked = True
             result.message = (
@@ -259,6 +326,10 @@ class GuardrailsService:
         result = GuardrailResult(original_content=text)
 
         detections = self.content_filter.check_input(text)
+        if not self.config.enable_injection_detection:
+            detections = [
+                d for d in detections if d[0] != ContentCategory.PROMPT_INJECTION
+            ]
 
         if not detections:
             return result
@@ -268,6 +339,18 @@ class GuardrailsService:
         )
 
         if should_block and self.config.block_harmful_content:
+            if self._is_allowlisted_context(text):
+                self._log_event(
+                    SecurityEventType.POLICY_VIOLATION,
+                    ThreatLevel.LOW,
+                    "Bypassed harmful-content block due to allowlisted context",
+                    user_id,
+                    tenant_id,
+                    {"categories": [c.value for c in blocking_categories]},
+                )
+                result.events.append(self._events[-1])
+                return result
+
             result.passed = False
             result.blocked = True
             result.threat_level = ThreatLevel.CRITICAL
@@ -289,6 +372,35 @@ class GuardrailsService:
             result.events.append(self._events[-1])
 
         return result
+
+    def _is_allowlisted_context(self, text: str) -> bool:
+        """Return True when text appears to be a benign quoted/example context."""
+        if not self.config.allowlist_enabled:
+            return False
+        if not text:
+            return False
+
+        lower_text = text.lower()
+
+        if any(phrase in lower_text for phrase in self.config.allowlist_phrases):
+            return True
+
+        # Require at least one quote/backtick marker for context-keyword allowlist.
+        has_quote_marker = any(marker in text for marker in ('"', "'", "`"))
+        has_context_keyword = any(
+            keyword in lower_text for keyword in self.config.allowlist_context_keywords
+        )
+        if has_quote_marker and has_context_keyword:
+            return True
+
+        for pattern in self.config.allowlist_regex_patterns:
+            try:
+                if re.search(pattern, text, flags=re.IGNORECASE):
+                    return True
+            except re.error:
+                logger.warning("Invalid guardrails allowlist regex", pattern=pattern)
+
+        return False
 
     def _log_event(
         self,
@@ -332,7 +444,7 @@ class GuardrailsService:
         threat_level: ThreatLevel | None = None,
     ) -> list[SecurityEvent]:
         """Get recent security events."""
-        events = self._events
+        events: list[SecurityEvent] = list(self._events)
 
         if user_id:
             events = [e for e in events if e.user_id == user_id]
@@ -351,5 +463,10 @@ def get_guardrails_service() -> GuardrailsService:
     """Get the global guardrails service."""
     global _guardrails_service
     if _guardrails_service is None:
-        _guardrails_service = GuardrailsService()
+        _guardrails_service = GuardrailsService(
+            config=GuardrailConfig(
+                enable_nemo_guardrails=settings.NEMO_GUARDRAILS_ENABLED,
+                nemo_config_path=settings.NEMO_GUARDRAILS_CONFIG_PATH,
+            )
+        )
     return _guardrails_service

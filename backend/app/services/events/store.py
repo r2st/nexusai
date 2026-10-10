@@ -294,41 +294,12 @@ class EventStore:
         """
         stats = EventStats(tenant_id=tenant_id)
 
-        # Total count
-        result = await session.execute(
-            text("SELECT COUNT(*) FROM events_index WHERE tenant_id = :tenant_id"),
-            {"tenant_id": tenant_id},
-        )
-        stats.total_events = result.scalar() or 0
-
-        # Count by source
         result = await session.execute(
             text("""
-                SELECT source, COUNT(*) as count
-                FROM events_index
-                WHERE tenant_id = :tenant_id
-                GROUP BY source
-            """),
-            {"tenant_id": tenant_id},
-        )
-        stats.events_by_source = {row.source: row.count for row in result}
-
-        # Count by event type
-        result = await session.execute(
-            text("""
-                SELECT event_type, COUNT(*) as count
-                FROM events_index
-                WHERE tenant_id = :tenant_id
-                GROUP BY event_type
-            """),
-            {"tenant_id": tenant_id},
-        )
-        stats.events_by_type = {row.event_type: row.count for row in result}
-
-        # Time range
-        result = await session.execute(
-            text("""
-                SELECT MIN(received_at) as oldest, MAX(received_at) as newest
+                SELECT
+                    COUNT(*) as total,
+                    MIN(received_at) as oldest,
+                    MAX(received_at) as newest
                 FROM events_index
                 WHERE tenant_id = :tenant_id
             """),
@@ -336,8 +307,26 @@ class EventStore:
         )
         row = result.fetchone()
         if row:
+            stats.total_events = row.total or 0
             stats.oldest_event = row.oldest
             stats.newest_event = row.newest
+
+        result = await session.execute(
+            text("""
+                SELECT source, event_type, COUNT(*) as count
+                FROM events_index
+                WHERE tenant_id = :tenant_id
+                GROUP BY source, event_type
+            """),
+            {"tenant_id": tenant_id},
+        )
+        by_source: dict[str, int] = {}
+        by_type: dict[str, int] = {}
+        for row in result:
+            by_source[row.source] = by_source.get(row.source, 0) + row.count
+            by_type[row.event_type] = by_type.get(row.event_type, 0) + row.count
+        stats.events_by_source = by_source
+        stats.events_by_type = by_type
 
         return stats
 
