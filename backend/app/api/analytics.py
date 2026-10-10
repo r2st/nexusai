@@ -142,7 +142,7 @@ async def get_project(
         )
 
 
-@router.post("/projects")
+@router.post("/projects", status_code=status.HTTP_201_CREATED)
 async def create_project(
     request: CreateProjectRequest,
     _: User = Depends(get_current_user),
@@ -229,7 +229,7 @@ async def get_connection(
         )
 
 
-@router.post("/plugins/{plugin}/connections")
+@router.post("/plugins/{plugin}/connections", status_code=status.HTTP_201_CREATED)
 async def create_connection(
     plugin: str,
     request: CreateConnectionRequest,

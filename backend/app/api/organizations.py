@@ -10,7 +10,7 @@ Provides endpoints for:
 from datetime import datetime
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from pydantic import BaseModel, EmailStr, Field, field_validator
 import re as _re
 from sqlalchemy import select
@@ -114,7 +114,7 @@ class UpdateMemberRequest(BaseModel):
     department: str | None = None
 
 
-@router.post("", response_model=OrganizationResponse)
+@router.post("", response_model=OrganizationResponse, status_code=status.HTTP_201_CREATED)
 async def create_organization(
     request: OrganizationCreate,
     db: AsyncSession = Depends(get_db),
@@ -255,12 +255,12 @@ async def update_organization(
     return org
 
 
-@router.delete("/{org_id}")
+@router.delete("/{org_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_organization(
     org_id: str,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-) -> dict[str, str]:
+) -> Response:
     """Delete an organization."""
     # Check owner permission
     result = await db.execute(
@@ -287,7 +287,7 @@ async def delete_organization(
     org.is_active = False
     await db.commit()
 
-    return {"message": "Organization deleted"}
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 # Member management
@@ -336,7 +336,7 @@ async def list_members(
     return members
 
 
-@router.post("/{org_id}/members/invite")
+@router.post("/{org_id}/members/invite", status_code=status.HTTP_201_CREATED)
 async def invite_member(
     org_id: str,
     request: InviteMemberRequest,
@@ -463,13 +463,13 @@ async def update_member(
     )
 
 
-@router.delete("/{org_id}/members/{member_id}")
+@router.delete("/{org_id}/members/{member_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def remove_member(
     org_id: str,
     member_id: str,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-) -> dict[str, str]:
+) -> Response:
     """Remove a member from the organization."""
     # Check admin permission
     result = await db.execute(
@@ -505,7 +505,7 @@ async def remove_member(
 
     await db.commit()
 
-    return {"message": "Member removed"}
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 # Import timedelta for invite expiration

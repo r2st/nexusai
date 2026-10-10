@@ -322,7 +322,7 @@ async def scan_config(
 
 
 # Secret Rotation Endpoints
-@router.post("/secrets/register", response_model=SecretResponse)
+@router.post("/secrets/register", response_model=SecretResponse, status_code=status.HTTP_201_CREATED)
 async def register_secret(
     request: SecretRegisterRequest,
     current_user: Annotated[User, Depends(get_current_user)],

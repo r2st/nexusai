@@ -213,7 +213,7 @@ async def analyze_adoption(
     }
 
 
-@router.post("/dashboard/create")
+@router.post("/dashboard/create", status_code=status.HTTP_201_CREATED)
 async def create_dashboard(
     request: DashboardCreateRequest,
     current_user: User = Depends(get_current_user),
@@ -247,7 +247,7 @@ async def create_dashboard(
     }
 
 
-@router.post("/summary/create")
+@router.post("/summary/create", status_code=status.HTTP_201_CREATED)
 async def create_summary(
     request: SummaryCreateRequest,
     current_user: User = Depends(get_current_user),
@@ -300,7 +300,7 @@ async def create_summary(
     }
 
 
-@router.post("/workflows", response_model=WorkflowResponse)
+@router.post("/workflows", response_model=WorkflowResponse, status_code=status.HTTP_201_CREATED)
 async def create_workflow(
     request: WorkflowCreateRequest,
     background_tasks: BackgroundTasks,

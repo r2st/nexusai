@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field, field_validator
 import structlog
 
@@ -159,7 +159,7 @@ class CreateChangeRecordRequest(BaseModel):
 
 # --- GDPR Endpoints ---
 
-@router.post("/gdpr/dsr")
+@router.post("/gdpr/dsr", status_code=status.HTTP_201_CREATED)
 async def create_dsr(request: CreateDSRRequest):
     """Create a new Data Subject Request."""
     service = get_gdpr_service()
@@ -298,7 +298,7 @@ async def check_consent(user_id: str, consent_type: ConsentType):
     return {"has_consent": has_consent}
 
 
-@router.post("/gdpr/retention-policy")
+@router.post("/gdpr/retention-policy", status_code=status.HTTP_201_CREATED)
 async def create_retention_policy(request: CreateRetentionPolicyRequest):
     """Create a data retention policy."""
     service = get_gdpr_service()
@@ -331,7 +331,7 @@ async def execute_retention_policy(policy_id: str):
     return result
 
 
-@router.post("/gdpr/data-inventory")
+@router.post("/gdpr/data-inventory", status_code=status.HTTP_201_CREATED)
 async def add_data_inventory(request: AddDataInventoryRequest):
     """Add an item to the personal data inventory."""
     service = get_gdpr_service()
@@ -438,7 +438,7 @@ async def record_control_test(control_id: str, request: RecordControlTestRequest
     return {"control": control.model_dump()}
 
 
-@router.post("/soc2/evidence")
+@router.post("/soc2/evidence", status_code=status.HTTP_201_CREATED)
 async def add_evidence(request: AddEvidenceRequest):
     """Add evidence for a control."""
     service = get_soc2_service()
@@ -474,7 +474,7 @@ async def verify_evidence(evidence_id: str, verifier: str):
     return {"evidence": evidence.model_dump()}
 
 
-@router.post("/soc2/access-review")
+@router.post("/soc2/access-review", status_code=status.HTTP_201_CREATED)
 async def create_access_review(request: CreateAccessReviewRequest):
     """Create a new access review."""
     service = get_soc2_service()
@@ -523,7 +523,7 @@ async def list_access_reviews(status: str | None = None):
     return {"reviews": [r.model_dump() for r in reviews]}
 
 
-@router.post("/soc2/change")
+@router.post("/soc2/change", status_code=status.HTTP_201_CREATED)
 async def create_change_record(request: CreateChangeRecordRequest):
     """Create a change management record."""
     service = get_soc2_service()

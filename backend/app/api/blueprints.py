@@ -10,7 +10,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
@@ -57,6 +57,21 @@ class BlueprintResponse(BaseModel):
     updated_at: datetime
 
 
+class BlueprintDetailResponse(BlueprintResponse):
+    """Blueprint detail response with plan and settings."""
+
+    settings: dict[str, Any] | None = None
+    plan: list[list[dict[str, Any]]] | None = None
+    labels: list[str] | None = None
+
+
+class BlueprintStatusUpdate(BaseModel):
+    """Response after updating blueprint status."""
+
+    status: str
+    new_status: str
+
+
 class PipelineRunResponse(BaseModel):
     """Pipeline run response model."""
 
@@ -73,9 +88,16 @@ class PipelineRunResponse(BaseModel):
     created_at: datetime
 
 
+class PipelineCancelResponse(BaseModel):
+    """Response after cancelling a pipeline."""
+
+    status: str
+    pipeline_id: str
+
+
 # ============= Blueprint Endpoints =============
 
-@router.post("/blueprints", response_model=BlueprintResponse)
+@router.post("/blueprints", response_model=BlueprintResponse, status_code=status.HTTP_201_CREATED)
 async def create_blueprint(
     request: BlueprintCreateRequest,
     session: AsyncSession = Depends(get_db),
@@ -156,12 +178,12 @@ async def list_blueprints(
     ]
 
 
-@router.get("/blueprints/{blueprint_id}", response_model=dict[str, Any])
+@router.get("/blueprints/{blueprint_id}", response_model=BlueprintDetailResponse)
 async def get_blueprint(
     blueprint_id: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
-) -> dict[str, Any]:
+) -> BlueprintDetailResponse:
     """Get a blueprint by ID with full details including plan."""
     from sqlalchemy import select
 
@@ -176,29 +198,29 @@ async def get_blueprint(
     if not blueprint:
         raise HTTPException(status_code=404, detail="Blueprint not found")
 
-    return {
-        "id": str(blueprint.id),
-        "name": blueprint.name,
-        "description": blueprint.description,
-        "mode": blueprint.mode.value,
-        "status": blueprint.status.value,
-        "cron_config": blueprint.cron_config,
-        "is_manual": blueprint.is_manual,
-        "settings": blueprint.settings,
-        "plan": blueprint.plan,
-        "labels": blueprint.labels,
-        "created_at": blueprint.created_at.isoformat(),
-        "updated_at": blueprint.updated_at.isoformat(),
-    }
+    return BlueprintDetailResponse(
+        id=str(blueprint.id),
+        name=blueprint.name,
+        description=blueprint.description,
+        mode=blueprint.mode.value,
+        status=blueprint.status.value,
+        cron_config=blueprint.cron_config,
+        is_manual=blueprint.is_manual,
+        settings=blueprint.settings,
+        plan=blueprint.plan,
+        labels=blueprint.labels,
+        created_at=blueprint.created_at,
+        updated_at=blueprint.updated_at,
+    )
 
 
-@router.patch("/blueprints/{blueprint_id}/status")
+@router.patch("/blueprints/{blueprint_id}/status", response_model=BlueprintStatusUpdate)
 async def update_blueprint_status(
     blueprint_id: str,
-    status: str = Query(..., pattern="^(ACTIVE|PAUSED|DISABLED)$"),
+    new_status: str = Query(..., alias="status", pattern="^(ACTIVE|PAUSED|DISABLED)$"),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
-) -> dict[str, str]:
+) -> BlueprintStatusUpdate:
     """Update blueprint status (ACTIVE, PAUSED, DISABLED)."""
     from sqlalchemy import select
 
@@ -213,21 +235,21 @@ async def update_blueprint_status(
     if not blueprint:
         raise HTTPException(status_code=404, detail="Blueprint not found")
 
-    blueprint.status = BlueprintStatus(status)
+    blueprint.status = BlueprintStatus(new_status)
     blueprint.updated_at = datetime.utcnow()
     await session.commit()
 
-    return {"status": "updated", "new_status": status}
+    return BlueprintStatusUpdate(status="updated", new_status=new_status)
 
 
-@router.delete("/blueprints/{blueprint_id}")
+@router.delete("/blueprints/{blueprint_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_blueprint(
     blueprint_id: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
-) -> dict[str, str]:
+) -> Response:
     """Delete a blueprint."""
-    from sqlalchemy import select, delete
+    from sqlalchemy import select
 
     result = await session.execute(
         select(Blueprint).where(
@@ -243,7 +265,7 @@ async def delete_blueprint(
     await session.delete(blueprint)
     await session.commit()
 
-    return {"status": "deleted", "blueprint_id": blueprint_id}
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 # ============= Pipeline Run Endpoints =============
@@ -315,12 +337,12 @@ async def get_pipeline_status(
     )
 
 
-@router.post("/pipelines/{pipeline_id}/cancel")
+@router.post("/pipelines/{pipeline_id}/cancel", response_model=PipelineCancelResponse)
 async def cancel_pipeline(
     pipeline_id: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
-) -> dict[str, Any]:
+) -> PipelineCancelResponse:
     """Cancel a running pipeline."""
     success = await blueprint_service.cancel_pipeline(
         session=session,
@@ -333,7 +355,7 @@ async def cancel_pipeline(
             detail="Pipeline not found or not in running state"
         )
 
-    return {"status": "cancelled", "pipeline_id": pipeline_id}
+    return PipelineCancelResponse(status="cancelled", pipeline_id=pipeline_id)
 
 
 @router.get("/blueprints/{blueprint_id}/history", response_model=list[PipelineRunResponse])

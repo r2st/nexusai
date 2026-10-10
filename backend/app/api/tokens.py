@@ -9,7 +9,7 @@ Provides endpoints for:
 
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
@@ -51,7 +51,7 @@ async def list_available_scopes() -> list[dict[str, str]]:
     ]
 
 
-@router.post("/", response_model=PATCreateResponse)
+@router.post("/", response_model=PATCreateResponse, status_code=status.HTTP_201_CREATED)
 async def create_token(
     request: PATCreateRequest,
     user_id: str = Query(..., description="Current user ID"),  # In production, from auth
@@ -101,14 +101,14 @@ async def list_tokens(
     )
 
 
-@router.delete("/{token_id}")
+@router.delete("/{token_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def revoke_token(
     token_id: str,
     user_id: str = Query(..., description="Current user ID"),
     reason: str | None = Query(default=None),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
-) -> dict[str, Any]:
+) -> Response:
     """Revoke a Personal Access Token.
 
     Once revoked, the token cannot be used for authentication.
@@ -126,7 +126,7 @@ async def revoke_token(
             detail="Token not found or doesn't belong to user"
         )
 
-    return {"status": "revoked", "token_id": token_id}
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.post("/{token_id}/rotate", response_model=PATCreateResponse)

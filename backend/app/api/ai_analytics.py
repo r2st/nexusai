@@ -10,7 +10,7 @@ Provides endpoints for:
 from datetime import datetime, timedelta
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
@@ -145,7 +145,7 @@ async def get_plugin(plugin_id: str) -> dict[str, Any]:
     }
 
 
-@router.post("/connections")
+@router.post("/connections", status_code=status.HTTP_201_CREATED)
 async def create_connection(
     request: AIToolConnectionCreate,
     db: AsyncSession = Depends(get_db),

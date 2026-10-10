@@ -5,7 +5,7 @@ REST endpoints for Single Sign-On authentication.
 """
 
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field, field_validator
 from urllib.parse import urlparse as _urlparse
@@ -118,7 +118,7 @@ async def get_provider(provider_id: str):
     )
 
 
-@router.post("/providers", response_model=ProviderResponse)
+@router.post("/providers", response_model=ProviderResponse, status_code=status.HTTP_201_CREATED)
 async def create_provider(request: ProviderCreateRequest):
     """
     Create a new SSO provider.
@@ -137,13 +137,13 @@ async def create_provider(request: ProviderCreateRequest):
     )
 
 
-@router.delete("/providers/{provider_id}")
+@router.delete("/providers/{provider_id}", status_code=204)
 async def delete_provider(provider_id: str):
     """Delete an SSO provider."""
     # sso_service = get_sso_service()
     # await sso_service.delete_provider(provider_id)
-    
-    return {"status": "deleted", "provider_id": provider_id}
+
+    return Response(status_code=204)
 
 
 @router.get("/auth/{provider_id}")

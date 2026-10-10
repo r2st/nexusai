@@ -162,7 +162,7 @@ def _parse_tool_payloads(content: str) -> tuple[list[dict], list[dict]]:
     return tool_calls, tool_results
 
 
-@router.post("/conversations", response_model=ConversationResponse)
+@router.post("/conversations", response_model=ConversationResponse, status_code=status.HTTP_201_CREATED)
 async def create_conversation(
     request: CreateConversationRequest,
     user: User = Depends(get_current_user),

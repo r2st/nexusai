@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, HTTPException, Query, Response, WebSocket, WebSocketDisconnect, status
 import structlog
 
 logger = structlog.get_logger()
@@ -199,7 +199,7 @@ async def get_users_in_file(
 
 # --- Session Endpoints ---
 
-@router.post("/sessions")
+@router.post("/sessions", status_code=status.HTTP_201_CREATED)
 async def create_session(request: CreateSessionRequest):
     """Create a new collaborative session."""
     service = get_collaboration_service()
@@ -302,7 +302,7 @@ async def send_session_message(session_id: str, request: SessionMessageRequest):
 
 # --- Annotation Endpoints ---
 
-@router.post("/annotations")
+@router.post("/annotations", status_code=status.HTTP_201_CREATED)
 async def create_annotation(request: CreateAnnotationRequest):
     """Create a new annotation."""
     service = get_collaboration_service()
@@ -374,14 +374,13 @@ async def update_annotation(annotation_id: str, request: UpdateAnnotationRequest
     return {"annotation": annotation.model_dump()}
 
 
-@router.delete("/annotations/{annotation_id}")
-async def delete_annotation(annotation_id: str, user_id: str):
+@router.delete("/annotations/{annotation_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_annotation(annotation_id: str, user_id: str) -> None:
     """Delete an annotation."""
     annotations = get_annotation_service()
     success = await annotations.delete_annotation(annotation_id, user_id)
     if not success:
         raise HTTPException(status_code=404, detail="Annotation not found or not authorized")
-    return {"deleted": True}
 
 
 @router.post("/annotations/{annotation_id}/resolve")

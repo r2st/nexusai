@@ -273,12 +273,12 @@ async def get_messages(
     return session.messages
 
 
-@router.delete("/sessions/{session_id}")
+@router.delete("/sessions/{session_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_session(
     session_id: str,
     current_user: User = Depends(get_current_user),
     tenant_id: str = Depends(get_current_tenant),
-):
+) -> None:
     """Delete a session."""
     session = setup_chatbot_service.get_session(session_id)
 
@@ -295,8 +295,6 @@ async def delete_session(
         )
 
     setup_chatbot_service.delete_session(session_id)
-
-    return {"status": "deleted", "session_id": session_id}
 
 
 @router.post("/sessions/{session_id}/cancel")

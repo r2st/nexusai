@@ -51,7 +51,7 @@ class SearchResult(BaseModel):
     similarity: float
 
 
-@router.post("/upload", response_model=DocumentResponse)
+@router.post("/upload", response_model=DocumentResponse, status_code=status.HTTP_201_CREATED)
 async def upload_document(
     file: UploadFile = File(...),
     user: User = Depends(get_current_user),

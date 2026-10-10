@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field
 import structlog
 
@@ -174,7 +174,7 @@ async def update_region_status(region_id: str, status: RegionStatus):
 
 # --- Policy Endpoints ---
 
-@router.post("/policies")
+@router.post("/policies", status_code=status.HTTP_201_CREATED)
 async def create_policy(request: CreatePolicyRequest):
     """Create a data residency policy."""
     service = get_data_residency_service()
@@ -232,7 +232,7 @@ async def update_policy(policy_id: str, request: UpdatePolicyRequest):
     return {"policy": policy.model_dump()}
 
 
-@router.post("/policies/{policy_id}/requirements")
+@router.post("/policies/{policy_id}/requirements", status_code=status.HTTP_201_CREATED)
 async def add_requirement(policy_id: str, request: AddRequirementRequest):
     """Add a requirement to a policy."""
     service = get_data_residency_service()
@@ -257,7 +257,7 @@ async def add_requirement(policy_id: str, request: AddRequirementRequest):
     return {"requirement": requirement.model_dump()}
 
 
-@router.post("/policies/{policy_id}/requirements/gdpr")
+@router.post("/policies/{policy_id}/requirements/gdpr", status_code=status.HTTP_201_CREATED)
 async def add_gdpr_requirement(policy_id: str):
     """Add default GDPR requirement to a policy."""
     service = get_data_residency_service()
@@ -269,7 +269,7 @@ async def add_gdpr_requirement(policy_id: str):
 
 # --- Storage Location Endpoints ---
 
-@router.post("/storage")
+@router.post("/storage", status_code=status.HTTP_201_CREATED)
 async def register_storage_location(request: RegisterStorageRequest):
     """Register a storage location."""
     service = get_data_residency_service()
@@ -324,7 +324,7 @@ async def get_storage_location(location_id: str):
 
 # --- Transfer Endpoints ---
 
-@router.post("/transfers")
+@router.post("/transfers", status_code=status.HTTP_201_CREATED)
 async def create_transfer_request(request: CreateTransferRequest):
     """Create a data transfer request."""
     service = get_data_residency_service()

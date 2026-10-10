@@ -161,7 +161,7 @@ async def get_stats(
         await client.close()
 
 
-@router.post("/nodes")
+@router.post("/nodes", status_code=status.HTTP_201_CREATED)
 async def create_node(
     request: NodeCreate,
     current_user: User = Depends(get_current_user),
@@ -222,7 +222,7 @@ async def list_nodes(
         await client.close()
 
 
-@router.post("/relationships")
+@router.post("/relationships", status_code=status.HTTP_201_CREATED)
 async def create_relationship(
     request: RelationshipCreate,
     current_user: User = Depends(get_current_user),
@@ -498,12 +498,12 @@ async def sync_from_postgresql(
         await client.close()
 
 
-@router.delete("/nodes/{label}/{name}")
+@router.delete("/nodes/{label}/{name}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_node(
     label: str,
     name: str,
     current_user: User = Depends(get_current_user),
-):
+) -> None:
     """Delete a node from the knowledge graph."""
     validate_cypher_identifier(label, "label")
     client = get_neo4j_client()
@@ -514,10 +514,5 @@ async def delete_node(
             RETURN count(n) as deleted
         """
         result = await client.execute_write(query, {"name": name})
-        return {
-            "status": "deleted",
-            "label": label,
-            "name": name,
-        }
     finally:
         await client.close()

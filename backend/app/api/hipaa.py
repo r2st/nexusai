@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field, field_validator
 import structlog
 
@@ -175,7 +175,7 @@ async def get_phi_patterns(category: PHICategory | None = None):
 
 # --- BAA Management Endpoints ---
 
-@router.post("/baa")
+@router.post("/baa", status_code=status.HTTP_201_CREATED)
 async def create_baa(request: CreateBAARequest):
     """Create a new Business Associate Agreement."""
     manager = get_baa_manager()
@@ -325,7 +325,7 @@ async def list_encryption_audits(limit: int = Query(default=100, le=500)):
     return {"audits": [r.model_dump() for r in results]}
 
 
-@router.post("/encryption/register-storage")
+@router.post("/encryption/register-storage", status_code=status.HTTP_201_CREATED)
 async def register_storage_location(request: RegisterStorageRequest):
     """Register a storage location for encryption audit."""
     auditor = get_encryption_auditor()
@@ -338,7 +338,7 @@ async def register_storage_location(request: RegisterStorageRequest):
     return {"registered": True, "location_id": request.location_id}
 
 
-@router.post("/encryption/register-endpoint")
+@router.post("/encryption/register-endpoint", status_code=status.HTTP_201_CREATED)
 async def register_endpoint(request: RegisterEndpointRequest):
     """Register an endpoint for encryption audit."""
     auditor = get_encryption_auditor()
@@ -400,7 +400,7 @@ async def update_control_status(control_id: str, request: UpdateControlStatusReq
     return {"control": control.model_dump()}
 
 
-@router.post("/controls/{control_id}/evidence")
+@router.post("/controls/{control_id}/evidence", status_code=status.HTTP_201_CREATED)
 async def add_control_evidence(control_id: str, evidence_id: str, added_by: str):
     """Add evidence to a control."""
     service = get_hipaa_service()
@@ -412,7 +412,7 @@ async def add_control_evidence(control_id: str, evidence_id: str, added_by: str)
 
 # --- Minimum Necessary Policy Endpoints ---
 
-@router.post("/policies/minimum-necessary")
+@router.post("/policies/minimum-necessary", status_code=status.HTTP_201_CREATED)
 async def create_minimum_necessary_policy(request: CreatePolicyRequest):
     """Create a minimum necessary access policy."""
     service = get_hipaa_service()

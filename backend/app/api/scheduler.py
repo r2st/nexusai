@@ -213,7 +213,7 @@ async def list_tasks(
     ]
 
 
-@router.post("/tasks", response_model=TaskResponse)
+@router.post("/tasks", response_model=TaskResponse, status_code=status.HTTP_201_CREATED)
 async def create_task(
     request: CreateTaskRequest,
     user: User = Depends(get_current_user),
@@ -310,11 +310,11 @@ async def get_task(
     )
 
 
-@router.delete("/tasks/{task_id}")
+@router.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_task(
     task_id: str,
     user: User = Depends(get_current_user),
-) -> dict[str, str]:
+) -> None:
     """Delete a scheduled task."""
     if not user.is_admin:
         raise HTTPException(
@@ -329,8 +329,6 @@ async def delete_task(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Task not found",
         )
-
-    return {"status": "deleted", "task_id": task_id}
 
 
 @router.post("/tasks/{task_id}/trigger")

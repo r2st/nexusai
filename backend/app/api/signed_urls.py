@@ -187,7 +187,7 @@ async def _generate_upload_url(
     return await backend.get_url(key=key, expires_in=expires_in)
 
 
-@router.post("/upload", response_model=UploadSignedURLResponse)
+@router.post("/upload", response_model=UploadSignedURLResponse, status_code=status.HTTP_201_CREATED)
 async def generate_upload_url(
     filename: str = Query(..., description="Filename for upload"),
     category: str = Query(

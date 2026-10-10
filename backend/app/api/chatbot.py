@@ -3,7 +3,7 @@
 import json
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request, Header, Response
+from fastapi import APIRouter, HTTPException, Request, Header, Response, status
 from pydantic import BaseModel, Field
 import structlog
 
@@ -321,7 +321,7 @@ async def broadcast_notification(request: BroadcastNotificationRequest):
 
 # --- Subscription Endpoints ---
 
-@router.post("/subscriptions")
+@router.post("/subscriptions", status_code=status.HTTP_201_CREATED)
 async def subscribe_channel(request: SubscribeRequest):
     """Subscribe a channel to event types."""
     service = get_chatbot_service()
@@ -333,16 +333,15 @@ async def subscribe_channel(request: SubscribeRequest):
     return {"subscribed": success}
 
 
-@router.delete("/subscriptions")
-async def unsubscribe_channel(request: UnsubscribeRequest):
+@router.delete("/subscriptions", status_code=status.HTTP_204_NO_CONTENT)
+async def unsubscribe_channel(request: UnsubscribeRequest) -> None:
     """Unsubscribe a channel from event types."""
     service = get_chatbot_service()
-    success = await service.unsubscribe_channel(
+    await service.unsubscribe_channel(
         platform=request.platform,
         channel_id=request.channel_id,
         event_types=request.event_types,
     )
-    return {"unsubscribed": success}
 
 
 @router.get("/subscriptions/{platform}/{channel_id}")

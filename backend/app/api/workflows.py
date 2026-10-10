@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Response, status
 from pydantic import BaseModel, Field
 import structlog
 
@@ -53,7 +53,7 @@ class HandleTriggerRequest(BaseModel):
 
 # --- Workflow Endpoints ---
 
-@router.post("")
+@router.post("", status_code=status.HTTP_201_CREATED)
 async def create_workflow(request: CreateWorkflowRequest):
     """Create a new workflow."""
     engine = get_workflow_engine()
@@ -68,7 +68,7 @@ async def create_workflow(request: CreateWorkflowRequest):
     return {"workflow": workflow.model_dump()}
 
 
-@router.post("/from-template")
+@router.post("/from-template", status_code=status.HTTP_201_CREATED)
 async def create_from_template(request: CreateFromTemplateRequest):
     """Create a workflow from a template."""
     engine = get_workflow_engine()
@@ -141,14 +141,13 @@ async def pause_workflow(workflow_id: str):
     return {"workflow": workflow.model_dump()}
 
 
-@router.delete("/{workflow_id}")
-async def delete_workflow(workflow_id: str):
+@router.delete("/{workflow_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_workflow(workflow_id: str) -> None:
     """Delete a workflow."""
     engine = get_workflow_engine()
     deleted = await engine.delete_workflow(workflow_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Workflow not found")
-    return {"deleted": True}
 
 
 # --- Execution Endpoints ---

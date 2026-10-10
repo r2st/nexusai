@@ -108,7 +108,7 @@ async def health_check():
     }
 
 
-@router.post("/register", response_model=ActionResponse)
+@router.post("/register", response_model=ActionResponse, status_code=status.HTTP_201_CREATED)
 async def register_action(
     request: ActionRegisterRequest,
     current_user: User = Depends(get_current_user),
@@ -193,7 +193,7 @@ async def register_action(
     )
 
 
-@router.post("/register/openapi-spec")
+@router.post("/register/openapi-spec", status_code=status.HTTP_201_CREATED)
 async def register_from_spec(
     action_id: str,
     action_name: str,
@@ -515,7 +515,7 @@ async def validate_action(
 # Pre-built Actions
 # ======================
 
-@router.post("/prebuilt/github")
+@router.post("/prebuilt/github", status_code=status.HTTP_201_CREATED)
 async def register_github_action(
     token: str,
     current_user: User = Depends(get_current_user),
@@ -533,7 +533,7 @@ async def register_github_action(
     }
 
 
-@router.post("/prebuilt/jira")
+@router.post("/prebuilt/jira", status_code=status.HTTP_201_CREATED)
 async def register_jira_action(
     base_url: str,
     email: str,
