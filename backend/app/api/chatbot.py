@@ -3,10 +3,12 @@
 import json
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request, Header, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Header, Response, status
 from pydantic import BaseModel, Field
 import structlog
 
+from app.api.deps import get_current_user
+from app.models.user import User
 from app.services.chatbot import (
     get_chatbot_service,
     ChatPlatform,
@@ -97,7 +99,7 @@ class SendTeamsMessageRequest(BaseModel):
 # --- Configuration Endpoints ---
 
 @router.post("/configure/slack")
-async def configure_slack(request: ConfigureSlackRequest):
+async def configure_slack(request: ConfigureSlackRequest, _current_user: User = Depends(get_current_user)):
     """Configure Slack bot."""
     service = get_chatbot_service()
     service.configure_slack(
@@ -109,7 +111,7 @@ async def configure_slack(request: ConfigureSlackRequest):
 
 
 @router.post("/configure/teams")
-async def configure_teams(request: ConfigureTeamsRequest):
+async def configure_teams(request: ConfigureTeamsRequest, _current_user: User = Depends(get_current_user)):
     """Configure Teams bot."""
     service = get_chatbot_service()
     service.configure_teams(
@@ -249,7 +251,7 @@ async def teams_messages(request: Request):
 # --- User Linking Endpoints ---
 
 @router.post("/users/link")
-async def link_user(request: LinkUserRequest):
+async def link_user(request: LinkUserRequest, _current_user: User = Depends(get_current_user)):
     """Link a platform user to NexusAI."""
     service = get_chatbot_service()
     success = await service.link_user(
@@ -266,7 +268,7 @@ async def link_user(request: LinkUserRequest):
 
 
 @router.post("/users/unlink")
-async def unlink_user(request: UnlinkUserRequest):
+async def unlink_user(request: UnlinkUserRequest, _current_user: User = Depends(get_current_user)):
     """Unlink a platform user from NexusAI."""
     service = get_chatbot_service()
     success = await service.unlink_user(
@@ -278,7 +280,7 @@ async def unlink_user(request: UnlinkUserRequest):
 
 
 @router.get("/users/{platform}/{platform_user_id}")
-async def get_linked_user(platform: ChatPlatform, platform_user_id: str):
+async def get_linked_user(platform: ChatPlatform, platform_user_id: str, _current_user: User = Depends(get_current_user)):
     """Get linked user info."""
     service = get_chatbot_service()
     user = await service.get_linked_user(platform, platform_user_id)
@@ -292,7 +294,7 @@ async def get_linked_user(platform: ChatPlatform, platform_user_id: str):
 # --- Notification Endpoints ---
 
 @router.post("/notifications/send")
-async def send_notification(request: SendNotificationRequest):
+async def send_notification(request: SendNotificationRequest, _current_user: User = Depends(get_current_user)):
     """Send notification to subscribed channels."""
     service = get_chatbot_service()
     sent_to = await service.send_notification(
@@ -307,7 +309,7 @@ async def send_notification(request: SendNotificationRequest):
 
 
 @router.post("/notifications/broadcast")
-async def broadcast_notification(request: BroadcastNotificationRequest):
+async def broadcast_notification(request: BroadcastNotificationRequest, _current_user: User = Depends(get_current_user)):
     """Broadcast notification to all platforms."""
     service = get_chatbot_service()
     results = await service.broadcast_notification(
@@ -322,7 +324,7 @@ async def broadcast_notification(request: BroadcastNotificationRequest):
 # --- Subscription Endpoints ---
 
 @router.post("/subscriptions", status_code=status.HTTP_201_CREATED)
-async def subscribe_channel(request: SubscribeRequest):
+async def subscribe_channel(request: SubscribeRequest, _current_user: User = Depends(get_current_user)):
     """Subscribe a channel to event types."""
     service = get_chatbot_service()
     success = await service.subscribe_channel(
@@ -334,7 +336,7 @@ async def subscribe_channel(request: SubscribeRequest):
 
 
 @router.delete("/subscriptions", status_code=status.HTTP_204_NO_CONTENT)
-async def unsubscribe_channel(request: UnsubscribeRequest) -> None:
+async def unsubscribe_channel(request: UnsubscribeRequest, _current_user: User = Depends(get_current_user))-> None:
     """Unsubscribe a channel from event types."""
     service = get_chatbot_service()
     await service.unsubscribe_channel(
@@ -345,7 +347,7 @@ async def unsubscribe_channel(request: UnsubscribeRequest) -> None:
 
 
 @router.get("/subscriptions/{platform}/{channel_id}")
-async def get_subscriptions(platform: ChatPlatform, channel_id: str):
+async def get_subscriptions(platform: ChatPlatform, channel_id: str, _current_user: User = Depends(get_current_user)):
     """Get subscriptions for a channel."""
     service = get_chatbot_service()
     subscriptions = await service.get_subscriptions(platform, channel_id)
@@ -355,7 +357,7 @@ async def get_subscriptions(platform: ChatPlatform, channel_id: str):
 # --- Message Endpoints ---
 
 @router.post("/messages/slack")
-async def send_slack_message(request: SendSlackMessageRequest):
+async def send_slack_message(request: SendSlackMessageRequest, _current_user: User = Depends(get_current_user)):
     """Send a message to Slack."""
     service = get_chatbot_service()
     result = await service.send_slack_message(
@@ -368,7 +370,7 @@ async def send_slack_message(request: SendSlackMessageRequest):
 
 
 @router.post("/messages/teams")
-async def send_teams_message(request: SendTeamsMessageRequest):
+async def send_teams_message(request: SendTeamsMessageRequest, _current_user: User = Depends(get_current_user)):
     """Send a message to Teams."""
     service = get_chatbot_service()
     result = await service.send_teams_message(
@@ -382,7 +384,7 @@ async def send_teams_message(request: SendTeamsMessageRequest):
 # --- Info Endpoints ---
 
 @router.get("/commands")
-async def get_commands(platform: ChatPlatform | None = None):
+async def get_commands(platform: ChatPlatform | None = None, _current_user: User = Depends(get_current_user)):
     """Get available bot commands."""
     service = get_chatbot_service()
 
@@ -395,7 +397,7 @@ async def get_commands(platform: ChatPlatform | None = None):
 
 
 @router.get("/dashboard")
-async def get_chatbot_dashboard():
+async def get_chatbot_dashboard(_current_user: User = Depends(get_current_user)):
     """Get chatbot dashboard data."""
     service = get_chatbot_service()
     dashboard = await service.get_chatbot_dashboard()

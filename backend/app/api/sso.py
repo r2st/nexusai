@@ -11,6 +11,9 @@ from pydantic import BaseModel, Field, field_validator
 from urllib.parse import urlparse as _urlparse
 import structlog
 
+from app.api.deps import get_current_admin_user
+from app.models.user import User
+
 logger = structlog.get_logger()
 
 router = APIRouter(prefix="/sso", tags=["SSO"])
@@ -74,6 +77,7 @@ class SessionResponse(BaseModel):
 @router.get("/providers", response_model=List[ProviderResponse])
 async def list_providers(
     tenant_id: Optional[str] = Query(None),
+    _current_user: User = Depends(get_current_admin_user),
 ):
     """
     List available SSO providers.
@@ -104,7 +108,7 @@ async def list_providers(
 
 
 @router.get("/providers/{provider_id}", response_model=ProviderResponse)
-async def get_provider(provider_id: str):
+async def get_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)):
     """Get SSO provider details."""
     # sso_service = get_sso_service()
     # provider = sso_service.get_provider(provider_id)
@@ -119,10 +123,10 @@ async def get_provider(provider_id: str):
 
 
 @router.post("/providers", response_model=ProviderResponse, status_code=status.HTTP_201_CREATED)
-async def create_provider(request: ProviderCreateRequest):
+async def create_provider(request: ProviderCreateRequest, _current_user: User = Depends(get_current_admin_user)):
     """
     Create a new SSO provider.
-    
+
     Requires admin permissions.
     """
     # sso_service = get_sso_service()
@@ -138,7 +142,7 @@ async def create_provider(request: ProviderCreateRequest):
 
 
 @router.delete("/providers/{provider_id}", status_code=204)
-async def delete_provider(provider_id: str):
+async def delete_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)):
     """Delete an SSO provider."""
     # sso_service = get_sso_service()
     # await sso_service.delete_provider(provider_id)

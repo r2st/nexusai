@@ -7,11 +7,13 @@ These endpoints proxy requests to the DevLake service for frontend polling.
 from datetime import datetime, timezone
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 import structlog
 
 from app.services.devlake.service import devlake_service
+from app.api.deps import get_current_user
+from app.models.user import User
 
 logger = structlog.get_logger()
 
@@ -70,7 +72,7 @@ class PipelineStatusResponse(BaseModel):
 
 
 @router.get("/pipelines/{pipeline_id}", response_model=PipelineStatusResponse)
-async def get_pipeline_status(pipeline_id: int) -> dict[str, Any]:
+async def get_pipeline_status(pipeline_id: int, _current_user: User = Depends(get_current_user))-> dict[str, Any]:
     """Get pipeline status for progress tracking.
 
     This endpoint is used by the frontend to poll for pipeline progress updates.
@@ -117,7 +119,7 @@ async def get_pipeline_status(pipeline_id: int) -> dict[str, Any]:
 
 
 @router.get("/pipelines/{pipeline_id}/tasks")
-async def get_pipeline_tasks(pipeline_id: int) -> dict[str, Any]:
+async def get_pipeline_tasks(pipeline_id: int, _current_user: User = Depends(get_current_user))-> dict[str, Any]:
     """Get pipeline tasks for detailed progress information."""
     try:
         # Use the DevLake service to get task details

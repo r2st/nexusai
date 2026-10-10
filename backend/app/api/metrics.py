@@ -19,7 +19,9 @@ import structlog
 from app.core.database import get_db
 
 logger = structlog.get_logger()
+from app.api.deps import get_current_user
 from app.core.multitenancy import get_current_tenant_id
+from app.models.user import User
 from app.services.metrics import (
     dora_metrics_service,
     space_metrics_service,
@@ -42,6 +44,7 @@ async def get_dora_metrics(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get DORA metrics for a project.
 
@@ -65,6 +68,7 @@ async def get_dora_trend(
     granularity: str = Query(default="monthly", pattern="^(weekly|monthly|quarterly)$"),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
     """Get DORA metrics trend over time."""
     trends = await dora_metrics_service.get_trend(
@@ -78,6 +82,7 @@ async def get_dora_benchmark(
     project_name: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Compare project DORA metrics against industry benchmarks."""
     metrics = await dora_metrics_service.calculate_metrics(
@@ -95,6 +100,7 @@ async def get_space_metrics(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get SPACE framework metrics for a project.
 
@@ -117,6 +123,7 @@ async def get_space_trend(
     periods: int = Query(default=6, ge=1, le=24),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
     """Get SPACE metrics trend over time."""
     trends = await space_metrics_service.get_trend(
@@ -130,6 +137,7 @@ async def get_space_recommendations(
     project_name: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
     """Get recommendations for improving SPACE metrics."""
     return await space_metrics_service.get_recommendations(
@@ -146,6 +154,7 @@ async def get_business_metrics(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get business metrics for a project.
 
@@ -169,6 +178,7 @@ async def get_business_trend(
     periods: int = Query(default=6, ge=1, le=24),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
     """Get business metrics trend over time."""
     trends = await business_metrics_service.get_trend(
@@ -182,6 +192,7 @@ async def get_executive_summary(
     project_name: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get executive summary of business metrics."""
     return await business_metrics_service.get_executive_summary(
@@ -198,6 +209,7 @@ async def get_team_productivity(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get team productivity metrics."""
     metrics = await productivity_metrics_service.calculate_team_productivity(
@@ -213,6 +225,7 @@ async def get_individual_productivity(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get individual developer productivity metrics."""
     metrics = await productivity_metrics_service.calculate_individual_productivity(
@@ -230,6 +243,7 @@ async def get_productivity_leaderboard(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
     """Get productivity leaderboard for a project."""
     results = await productivity_metrics_service.get_productivity_leaderboard(
@@ -243,6 +257,7 @@ async def get_productivity_insights(
     project_name: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get actionable productivity insights for a project."""
     return await productivity_metrics_service.get_productivity_insights(
@@ -257,6 +272,7 @@ async def get_metrics_dashboard(
     project_name: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get combined metrics dashboard for a project.
 
@@ -295,6 +311,7 @@ async def get_flow_metrics(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get Flow metrics for a project.
 
@@ -322,6 +339,7 @@ async def get_cumulative_flow_diagram(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
     """Get Cumulative Flow Diagram data.
 
@@ -339,6 +357,7 @@ async def get_cycle_time_histogram(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get cycle time distribution data.
 
@@ -357,6 +376,7 @@ async def get_throughput_chart(
     granularity: str = Query(default="weekly", pattern="^(daily|weekly|monthly)$"),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
     """Get throughput run chart data.
 
@@ -378,6 +398,7 @@ async def get_unified_metrics(
     include_ai_summary: bool = Query(default=True),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get unified metrics combining DORA, Flow, and Productivity.
 
@@ -406,6 +427,7 @@ async def get_metrics_summary(
     project_name: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get a quick summary of current metrics state.
 
@@ -423,6 +445,7 @@ async def get_unified_dashboard(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get complete dashboard data for metrics visualization.
 
@@ -464,6 +487,7 @@ async def get_ai_insights(
     period_end: datetime | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Get AI-generated insights for a project.
 
@@ -509,6 +533,7 @@ async def chat_about_metrics(
     question: str = Query(..., min_length=5, max_length=500),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Ask questions about metrics in natural language.
 

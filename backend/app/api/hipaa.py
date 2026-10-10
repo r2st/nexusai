@@ -3,10 +3,12 @@
 from datetime import datetime
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field, field_validator
 import structlog
 
+from app.api.deps import get_current_user
+from app.models.user import User
 from app.services.compliance.hipaa import (
     get_hipaa_service,
     get_baa_manager,
@@ -143,7 +145,7 @@ class DenyAccessRequest(BaseModel):
 # --- PHI Detection Endpoints ---
 
 @router.post("/phi/detect")
-async def detect_phi(request: DetectPHIRequest):
+async def detect_phi(request: DetectPHIRequest, _current_user: User = Depends(get_current_user)):
     """Detect PHI in content."""
     detector = get_phi_detector()
     result = await detector.detect(
@@ -155,7 +157,7 @@ async def detect_phi(request: DetectPHIRequest):
 
 
 @router.post("/phi/detect-in-code")
-async def detect_phi_in_code(request: DetectPHIInCodeRequest):
+async def detect_phi_in_code(request: DetectPHIInCodeRequest, _current_user: User = Depends(get_current_user)):
     """Detect PHI in source code."""
     detector = get_phi_detector()
     result = await detector.detect_in_code(
@@ -166,7 +168,7 @@ async def detect_phi_in_code(request: DetectPHIInCodeRequest):
 
 
 @router.get("/phi/patterns")
-async def get_phi_patterns(category: PHICategory | None = None):
+async def get_phi_patterns(category: PHICategory | None = None, _current_user: User = Depends(get_current_user)):
     """Get configured PHI detection patterns."""
     detector = get_phi_detector()
     patterns = detector.get_patterns(category)
@@ -176,7 +178,7 @@ async def get_phi_patterns(category: PHICategory | None = None):
 # --- BAA Management Endpoints ---
 
 @router.post("/baa", status_code=status.HTTP_201_CREATED)
-async def create_baa(request: CreateBAARequest):
+async def create_baa(request: CreateBAARequest, _current_user: User = Depends(get_current_user)):
     """Create a new Business Associate Agreement."""
     manager = get_baa_manager()
     baa = await manager.create_baa(
@@ -215,7 +217,7 @@ async def list_baas(
 
 
 @router.get("/baa/{baa_id}")
-async def get_baa(baa_id: str):
+async def get_baa(baa_id: str, _current_user: User = Depends(get_current_user)):
     """Get a BAA by ID."""
     manager = get_baa_manager()
     baa = await manager.get_baa(baa_id)
@@ -225,7 +227,7 @@ async def get_baa(baa_id: str):
 
 
 @router.post("/baa/{baa_id}/submit-for-review")
-async def submit_baa_for_review(baa_id: str, submitted_by: str):
+async def submit_baa_for_review(baa_id: str, submitted_by: str, _current_user: User = Depends(get_current_user)):
     """Submit BAA for review."""
     manager = get_baa_manager()
     baa = await manager.submit_for_review(baa_id, submitted_by)
@@ -235,7 +237,7 @@ async def submit_baa_for_review(baa_id: str, submitted_by: str):
 
 
 @router.post("/baa/{baa_id}/approve")
-async def approve_baa(baa_id: str, approved_by: str):
+async def approve_baa(baa_id: str, approved_by: str, _current_user: User = Depends(get_current_user)):
     """Approve a BAA."""
     manager = get_baa_manager()
     baa = await manager.approve_baa(baa_id, approved_by)
@@ -245,7 +247,7 @@ async def approve_baa(baa_id: str, approved_by: str):
 
 
 @router.post("/baa/{baa_id}/activate")
-async def activate_baa(baa_id: str, request: ActivateBAARequest):
+async def activate_baa(baa_id: str, request: ActivateBAARequest, _current_user: User = Depends(get_current_user)):
     """Activate a signed BAA."""
     manager = get_baa_manager()
     baa = await manager.activate_baa(
@@ -261,7 +263,7 @@ async def activate_baa(baa_id: str, request: ActivateBAARequest):
 
 
 @router.post("/baa/{baa_id}/renew")
-async def renew_baa(baa_id: str, request: RenewBAARequest):
+async def renew_baa(baa_id: str, request: RenewBAARequest, _current_user: User = Depends(get_current_user)):
     """Renew a BAA."""
     manager = get_baa_manager()
     baa = await manager.renew_baa(
@@ -276,7 +278,7 @@ async def renew_baa(baa_id: str, request: RenewBAARequest):
 
 
 @router.post("/baa/{baa_id}/terminate")
-async def terminate_baa(baa_id: str, request: TerminateBAARequest):
+async def terminate_baa(baa_id: str, request: TerminateBAARequest, _current_user: User = Depends(get_current_user)):
     """Terminate a BAA."""
     manager = get_baa_manager()
     baa = await manager.terminate_baa(
@@ -290,7 +292,7 @@ async def terminate_baa(baa_id: str, request: TerminateBAARequest):
 
 
 @router.get("/baa/summary/{organization_id}")
-async def get_baa_summary(organization_id: str):
+async def get_baa_summary(organization_id: str, _current_user: User = Depends(get_current_user)):
     """Get BAA summary for organization."""
     manager = get_baa_manager()
     summary = await manager.get_baa_summary(organization_id)
@@ -300,7 +302,7 @@ async def get_baa_summary(organization_id: str):
 # --- Encryption Audit Endpoints ---
 
 @router.post("/encryption/audit")
-async def run_encryption_audit(auditor: str | None = None):
+async def run_encryption_audit(auditor: str | None = None, _current_user: User = Depends(get_current_user)):
     """Run encryption compliance audit."""
     auditor_service = get_encryption_auditor()
     result = await auditor_service.audit_encryption(auditor)
@@ -308,7 +310,7 @@ async def run_encryption_audit(auditor: str | None = None):
 
 
 @router.get("/encryption/audit/{audit_id}")
-async def get_encryption_audit(audit_id: str):
+async def get_encryption_audit(audit_id: str, _current_user: User = Depends(get_current_user)):
     """Get encryption audit result."""
     auditor = get_encryption_auditor()
     result = await auditor.get_audit_result(audit_id)
@@ -318,7 +320,7 @@ async def get_encryption_audit(audit_id: str):
 
 
 @router.get("/encryption/audits")
-async def list_encryption_audits(limit: int = Query(default=100, le=500)):
+async def list_encryption_audits(limit: int = Query(default=100, le=500), _current_user: User = Depends(get_current_user)):
     """List encryption audit results."""
     auditor = get_encryption_auditor()
     results = await auditor.list_audits(limit)
@@ -326,7 +328,7 @@ async def list_encryption_audits(limit: int = Query(default=100, le=500)):
 
 
 @router.post("/encryption/register-storage", status_code=status.HTTP_201_CREATED)
-async def register_storage_location(request: RegisterStorageRequest):
+async def register_storage_location(request: RegisterStorageRequest, _current_user: User = Depends(get_current_user)):
     """Register a storage location for encryption audit."""
     auditor = get_encryption_auditor()
     await auditor.register_storage_location(
@@ -339,7 +341,7 @@ async def register_storage_location(request: RegisterStorageRequest):
 
 
 @router.post("/encryption/register-endpoint", status_code=status.HTTP_201_CREATED)
-async def register_endpoint(request: RegisterEndpointRequest):
+async def register_endpoint(request: RegisterEndpointRequest, _current_user: User = Depends(get_current_user)):
     """Register an endpoint for encryption audit."""
     auditor = get_encryption_auditor()
     await auditor.register_endpoint(
@@ -352,7 +354,7 @@ async def register_endpoint(request: RegisterEndpointRequest):
 
 
 @router.get("/encryption/algorithms")
-async def get_encryption_algorithms():
+async def get_encryption_algorithms(_current_user: User = Depends(get_current_user)):
     """Get approved and weak encryption algorithms."""
     auditor = get_encryption_auditor()
     return {
@@ -368,6 +370,7 @@ async def list_controls(
     category: HIPAAControlCategory | None = None,
     status: HIPAAControlStatus | None = None,
     required_only: bool = False,
+    _current_user: User = Depends(get_current_user),
 ):
     """List HIPAA controls."""
     service = get_hipaa_service()
@@ -376,7 +379,7 @@ async def list_controls(
 
 
 @router.get("/controls/{control_id}")
-async def get_control(control_id: str):
+async def get_control(control_id: str, _current_user: User = Depends(get_current_user)):
     """Get a HIPAA control."""
     service = get_hipaa_service()
     control = await service.get_control(control_id)
@@ -386,7 +389,7 @@ async def get_control(control_id: str):
 
 
 @router.put("/controls/{control_id}/status")
-async def update_control_status(control_id: str, request: UpdateControlStatusRequest):
+async def update_control_status(control_id: str, request: UpdateControlStatusRequest, _current_user: User = Depends(get_current_user)):
     """Update a control's status."""
     service = get_hipaa_service()
     control = await service.update_control_status(
@@ -401,7 +404,7 @@ async def update_control_status(control_id: str, request: UpdateControlStatusReq
 
 
 @router.post("/controls/{control_id}/evidence", status_code=status.HTTP_201_CREATED)
-async def add_control_evidence(control_id: str, evidence_id: str, added_by: str):
+async def add_control_evidence(control_id: str, evidence_id: str, added_by: str, _current_user: User = Depends(get_current_user)):
     """Add evidence to a control."""
     service = get_hipaa_service()
     control = await service.add_control_evidence(control_id, evidence_id, added_by)
@@ -413,7 +416,7 @@ async def add_control_evidence(control_id: str, evidence_id: str, added_by: str)
 # --- Minimum Necessary Policy Endpoints ---
 
 @router.post("/policies/minimum-necessary", status_code=status.HTTP_201_CREATED)
-async def create_minimum_necessary_policy(request: CreatePolicyRequest):
+async def create_minimum_necessary_policy(request: CreatePolicyRequest, _current_user: User = Depends(get_current_user)):
     """Create a minimum necessary access policy."""
     service = get_hipaa_service()
     policy = await service.create_minimum_necessary_policy(
@@ -430,7 +433,7 @@ async def create_minimum_necessary_policy(request: CreatePolicyRequest):
 
 
 @router.get("/policies/minimum-necessary")
-async def list_minimum_necessary_policies(enabled_only: bool = True):
+async def list_minimum_necessary_policies(enabled_only: bool = True, _current_user: User = Depends(get_current_user)):
     """List minimum necessary policies."""
     service = get_hipaa_service()
     policies = await service.list_minimum_necessary_policies(enabled_only)
@@ -438,7 +441,7 @@ async def list_minimum_necessary_policies(enabled_only: bool = True):
 
 
 @router.post("/access/request")
-async def request_access(request: RequestAccessRequest):
+async def request_access(request: RequestAccessRequest, _current_user: User = Depends(get_current_user)):
     """Request access with justification."""
     service = get_hipaa_service()
     justification = await service.request_access_justification(
@@ -452,7 +455,7 @@ async def request_access(request: RequestAccessRequest):
 
 
 @router.post("/access/{justification_id}/approve")
-async def approve_access(justification_id: str, request: ApproveAccessRequest):
+async def approve_access(justification_id: str, request: ApproveAccessRequest, _current_user: User = Depends(get_current_user)):
     """Approve access justification."""
     service = get_hipaa_service()
     justification = await service.approve_access_justification(
@@ -467,7 +470,7 @@ async def approve_access(justification_id: str, request: ApproveAccessRequest):
 
 
 @router.post("/access/{justification_id}/deny")
-async def deny_access(justification_id: str, request: DenyAccessRequest):
+async def deny_access(justification_id: str, request: DenyAccessRequest, _current_user: User = Depends(get_current_user)):
     """Deny access justification."""
     service = get_hipaa_service()
     justification = await service.deny_access_justification(
@@ -484,6 +487,7 @@ async def deny_access(justification_id: str, request: DenyAccessRequest):
 
 @router.get("/report")
 async def get_hipaa_compliance_report(
+    _current_user: User = Depends(get_current_user),
     report_period: str = Query(default="Q1 2024"),
     organization_id: str | None = None,
 ):
@@ -496,6 +500,7 @@ async def get_hipaa_compliance_report(
 @router.get("/audit-log")
 async def get_hipaa_audit_log(
     resource_type: str | None = None,
+    _current_user: User = Depends(get_current_user),
     limit: int = Query(default=100, le=500),
 ):
     """Get HIPAA audit log entries."""

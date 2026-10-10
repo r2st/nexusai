@@ -2,10 +2,12 @@
 
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from pydantic import BaseModel, Field
 import structlog
 
+from app.api.deps import get_current_user
+from app.models.user import User
 from app.services.workflow.engine import get_workflow_engine
 
 logger = structlog.get_logger()
@@ -54,7 +56,7 @@ class HandleTriggerRequest(BaseModel):
 # --- Workflow Endpoints ---
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-async def create_workflow(request: CreateWorkflowRequest):
+async def create_workflow(request: CreateWorkflowRequest, _current_user: User = Depends(get_current_user)):
     """Create a new workflow."""
     engine = get_workflow_engine()
     workflow = await engine.create_workflow(
@@ -69,7 +71,7 @@ async def create_workflow(request: CreateWorkflowRequest):
 
 
 @router.post("/from-template", status_code=status.HTTP_201_CREATED)
-async def create_from_template(request: CreateFromTemplateRequest):
+async def create_from_template(request: CreateFromTemplateRequest, _current_user: User = Depends(get_current_user)):
     """Create a workflow from a template."""
     engine = get_workflow_engine()
     try:
@@ -85,7 +87,7 @@ async def create_from_template(request: CreateFromTemplateRequest):
 
 
 @router.get("/templates")
-async def list_templates():
+async def list_templates(_current_user: User = Depends(get_current_user)):
     """List available workflow templates."""
     engine = get_workflow_engine()
     templates = engine.get_available_templates()
@@ -98,6 +100,7 @@ async def list_workflows(
     status: WorkflowStatus | None = None,
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
+    _current_user: User = Depends(get_current_user),
 ):
     """List workflows with optional filters."""
     engine = get_workflow_engine()
@@ -112,7 +115,7 @@ async def list_workflows(
 
 
 @router.get("/{workflow_id}")
-async def get_workflow(workflow_id: str):
+async def get_workflow(workflow_id: str, _current_user: User = Depends(get_current_user)):
     """Get a workflow by ID."""
     engine = get_workflow_engine()
     workflow = await engine.get_workflow(workflow_id)
@@ -122,7 +125,7 @@ async def get_workflow(workflow_id: str):
 
 
 @router.post("/{workflow_id}/activate")
-async def activate_workflow(workflow_id: str):
+async def activate_workflow(workflow_id: str, _current_user: User = Depends(get_current_user)):
     """Activate a workflow."""
     engine = get_workflow_engine()
     workflow = await engine.activate_workflow(workflow_id)
@@ -132,7 +135,7 @@ async def activate_workflow(workflow_id: str):
 
 
 @router.post("/{workflow_id}/pause")
-async def pause_workflow(workflow_id: str):
+async def pause_workflow(workflow_id: str, _current_user: User = Depends(get_current_user)):
     """Pause a workflow."""
     engine = get_workflow_engine()
     workflow = await engine.pause_workflow(workflow_id)
@@ -142,7 +145,7 @@ async def pause_workflow(workflow_id: str):
 
 
 @router.delete("/{workflow_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_workflow(workflow_id: str) -> None:
+async def delete_workflow(workflow_id: str, _current_user: User = Depends(get_current_user)) -> None:
     """Delete a workflow."""
     engine = get_workflow_engine()
     deleted = await engine.delete_workflow(workflow_id)
@@ -153,7 +156,7 @@ async def delete_workflow(workflow_id: str) -> None:
 # --- Execution Endpoints ---
 
 @router.post("/{workflow_id}/execute")
-async def start_execution(workflow_id: str, request: StartExecutionRequest):
+async def start_execution(workflow_id: str, request: StartExecutionRequest, _current_user: User = Depends(get_current_user)):
     """Start a workflow execution."""
     engine = get_workflow_engine()
     try:
@@ -168,7 +171,7 @@ async def start_execution(workflow_id: str, request: StartExecutionRequest):
 
 
 @router.post("/trigger")
-async def handle_trigger(request: HandleTriggerRequest):
+async def handle_trigger(request: HandleTriggerRequest, _current_user: User = Depends(get_current_user)):
     """Handle an external trigger event."""
     engine = get_workflow_engine()
     executions = await engine.handle_trigger(
@@ -187,6 +190,7 @@ async def list_executions(
     workflow_id: str | None = None,
     status: WorkflowExecutionStatus | None = None,
     limit: int = Query(default=100, le=500),
+    _current_user: User = Depends(get_current_user),
 ):
     """List workflow executions."""
     engine = get_workflow_engine()
@@ -195,7 +199,7 @@ async def list_executions(
 
 
 @router.get("/executions/{execution_id}")
-async def get_execution(execution_id: str):
+async def get_execution(execution_id: str, _current_user: User = Depends(get_current_user)):
     """Get an execution by ID."""
     engine = get_workflow_engine()
     execution = await engine.get_execution(execution_id)
@@ -205,7 +209,7 @@ async def get_execution(execution_id: str):
 
 
 @router.post("/executions/{execution_id}/cancel")
-async def cancel_execution(execution_id: str):
+async def cancel_execution(execution_id: str, _current_user: User = Depends(get_current_user)):
     """Cancel a running execution."""
     engine = get_workflow_engine()
     execution = await engine.cancel_execution(execution_id)
@@ -217,7 +221,7 @@ async def cancel_execution(execution_id: str):
 # --- Dashboard Endpoint ---
 
 @router.get("/dashboard")
-async def get_workflow_dashboard(organization_id: str):
+async def get_workflow_dashboard(organization_id: str, _current_user: User = Depends(get_current_user)):
     """Get workflow dashboard data."""
     engine = get_workflow_engine()
 
