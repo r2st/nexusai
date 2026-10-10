@@ -46,6 +46,9 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
                 <li><Link href="/blog/gst-return-filing-guide-2026-27" className="hover:text-blue-600">GST Return Filing Guide</Link></li>
                 <li><Link href="/blog/gst-registration-online-guide" className="hover:text-blue-600">GST Registration Guide</Link></li>
                 <li><Link href="/blog/input-tax-credit-itc-rules-2026-27" className="hover:text-blue-600">ITC Rules Guide</Link></li>
+                <li><Link href="/blog/gst-invoice-format-guide" className="hover:text-blue-600">GST Invoice Format</Link></li>
+                <li><Link href="/blog/gst-hsn-code-list" className="hover:text-blue-600">HSN Code List</Link></li>
+                <li><Link href="/blog/gst-composition-scheme-guide" className="hover:text-blue-600">Composition Scheme Guide</Link></li>
               </ul>
             </div>
           </div>

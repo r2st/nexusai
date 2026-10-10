@@ -15,6 +15,30 @@ export const metadata: Metadata = {
 
 const blogPosts = [
   {
+    slug: 'gst-invoice-format-guide',
+    title: 'GST Invoice Format 2026: Mandatory Fields, Templates & E-Invoicing Rules',
+    description: 'Complete guide to GST invoice format with mandatory fields, templates, e-invoicing rules, and bill of supply format for Indian businesses in 2026-27.',
+    date: '2026-10-10',
+    readTime: '16 min read',
+    category: 'Invoicing',
+  },
+  {
+    slug: 'gst-hsn-code-list',
+    title: 'GST HSN Code List 2026: Complete Guide to Finding HSN & SAC Codes',
+    description: 'Complete HSN code list for GST with chapter-wise breakdown. Find HSN codes for goods and SAC codes for services. Updated for 2026-27 with search guide.',
+    date: '2026-10-10',
+    readTime: '18 min read',
+    category: 'HSN Codes',
+  },
+  {
+    slug: 'gst-composition-scheme-guide',
+    title: 'GST Composition Scheme 2026: Eligibility, Tax Rates & Filing Guide',
+    description: 'Complete guide to GST Composition Scheme — eligibility, tax rates, GSTR-4 filing, benefits vs regular scheme. Updated for 2026-27 with practical examples.',
+    date: '2026-10-10',
+    readTime: '15 min read',
+    category: 'Composition Scheme',
+  },
+  {
     slug: 'gst-return-filing-guide-2026-27',
     title: 'GST Return Filing Guide 2026-27: Step-by-Step Process, Due Dates & Penalties',
     description: 'Complete guide to filing GST returns in 2026-27. Learn step-by-step GSTR-1, GSTR-3B filing process, due dates, late fees, and how to avoid penalties.',

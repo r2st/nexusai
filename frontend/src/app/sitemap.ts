@@ -35,6 +35,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/blog/gst-invoice-format-guide`,
+      lastModified: new Date('2026-10-10'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog/gst-hsn-code-list`,
+      lastModified: new Date('2026-10-10'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog/gst-composition-scheme-guide`,
+      lastModified: new Date('2026-10-10'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/pricing`,
       lastModified: new Date('2026-10-10'),
       changeFrequency: 'monthly',
