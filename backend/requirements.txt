@@ -82,7 +82,7 @@ arize-phoenix>=4.0.0
 arize-phoenix-evals>=0.17.0
 
 # RAGAS - RAG Evaluation Framework
-ragas>=0.2.0
+ragas>=0.4.0
 
 # OpenTelemetry
 opentelemetry-api>=1.22.0
