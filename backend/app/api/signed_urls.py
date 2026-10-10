@@ -209,9 +209,10 @@ async def generate_upload_url(
 ) -> UploadSignedURLResponse:
     """
     Generate a pre-signed URL for file upload.
-    
+
     Returns a URL and any additional fields required for upload.
     """
+    validate_no_path_traversal(filename, "filename")
     storage_manager = get_storage_manager()
     
     # Build storage key
