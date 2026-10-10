@@ -182,8 +182,8 @@ class TenantMiddleware(BaseHTTPMiddleware):
                     return payload["tenant_id"]
                 if payload and "organization_id" in payload:
                     return payload["organization_id"]
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Failed to extract tenant from JWT", error=str(e))
 
         return None
 
@@ -412,8 +412,8 @@ class ErrorTrackingMiddleware(BaseHTTPMiddleware):
                 payload = decode_token(token)
                 if payload:
                     user_id = payload.get("sub")
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Failed to extract user from JWT for audit", error=str(e))
 
         try:
             response = await call_next(request)

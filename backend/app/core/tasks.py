@@ -9,6 +9,7 @@ Provides:
 """
 
 import asyncio
+import logging
 from datetime import datetime, timedelta
 from typing import Any, Callable, TypeVar
 from functools import wraps
@@ -20,6 +21,8 @@ from arq.jobs import Job
 
 from app.core.config import settings
 from app.core.multitenancy import set_current_tenant_id, clear_tenant_context
+
+logger = logging.getLogger(__name__)
 
 T = TypeVar("T")
 
@@ -275,13 +278,17 @@ class TaskQueue:
         Use when deleting a tenant or during emergency shutdown.
         """
         cancelled = 0
+        failed = 0
         jobs = await self.get_tenant_jobs(tenant_id)
         for job in jobs:
             try:
                 await job.abort()
                 cancelled += 1
-            except Exception:
-                pass
+            except Exception as e:
+                failed += 1
+                logger.warning("Failed to cancel job", job_id=str(getattr(job, 'id', 'unknown')), tenant_id=tenant_id, error=str(e))
+        if failed:
+            logger.error("Some tenant jobs failed to cancel", tenant_id=tenant_id, cancelled=cancelled, failed=failed)
         return cancelled
 
 

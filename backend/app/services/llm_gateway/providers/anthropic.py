@@ -208,7 +208,8 @@ class AnthropicProvider(BaseAIProvider):
                             delta = data.get("delta", {})
                             if delta.get("type") == "text_delta":
                                 yield delta.get("text", "")
-                    except Exception:
+                    except (json.JSONDecodeError, KeyError) as e:
+                        logger.debug("Skipping malformed SSE chunk", error=str(e))
                         continue
 
     async def close(self):

@@ -439,20 +439,25 @@ async def list_workflows(
     """List workflow executions."""
     workflow = DevOpsAgentWorkflow()
 
-    # Map strings to enums
     wf_type = None
     if workflow_type:
         try:
             wf_type = WorkflowType(workflow_type)
         except ValueError:
-            pass
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid workflow_type: {workflow_type!r}. Valid values: {[e.value for e in WorkflowType]}",
+            )
 
     wf_status = None
     if status:
         try:
             wf_status = WorkflowStatus(status)
         except ValueError:
-            pass
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid status: {status!r}. Valid values: {[e.value for e in WorkflowStatus]}",
+            )
 
     executions = workflow.list_executions(
         workflow_type=wf_type,

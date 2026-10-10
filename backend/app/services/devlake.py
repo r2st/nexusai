@@ -1,11 +1,14 @@
 """DevLake integration service for engineering analytics."""
 
+import logging
 from typing import Any
 
 import httpx
 from pydantic import BaseModel
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 class DevLakeProject(BaseModel):
@@ -223,7 +226,6 @@ class DevLakeService:
         # - dora_change_failure_rate
 
         try:
-            # Try to get metrics from DevLake API
             result = await self._request(
                 "GET",
                 f"/api/projects/{project_name}/metrics/dora",
@@ -237,10 +239,9 @@ class DevLakeService:
                     mean_time_to_recovery=result.get("meanTimeToRecovery"),
                     change_failure_rate=result.get("changeFailureRate"),
                 )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("Failed to fetch DORA metrics from DevLake", project=project_name, error=str(e))
 
-        # Return empty metrics if not available
         return DORAMetrics()
 
     # ======================

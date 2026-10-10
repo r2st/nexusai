@@ -1,8 +1,11 @@
 """Recommendation Engine - Generates actionable improvement recommendations."""
 
+import logging
 import uuid
 from datetime import datetime
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 from app.services.predictive.models import (
     Bottleneck,
@@ -452,7 +455,8 @@ class RecommendationEngine:
 
             return self._parse_ai_recommendations(response.content)
 
-        except Exception:
+        except Exception as e:
+            logger.error("Failed to generate AI recommendations", error=str(e))
             return []
 
     def _get_system_prompt(self) -> str:
@@ -515,5 +519,6 @@ Please provide 3-5 specific recommendations in JSON format:
 
             return recommendations
 
-        except (json.JSONDecodeError, ValueError):
+        except (json.JSONDecodeError, ValueError) as e:
+            logger.warning("Failed to parse AI recommendations response", error=str(e))
             return []

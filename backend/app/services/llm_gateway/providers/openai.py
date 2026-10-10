@@ -137,7 +137,8 @@ class OpenAIProvider(BaseAIProvider):
                         content = delta.get("content", "")
                         if content:
                             yield content
-                    except Exception:
+                    except (json.JSONDecodeError, KeyError, IndexError) as e:
+                        logger.debug("Skipping malformed SSE chunk", error=str(e))
                         continue
 
     async def close(self):

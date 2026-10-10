@@ -125,7 +125,10 @@ async def list_blueprints(
         try:
             status_filter = BlueprintStatus(status)
         except ValueError:
-            pass
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid status: {status!r}. Valid values: {[e.value for e in BlueprintStatus]}",
+            )
 
     blueprints = await blueprint_service.list_blueprints(
         session=session,

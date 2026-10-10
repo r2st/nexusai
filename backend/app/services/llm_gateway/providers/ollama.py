@@ -177,7 +177,8 @@ class OllamaProvider(BaseAIProvider):
                         content = message.get("content", "")
                         if content:
                             yield content
-                    except Exception:
+                    except (json.JSONDecodeError, KeyError) as e:
+                        logger.debug("Skipping malformed streaming chunk", error=str(e))
                         continue
 
     async def generate(

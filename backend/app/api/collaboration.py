@@ -1,9 +1,12 @@
 """Real-time Collaboration API endpoints."""
 
+import logging
 from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, WebSocket, WebSocketDisconnect
+
+logger = logging.getLogger(__name__)
 from pydantic import BaseModel, Field
 
 from app.services.collaboration import (
@@ -595,12 +598,19 @@ class ConnectionManager:
         if room_id not in self.active_connections:
             return
 
+        dead_connections = []
         for user_id, websocket in self.active_connections[room_id].items():
             if user_id != exclude_user_id:
                 try:
                     await websocket.send_json(message)
                 except Exception:
-                    pass
+                    logger.debug("Removing dead websocket connection", room_id=room_id, user_id=user_id)
+                    dead_connections.append(user_id)
+
+        for user_id in dead_connections:
+            self.active_connections[room_id].pop(user_id, None)
+        if room_id in self.active_connections and not self.active_connections[room_id]:
+            del self.active_connections[room_id]
 
 
 manager = ConnectionManager()

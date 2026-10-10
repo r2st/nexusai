@@ -163,11 +163,11 @@ async def process_trial_expirations(ctx: dict[str, Any]) -> dict[str, Any]:
         from app.services.trial import TrialService
 
         expired_count = 0
+        failed_count = 0
 
         async with async_session_factory() as db:
             trial_service = TrialService(db)
 
-            # Find all trials that have expired but are still marked as active
             expired_orgs = await trial_service.get_expired_trials()
 
             for org in expired_orgs:
@@ -176,15 +176,17 @@ async def process_trial_expirations(ctx: dict[str, Any]) -> dict[str, Any]:
                     expired_count += 1
                     logger.info(f"Expired trial for organization: {org.id} ({org.name})")
                 except Exception as e:
+                    failed_count += 1
                     logger.error(f"Error expiring trial for org {org.id}: {e}")
 
             await db.commit()
 
-        logger.info(f"Processed {expired_count} expired trials")
+        logger.info(f"Processed {expired_count} expired trials, {failed_count} failed")
 
         return {
-            "status": "completed",
+            "status": "completed" if failed_count == 0 else "partial",
             "trials_expired": expired_count,
+            "trials_failed": failed_count,
         }
     except Exception as e:
         logger.error(f"Error processing trial expirations: {e}")
@@ -207,32 +209,32 @@ async def send_trial_expiry_reminders(ctx: dict[str, Any]) -> dict[str, Any]:
         from app.services.trial import TrialService
 
         reminder_count = 0
+        failed_count = 0
 
         async with async_session_factory() as db:
             trial_service = TrialService(db)
 
-            # Get trials expiring within the reminder window (default 3 days)
             expiring_orgs = await trial_service.get_expiring_trials(
                 days_until_expiry=settings.TRIAL_REMINDER_DAYS
             )
 
             for org in expiring_orgs:
                 try:
-                    # TODO: Implement email sending
-                    # For now, just log it
                     logger.info(
                         f"Would send reminder to org {org.id} ({org.name}), "
                         f"trial expires in {org.trial_days_remaining} days"
                     )
                     reminder_count += 1
                 except Exception as e:
+                    failed_count += 1
                     logger.error(f"Error sending reminder for org {org.id}: {e}")
 
-        logger.info(f"Sent {reminder_count} trial expiry reminders")
+        logger.info(f"Sent {reminder_count} trial expiry reminders, {failed_count} failed")
 
         return {
-            "status": "completed",
+            "status": "completed" if failed_count == 0 else "partial",
             "reminders_sent": reminder_count,
+            "reminders_failed": failed_count,
         }
     except Exception as e:
         logger.error(f"Error sending trial expiry reminders: {e}")

@@ -187,7 +187,8 @@ class GoogleProvider(BaseAIProvider):
                             for part in candidates[0].get("content", {}).get("parts", []):
                                 if "text" in part:
                                     yield part["text"]
-                    except Exception:
+                    except (json.JSONDecodeError, KeyError, IndexError) as e:
+                        logger.debug("Skipping malformed SSE chunk", error=str(e))
                         continue
 
     async def close(self):

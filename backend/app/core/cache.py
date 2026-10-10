@@ -12,6 +12,7 @@ import asyncio
 import functools
 import hashlib
 import json
+import logging
 import pickle
 from datetime import timedelta
 from typing import Any, Callable, TypeVar, ParamSpec
@@ -21,6 +22,8 @@ import redis.asyncio as redis
 from redis.asyncio.connection import ConnectionPool
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 P = ParamSpec("P")
 T = TypeVar("T")
@@ -109,7 +112,8 @@ class RedisCache:
             if data:
                 return pickle.loads(data)
             return None
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache get failed", extra={"key": key, "error": str(e)})
             return None
 
     async def set(
@@ -125,7 +129,8 @@ class RedisCache:
             data = pickle.dumps(value)
             await self.client.setex(key, ttl, data)
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache set failed", extra={"key": key, "error": str(e)})
             return False
 
     async def delete(self, key: str) -> bool:
@@ -133,7 +138,8 @@ class RedisCache:
         try:
             await self.client.delete(key)
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache delete failed", extra={"key": key, "error": str(e)})
             return False
 
     async def delete_pattern(self, pattern: str) -> int:
@@ -148,35 +154,40 @@ class RedisCache:
                 if cursor == 0:
                     break
             return deleted
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache delete_pattern failed", extra={"pattern": pattern, "error": str(e)})
             return 0
 
     async def exists(self, key: str) -> bool:
         """Check if key exists."""
         try:
             return await self.client.exists(key) > 0
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache exists check failed", extra={"key": key, "error": str(e)})
             return False
 
     async def incr(self, key: str, amount: int = 1) -> int:
         """Increment counter."""
         try:
             return await self.client.incrby(key, amount)
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache incr failed", extra={"key": key, "error": str(e)})
             return 0
 
     async def expire(self, key: str, ttl: int) -> bool:
         """Set expiration on existing key."""
         try:
             return await self.client.expire(key, ttl)
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache expire failed", extra={"key": key, "error": str(e)})
             return False
 
     async def ttl(self, key: str) -> int:
         """Get remaining TTL for key."""
         try:
             return await self.client.ttl(key)
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache ttl check failed", extra={"key": key, "error": str(e)})
             return -1
 
     async def get_json(self, key: str) -> dict | list | None:
@@ -186,7 +197,8 @@ class RedisCache:
             if data:
                 return json.loads(data)
             return None
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache get_json failed", extra={"key": key, "error": str(e)})
             return None
 
     async def set_json(
@@ -200,7 +212,8 @@ class RedisCache:
             data = json.dumps(value)
             await self.client.setex(key, ttl, data)
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Cache set_json failed", extra={"key": key, "error": str(e)})
             return False
 
     @asynccontextmanager
@@ -227,8 +240,8 @@ class RedisCache:
         finally:
             try:
                 await lock.release()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Failed to release distributed lock", extra={"lock": name, "error": str(e)})
 
     async def health_check(self) -> dict[str, Any]:
         """Check Redis connectivity."""
