@@ -1,8 +1,11 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState, type ReactNode } from 'react';
-import { ConsentBanner } from '@/components/compliance';
+import { lazy, Suspense, useState, type ReactNode } from 'react';
+
+const ConsentBanner = lazy(() =>
+  import('@/components/compliance').then((m) => ({ default: m.ConsentBanner }))
+);
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -20,7 +23,9 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ConsentBanner />
+      <Suspense fallback={null}>
+        <ConsentBanner />
+      </Suspense>
     </QueryClientProvider>
   );
 }

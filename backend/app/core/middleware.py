@@ -410,11 +410,15 @@ class ErrorTrackingMiddleware(BaseHTTPMiddleware):
     Integrates with Langfuse for LLM-related error tracking.
     """
 
+    _SKIP_PATHS = frozenset(("/", "/health", "/healthz", "/favicon.ico"))
+
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        if request.url.path in self._SKIP_PATHS:
+            return await call_next(request)
+
         request_id = request_id_var.get() or str(uuid.uuid4())
         tenant_id = tenant_id_var.get()
 
-        # Extract user info from auth header if available
         user_id = None
         auth_header = request.headers.get("Authorization", "")
         if auth_header.startswith("Bearer "):
