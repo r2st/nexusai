@@ -351,8 +351,8 @@ export default function ChatPage() {
       <main className="flex flex-1 flex-col" role="main" aria-label="Chat area">
         {/* Header with model selector and connection status */}
         <div className="flex h-14 items-center justify-between border-b px-4">
-          {/* Model Selector */}
-          <div className="flex items-center gap-3">
+          {/* Model Selector - extra left padding on mobile for hamburger */}
+          <div className="flex items-center gap-3 max-md:pl-10">
             <ModelSelector
               selectedModel={selectedModel}
               onSelectModel={handleModelSelect}
