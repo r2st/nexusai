@@ -30,7 +30,7 @@ langchain-text-splitters>=0.3.6
 langserve>=0.2.0
 openai>=1.55.0
 anthropic>=0.39.0
-tiktoken>=0.8.0
+tiktoken>=0.14.0
 sentence-transformers>=3.4.0
 
 # AI/ML - Additional Providers
@@ -61,15 +61,15 @@ google-cloud-storage>=2.14.0  # GCS
 # Note: OpenAI handles TTS/STT, additional providers via httpx
 
 # Utilities
-pydantic[email]>=2.10.0
-pydantic-settings>=2.6.0
+pydantic[email]>=2.14.0
+pydantic-settings>=2.15.0
 croniter>=6.0.0  # Cron expression parsing for scheduled tasks
 httpx>=0.28.0
 aiofiles>=24.1.0
 python-dotenv>=1.1.0
 structlog>=24.4.0
 tenacity>=9.0.0
-orjson>=3.11.6
+orjson>=3.13.0
 clickhouse-connect>=0.7.0
 websockets>=12.0  # For MCP WebSocket transport
 bleach>=6.2.0  # HTML sanitization for security
