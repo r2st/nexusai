@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexusAI Grounding Architecture</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; padding: 40px 20px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 { text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #f1f5f9; }
+  .subtitle { text-align: center; font-size: 14px; color: #94a3b8; margin-bottom: 40px; }
+
+  /* ── Flow diagram ── */
+  .flow { display: flex; flex-direction: column; gap: 24px; align-items: center; }
+  .arrow-down { width: 2px; height: 28px; background: #475569; position: relative; margin: -8px 0; }
+  .arrow-down::after { content: '▼'; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); color: #475569; font-size: 12px; }
+  .arrow-split { display: flex; justify-content: center; align-items: flex-start; gap: 0; width: 100%; position: relative; }
+  .arrow-split::before { content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 2px; background: #475569; }
+
+  /* ── Boxes ── */
+  .box { border-radius: 12px; padding: 20px 28px; width: 100%; max-width: 520px; position: relative; }
+  .box-input { background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%); border: 1px solid #334155; }
+  .box-process { background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%); border: 1px solid #4338ca; }
+  .box-output { background: linear-gradient(135deg, #064e3b 0%, #022c22 100%); border: 1px solid #047857; }
+  .box-score { background: linear-gradient(135deg, #78350f 0%, #451a03 100%); border: 1px solid #b45309; }
+
+  .box h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .box p { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+  .badge-blue { background: #1d4ed8; color: #dbeafe; }
+  .badge-purple { background: #6d28d9; color: #ede9fe; }
+  .badge-green { background: #047857; color: #d1fae5; }
+  .badge-amber { background: #b45309; color: #fef3c7; }
+
+  /* ── Parallel columns ── */
+  .parallel { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 800px; }
+  .parallel .box { max-width: none; }
+
+  /* ── Sentence table ── */
+  .sentence-table { width: 100%; margin-top: 12px; border-collapse: collapse; }
+  .sentence-table th, .sentence-table td { text-align: left; padding: 6px 10px; font-size: 12px; border-bottom: 1px solid #334155; }
+  .sentence-table th { color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; font-size: 10px; }
+  .grounded { color: #34d399; }
+  .ungrounded { color: #f87171; }
+
+  /* ── Formula ── */
+  .formula { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 16px 24px; font-family: 'Courier New', monospace; font-size: 14px; text-align: center; color: #e0e7ff; margin-top: 8px; line-height: 1.8; }
+  .formula .op { color: #818cf8; }
+  .formula .num { color: #fbbf24; }
+  .formula .var { color: #67e8f9; }
+
+  /* ── Legend ── */
+  .legend { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 36px; padding-top: 20px; border-top: 1px solid #1e293b; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #94a3b8; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+  .code { font-family: 'Courier New', monospace; font-size: 12px; color: #a5b4fc; background: rgba(99,102,241,.12); padding: 1px 5px; border-radius: 4px; }
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; font-weight: 600; margin-bottom: -8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Grounding Check Architecture</h1>
+  <p class="subtitle">NexusAI &middot; <span class="code">SemanticSimilarityChecker.check_grounding()</span></p>
+
+  <div class="flow">
+
+    <!-- STEP 1: INPUTS -->
+    <p class="section-label">Inputs</p>
+    <div class="parallel">
+      <div class="box box-input">
+        <h3><span class="badge badge-blue">Input</span> LLM Response</h3>
+        <p>The generated response text to validate. Split into individual sentences using regex: <span class="code">(?&lt;=[.!?])\s+</span></p>
+      </div>
+      <div class="box box-input">
+        <h3><span class="badge badge-blue">Input</span> Context Documents</h3>
+        <p>List of RAG-retrieved passages / context chunks that the response should be grounded in.</p>
+      </div>
+    </div>
+
+    <div class="arrow-down"></div>
+
+    <!-- STEP 2: EMBEDDING -->
+    <div class="box box-process" style="max-width: 800px;">
+      <h3><span class="badge badge-purple">Step 1</span> Batch Embedding</h3>
+      <p>All texts (sentences + context docs) are sent to <span class="code">EmbeddingsService.embed_batch()</span> in a <strong>single batch call</strong> for efficiency. Each text is converted into a high-dimensional vector.</p>
+    </div>
+
+    <div class="arrow-down"></div>
+
+    <!-- STEP 3: TWO PARALLEL CHECKS -->
+    <p class="section-label">Parallel Analysis</p>
+    <div class="parallel">
+      <div class="box box-process">
+        <h3><span class="badge badge-purple">Step 2a</span> Overall Similarity</h3>
+        <p>Cosine similarity between the <strong>full response</strong> embedding and <strong>combined context</strong> embedding. Gives a high-level grounding signal.</p>
+        <div class="formula">
+          <span class="var">cos(A, B)</span> <span class="op">=</span> <span class="var">A &middot; B</span> <span class="op">/</span> (<span class="var">||A||</span> <span class="op">&times;</span> <span class="var">||B||</span>)
+        </div>
+      </div>
+      <div class="box box-process">
+        <h3><span class="badge badge-purple">Step 2b</span> Sentence-Level Check</h3>
+        <p>Each sentence is compared against <strong>every context document</strong>. The <strong>max similarity</strong> across all context docs is kept. If below <span class="code">sentence_threshold (0.5)</span>, the sentence is flagged as <strong>ungrounded</strong>.</p>
+        <table class="sentence-table">
+          <tr><th>Sentence</th><th>Max Sim</th><th>Status</th></tr>
+          <tr><td>"The API supports..."</td><td>0.82</td><td class="grounded">&#10003; Grounded</td></tr>
+          <tr><td>"It was founded in..."</td><td>0.38</td><td class="ungrounded">&#10007; Ungrounded</td></tr>
+          <tr><td>"Users can also..."</td><td>0.71</td><td class="grounded">&#10003; Grounded</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="arrow-down"></div>
+
+    <!-- STEP 4: CONTEXT COVERAGE -->
+    <div class="box box-process" style="max-width: 800px;">
+      <h3><span class="badge badge-purple">Step 3</span> Context Coverage</h3>
+      <p>Measures how much of the provided context is actually <em>used</em> by the response. Computes cosine similarity between the response and <strong>each</strong> context doc individually, then averages. Low coverage can indicate the response ignored relevant context.</p>
+    </div>
+
+    <div class="arrow-down"></div>
+
+    <!-- STEP 5: SCORE FUSION -->
+    <div class="box box-score" style="max-width: 800px;">
+      <h3><span class="badge badge-amber">Step 4</span> Score Fusion</h3>
+      <p>The final grounding score is a <strong>weighted blend</strong> of the overall similarity and the sentence-level grounding rate:</p>
+      <div class="formula">
+        <span class="var">final_score</span> <span class="op">=</span> <span class="var">overall_similarity</span> <span class="op">&times;</span> <span class="num">0.4</span> <span class="op">+</span> <span class="var">sentence_grounding_rate</span> <span class="op">&times;</span> <span class="num">0.6</span>
+      </div>
+      <p style="margin-top: 10px;">Sentence-level analysis gets <strong>60% weight</strong> because it catches fine-grained hallucinations that overall similarity might miss.</p>
+    </div>
+
+    <div class="arrow-down"></div>
+
+    <!-- STEP 6: OUTPUT -->
+    <div class="box box-output" style="max-width: 800px;">
+      <h3><span class="badge badge-green">Output</span> GroundingResult</h3>
+      <p>Returns a structured result containing:</p>
+      <table class="sentence-table" style="margin-top: 8px;">
+        <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        <tr><td><span class="code">grounding_score</span></td><td>float 0–1</td><td>Final weighted grounding score</td></tr>
+        <tr><td><span class="code">ungrounded_sentences</span></td><td>list[str]</td><td>Sentences below the similarity threshold</td></tr>
+        <tr><td><span class="code">context_coverage</span></td><td>float 0–1</td><td>How much context was utilized</td></tr>
+        <tr><td><span class="code">details</span></td><td>dict</td><td>Per-sentence scores, counts, overall similarity</td></tr>
+      </table>
+    </div>
+
+    <div class="arrow-down"></div>
+
+    <!-- STEP 7: INTEGRATION -->
+    <div class="box box-score" style="max-width: 800px; border-color: #dc2626; background: linear-gradient(135deg, #450a0a 0%, #1c1917 100%);">
+      <h3><span class="badge" style="background:#dc2626;color:#fecaca;">Integration</span> Hallucination Score</h3>
+      <p>Grounding feeds into the combined hallucination score with <strong>40% weight</strong>. If <span class="code">grounding_score &lt; 0.7</span>, a <span class="code">low_grounding</span> issue is raised.</p>
+      <div class="formula">
+        <span class="var">hallucination_score</span> <span class="op">=</span> (<span class="num">1</span> <span class="op">-</span> <span class="var">grounding</span>) <span class="op">&times;</span> <span class="num">0.4</span> <span class="op">+</span> (<span class="num">1</span> <span class="op">-</span> <span class="var">consistency</span>) <span class="op">&times;</span> <span class="num">0.3</span> <span class="op">+</span> <span class="var">citation_issues</span> <span class="op">&times;</span> <span class="num">0.3</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#1d4ed8;"></div> Inputs</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6d28d9;"></div> Processing Steps</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b45309;"></div> Scoring</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#047857;"></div> Output</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#dc2626;"></div> Integration</div>
+  </div>
+
+</div>
+</body>
+</html>

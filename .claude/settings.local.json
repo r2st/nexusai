@@ -68,7 +68,18 @@
       "Bash(docker-compose ps:*)",
       "Bash(/opt/anaconda3/bin/python:*)",
       "Bash(docker port:*)",
-      "Bash(docker network:*)"
+      "Bash(docker network:*)",
+      "Bash(.venv/bin/pip install:*)",
+      "Bash(.venv/bin/python:*)",
+      "WebFetch(domain:www.promptlayer.com)",
+      "WebFetch(domain:langfuse.com)",
+      "WebFetch(domain:www.braintrust.dev)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:deepwiki.com)",
+      "Bash(pip3 show:*)",
+      "Bash(.venv/bin/pip show:*)",
+      "Bash(timeout 20 .venv/bin/uvicorn:*)"
     ]
   }
 }

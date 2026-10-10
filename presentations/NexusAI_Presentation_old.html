@@ -1,0 +1,2329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusAI — Engineering Intelligence Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==================== CSS VARIABLES & FOUNDATION ==================== */
+        :root {
+            --brand-ink: #0b1220;
+            --brand-blue: #1e40af;
+            --brand-sky: #60a5fa;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --bg-light: #f7fafc;
+            --bg-lighter: #edf2f7;
+            --border-color: #e2e8f0;
+            --border-dark: #cbd5e0;
+            --green-accent: #48bb78;
+            --red-accent: #f56565;
+            --purple-accent: #9f7aea;
+            --spacing-unit: 8px;
+            --transition-normal: 150ms ease-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--brand-ink);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        /* ==================== PRESENTATION CONTAINER ==================== */
+        .presentation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .slides-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 64px;
+            opacity: 0;
+            transition: opacity 0.4s ease-out;
+            pointer-events: none;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        .slide.exit-left {
+            animation: slideExitLeft 0.4s ease-out forwards;
+        }
+
+        @keyframes slideExitLeft {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+        }
+
+        /* ==================== SCROLL HANDLING ==================== */
+        .slide.scrollable {
+            overflow-y: auto;
+            padding-right: 52px;
+        }
+
+        .slide.scrollable::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide.scrollable::-webkit-scrollbar-track {
+            background: var(--bg-lighter);
+            border-radius: 4px;
+        }
+
+        .slide.scrollable::-webkit-scrollbar-thumb {
+            background: var(--brand-sky);
+            border-radius: 4px;
+        }
+
+        .slide.scrollable::-webkit-scrollbar-thumb:hover {
+            background: var(--brand-blue);
+        }
+
+        /* ==================== SCROLL HINT ==================== */
+        .scroll-hint {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: scrollBounce 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(8px);
+            }
+        }
+
+        /* ==================== BRAND MARK ==================== */
+        .brand-mark {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 24px;
+        }
+
+        .brand-mark svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .brand-mark-sm {
+            width: 14px;
+            height: 14px;
+            vertical-align: -2px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+
+        /* ==================== TYPOGRAPHY ==================== */
+        h1 {
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--brand-ink);
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--brand-ink);
+            margin-bottom: 24px;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--brand-ink);
+            margin-bottom: 16px;
+            margin-top: 32px;
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .metadata {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* ==================== TAGS & LABELS ==================== */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--brand-sky);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+
+        .tag.dark {
+            background: var(--brand-ink);
+        }
+
+        .tag.green {
+            background: var(--green-accent);
+        }
+
+        .tag.purple {
+            background: var(--purple-accent);
+        }
+
+        .tag.grey {
+            background: #a0aec0;
+        }
+
+        .tag-inline {
+            display: inline;
+            padding: 2px 8px;
+            background: var(--bg-lighter);
+            color: var(--brand-blue);
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 2px;
+        }
+
+        /* ==================== DIVIDER ==================== */
+        .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 40px 0;
+        }
+
+        .divider.blue {
+            background: var(--brand-blue);
+            height: 2px;
+            margin: 48px 0;
+        }
+
+        /* ==================== CARDS ==================== */
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            transition: all var(--transition-normal);
+        }
+
+        .card:hover {
+            border-color: var(--brand-sky);
+            box-shadow: 0 4px 12px rgba(96, 165, 250, 0.1);
+        }
+
+        .card-dark {
+            background: var(--brand-ink);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--brand-sky);
+        }
+
+        .card-dark h4 {
+            color: white;
+        }
+
+        .card-dark p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .card-blue {
+            background: linear-gradient(135deg, var(--brand-blue) 0%, #1e3a8a 100%);
+            border: 1px solid var(--brand-blue);
+            color: white;
+        }
+
+        .card-blue h4 {
+            color: white;
+        }
+
+        .card-blue p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-icon {
+            text-align: center;
+            padding: 32px 24px;
+        }
+
+        .card-icon svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+        }
+
+        /* ==================== GRIDS ==================== */
+        .grid {
+            display: grid;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .grid-4 {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+
+        .grid-5 {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        }
+
+        .grid-2-1 {
+            grid-template-columns: 2fr 1fr;
+        }
+
+        .grid-1-2 {
+            grid-template-columns: 1fr 2fr;
+        }
+
+        /* ==================== TABLES ==================== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        th {
+            background: var(--brand-blue);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-dark);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        tr:hover td {
+            background: var(--bg-light);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ==================== TIMELINE ==================== */
+        .timeline {
+            position: relative;
+            padding: 24px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--brand-sky);
+        }
+
+        .tl-item {
+            margin-bottom: 32px;
+            padding-left: 60px;
+            position: relative;
+        }
+
+        .tl-dot {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border: 3px solid var(--brand-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--brand-blue);
+            font-size: 14px;
+        }
+
+        .tl-title {
+            font-weight: 600;
+            color: var(--brand-ink);
+            margin-bottom: 4px;
+        }
+
+        .tl-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ==================== FLOW ==================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background: var(--brand-blue);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 140px;
+            flex-shrink: 0;
+        }
+
+        .flow-arrow {
+            color: var(--brand-sky);
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        /* ==================== METRIC BARS ==================== */
+        .metric-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .metric-bar-bg {
+            flex: 1;
+            height: 24px;
+            background: var(--bg-lighter);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .metric-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-sky) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ==================== PILLS & CHIPS ==================== */
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-right: 8px;
+            margin-bottom: 12px;
+            white-space: nowrap;
+        }
+
+        .pill-blue {
+            background: var(--brand-blue);
+            color: white;
+            border-color: var(--brand-blue);
+        }
+
+        .pill-sky {
+            background: var(--brand-sky);
+            color: white;
+            border-color: var(--brand-sky);
+        }
+
+        .pill-dark {
+            background: var(--brand-ink);
+            color: white;
+            border-color: var(--brand-ink);
+        }
+
+        /* ==================== SVG DIAGRAMS ==================== */
+        .diagram {
+            width: 100%;
+            margin: 32px 0;
+            border-radius: 8px;
+            background: var(--bg-light);
+            padding: 24px;
+        }
+
+        .diagram svg {
+            width: 100%;
+            height: auto;
+        }
+
+        /* ==================== NAVIGATION BAR ==================== */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 32px;
+            background: var(--brand-ink);
+            color: white;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            height: 64px;
+            flex-shrink: 0;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all var(--transition-normal);
+        }
+
+        .nav-button:hover {
+            background: rgba(96, 165, 250, 0.2);
+            border-color: var(--brand-sky);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .dot.active {
+            background: var(--brand-sky);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .slide-counter {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+            min-width: 60px;
+        }
+
+        .slide-title {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-mark {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* ==================== KEYBOARD HINTS ==================== */
+        .kbd-hint {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            font-size: 12px;
+            color: var(--text-light);
+            text-align: right;
+            line-height: 1.6;
+        }
+
+        .kbd-key {
+            display: inline-block;
+            padding: 2px 6px;
+            background: var(--bg-lighter);
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            font-family: 'Courier Prime', monospace;
+            font-size: 11px;
+            margin: 0 2px;
+        }
+
+        /* ==================== SECTION HIGHLIGHTS ==================== */
+        .highlight-section {
+            background: var(--bg-light);
+            border-left: 4px solid var(--brand-blue);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 24px 0;
+        }
+
+        .highlight-section h4 {
+            color: var(--brand-blue);
+            margin-bottom: 8px;
+        }
+
+        /* ==================== FOOTER BANNER ==================== */
+        .footer-banner {
+            background: linear-gradient(135deg, var(--brand-blue) 0%, #1e3a8a 100%);
+            color: white;
+            padding: 32px 24px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .footer-banner p {
+            color: white;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .footer-banner .contact {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* ==================== RESPONSIVE: 1800px+ ==================== */
+        @media (min-width: 1800px) {
+            h1 {
+                font-size: 64px;
+            }
+
+            h2 {
+                font-size: 48px;
+            }
+
+            .subtitle {
+                font-size: 20px;
+            }
+
+            .slide {
+                padding: 80px;
+            }
+        }
+
+        /* ==================== RESPONSIVE: 900px ==================== */
+        @media (max-width: 900px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .grid-5 {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .grid-2-1 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-1-2 {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            h2 {
+                font-size: 32px;
+            }
+
+            .slide {
+                padding: 48px;
+            }
+        }
+
+        /* ==================== RESPONSIVE: 768px ==================== */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px;
+            }
+
+            .grid-4 {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-bar {
+                padding: 12px 16px;
+                height: auto;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .nav-center {
+                order: 3;
+                flex-basis: 100%;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .slide-dots {
+                gap: 6px;
+            }
+
+            .dot {
+                width: 6px;
+                height: 6px;
+            }
+
+            .dot.active {
+                width: 18px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            h3 {
+                font-size: 20px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 10px 12px;
+            }
+        }
+
+        /* ==================== RESPONSIVE: 480px ==================== */
+        @media (max-width: 480px) {
+            .slide {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            h3 {
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-5 {
+                grid-template-columns: 1fr;
+            }
+
+            .pill {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .nav-button {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .nav-title {
+                display: none;
+            }
+
+            .kbd-hint {
+                display: none;
+            }
+
+            .flow {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .flow-step {
+                width: 100%;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* ==================== LANDSCAPE ORIENTATION ==================== */
+        @media (orientation: landscape) {
+            @media (max-height: 600px) {
+                .slide {
+                    padding: 32px;
+                }
+
+                h1 {
+                    font-size: 28px;
+                    margin-bottom: 12px;
+                }
+
+                h2 {
+                    font-size: 24px;
+                    margin-bottom: 16px;
+                }
+
+                p {
+                    font-size: 14px;
+                    margin-bottom: 8px;
+                }
+
+                .subtitle {
+                    font-size: 14px;
+                    margin-bottom: 16px;
+                }
+
+                .card {
+                    padding: 16px;
+                }
+            }
+        }
+
+        /* ==================== TOUCH ENHANCEMENTS ==================== */
+        @media (hover: none) {
+            .card {
+                border-color: var(--border-color);
+                box-shadow: none;
+            }
+
+            .nav-button {
+                border-color: rgba(255, 255, 255, 0.3);
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .pill {
+                padding: 10px 18px;
+            }
+        }
+
+        /* ==================== PRINT STYLES ==================== */
+        @media print {
+            html, body {
+                background: white;
+                height: auto;
+                overflow: auto;
+            }
+
+            .presentation-container {
+                position: static;
+                flex-direction: column;
+                height: auto;
+            }
+
+            .slides-wrapper {
+                position: relative;
+                overflow: visible;
+                background: white;
+                page-break-after: always;
+            }
+
+            .slide {
+                position: relative;
+                page-break-inside: avoid;
+                opacity: 1;
+                pointer-events: auto;
+                width: 100%;
+                height: auto;
+                overflow: visible;
+                display: block;
+                margin-bottom: 40px;
+                padding-bottom: 40px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .nav-bar {
+                display: none;
+            }
+
+            .kbd-hint {
+                display: none;
+            }
+
+            .scroll-hint {
+                display: none;
+            }
+
+            a {
+                color: var(--brand-blue);
+                text-decoration: underline;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slides-wrapper" id="slidesWrapper">
+            <!-- ========== SLIDE 1: TITLE ========== -->
+            <div class="slide active" id="slide-0">
+                <div class="brand-mark" aria-label="NexusAI mark">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 32c6-12 34-12 40 0" stroke="#1e40af" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M12 40c6-12 34-12 40 0" stroke="rgba(30,64,175,0.60)" stroke-width="4" stroke-linecap="round"/>
+                        <circle cx="32" cy="24" r="4.5" fill="#60a5fa"/>
+                    </svg>
+                </div>
+
+                <div class="tag">Architecture & Product Overview</div>
+
+                <h1>NexusAI Engineering Intelligence</h1>
+
+                <p class="subtitle">
+                    An enterprise-grade LLM-assisted Software Intelligence SaaS platform combining AI analysis with engineering metrics. DevLake-powered with multi-provider AI, RAG-based hallucination detection, and DORA/SPACE insights.
+                </p>
+
+                <!-- Tech Pills -->
+                <div style="margin-bottom: 48px;">
+                    <div class="pill pill-blue">FastAPI</div>
+                    <div class="pill pill-blue">Next.js</div>
+                    <div class="pill pill-blue">PostgreSQL + pgvector</div>
+                    <div class="pill pill-blue">Redis</div>
+                    <div class="pill pill-blue">Meilisearch</div>
+                    <div class="pill pill-blue">Apache DevLake</div>
+                    <div class="pill pill-blue">Grafana</div>
+                    <div class="pill pill-blue">Multi-LLM (8+ providers)</div>
+                    <div class="pill pill-blue">MCP Protocol</div>
+                </div>
+
+                <!-- Hero Diagram -->
+                <div class="diagram">
+                    <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Title -->
+                        <text x="400" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#0b1220">
+                            HIGH-LEVEL SYSTEM FLOW
+                        </text>
+
+                        <!-- Engineering Tools Box -->
+                        <rect x="40" y="60" width="120" height="80" fill="#f0f4f8" stroke="#1e40af" stroke-width="2" rx="6"/>
+                        <text x="100" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#0b1220">Engineering</text>
+                        <text x="100" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="#0b1220">Tools</text>
+                        <text x="100" y="130" text-anchor="middle" font-size="11" fill="#4a5568">(40+ sources)</text>
+
+                        <!-- Arrow 1 -->
+                        <path d="M 165 100 L 195 100" stroke="#60a5fa" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+                        <!-- DevLake Box -->
+                        <rect x="200" y="60" width="120" height="80" fill="#f0f4f8" stroke="#1e40af" stroke-width="2" rx="6"/>
+                        <text x="260" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#0b1220">DevLake</text>
+                        <text x="260" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="#0b1220">Normalization</text>
+                        <text x="260" y="130" text-anchor="middle" font-size="11" fill="#4a5568">(DORA/SPACE)</text>
+
+                        <!-- Arrow 2 -->
+                        <path d="M 325 100 L 355 100" stroke="#60a5fa" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+                        <!-- NexusAI Platform Box -->
+                        <rect x="360" y="60" width="120" height="80" fill="#f0f4f8" stroke="#1e40af" stroke-width="2" rx="6"/>
+                        <text x="420" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#0b1220">NexusAI</text>
+                        <text x="420" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="#0b1220">Platform</text>
+                        <text x="420" y="130" text-anchor="middle" font-size="11" fill="#4a5568">(AI + RAG)</text>
+
+                        <!-- Arrow 3 -->
+                        <path d="M 485 100 L 515 100" stroke="#60a5fa" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+                        <!-- Users Box -->
+                        <rect x="520" y="60" width="120" height="80" fill="#1e40af" stroke="#1e40af" stroke-width="2" rx="6"/>
+                        <text x="580" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="white">Users &amp;</text>
+                        <text x="580" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="white">Teams</text>
+                        <text x="580" y="130" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.8)">(Insights &amp; Analysis)</text>
+
+                        <!-- Marker definition -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#60a5fa"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <!-- Metadata Row -->
+                <div style="margin-top: auto; padding-top: 32px; border-top: 1px solid var(--border-color);">
+                    <div class="metadata">
+                        Prepared by: Subhendu Das | Date: March 2026 | Scope: AI-Powered Engineering Intelligence
+                    </div>
+                </div>
+
+                <!-- Keyboard Hints -->
+                <div class="kbd-hint">
+                    <div><span class="kbd-key">←</span> <span class="kbd-key">→</span> to navigate</div>
+                    <div><span class="kbd-key">F</span> fullscreen</div>
+                </div>
+            </div>
+
+            <!-- ========== SLIDE 2: PROBLEM & CONTEXT ========== -->
+            <div class="slide scrollable" id="slide-1">
+                <div class="tag">Problem Statement</div>
+                <h2>Engineering Analytics Is Valuable... But Painful to Operate</h2>
+                <p class="subtitle">
+                    Teams want DORA/SPACE visibility, trustworthy AI-powered insights, and code quality metrics — but setup friction, tool sprawl, and hallucination risks prevent adoption.
+                </p>
+
+                <!-- 4-card grid: Core Pain Points -->
+                <h3 style="margin-top: 40px;">Core Pain Points</h3>
+                <div class="grid grid-2">
+                    <div class="card card-dark">
+                        <h4>Setup Friction</h4>
+                        <p style="margin: 8px 0; font-size: 32px; font-weight: 700; color: var(--brand-sky);">High</p>
+                        <p style="margin-top: 8px;">Connections, scopes, tokens, and schedules across 40+ tools are hard to get right.</p>
+                    </div>
+                    <div class="card card-dark">
+                        <h4>Tool Fragmentation</h4>
+                        <p style="margin: 8px 0; font-size: 32px; font-weight: 700; color: var(--brand-sky);">40+</p>
+                        <p style="margin-top: 8px;">Git + Issues + CI/CD + Chat + Monitoring live in separate islands.</p>
+                    </div>
+                    <div class="card card-dark">
+                        <h4>Time to Insight</h4>
+                        <p style="margin: 8px 0; font-size: 32px; font-weight: 700; color: var(--brand-sky);">Slow</p>
+                        <p style="margin-top: 8px;">Dashboards exist, but users don't know where to start or what metrics mean.</p>
+                    </div>
+                    <div class="card card-dark">
+                        <h4>AI Trust</h4>
+                        <p style="margin: 8px 0; font-size: 32px; font-weight: 700; color: var(--brand-sky);">Variable</p>
+                        <p style="margin-top: 8px;">LLM responses can hallucinate; metrics definitions and data scopes drift without guardrails.</p>
+                    </div>
+                </div>
+
+                <!-- Current State Diagram -->
+                <h3 style="margin-top: 40px;">Current State — Fragmented Tool Landscape</h3>
+                <div class="diagram">
+                    <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Tools scattered -->
+                        <rect x="60" y="40" width="80" height="50" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="100" y="70" text-anchor="middle" font-size="11" font-weight="600">GitHub</text>
+
+                        <rect x="160" y="30" width="80" height="50" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="200" y="60" text-anchor="middle" font-size="11" font-weight="600">Jira</text>
+
+                        <rect x="260" y="45" width="80" height="50" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="300" y="75" text-anchor="middle" font-size="11" font-weight="600">Jenkins</text>
+
+                        <rect x="360" y="35" width="80" height="50" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="400" y="65" text-anchor="middle" font-size="11" font-weight="600">DataDog</text>
+
+                        <rect x="460" y="50" width="80" height="50" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="500" y="80" text-anchor="middle" font-size="11" font-weight="600">Slack</text>
+
+                        <rect x="560" y="40" width="80" height="50" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="600" y="70" text-anchor="middle" font-size="11" font-weight="600">GitLab</text>
+
+                        <rect x="660" y="45" width="80" height="50" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="700" y="75" text-anchor="middle" font-size="11" font-weight="600">PagerDuty</text>
+
+                        <!-- Question marks below -->
+                        <text x="100" y="130" text-anchor="middle" font-size="40" fill="#cbd5e0">?</text>
+                        <text x="200" y="130" text-anchor="middle" font-size="40" fill="#cbd5e0">?</text>
+                        <text x="300" y="130" text-anchor="middle" font-size="40" fill="#cbd5e0">?</text>
+                        <text x="400" y="130" text-anchor="middle" font-size="40" fill="#cbd5e0">?</text>
+                        <text x="500" y="130" text-anchor="middle" font-size="40" fill="#cbd5e0">?</text>
+                        <text x="600" y="130" text-anchor="middle" font-size="40" fill="#cbd5e0">?</text>
+                        <text x="700" y="130" text-anchor="middle" font-size="40" fill="#cbd5e0">?</text>
+
+                        <!-- No unified intelligence -->
+                        <text x="400" y="200" text-anchor="middle" font-size="14" font-weight="600" fill="#f56565">
+                            ❌ No unified intelligence layer
+                        </text>
+                    </svg>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Missing Business Capabilities -->
+                <h3>Missing Business Capabilities</h3>
+                <div class="grid grid-3">
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">AI-Powered Code Analysis</h4>
+                        <p>No unified NLP interface to query codebases, detect bugs, or generate documentation from engineering data.</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Hallucination-Free Insights</h4>
+                        <p>No grounding checks on AI responses — teams can't trust automated analysis without validation.</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Unified Metrics Surface</h4>
+                        <p>DORA/SPACE metrics scattered across tools; no single pane with AI explanations.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Multi-Provider AI Flexibility</h4>
+                        <p>Need to support free cloud LLMs AND local/private LLMs for sensitive environments.</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Enterprise Compliance</h4>
+                        <p>SOC 2, HIPAA, GDPR requirements for audit logging, data residency, and access controls.</p>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Proposed Non-Functional Targets -->
+                <h3>Proposed Non-Functional Targets <span style="font-weight: 400; font-size: 16px; color: var(--text-light);">(proposed based on industry benchmarks)</span></h3>
+                <div class="grid grid-3">
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">API Response (p95)</h4>
+                        <p style="font-size: 18px; font-weight: 700; margin: 8px 0;">200-400ms</p>
+                        <p style="font-size: 13px;">Excluding upstream data dependencies</p>
+                    </div>
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Chat Latency (p95)</h4>
+                        <p style="font-size: 18px; font-weight: 700; margin: 8px 0;">1-3s</p>
+                        <p style="font-size: 13px;">Including LLM inference time</p>
+                    </div>
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Uptime SLO</h4>
+                        <p style="font-size: 18px; font-weight: 700; margin: 8px 0;">99.9%</p>
+                        <p style="font-size: 13px;">Self-hosted or cloud deployment</p>
+                    </div>
+                </div>
+
+                <div class="scroll-hint">
+                    <span>↓ Scroll to see more</span>
+                </div>
+            </div>
+
+            <!-- ========== SLIDE 3: SOLUTION DESIGN & ARCHITECTURE ========== -->
+            <div class="slide scrollable" id="slide-2">
+                <div class="tag">Solution Design & Architecture</div>
+                <h2>Composable AI Platform with Grounded Intelligence</h2>
+                <p class="subtitle">
+                    NexusAI sits above DevLake to make setup and first insight fast, while adding AI-powered analysis with hallucination detection, RAG retrieval, and multi-provider LLM routing.
+                </p>
+
+                <!-- Requirement to Solution Traceability -->
+                <h3 style="margin-top: 40px;">Requirement → Solution Traceability</h3>
+                <div class="grid grid-5">
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">AI-Powered Analysis</h4>
+                        <p style="font-size: 13px;">Multi-LLM router, RAG pipeline, MCP tool integration, knowledge graph</p>
+                    </div>
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Grounded Intelligence</h4>
+                        <p style="font-size: 13px;">Semantic similarity scoring, sentence-level grounding (60%), consistency checks (30%)</p>
+                    </div>
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Engineering Metrics</h4>
+                        <p style="font-size: 13px;">DevLake integration (40+ tools), DORA/SPACE dashboards, Grafana embedding</p>
+                    </div>
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Enterprise Security</h4>
+                        <p style="font-size: 13px;">RBAC, OpenFGA, audit logging, credential encryption, HIPAA/GDPR/SOC 2</p>
+                    </div>
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Deployment Flexibility</h4>
+                        <p style="font-size: 13px;">Docker Compose, multi-LLM (cloud + local Ollama), Traefik gateway</p>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Core Platform Modules -->
+                <h3>Core Platform Modules</h3>
+                <div class="diagram">
+                    <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Frontend -->
+                        <rect x="40" y="40" width="150" height="100" fill="#f0f4f8" stroke="#1e40af" stroke-width="2" rx="6"/>
+                        <text x="115" y="65" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Frontend (Next.js)</text>
+                        <text x="115" y="85" text-anchor="middle" font-size="11" fill="#4a5568">Setup UI</text>
+                        <text x="115" y="102" text-anchor="middle" font-size="11" fill="#4a5568">Analytics Pages</text>
+                        <text x="115" y="119" text-anchor="middle" font-size="11" fill="#4a5568">Chat Widgets</text>
+                        <text x="115" y="136" text-anchor="middle" font-size="11" fill="#4a5568">Knowledge Graph</text>
+
+                        <!-- Backend -->
+                        <rect x="220" y="40" width="150" height="100" fill="#f0f4f8" stroke="#1e40af" stroke-width="2" rx="6"/>
+                        <text x="295" y="65" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Backend (FastAPI)</text>
+                        <text x="295" y="85" text-anchor="middle" font-size="11" fill="#4a5568">Auth & RBAC</text>
+                        <text x="295" y="102" text-anchor="middle" font-size="11" fill="#4a5568">LLM Router</text>
+                        <text x="295" y="119" text-anchor="middle" font-size="11" fill="#4a5568">RAG Pipeline</text>
+                        <text x="295" y="136" text-anchor="middle" font-size="11" fill="#4a5568">52+ API Routes</text>
+
+                        <!-- Data Layer -->
+                        <rect x="400" y="40" width="150" height="100" fill="#f0f4f8" stroke="#1e40af" stroke-width="2" rx="6"/>
+                        <text x="475" y="65" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Data Layer</text>
+                        <text x="475" y="85" text-anchor="middle" font-size="11" fill="#4a5568">PostgreSQL+pgvector</text>
+                        <text x="475" y="102" text-anchor="middle" font-size="11" fill="#4a5568">Redis Cache</text>
+                        <text x="475" y="119" text-anchor="middle" font-size="11" fill="#4a5568">Meilisearch</text>
+                        <text x="475" y="136" text-anchor="middle" font-size="11" fill="#4a5568">ARQ Queue</text>
+
+                        <!-- Analytics Stack -->
+                        <rect x="580" y="40" width="160" height="100" fill="#f0f4f8" stroke="#1e40af" stroke-width="2" rx="6"/>
+                        <text x="660" y="65" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Analytics Stack</text>
+                        <text x="660" y="85" text-anchor="middle" font-size="11" fill="#4a5568">DevLake (40+ tools)</text>
+                        <text x="660" y="102" text-anchor="middle" font-size="11" fill="#4a5568">Grafana Dashboards</text>
+                        <text x="660" y="119" text-anchor="middle" font-size="11" fill="#4a5568">DORA/SPACE Metrics</text>
+                        <text x="660" y="136" text-anchor="middle" font-size="11" fill="#4a5568">MySQL Backend</text>
+
+                        <!-- Connecting arrows -->
+                        <path d="M 195 90 L 220 90" stroke="#60a5fa" stroke-width="2" fill="none"/>
+                        <path d="M 375 90 L 400 90" stroke="#60a5fa" stroke-width="2" fill="none"/>
+                        <path d="M 555 90 L 580 90" stroke="#60a5fa" stroke-width="2" fill="none"/>
+
+                        <!-- Bottom: External Services -->
+                        <text x="40" y="180" font-size="12" font-weight="700" fill="#0b1220">External Services:</text>
+
+                        <rect x="40" y="200" width="110" height="60" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="95" y="220" text-anchor="middle" font-size="11" font-weight="600">Ollama</text>
+                        <text x="95" y="238" text-anchor="middle" font-size="10" fill="#4a5568">(Local LLM)</text>
+                        <text x="95" y="253" text-anchor="middle" font-size="10" fill="#4a5568">Optional</text>
+
+                        <rect x="170" y="200" width="110" height="60" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="225" y="220" text-anchor="middle" font-size="11" font-weight="600">Google Gemini</text>
+                        <text x="225" y="238" text-anchor="middle" font-size="10" fill="#4a5568">(Free Tier)</text>
+                        <text x="225" y="253" text-anchor="middle" font-size="10" fill="#4a5568">Default</text>
+
+                        <rect x="300" y="200" width="110" height="60" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="355" y="220" text-anchor="middle" font-size="11" font-weight="600">OpenAI GPT-4</text>
+                        <text x="355" y="238" text-anchor="middle" font-size="10" fill="#4a5568">(Paid)</text>
+                        <text x="355" y="253" text-anchor="middle" font-size="10" fill="#4a5568">Fallback</text>
+
+                        <rect x="430" y="200" width="110" height="60" fill="#f0f4f8" stroke="#cbd5e0" stroke-width="1" rx="4"/>
+                        <text x="485" y="220" text-anchor="middle" font-size="11" font-weight="600">Anthropic Claude</text>
+                        <text x="485" y="238" text-anchor="middle" font-size="10" fill="#4a5568">(Paid)</text>
+                        <text x="485" y="253" text-anchor="middle" font-size="10" fill="#4a5568">Advanced</text>
+
+                        <text x="40" y="290" font-size="11" fill="#718096">
+                            ✓ Pluggable provider architecture — easy to add more LLMs
+                        </text>
+                    </svg>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Hallucination Detection Pipeline -->
+                <h3>Hallucination Detection Pipeline</h3>
+                <div class="diagram">
+                    <svg viewBox="0 0 800 180" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Pipeline steps -->
+                        <rect x="30" y="30" width="80" height="50" fill="#1e40af" stroke="#1e40af" stroke-width="1" rx="4"/>
+                        <text x="70" y="48" text-anchor="middle" font-size="11" font-weight="600" fill="white">Response</text>
+                        <text x="70" y="63" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">Raw Text</text>
+
+                        <path d="M 115 55 L 140 55" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrowblue)"/>
+
+                        <rect x="145" y="30" width="80" height="50" fill="#1e40af" stroke="#1e40af" stroke-width="1" rx="4"/>
+                        <text x="185" y="48" text-anchor="middle" font-size="11" font-weight="600" fill="white">Sentence</text>
+                        <text x="185" y="63" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">Splitting</text>
+
+                        <path d="M 230 55 L 255 55" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrowblue)"/>
+
+                        <rect x="260" y="30" width="80" height="50" fill="#1e40af" stroke="#1e40af" stroke-width="1" rx="4"/>
+                        <text x="300" y="48" text-anchor="middle" font-size="11" font-weight="600" fill="white">Batch</text>
+                        <text x="300" y="63" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">Embedding</text>
+
+                        <path d="M 345 55 L 370 55" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrowblue)"/>
+
+                        <rect x="375" y="30" width="80" height="50" fill="#1e40af" stroke="#1e40af" stroke-width="1" rx="4"/>
+                        <text x="415" y="48" text-anchor="middle" font-size="11" font-weight="600" fill="white">Similarity</text>
+                        <text x="415" y="63" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">Matrix</text>
+
+                        <path d="M 460 55 L 485 55" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrowblue)"/>
+
+                        <rect x="490" y="30" width="80" height="50" fill="#1e40af" stroke="#1e40af" stroke-width="1" rx="4"/>
+                        <text x="530" y="48" text-anchor="middle" font-size="11" font-weight="600" fill="white">Score</text>
+                        <text x="530" y="63" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">Fusion</text>
+
+                        <path d="M 575 55 L 600 55" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrowblue)"/>
+
+                        <rect x="605" y="30" width="80" height="50" fill="#1e40af" stroke="#1e40af" stroke-width="1" rx="4"/>
+                        <text x="645" y="48" text-anchor="middle" font-size="11" font-weight="600" fill="white">Threshold</text>
+                        <text x="645" y="63" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">Check</text>
+
+                        <path d="M 690 55 L 715 55" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrowblue)"/>
+
+                        <rect x="720" y="30" width="50" height="50" fill="#48bb78" stroke="#48bb78" stroke-width="1" rx="4"/>
+                        <text x="745" y="58" text-anchor="middle" font-size="11" font-weight="600" fill="white">Safe</text>
+
+                        <!-- Formula -->
+                        <text x="30" y="130" font-size="12" font-weight="600" fill="#0b1220">Grounding Formula:</text>
+                        <text x="30" y="150" font-family="Courier Prime" font-size="12" fill="#1e40af">
+                            hallucination_score = (1 - grounding) × 0.4 + (1 - consistency) × 0.3 + citation_issues × 0.3
+                        </text>
+
+                        <!-- Marker for arrows -->
+                        <defs>
+                            <marker id="arrowblue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#60a5fa"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Service Architecture -->
+                <h3>Service Architecture (Docker Compose)</h3>
+                <div class="grid grid-3">
+                    <div class="highlight-section">
+                        <h4>Core Services</h4>
+                        <p style="font-size: 13px; margin: 4px 0;">• traefik (gateway)</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• backend (FastAPI)</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• worker (async)</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• frontend (Next.js)</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• postgres (database)</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• redis (cache)</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• meilisearch (search)</p>
+                    </div>
+                    <div class="highlight-section">
+                        <h4>Analytics Stack</h4>
+                        <p style="font-size: 13px; margin: 4px 0;">• devlake-mysql</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• devlake (normalizer)</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• devlake-config-ui</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• grafana (dashboards)</p>
+                    </div>
+                    <div class="highlight-section">
+                        <h4>AI &amp; Monitoring</h4>
+                        <p style="font-size: 13px; margin: 4px 0;">• ollama (local LLM)</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• ollama-webui</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• prometheus (metrics)</p>
+                        <p style="font-size: 13px; margin: 4px 0;">• grafana (monitoring)</p>
+                    </div>
+                </div>
+
+                <div class="scroll-hint">
+                    <span>↓ Scroll to see more</span>
+                </div>
+            </div>
+
+            <!-- ========== SLIDE 4: TARGET SYSTEM ARCHITECTURE ========== -->
+            <div class="slide scrollable" id="slide-3">
+                <div class="tag" style="color: white; background: var(--brand-sky);">DevLake + Analytics + AI</div>
+                <h2>Ingestion → Analysis → Intelligence</h2>
+                <p class="subtitle">
+                    DevLake normalizes data from 40+ engineering tools. NexusAI adds AI analysis, hallucination detection, and natural language interfaces.
+                </p>
+
+                <!-- Grid: Typical Flow vs What Users See -->
+                <h3 style="margin-top: 40px;">System Data Flow</h3>
+                <div class="grid grid-2-1">
+                    <div>
+                        <h4 style="color: var(--brand-blue); margin-bottom: 16px;">Typical Flow (4 Steps)</h4>
+                        <div class="grid" style="grid-template-columns: 1fr;">
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                    <span style="font-size: 20px; font-weight: 700; color: var(--brand-blue);">1</span>
+                                    <h4 style="margin: 0; color: var(--brand-blue);">Connect</h4>
+                                </div>
+                                <p style="font-size: 13px;">GitHub/Jira/CI + scopes (orgs, repos, boards) — 40+ data sources</p>
+                            </div>
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                    <span style="font-size: 20px; font-weight: 700; color: var(--brand-blue);">2</span>
+                                    <h4 style="margin: 0; color: var(--brand-blue);">Analyze</h4>
+                                </div>
+                                <p style="font-size: 13px;">DevLake normalizes, computes DORA/SPACE metrics, builds domain model</p>
+                            </div>
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                    <span style="font-size: 20px; font-weight: 700; color: var(--brand-blue);">3</span>
+                                    <h4 style="margin: 0; color: var(--brand-blue);">Enrich</h4>
+                                </div>
+                                <p style="font-size: 13px;">RAG pipeline + knowledge graph + embeddings for AI-powered queries</p>
+                            </div>
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                    <span style="font-size: 20px; font-weight: 700; color: var(--brand-blue);">4</span>
+                                    <h4 style="margin: 0; color: var(--brand-blue);">Interact</h4>
+                                </div>
+                                <p style="font-size: 13px;">Chat interface, dashboards, code review, documentation generation</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--brand-blue); margin-bottom: 16px;">What Users See</h4>
+                        <div class="card card-blue" style="margin-bottom: 16px;">
+                            <h4 style="margin-top: 0;">DORA Metrics</h4>
+                            <p style="font-size: 13px; margin: 4px 0;">• Deploy Frequency</p>
+                            <p style="font-size: 13px; margin: 4px 0;">• Lead Time for Changes</p>
+                            <p style="font-size: 13px; margin: 4px 0;">• Change Failure Rate</p>
+                            <p style="font-size: 13px; margin: 4px 0;">• MTTR (Mean Time to Recovery)</p>
+                        </div>
+                        <div class="card card-blue" style="margin-bottom: 16px;">
+                            <h4 style="margin-top: 0;">SPACE Dimensions</h4>
+                            <p style="font-size: 13px; margin: 4px 0;">• Satisfaction & Well-being</p>
+                            <p style="font-size: 13px; margin: 4px 0;">• Performance</p>
+                            <p style="font-size: 13px; margin: 4px 0;">• Activity</p>
+                            <p style="font-size: 13px; margin: 4px 0;">• Collaboration</p>
+                            <p style="font-size: 13px; margin: 4px 0;">• Efficiency</p>
+                        </div>
+                        <div class="card card-blue">
+                            <h4 style="margin-top: 0;">AI Analysis</h4>
+                            <p style="font-size: 13px; margin: 4px 0;">• Code Quality Insights</p>
+                            <p style="font-size: 13px; margin: 4px 0;">• Bug Detection</p>
+                            <p style="font-size: 13px; margin: 4px 0;">• Documentation Gen</p>
+                        </div>
+                        <div style="margin-top: 24px; padding: 16px; background: var(--bg-light); border-radius: 6px;">
+                            <p style="font-size: 12px; font-weight: 600; margin: 0;">Service Ports:</p>
+                            <p style="font-size: 12px; margin: 4px 0;">Frontend: :3000</p>
+                            <p style="font-size: 12px; margin: 4px 0;">API: :8000/docs</p>
+                            <p style="font-size: 12px; margin: 4px 0;">DevLake: :4000</p>
+                            <p style="font-size: 12px; margin: 4px 0;">Grafana: :3002</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- LLM Provider Matrix -->
+                <h3>LLM Provider Matrix</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Provider</th>
+                            <th>Tier</th>
+                            <th>Rate Limit</th>
+                            <th>Best For</th>
+                            <th>Latency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Google Gemini</strong></td>
+                            <td>Free</td>
+                            <td>60 req/min</td>
+                            <td>Quick start, general analysis</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Groq</strong></td>
+                            <td>Free</td>
+                            <td>30 req/min</td>
+                            <td>Interactive setup, fast Q&A</td>
+                            <td><span style="color: var(--green-accent); font-weight: 600;">Fastest</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ollama</strong></td>
+                            <td>Free/Local</td>
+                            <td>Unlimited</td>
+                            <td>Private deployments, sensitive data</td>
+                            <td>Variable</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OpenAI GPT-4</strong></td>
+                            <td>Paid</td>
+                            <td>Standard</td>
+                            <td>Complex analysis, code review</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Anthropic Claude</strong></td>
+                            <td>Paid</td>
+                            <td>Standard</td>
+                            <td>Long context, documentation</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Together AI</strong></td>
+                            <td>Paid</td>
+                            <td>Standard</td>
+                            <td>Open-source models</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OpenRouter</strong></td>
+                            <td>Paid</td>
+                            <td>Standard</td>
+                            <td>Model marketplace, flexibility</td>
+                            <td>Variable</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DeepSeek</strong></td>
+                            <td>Paid</td>
+                            <td>Standard</td>
+                            <td>Code-focused tasks</td>
+                            <td><span style="color: var(--green-accent); font-weight: 600;">Fast</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="divider"></div>
+
+                <!-- API Surface -->
+                <h3>API Surface (52+ Endpoints)</h3>
+                <div class="grid grid-4">
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Core</h4>
+                        <p style="font-size: 13px; margin: 4px 0;">/auth</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/chat</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/ws</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/documents</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/health</p>
+                    </div>
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Analytics</h4>
+                        <p style="font-size: 13px; margin: 4px 0;">/analytics</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/ai-analytics</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/metrics</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/ai-sdlc</p>
+                    </div>
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">AI</h4>
+                        <p style="font-size: 13px; margin: 4px 0;">/agents</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/knowledge-graph</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/hallucination</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/ragas</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/code-review</p>
+                    </div>
+                    <div class="card" style="border-top: 3px solid var(--brand-blue);">
+                        <h4 style="color: var(--brand-blue);">Enterprise</h4>
+                        <p style="font-size: 13px; margin: 4px 0;">/organizations</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/compliance</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/audit</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/security</p>
+                        <p style="font-size: 13px; margin: 4px 0;">/webhooks</p>
+                    </div>
+                </div>
+
+                <div class="scroll-hint">
+                    <span>↓ Scroll to see more</span>
+                </div>
+            </div>
+
+            <!-- ========== SLIDE 5: BUSINESS & OPERATIONS ========== -->
+            <div class="slide scrollable" id="slide-4">
+                <div class="tag" style="color: white; background: var(--purple-accent);">Business Alignment & Operations</div>
+                <h2>Trade-Offs, Cost & Business Impact</h2>
+
+                <div class="grid grid-2">
+                    <!-- Left: Trade-Offs & Mitigations -->
+                    <div>
+                        <h3>Key Trade-Offs & Mitigations</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trade-Off</th>
+                                    <th>Risk</th>
+                                    <th>Mitigation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Multi-LLM Routing</strong></td>
+                                    <td>Provider changes</td>
+                                    <td>Adapter pattern; pluggable interface</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RAG Detection</strong></td>
+                                    <td>False positives</td>
+                                    <td>Tunable thresholds; sentence-level granularity</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>DevLake Dependency</strong></td>
+                                    <td>Version coupling</td>
+                                    <td>API abstraction layer; version-pinned compose</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Eventual Consistency</strong></td>
+                                    <td>Stale data</td>
+                                    <td>Short-TTL caching; scheduled syncs</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Local vs Cloud LLM</strong></td>
+                                    <td>Quality variance</td>
+                                    <td>Model-specific prompts; evaluation framework</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>pgvector Storage</strong></td>
+                                    <td>Storage growth</td>
+                                    <td>7-day TTL cache; periodic cleanup</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="margin-top: 40px;">Data Architecture</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Challenge</th>
+                                    <th>Approach</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Multi-Provider Embeddings</strong></td>
+                                    <td>Unified EmbeddingsService with fallback chain</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Knowledge Graph Sync</strong></td>
+                                    <td>Event-driven updates via background worker</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Metrics Aggregation</strong></td>
+                                    <td>Precomputed rollups + DevLake pipelines</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Document Processing</strong></td>
+                                    <td>Async worker queue (ARQ) with retry logic</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Right: Cost & Business Impact -->
+                    <div>
+                        <h3>Infrastructure Cost (Docker Self-Hosted)</h3>
+                        <div class="metric-row">
+                            <div class="metric-label">Compute (API + Worker)</div>
+                            <div class="metric-bar-bg">
+                                <div class="metric-bar" style="width: 40%;">~$200/mo</div>
+                            </div>
+                        </div>
+                        <div class="metric-row">
+                            <div class="metric-label">PostgreSQL + pgvector</div>
+                            <div class="metric-bar-bg">
+                                <div class="metric-bar" style="width: 10%;">~$50/mo</div>
+                            </div>
+                        </div>
+                        <div class="metric-row">
+                            <div class="metric-label">Redis + Meilisearch</div>
+                            <div class="metric-bar-bg">
+                                <div class="metric-bar" style="width: 6%;">~$30/mo</div>
+                            </div>
+                        </div>
+                        <div class="metric-row">
+                            <div class="metric-label">LLM API Costs</div>
+                            <div class="metric-bar-bg">
+                                <div class="metric-bar" style="width: 0%;">Variable ($0 with Ollama)</div>
+                            </div>
+                        </div>
+                        <div class="metric-row">
+                            <div class="metric-label">DevLake + Grafana</div>
+                            <div class="metric-bar-bg">
+                                <div class="metric-bar" style="width: 4%;">~$20/mo</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-light); margin-top: 16px;">
+                            <strong>Note:</strong> Self-hosted Docker deployment. Cloud LLM costs depend on usage. Free tiers available for Google Gemini & Groq.
+                        </p>
+
+                        <h3 style="margin-top: 40px;">Business Impact</h3>
+                        <div class="grid grid-2" style="grid-template-columns: 1fr;">
+                            <div class="card card-blue">
+                                <h4 style="margin-top: 0;">AI Code Analysis</h4>
+                                <p style="font-size: 24px; font-weight: 700; margin: 8px 0;">99.99%</p>
+                                <p style="font-size: 13px;">False positive reduction</p>
+                            </div>
+                            <div class="card card-blue">
+                                <h4 style="margin-top: 0;">User Adoption</h4>
+                                <p style="font-size: 24px; font-weight: 700; margin: 8px 0;">40%+</p>
+                                <p style="font-size: 13px;">Improvement via natural language interface</p>
+                            </div>
+                            <div class="card card-blue">
+                                <h4 style="margin-top: 0;">Answer Accuracy</h4>
+                                <p style="font-size: 24px; font-weight: 700; margin: 8px 0;">67%</p>
+                                <p style="font-size: 13px;">Improvement through RAG grounding</p>
+                            </div>
+                            <div class="card card-blue">
+                                <h4 style="margin-top: 0;">Time to Insight</h4>
+                                <p style="font-size: 24px; font-weight: 700; margin: 8px 0;">Minutes</p>
+                                <p style="font-size: 13px;">Not days — setup to first dashboard</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider blue"></div>
+
+                <!-- Operations & Evolution -->
+                <div class="tag green">Operations & Evolution</div>
+                <h3>Post-Production Support & Maintenance</h3>
+
+                <div class="diagram">
+                    <svg viewBox="0 0 800 120" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Lifecycle -->
+                        <text x="40" y="30" font-size="11" font-weight="600" fill="#4a5568">Lifecycle:</text>
+
+                        <rect x="40" y="40" width="70" height="40" fill="#f0f4f8" stroke="#60a5fa" stroke-width="2" rx="4"/>
+                        <text x="75" y="68" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">Monitor</text>
+
+                        <path d="M 115 60 L 135 60" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+                        <rect x="140" y="40" width="70" height="40" fill="#f0f4f8" stroke="#60a5fa" stroke-width="2" rx="4"/>
+                        <text x="175" y="68" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">Detect</text>
+
+                        <path d="M 215 60 L 235 60" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+                        <rect x="240" y="40" width="70" height="40" fill="#f0f4f8" stroke="#60a5fa" stroke-width="2" rx="4"/>
+                        <text x="275" y="68" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">Respond</text>
+
+                        <path d="M 315 60 L 335 60" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+                        <rect x="340" y="40" width="70" height="40" fill="#f0f4f8" stroke="#60a5fa" stroke-width="2" rx="4"/>
+                        <text x="375" y="68" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">Fix</text>
+
+                        <path d="M 415 60 L 435 60" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+                        <rect x="440" y="40" width="70" height="40" fill="#f0f4f8" stroke="#60a5fa" stroke-width="2" rx="4"/>
+                        <text x="475" y="68" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">Learn</text>
+
+                        <path d="M 515 60 L 535 60" stroke="#60a5fa" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+                        <rect x="540" y="40" width="70" height="40" fill="#48bb78" stroke="#48bb78" stroke-width="2" rx="4"/>
+                        <text x="575" y="68" text-anchor="middle" font-size="11" font-weight="600" fill="white">Evolve</text>
+
+                        <!-- Feedback loop -->
+                        <path d="M 575 85 Q 575 105 300 105 Q 75 105 75 85" stroke="#f56565" stroke-width="2" fill="none" marker-end="url(#arrow-red)" stroke-dasharray="5,5"/>
+
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#60a5fa"/>
+                            </marker>
+                            <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#f56565"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div class="grid grid-2">
+                    <!-- Left: Deployment & Monitoring -->
+                    <div>
+                        <h3>Deployment Commands</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Command</th>
+                                    <th>Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="tag-inline">make dev</span></td>
+                                    <td>Start development stack</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag-inline">make prod</span></td>
+                                    <td>Production with Traefik + TLS</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag-inline">make devlake-up</span></td>
+                                    <td>Start DevLake analytics</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag-inline">make ollama-up</span></td>
+                                    <td>Start local LLM</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag-inline">make test</span></td>
+                                    <td>Run test suite</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag-inline">make migrate</span></td>
+                                    <td>Database migrations</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="margin-top: 32px;">Monitoring & Observability</h3>
+                        <div class="grid grid-2" style="grid-template-columns: 1fr;">
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <h4 style="color: var(--brand-blue);">Structured Logging</h4>
+                                <p style="font-size: 13px;">JSON format with Structlog</p>
+                            </div>
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <h4 style="color: var(--brand-blue);">Health Checks</h4>
+                                <p style="font-size: 13px;">/health endpoint, container probes</p>
+                            </div>
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <h4 style="color: var(--brand-blue);">Prometheus</h4>
+                                <p style="font-size: 13px;">Metrics collection + Grafana dashboards</p>
+                            </div>
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <h4 style="color: var(--brand-blue);">Traefik</h4>
+                                <p style="font-size: 13px;">Request routing, rate limiting, auto-TLS</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Roadmap & Enterprise -->
+                    <div>
+                        <h3>Feature Roadmap</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Quarter</th>
+                                    <th>Features</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Q1</strong></td>
+                                    <td>Knowledge graph expansion, advanced RAG, MCP marketplace</td>
+                                    <td><span class="tag" style="margin: 0; padding: 2px 8px; font-size: 11px;">High</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Q2</strong></td>
+                                    <td>Real-time collaboration, team insights, predictive analytics</td>
+                                    <td><span class="tag" style="margin: 0; padding: 2px 8px; font-size: 11px;">High</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Q3</strong></td>
+                                    <td>GraphQL API, mobile app, advanced compliance</td>
+                                    <td><span class="tag" style="margin: 0; padding: 2px 8px; font-size: 11px;">Medium</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Q4</strong></td>
+                                    <td>Edge deployment, AI-driven capacity planning, marketplace</td>
+                                    <td><span class="tag" style="margin: 0; padding: 2px 8px; font-size: 11px;">Strategic</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="margin-top: 32px;">Enterprise Capabilities</h3>
+                        <div class="grid grid-2" style="grid-template-columns: 1fr;">
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <h4 style="color: var(--brand-blue);">Multi-Tenancy</h4>
+                                <p style="font-size: 13px;">Organization isolation, per-tenant LLM config</p>
+                            </div>
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <h4 style="color: var(--brand-blue);">Compliance</h4>
+                                <p style="font-size: 13px;">HIPAA, GDPR, SOC 2 ready with audit logging</p>
+                            </div>
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <h4 style="color: var(--brand-blue);">SSO/OAuth</h4>
+                                <p style="font-size: 13px;">Enterprise identity integration</p>
+                            </div>
+                            <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                                <h4 style="color: var(--brand-blue);">IDE Extensions</h4>
+                                <p style="font-size: 13px;">VSCode, JetBrains via MCP protocol</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Banner -->
+                <div class="footer-banner">
+                    <p>NexusAI — AI-powered engineering intelligence. Setup in minutes, insights for years.</p>
+                </div>
+
+                <div class="scroll-hint">
+                    <span>↓ Scroll to see more</span>
+                </div>
+            </div>
+
+            <!-- ========== SLIDE 6: APPENDIX ========== -->
+            <div class="slide scrollable" id="slide-5">
+                <div class="tag grey">Appendix</div>
+                <h2>Assumptions, Demo & Glossary</h2>
+
+                <!-- Key Assumptions -->
+                <h3 style="border-bottom: 2px solid var(--brand-blue); padding-bottom: 12px; margin-bottom: 20px;">Key Assumptions</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <h4 style="color: var(--brand-blue); margin-bottom: 12px;">Traffic & Performance</h4>
+                        <table style="font-size: 13px; margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th style="font-size: 12px;">Parameter</th>
+                                    <th style="font-size: 12px;">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Default LLM Provider</td>
+                                    <td>Google Gemini (free tier)</td>
+                                </tr>
+                                <tr>
+                                    <td>Concurrent Chat Sessions</td>
+                                    <td>50+ per instance</td>
+                                </tr>
+                                <tr>
+                                    <td>Embedding Cache TTL</td>
+                                    <td>7 days</td>
+                                </tr>
+                                <tr>
+                                    <td>API Response (p95)</td>
+                                    <td>200-400ms (excl. LLM)</td>
+                                </tr>
+                                <tr>
+                                    <td>DevLake Sync</td>
+                                    <td>Hourly/daily configurable</td>
+                                </tr>
+                                <tr>
+                                    <td>Vector Dimension</td>
+                                    <td>Model-dependent (1536)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--brand-blue); margin-bottom: 12px;">Infrastructure & Security</h4>
+                        <table style="font-size: 13px; margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th style="font-size: 12px;">Component</th>
+                                    <th style="font-size: 12px;">Specification</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Deployment</td>
+                                    <td>Docker Compose (K8s optional)</td>
+                                </tr>
+                                <tr>
+                                    <td>Database</td>
+                                    <td>PostgreSQL 16 with pgvector</td>
+                                </tr>
+                                <tr>
+                                    <td>Auth</td>
+                                    <td>JWT with configurable expiry</td>
+                                </tr>
+                                <tr>
+                                    <td>Secrets</td>
+                                    <td>Environment variables (Vault optional)</td>
+                                </tr>
+                                <tr>
+                                    <td>LLM Providers</td>
+                                    <td>8+ supported (3 free tiers)</td>
+                                </tr>
+                                <tr>
+                                    <td>Compliance</td>
+                                    <td>SOC 2, HIPAA, GDPR ready</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Quick Start Demo -->
+                <h3>Quick Start Demo (10-15 min)</h3>
+                <div class="card" style="background: var(--bg-light); border-left: 4px solid var(--brand-blue);">
+                    <ol style="font-size: 14px; line-height: 1.8; margin-left: 16px;">
+                        <li><strong>Start:</strong> <span class="tag-inline">make dev</span> then <span class="tag-inline">make devlake-up</span></li>
+                        <li><strong>Open:</strong> http://localhost:3000</li>
+                        <li><strong>Login:</strong> admin@nexusai.dev / admin123</li>
+                        <li><strong>Setup:</strong> Ask "connect GitHub" → create DevLake project</li>
+                        <li><strong>Pipeline:</strong> Trigger sync → open Grafana DORA dashboard</li>
+                        <li><strong>Chat:</strong> Ask questions about your engineering metrics</li>
+                    </ol>
+                </div>
+
+                <h4 style="margin-top: 24px; color: var(--brand-blue);">Service Endpoints</h4>
+                <table style="font-size: 13px;">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Frontend</strong></td>
+                            <td><span class="tag-inline">http://localhost:3000</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Backend API Docs</strong></td>
+                            <td><span class="tag-inline">http://localhost:8000/docs</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>DevLake UI</strong></td>
+                            <td><span class="tag-inline">http://localhost:4000</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Grafana</strong></td>
+                            <td><span class="tag-inline">http://localhost:3002</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ollama</strong></td>
+                            <td><span class="tag-inline">http://localhost:11434</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="divider"></div>
+
+                <!-- Questions for Stakeholders -->
+                <h3>Questions for Stakeholders</h3>
+                <div class="grid grid-3">
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <p style="font-size: 14px; font-weight: 500; margin: 0;">Which LLM provider to default to for the team?</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <p style="font-size: 14px; font-weight: 500; margin: 0;">Data residency requirements for embeddings?</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <p style="font-size: 14px; font-weight: 500; margin: 0;">SSO/IdP integration specifics?</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <p style="font-size: 14px; font-weight: 500; margin: 0;">DevLake sync frequency preferences?</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <p style="font-size: 14px; font-weight: 500; margin: 0;">Compliance certification timeline?</p>
+                    </div>
+                    <div class="card" style="border-left: 4px solid var(--brand-blue);">
+                        <p style="font-size: 14px; font-weight: 500; margin: 0;">Custom metric definitions needed?</p>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Glossary -->
+                <h3>Glossary</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <p><strong>DORA:</strong> DevOps Research & Assessment metrics (Deploy Frequency, Lead Time, CFR, MTTR)</p>
+                        <p><strong>SPACE:</strong> Five dimensions of developer productivity (Satisfaction, Performance, Activity, Collaboration, Efficiency)</p>
+                        <p><strong>RAG:</strong> Retrieval-Augmented Generation — grounding LLM responses with external knowledge</p>
+                        <p><strong>MCP:</strong> Model Context Protocol — standardized interface for LLM tool use and integrations</p>
+                        <p><strong>pgvector:</strong> PostgreSQL extension for vector similarity search (embeddings)</p>
+                        <p><strong>DevLake:</strong> Open-source data lake for DevOps metrics and analytics</p>
+                        <p><strong>Grafana:</strong> Open-source visualization platform for dashboards and monitoring</p>
+                        <p><strong>Meilisearch:</strong> Fast, relevant full-text search engine</p>
+                    </div>
+                    <div>
+                        <p><strong>ARQ:</strong> Async task queue for background jobs in Python</p>
+                        <p><strong>Traefik:</strong> Modern reverse proxy and load balancer for API gateway</p>
+                        <p><strong>Ollama:</strong> Local LLM runner — deploy models without internet</p>
+                        <p><strong>RAGAS:</strong> Framework for evaluating RAG system performance</p>
+                        <p><strong>Hallucination Score:</strong> Metric indicating likelihood of LLM-generated false information (0-1)</p>
+                        <p><strong>Grounding Check:</strong> Validation that LLM response is supported by source data</p>
+                        <p><strong>Embeddings:</strong> Dense vector representations of text for semantic search</p>
+                        <p><strong>Knowledge Graph:</strong> Structured representation of engineering entities and relationships</p>
+                    </div>
+                </div>
+
+                <p style="font-size: 12px; color: var(--text-light);">continued...</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    <div>
+                        <p><strong>RBAC:</strong> Role-Based Access Control for user permissions</p>
+                        <p><strong>OpenFGA:</strong> Open-source fine-grained authorization service</p>
+                        <p><strong>SOC 2:</strong> Security compliance framework for service organizations</p>
+                        <p><strong>HIPAA:</strong> Health Insurance Portability and Accountability Act (healthcare compliance)</p>
+                    </div>
+                    <div>
+                        <p><strong>GDPR:</strong> General Data Protection Regulation (EU data privacy law)</p>
+                        <p><strong>FastAPI:</strong> Modern Python web framework for building APIs</p>
+                        <p><strong>Next.js:</strong> React framework for production-ready web applications</p>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Contact & Thank You -->
+                <div style="text-align: center; margin-top: 48px;">
+                    <h3 style="margin-bottom: 8px;">Thank You</h3>
+                    <p style="font-size: 14px; color: var(--text-secondary);">Questions or feedback?</p>
+                    <p style="font-size: 14px; font-weight: 500; color: var(--brand-blue);">sumaninster7@gmail.com</p>
+                </div>
+
+                <div class="scroll-hint">
+                    <span>↓ End of presentation</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== NAVIGATION BAR ========== -->
+        <div class="nav-bar">
+            <div class="nav-left">
+                <button class="nav-button" id="prevBtn" aria-label="Previous slide" title="Previous (←)">
+                    ←
+                </button>
+                <button class="nav-button" id="nextBtn" aria-label="Next slide" title="Next (→)">
+                    →
+                </button>
+            </div>
+
+            <div class="nav-center">
+                <div class="slide-dots" id="slideDots"></div>
+                <div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">6</span></div>
+                <div class="slide-title" id="slideTitle">Title</div>
+            </div>
+
+            <div class="nav-right">
+                <button class="nav-button" id="fullscreenBtn" aria-label="Fullscreen" title="Fullscreen (F)">
+                    ⛶
+                </button>
+                <div class="nav-mark">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 32c6-12 34-12 40 0" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M12 40c6-12 34-12 40 0" stroke="rgba(255,255,255,0.60)" stroke-width="4" stroke-linecap="round"/>
+                        <circle cx="32" cy="24" r="4.5" fill="#60a5fa"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== PRESENTATION STATE ====================
+        const slides = document.querySelectorAll('.slide');
+        const slideTitles = [
+            'Title',
+            'Problem & Context',
+            'Solution & Architecture',
+            'System Architecture',
+            'Business & Operations',
+            'Appendix'
+        ];
+        let currentSlideIndex = 0;
+        const totalSlides = slides.length;
+
+        // ==================== DOM REFERENCES ====================
+        const slideDots = document.getElementById('slideDots');
+        const currentSlideSpan = document.getElementById('currentSlide');
+        const totalSlidesSpan = document.getElementById('totalSlides');
+        const slideTitleEl = document.getElementById('slideTitle');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+        // ==================== INITIALIZE DOTS ====================
+        function initializeDots() {
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
+                slideDots.appendChild(dot);
+            }
+        }
+
+        // ==================== UPDATE UI ====================
+        function updateUI() {
+            // Update counter
+            currentSlideSpan.textContent = currentSlideIndex + 1;
+            totalSlidesSpan.textContent = totalSlides;
+
+            // Update title
+            slideTitleEl.textContent = slideTitles[currentSlideIndex];
+
+            // Update dots
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlideIndex);
+            });
+
+            // Update button states
+            prevBtn.disabled = currentSlideIndex === 0;
+            nextBtn.disabled = currentSlideIndex === totalSlides - 1;
+        }
+
+        // ==================== NAVIGATION ====================
+        function goToSlide(index) {
+            if (index < 0 || index >= totalSlides || index === currentSlideIndex) return;
+
+            // Exit animation on old slide
+            if (index > currentSlideIndex) {
+                slides[currentSlideIndex].classList.add('exit-left');
+            }
+
+            currentSlideIndex = index;
+
+            // Update slide visibility
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.remove('exit-left');
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active', 'exit-left');
+                }
+            });
+
+            updateUI();
+        }
+
+        function navigate(direction) {
+            const newIndex = currentSlideIndex + direction;
+            goToSlide(newIndex);
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        prevBtn.addEventListener('click', () => navigate(-1));
+        nextBtn.addEventListener('click', () => navigate(1));
+
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+        // ==================== KEYBOARD NAVIGATION ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') navigate(-1);
+            else if (e.key === 'ArrowRight') navigate(1);
+            else if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+        });
+
+        // ==================== TOUCH NAVIGATION ====================
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        }, false);
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            if (touchStartX - touchEndX > 50) navigate(1); // Swipe left = next
+            else if (touchEndX - touchStartX > 50) navigate(-1); // Swipe right = prev
+        }, false);
+
+        // ==================== FULLSCREEN ====================
+        function toggleFullscreen() {
+            const elem = document.documentElement;
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen?.() ||
+                elem.webkitRequestFullscreen?.() ||
+                elem.mozRequestFullScreen?.() ||
+                elem.msRequestFullscreen?.();
+            } else {
+                document.exitFullscreen?.() ||
+                document.webkitExitFullscreen?.() ||
+                document.mozCancelFullScreen?.() ||
+                document.msExitFullscreen?.();
+            }
+        }
+
+        // ==================== INITIALIZE ====================
+        initializeDots();
+        updateUI();
+    </script>
+</body>
+</html>

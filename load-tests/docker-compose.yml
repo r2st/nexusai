@@ -1,0 +1,214 @@
+###############################################################################
+# NexusAI Load Test Infrastructure
+# ================================
+# Spins up the full backend stack + load testing tools.
+#
+# Usage:
+#   docker compose up -d postgres redis    # Infrastructure only
+#   docker compose up -d                   # Everything including app
+#   docker compose --profile loadtest up   # Run load tests
+###############################################################################
+
+services:
+  # ─── Database ─────────────────────────────────────────────────────────────
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: nexusai-loadtest-pg
+    environment:
+      POSTGRES_USER: nexusai
+      POSTGRES_PASSWORD: nexusai_loadtest
+      POSTGRES_DB: nexusai
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/01_init.sql
+    command: >
+      postgres
+        -c max_connections=500
+        -c shared_buffers=256MB
+        -c effective_cache_size=768MB
+        -c work_mem=16MB
+        -c maintenance_work_mem=128MB
+        -c random_page_cost=1.1
+        -c effective_io_concurrency=200
+        -c max_worker_processes=8
+        -c max_parallel_workers_per_gather=4
+        -c max_parallel_workers=8
+        -c wal_buffers=16MB
+        -c checkpoint_completion_target=0.9
+        -c log_min_duration_statement=100
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexusai"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+
+  # ─── Redis Cache ──────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: nexusai-loadtest-redis
+    ports:
+      - "6380:6379"
+    command: >
+      redis-server
+        --maxmemory 512mb
+        --maxmemory-policy allkeys-lru
+        --tcp-backlog 511
+        --timeout 0
+        --tcp-keepalive 300
+        --save ""
+        --appendonly no
+        --maxclients 10000
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+
+  # ─── Application (FastAPI Backend) ────────────────────────────────────────
+  app:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: nexusai-loadtest-app
+    environment:
+      - ENVIRONMENT=development
+      - SECRET_KEY=loadtest-secret-key-not-for-production
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=nexusai
+      - DATABASE_PASSWORD=nexusai_loadtest
+      - DATABASE_NAME=nexusai
+      - DATABASE_POOL_SIZE=50
+      - DATABASE_MAX_OVERFLOW=20
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - HOST=0.0.0.0
+      - PORT=8000
+      - WORKERS=4
+      - API_PREFIX=/api/v1
+      - RATE_LIMIT_PER_MINUTE=10000
+      - RATE_LIMIT_PER_HOUR=100000
+      - PER_TENANT_RATE_LIMIT=50000
+      - PER_USER_RATE_LIMIT=5000
+      - MULTI_TENANT_ENABLED=true
+      - DEFAULT_AI_PROVIDER=openai
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-fake-key-for-loadtest}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 2G
+
+  # ─── Locust Load Testing ─────────────────────────────────────────────────
+  locust-master:
+    image: locustio/locust:2.29.1
+    container_name: nexusai-locust-master
+    profiles: ["loadtest"]
+    ports:
+      - "8089:8089"      # Locust Web UI
+    volumes:
+      - ./locust:/mnt/locust
+      - ./configs:/mnt/locust/configs
+      - ./results:/mnt/results
+    command: >
+      -f /mnt/locust/locustfile.py
+      --master
+      --host=http://app:8000
+      --expect-workers=4
+      --csv=/mnt/results/locust_results
+      --html=/mnt/results/locust_report.html
+      --logfile=/mnt/results/locust.log
+      --loglevel=INFO
+    depends_on:
+      app:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+
+  locust-worker:
+    image: locustio/locust:2.29.1
+    profiles: ["loadtest"]
+    volumes:
+      - ./locust:/mnt/locust
+      - ./configs:/mnt/locust/configs
+    command: >
+      -f /mnt/locust/locustfile.py
+      --worker
+      --master-host=locust-master
+    depends_on:
+      - locust-master
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+
+  # ─── Prometheus (Metrics Collection) ──────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v2.50.0
+    container_name: nexusai-loadtest-prometheus
+    profiles: ["monitoring"]
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # ─── Grafana (Dashboards) ─────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: nexusai-loadtest-grafana
+    profiles: ["monitoring"]
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=loadtest
+      - GF_SECURITY_ADMIN_USER=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+volumes:
+  pg_data:
+  grafana_data:

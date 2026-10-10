@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="NexusAI Documentation">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#93c5fd"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="96" y="96" width="1008" height="438" rx="48" fill="rgba(255,255,255,0.06)"/>
+  <rect x="96" y="96" width="1008" height="8" fill="url(#accent)"/>
+  <text x="140" y="260" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="72" font-weight="700" fill="#ffffff">
+    NexusAI
+  </text>
+  <text x="140" y="340" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="34" font-weight="500" fill="rgba(255,255,255,0.82)">
+    Architecture &amp; documentation
+  </text>
+  <text x="140" y="420" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="22" font-weight="500" fill="rgba(255,255,255,0.70)">
+    FastAPI • Next.js • Postgres (pgvector) • Redis • Meilisearch • DevLake
+  </text>
+</svg>
+

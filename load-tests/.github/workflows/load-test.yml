@@ -1,0 +1,228 @@
+###############################################################################
+# NexusAI Load Test CI/CD Pipeline
+# Runs load tests on PR or schedule to validate SLA compliance.
+###############################################################################
+
+name: Load Test - SLA Validation
+
+on:
+  # Manual trigger with profile selection
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: "Test profile"
+        required: true
+        default: "smoke"
+        type: choice
+        options:
+          - smoke
+          - load
+          - stress
+          - spike
+      tool:
+        description: "Test tool"
+        required: true
+        default: "k6"
+        type: choice
+        options:
+          - k6
+          - locust
+          - both
+
+  # Scheduled nightly load test
+  schedule:
+    - cron: "0 2 * * 1-5"  # 2 AM UTC weekdays
+
+  # Run smoke on PRs to main
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - "load-tests/**"
+
+env:
+  TARGET_URL: http://localhost:8000
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: nexusai
+          POSTGRES_PASSWORD: nexusai_test
+          POSTGRES_DB: nexusai
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nexusai"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install backend dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install -r load-tests/requirements.txt
+
+      - name: Start FastAPI server
+        run: |
+          cd backend
+          uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4 &
+          sleep 10
+          curl -f http://localhost:8000/health || exit 1
+        env:
+          ENVIRONMENT: development
+          SECRET_KEY: ci-test-secret
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          DATABASE_USER: nexusai
+          DATABASE_PASSWORD: nexusai_test
+          DATABASE_NAME: nexusai
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+
+      - name: Install k6
+        if: ${{ github.event.inputs.tool != 'locust' }}
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg \
+            --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D68
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | \
+            sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6 -y
+
+      - name: Determine test profile
+        id: profile
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "profile=${{ github.event.inputs.profile }}" >> $GITHUB_OUTPUT
+            echo "tool=${{ github.event.inputs.tool }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "profile=load" >> $GITHUB_OUTPUT
+            echo "tool=both" >> $GITHUB_OUTPUT
+          else
+            echo "profile=smoke" >> $GITHUB_OUTPUT
+            echo "tool=k6" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run k6 load test
+        if: ${{ steps.profile.outputs.tool != 'locust' }}
+        run: |
+          cd load-tests
+          mkdir -p results
+          k6 run \
+            --env TARGET_URL=${{ env.TARGET_URL }} \
+            --env PROFILE=${{ steps.profile.outputs.profile }} \
+            --out json=results/k6_results.json \
+            k6/load_test.js
+        continue-on-error: true
+
+      - name: Run k6 SLA validation
+        if: ${{ steps.profile.outputs.profile == 'spike' || steps.profile.outputs.profile == 'load' }}
+        run: |
+          cd load-tests
+          k6 run \
+            --env TARGET_URL=${{ env.TARGET_URL }} \
+            k6/sla_validation.js
+        continue-on-error: true
+
+      - name: Run Locust load test
+        if: ${{ steps.profile.outputs.tool != 'k6' }}
+        run: |
+          cd load-tests
+          mkdir -p results
+          PROFILE=${{ steps.profile.outputs.profile }}
+          USERS=10
+          DURATION=60
+          SPAWN_RATE=2
+
+          case $PROFILE in
+            load) USERS=1000; DURATION=300; SPAWN_RATE=50 ;;
+            stress) USERS=5000; DURATION=600; SPAWN_RATE=100 ;;
+            spike) USERS=10000; DURATION=300; SPAWN_RATE=500 ;;
+          esac
+
+          locust -f locust/locustfile.py \
+            --headless \
+            --host=${{ env.TARGET_URL }} \
+            -u $USERS -r $SPAWN_RATE -t ${DURATION}s \
+            --csv=results/locust \
+            --html=results/locust_report.html \
+            --only-summary
+        continue-on-error: true
+
+      - name: Generate analysis report
+        if: always()
+        run: |
+          cd load-tests
+          python scripts/analyze_results.py \
+            --results-dir results \
+            --profile ${{ steps.profile.outputs.profile }} \
+            --output results/report.html || true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-results-${{ steps.profile.outputs.profile }}
+          path: |
+            load-tests/results/
+          retention-days: 30
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let summary = 'No results available';
+            try {
+              const files = fs.readdirSync('load-tests/results');
+              const jsonFile = files.find(f => f.endsWith('summary.json'));
+              if (jsonFile) {
+                const data = JSON.parse(fs.readFileSync(`load-tests/results/${jsonFile}`, 'utf8'));
+                const pass = data.sla_compliance?.overall_pass;
+                summary = `## Load Test Results\n\n` +
+                  `| Metric | Value | SLA |\n` +
+                  `|--------|-------|-----|\n` +
+                  `| P95 Response | ${data.response_times?.p95_ms}ms | <200ms ${pass ? '✅' : '❌'} |\n` +
+                  `| Error Rate | ${data.error_rate}% | <1% |\n` +
+                  `| Max VUs | ${data.max_vus} | 10,000+ |\n` +
+                  `| Total Requests | ${data.total_requests?.toLocaleString()} | - |\n\n` +
+                  `**Overall: ${pass ? '✅ SLA Met' : '❌ SLA Violated'}**`;
+              }
+            } catch (e) {
+              summary = `Load test completed but results parsing failed: ${e.message}`;
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary,
+            });
