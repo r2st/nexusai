@@ -13,7 +13,7 @@ import base64
 
 import httpx
 
-from .base import BaseConnector, ConnectorConfig, ConnectorStatus, WebhookEvent
+from .base import BaseConnector, ConnectorConfig, ConnectorStatus, DEFAULT_HTTP_TIMEOUT, WebhookEvent
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ class KubernetesConnector(BaseConnector):
                 base_url=self.config.api_server,
                 headers=headers,
                 verify=verify,
-                timeout=30.0,
+                timeout=DEFAULT_HTTP_TIMEOUT,
             )
             
             # Test connection by getting API versions

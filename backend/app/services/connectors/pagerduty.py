@@ -13,7 +13,7 @@ import logging
 
 import httpx
 
-from .base import BaseConnector, ConnectorConfig, ConnectorStatus, WebhookEvent
+from .base import BaseConnector, ConnectorConfig, ConnectorStatus, DEFAULT_HTTP_TIMEOUT, WebhookEvent
 
 logger = logging.getLogger(__name__)
 
@@ -67,13 +67,13 @@ class PagerDutyConnector(BaseConnector):
                     "Content-Type": "application/json",
                     "Accept": "application/vnd.pagerduty+json;version=2",
                 },
-                timeout=30.0,
+                timeout=DEFAULT_HTTP_TIMEOUT,
             )
-            
+
             self._events_client = httpx.AsyncClient(
                 base_url="https://events.pagerduty.com/v2",
                 headers={"Content-Type": "application/json"},
-                timeout=30.0,
+                timeout=DEFAULT_HTTP_TIMEOUT,
             )
             
             # Test connection

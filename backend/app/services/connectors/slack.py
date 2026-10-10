@@ -14,7 +14,7 @@ import time
 
 import httpx
 
-from .base import BaseConnector, ConnectorConfig, ConnectorStatus, WebhookEvent
+from .base import BaseConnector, ConnectorConfig, ConnectorStatus, DEFAULT_HTTP_TIMEOUT, WebhookEvent
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +70,7 @@ class SlackConnector(BaseConnector):
                     "Authorization": f"Bearer {self.config.bot_token}",
                     "Content-Type": "application/json",
                 },
-                timeout=30.0,
+                timeout=DEFAULT_HTTP_TIMEOUT,
             )
             
             # Test connection

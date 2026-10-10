@@ -11,6 +11,8 @@ from pydantic import BaseModel, Field
 
 logger = structlog.get_logger()
 
+DEFAULT_HTTP_TIMEOUT = 30.0
+
 
 class ConnectorStatus(str, Enum):
     """Connector status states."""

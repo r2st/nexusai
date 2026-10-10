@@ -13,7 +13,7 @@ import logging
 
 import httpx
 
-from .base import BaseConnector, ConnectorConfig, ConnectorStatus, WebhookEvent
+from .base import BaseConnector, ConnectorConfig, ConnectorStatus, DEFAULT_HTTP_TIMEOUT, WebhookEvent
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +76,7 @@ class JiraConnector(BaseConnector):
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
-                timeout=30.0,
+                timeout=DEFAULT_HTTP_TIMEOUT,
             )
             
             # Test connection

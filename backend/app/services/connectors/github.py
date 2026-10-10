@@ -12,6 +12,7 @@ from app.services.connectors.base import (
     BaseConnector,
     ConnectorConfig,
     ConnectorStatus,
+    DEFAULT_HTTP_TIMEOUT,
     SyncResult,
 )
 
@@ -69,7 +70,7 @@ class GitHubConnector(BaseConnector):
         self._client = httpx.AsyncClient(
             base_url=self.api_url,
             headers=headers,
-            timeout=30.0,
+            timeout=DEFAULT_HTTP_TIMEOUT,
         )
 
         # Test connection

@@ -1,12 +1,21 @@
 """API endpoints for the Query Gateway."""
 
 from datetime import datetime, timedelta
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
 from app.api.deps import get_current_user, get_db
+
+TIME_RANGE_DELTAS = {
+    "1h": timedelta(hours=1),
+    "24h": timedelta(hours=24),
+    "7d": timedelta(days=7),
+    "30d": timedelta(days=30),
+    "90d": timedelta(days=90),
+}
 
 logger = structlog.get_logger()
 from app.models.user import User
@@ -156,15 +165,7 @@ async def get_metrics_summary(
     """
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
-    # Parse time range
-    time_ranges = {
-        "1h": timedelta(hours=1),
-        "24h": timedelta(hours=24),
-        "7d": timedelta(days=7),
-        "30d": timedelta(days=30),
-        "90d": timedelta(days=90),
-    }
-    delta = time_ranges.get(time_range, timedelta(days=30))
+    delta = TIME_RANGE_DELTAS.get(time_range, timedelta(days=30))
     end_time = datetime.utcnow()
     start_time = end_time - delta
 
@@ -229,13 +230,7 @@ async def get_entity_summary(
     """Get a summary of entity counts by type."""
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
-    time_ranges = {
-        "1h": timedelta(hours=1),
-        "24h": timedelta(hours=24),
-        "7d": timedelta(days=7),
-        "30d": timedelta(days=30),
-    }
-    delta = time_ranges.get(time_range, timedelta(days=7))
+    delta = TIME_RANGE_DELTAS.get(time_range, timedelta(days=7))
     end_time = datetime.utcnow()
     start_time = end_time - delta
 
