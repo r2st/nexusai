@@ -186,9 +186,14 @@ class SemanticEvaluator(BaseEvaluator):
 
             # Calculate cosine similarity
             import numpy as np
-            similarity = np.dot(expected_embedding, actual_embedding) / (
-                np.linalg.norm(expected_embedding) * np.linalg.norm(actual_embedding)
-            )
+            norm_expected = np.linalg.norm(expected_embedding)
+            norm_actual = np.linalg.norm(actual_embedding)
+            if norm_expected == 0 or norm_actual == 0:
+                similarity = 0.0
+            else:
+                similarity = np.dot(expected_embedding, actual_embedding) / (
+                    norm_expected * norm_actual
+                )
 
             threshold = 0.8
             passed = similarity >= threshold
