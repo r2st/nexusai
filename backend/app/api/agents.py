@@ -151,6 +151,36 @@ class AgentListResponse(BaseModel):
     has_more: bool
 
 
+class AgentExecutionListResponse(BaseModel):
+    """Response model for listing agent executions."""
+
+    executions: list[dict[str, Any]]
+    page: int
+    page_size: int
+
+
+class AgentToolResponse(BaseModel):
+    """Response model for an agent tool."""
+
+    id: str
+    name: str
+    description: str
+    schema_definition: dict[str, Any]
+
+
+class CapabilityInfo(BaseModel):
+    """Info about an agent capability."""
+
+    name: str
+    description: str
+
+
+class CapabilityListResponse(BaseModel):
+    """Response model for listing capabilities."""
+
+    capabilities: list[CapabilityInfo]
+
+
 # ======================
 # Endpoints
 # ======================
@@ -455,14 +485,14 @@ async def execute_agent(
     )
 
 
-@router.get("/{agent_id}/executions")
+@router.get("/{agent_id}/executions", response_model=AgentExecutionListResponse)
 async def list_agent_executions(
     agent_id: str,
     page: int = 1,
     page_size: int = 20,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> AgentExecutionListResponse:
     """List execution history for an agent."""
     service = AgentService(db)
 
@@ -485,20 +515,20 @@ async def list_agent_executions(
         page_size=page_size,
     )
 
-    return {
-        "executions": executions,
-        "page": page,
-        "page_size": page_size,
-    }
+    return AgentExecutionListResponse(
+        executions=executions,
+        page=page,
+        page_size=page_size,
+    )
 
 
-@router.post("/{agent_id}/tools")
+@router.post("/{agent_id}/tools", response_model=AgentToolResponse, status_code=status.HTTP_201_CREATED)
 async def add_agent_tool(
     agent_id: str,
     request: ToolCreate,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> AgentToolResponse:
     """Add a custom tool to an agent."""
     service = AgentService(db)
 
@@ -524,26 +554,26 @@ async def add_agent_tool(
         config=request.config,
     )
 
-    return {
-        "id": str(tool.id),
-        "name": tool.name,
-        "description": tool.description,
-        "schema_definition": tool.schema_definition,
-    }
+    return AgentToolResponse(
+        id=str(tool.id),
+        name=tool.name,
+        description=tool.description,
+        schema_definition=tool.schema_definition,
+    )
 
 
-@router.get("/capabilities/list")
-async def list_capabilities():
+@router.get("/capabilities/list", response_model=CapabilityListResponse)
+async def list_capabilities() -> CapabilityListResponse:
     """List all available agent capabilities."""
-    return {
-        "capabilities": [
-            {
-                "name": cap.value,
-                "description": _get_capability_description(cap),
-            }
+    return CapabilityListResponse(
+        capabilities=[
+            CapabilityInfo(
+                name=cap.value,
+                description=_get_capability_description(cap),
+            )
             for cap in AgentCapability
         ]
-    }
+    )
 
 
 def _get_capability_description(cap: AgentCapability) -> str:
