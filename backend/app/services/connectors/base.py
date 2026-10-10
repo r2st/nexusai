@@ -17,6 +17,7 @@ class ConnectorStatus(str, Enum):
 
     PENDING = "pending"
     ACTIVE = "active"
+    CONNECTED = "connected"
     ERROR = "error"
     DISCONNECTED = "disconnected"
     RATE_LIMITED = "rate_limited"

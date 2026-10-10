@@ -278,12 +278,19 @@ class SubscriptionService:
         Returns:
             Updated organization
         """
-        if organization.subscription_status != SubscriptionStatus.ACTIVE.value:
-            raise ValueError("Organization does not have an active subscription")
+        cancellable_statuses = {
+            SubscriptionStatus.ACTIVE.value,
+            SubscriptionStatus.PAST_DUE.value,
+            SubscriptionStatus.PAUSED.value,
+        }
+        if organization.subscription_status not in cancellable_statuses:
+            raise ValueError(
+                "Subscription must be active, past_due, or paused to cancel"
+            )
 
         previous_status = organization.subscription_status
 
-        if at_period_end:
+        if at_period_end and organization.subscription_status == SubscriptionStatus.ACTIVE.value:
             organization.subscription_cancel_at_period_end = True
         else:
             organization.subscription_status = SubscriptionStatus.CANCELED.value
@@ -314,19 +321,26 @@ class SubscriptionService:
         organization: Organization,
         triggered_by: str,
     ) -> Organization:
-        """Resume a canceled subscription (if cancel_at_period_end was True).
+        """Resume a paused or pending-cancel subscription.
 
-        Args:
-            organization: The organization to resume subscription for
-            triggered_by: User ID who triggered resumption
-
-        Returns:
-            Updated organization
+        Handles two cases:
+        1. Subscription scheduled for cancellation at period end
+        2. Subscription in PAUSED state
         """
-        if not organization.subscription_cancel_at_period_end:
-            raise ValueError("Subscription is not scheduled for cancellation")
+        resumable_statuses = {
+            SubscriptionStatus.PAUSED.value,
+            SubscriptionStatus.PAST_DUE.value,
+        }
 
-        organization.subscription_cancel_at_period_end = False
+        if organization.subscription_cancel_at_period_end:
+            organization.subscription_cancel_at_period_end = False
+        elif organization.subscription_status in resumable_statuses:
+            organization.subscription_status = SubscriptionStatus.ACTIVE.value
+        else:
+            raise ValueError(
+                "Subscription is not in a resumable state "
+                "(must be paused, past_due, or scheduled for cancellation)"
+            )
 
         # Log the event
         event = SubscriptionEvent(

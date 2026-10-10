@@ -498,6 +498,9 @@ class AgentService:
         if not agent or agent.creator_id != user_id:
             return None
 
+        if agent.status == AgentStatus.ARCHIVED.value:
+            raise ValueError("Archived agents cannot be published to marketplace")
+
         agent.is_marketplace_listed = True
         agent.marketplace_category = category
         agent.status = AgentStatus.ACTIVE.value

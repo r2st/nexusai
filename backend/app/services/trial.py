@@ -196,6 +196,7 @@ class TrialService:
             raise ValueError("Organization must have an active or expired trial")
 
         previous_tier = organization.tier
+        previous_trial_status = organization.trial_status
         now = datetime.now(UTC)
 
         # Mark trial as converted
@@ -217,7 +218,7 @@ class TrialService:
             event_type=SubscriptionEventType.TRIAL_CONVERTED.value,
             previous_tier=previous_tier,
             new_tier=tier,
-            previous_status=organization.trial_status,
+            previous_status=previous_trial_status,
             new_status=SubscriptionStatus.ACTIVE.value,
             triggered_by=triggered_by,
             event_metadata={
@@ -255,22 +256,28 @@ class TrialService:
         )
         return list(result.scalars().all())
 
-    async def get_expired_trials(self) -> list[Organization]:
+    async def get_expired_trials(self, lock: bool = False) -> list[Organization]:
         """Get organizations with trials that have expired but not been processed.
+
+        Args:
+            lock: If True, use SELECT FOR UPDATE SKIP LOCKED to prevent
+                  concurrent workers from processing the same org.
 
         Returns:
             List of organizations with expired trials needing processing
         """
         now = datetime.now(UTC)
 
-        result = await self.db.execute(
-            select(Organization).where(
-                and_(
-                    Organization.trial_status == TrialStatus.ACTIVE.value,
-                    Organization.trial_ends_at <= now,
-                )
+        query = select(Organization).where(
+            and_(
+                Organization.trial_status == TrialStatus.ACTIVE.value,
+                Organization.trial_ends_at <= now,
             )
         )
+        if lock:
+            query = query.with_for_update(skip_locked=True)
+
+        result = await self.db.execute(query)
         return list(result.scalars().all())
 
     async def get_organization_trial_status(

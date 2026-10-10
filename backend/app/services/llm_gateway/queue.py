@@ -466,16 +466,18 @@ class RequestQueue:
         logger.debug("Worker stopped", worker_id=worker_id)
 
     async def cancel(self, request_id: UUID) -> bool:
-        """Cancel a pending request."""
-        # Check if in processing
+        """Cancel a pending or processing request."""
         if request_id in self._processing:
-            queued = self._processing[request_id]
+            queued = self._processing.pop(request_id)
             queued.status = RequestStatus.CANCELLED
+            queued.completed_at = datetime.utcnow()
+            self._completed[request_id] = queued
             if queued.future and not queued.future.done():
                 queued.future.cancel()
+            if queued.request.user_id:
+                self._user_limits[queued.request.user_id].concurrent -= 1
             return True
 
-        # Cannot cancel completed requests
         return False
 
     def get_status(self, request_id: UUID) -> dict[str, Any] | None:

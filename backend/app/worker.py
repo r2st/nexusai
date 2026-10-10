@@ -168,7 +168,7 @@ async def process_trial_expirations(ctx: dict[str, Any]) -> dict[str, Any]:
         async with async_session_factory() as db:
             trial_service = TrialService(db)
 
-            expired_orgs = await trial_service.get_expired_trials()
+            expired_orgs = await trial_service.get_expired_trials(lock=True)
 
             for org in expired_orgs:
                 try:

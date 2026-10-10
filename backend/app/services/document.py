@@ -95,8 +95,35 @@ class DocumentService:
 
         return document
 
+    async def reprocess_document(self, document: Document) -> Document:
+        """Retry processing a failed document."""
+        if document.status != DocumentStatus.FAILED.value:
+            raise ValueError(
+                f"Only failed documents can be reprocessed, current status: {document.status}"
+            )
+
+        # Clear old chunks before reprocessing
+        from sqlalchemy import delete
+        await self.db.execute(
+            delete(DocumentChunk).where(DocumentChunk.document_id == document.id)
+        )
+        document.error_message = None
+        document.chunk_count = 0
+        document.status = DocumentStatus.PENDING.value
+        await self.db.flush()
+
+        return await self.process_document(document)
+
     async def process_document(self, document: Document) -> Document:
         """Process a document: extract text, chunk, and embed."""
+        if document.status not in (
+            DocumentStatus.PENDING.value,
+            DocumentStatus.FAILED.value,
+        ):
+            raise ValueError(
+                f"Document must be in pending or failed state to process, "
+                f"current status: {document.status}"
+            )
         try:
             document.status = DocumentStatus.PROCESSING.value
             await self.db.flush()
