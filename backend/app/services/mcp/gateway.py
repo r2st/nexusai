@@ -116,6 +116,7 @@ class CircuitBreaker:
     state: CircuitState = CircuitState.CLOSED
     failure_count: int = 0
     success_count: int = 0
+    half_open_calls: int = 0
     last_failure_time: Optional[datetime] = None
     failure_threshold: int = 5
     recovery_timeout_seconds: int = 30
@@ -299,19 +300,18 @@ class MCPGateway:
             return True, None
 
         if cb.state == CircuitState.OPEN:
-            # Check if recovery timeout has passed
             if cb.last_failure_time:
                 elapsed = (datetime.utcnow() - cb.last_failure_time).total_seconds()
                 if elapsed >= cb.recovery_timeout_seconds:
                     cb.state = CircuitState.HALF_OPEN
                     cb.success_count = 0
+                    cb.half_open_calls = 0
                     logger.info(f"Circuit breaker for {tool_name} entering half-open state")
                     return True, None
             return False, f"Service {tool_name} is temporarily unavailable (circuit open)"
 
         if cb.state == CircuitState.HALF_OPEN:
-            if cb.success_count >= cb.half_open_max_calls:
-                # Allow limited requests in half-open state
+            if cb.half_open_calls >= cb.half_open_max_calls:
                 return False, f"Service {tool_name} is recovering, please retry"
             return True, None
 
@@ -324,9 +324,11 @@ class MCPGateway:
         if success:
             if cb.state == CircuitState.HALF_OPEN:
                 cb.success_count += 1
+                cb.half_open_calls += 1
                 if cb.success_count >= cb.half_open_max_calls:
                     cb.state = CircuitState.CLOSED
                     cb.failure_count = 0
+                    cb.half_open_calls = 0
                     logger.info(f"Circuit breaker for {tool_name} closed (service recovered)")
             else:
                 cb.failure_count = 0
@@ -335,7 +337,9 @@ class MCPGateway:
             cb.last_failure_time = datetime.utcnow()
 
             if cb.state == CircuitState.HALF_OPEN:
+                cb.half_open_calls += 1
                 cb.state = CircuitState.OPEN
+                cb.half_open_calls = 0
                 logger.warning(f"Circuit breaker for {tool_name} reopened after failure in half-open")
             elif cb.failure_count >= cb.failure_threshold:
                 cb.state = CircuitState.OPEN

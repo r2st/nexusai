@@ -125,7 +125,15 @@ class DocumentService:
                 f"current status: {document.status}"
             )
         try:
+            if document.status == DocumentStatus.FAILED.value and document.chunk_count > 0:
+                from sqlalchemy import delete as sa_delete
+                await self.db.execute(
+                    sa_delete(DocumentChunk).where(DocumentChunk.document_id == document.id)
+                )
+                document.chunk_count = 0
+
             document.status = DocumentStatus.PROCESSING.value
+            document.error_message = None
             await self.db.flush()
 
             # Read file content

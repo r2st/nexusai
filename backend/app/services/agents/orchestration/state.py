@@ -155,18 +155,28 @@ class AgentState(Generic[T]):
             "timestamp": datetime.utcnow().isoformat(),
         })
         self.pending_approval = None
-        self.status = StateStatus.RUNNING if approved else StateStatus.CANCELLED
+        if approved:
+            self.status = StateStatus.RUNNING
+        else:
+            self.status = StateStatus.CANCELLED
+            self.completed_at = datetime.utcnow()
         self.update()
     
+    _TERMINAL_STATUSES = frozenset({StateStatus.COMPLETED, StateStatus.FAILED, StateStatus.CANCELLED})
+
     def complete(self, output: Dict[str, Any]) -> None:
-        """Mark as completed."""
+        """Mark as completed. No-op if already in a terminal state."""
+        if self.status in self._TERMINAL_STATUSES:
+            return
         self.output_data = output
         self.status = StateStatus.COMPLETED
         self.completed_at = datetime.utcnow()
         self.update()
-    
+
     def fail(self, error: str) -> None:
-        """Mark as failed."""
+        """Mark as failed. No-op if already in a terminal state."""
+        if self.status in self._TERMINAL_STATUSES:
+            return
         self.add_error(error)
         self.status = StateStatus.FAILED
         self.completed_at = datetime.utcnow()

@@ -400,9 +400,12 @@ class BackgroundAgentScheduler:
         return tasks
 
     def cancel_task(self, task_id: str) -> bool:
-        """Cancel a scheduled task."""
+        """Cancel a scheduled task. No-op for already-terminal tasks."""
         task = self._tasks.get(task_id)
         if not task:
+            return False
+
+        if task.status in (TaskStatus.COMPLETED, TaskStatus.CANCELLED):
             return False
 
         task.status = TaskStatus.CANCELLED
@@ -420,9 +423,12 @@ class BackgroundAgentScheduler:
         return True
 
     def pause_task(self, task_id: str) -> bool:
-        """Pause a scheduled task."""
+        """Pause a scheduled task. Only PENDING tasks can be paused."""
         task = self._tasks.get(task_id)
         if not task:
+            return False
+
+        if task.status not in (TaskStatus.PENDING,):
             return False
 
         task.status = TaskStatus.PAUSED
@@ -451,7 +457,7 @@ class BackgroundAgentScheduler:
         if not task:
             return False
 
-        if task.status == TaskStatus.CANCELLED:
+        if task.status in (TaskStatus.CANCELLED, TaskStatus.RUNNING):
             return False
 
         task.next_run_at = datetime.now(UTC)
