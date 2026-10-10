@@ -204,6 +204,7 @@ async def list_baas(
     status: BAAStatus | None = None,
     baa_type: BAAType | None = None,
     expiring_within_days: int | None = None,
+    _current_user: User = Depends(get_current_user),
 ):
     """List Business Associate Agreements."""
     manager = get_baa_manager()

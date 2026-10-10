@@ -230,6 +230,7 @@ async def list_sessions(
     project_id: str | None = None,
     user_id: str | None = None,
     is_active: bool = True,
+    _current_user: User = Depends(get_current_user),
 ):
     """List collaborative sessions."""
     service = get_collaboration_service()
@@ -337,6 +338,7 @@ async def list_annotations(
     annotation_type: AnnotationType | None = None,
     resolved: bool | None = None,
     limit: int = Query(default=100, le=500),
+    _current_user: User = Depends(get_current_user),
 ):
     """List annotations."""
     service = get_collaboration_service()
@@ -437,6 +439,7 @@ async def get_organization_activity(
     activity_types: str | None = None,  # Comma-separated
     since: datetime | None = None,
     limit: int = Query(default=50, le=200),
+    _current_user: User = Depends(get_current_user),
 ):
     """Get organization activity feed."""
     service = get_collaboration_service()
@@ -463,6 +466,7 @@ async def get_project_activity(
     activity_types: str | None = None,
     since: datetime | None = None,
     limit: int = Query(default=50, le=200),
+    _current_user: User = Depends(get_current_user),
 ):
     """Get project activity feed."""
     service = get_collaboration_service()
