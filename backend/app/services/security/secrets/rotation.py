@@ -148,7 +148,7 @@ class SecretRotationService:
         # Store metadata
         self._metadata[name] = metadata
 
-        logger.info(f"Registered secret '{name}' for rotation (next: {next_rotation})")
+        logger.info("Registered secret for rotation", secret_name=name, next_rotation=str(next_rotation))
 
         return metadata
 
@@ -267,7 +267,7 @@ class SecretRotationService:
                 )
 
             except Exception as e:
-                logger.error(f"Failed to rotate secret '{name}': {e}")
+                logger.error("Failed to rotate secret", secret_name=name, error=str(e))
                 return RotationResult(
                     secret_name=name,
                     success=False,

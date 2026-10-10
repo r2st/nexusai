@@ -28,9 +28,28 @@ if settings.NEO4J_ENABLED:
     except ImportError:
         pass
 
+_SENSITIVE_KEYS = frozenset({
+    "password", "hashed_password", "secret", "secret_key", "api_key",
+    "token", "access_token", "refresh_token", "authorization",
+    "openai_api_key", "anthropic_api_key", "private_key",
+})
+
+
+def _redact_sensitive_fields(
+    logger: structlog.types.WrappedLogger,
+    method_name: str,
+    event_dict: dict,
+) -> dict:
+    for key in event_dict:
+        if key.lower() in _SENSITIVE_KEYS and isinstance(event_dict[key], str):
+            event_dict[key] = "[REDACTED]"
+    return event_dict
+
+
 # Configure structured logging
 structlog.configure(
     processors=[
+        structlog.contextvars.merge_contextvars,
         structlog.stdlib.filter_by_level,
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
@@ -39,6 +58,7 @@ structlog.configure(
         structlog.processors.StackInfoRenderer(),
         structlog.processors.format_exc_info,
         structlog.processors.UnicodeDecoder(),
+        _redact_sensitive_fields,
         structlog.processors.JSONRenderer() if settings.LOG_FORMAT == "json" else structlog.dev.ConsoleRenderer(),
     ],
     wrapper_class=structlog.stdlib.BoundLogger,
@@ -124,17 +144,48 @@ async def seed_dev_users_on_startup() -> None:
 
             await session.commit()
 
-            # Print compact development users info with color
-            print("\n\033[1;36m[Dev Users]\033[0m \033[33madmin@nexusai.dev\033[0m/\033[32madmin123\033[0m | \033[33muser@nexusai.dev\033[0m/\033[32muser123\033[0m | \033[33mviewer@nexusai.dev\033[0m/\033[32mviewer123\033[0m\n")
-
             logger.info(
                 "Development users ready",
                 created=created_count,
                 existing=len(existing_users),
+                accounts="admin@nexusai.dev | user@nexusai.dev | viewer@nexusai.dev",
             )
 
     except Exception as e:
         logger.warning("Failed to seed dev users", error=str(e))
+
+
+async def seed_langfuse_prompts() -> None:
+    """Seed default prompts to Langfuse on startup.
+
+    Creates the ``nexusai-system-prompt`` in Langfuse if it doesn't
+    already exist, so it appears in the Langfuse dashboard for editing.
+    Gracefully skips if Langfuse is not configured.
+    """
+    try:
+        from app.services.prompts.langfuse_manager import get_langfuse_prompt_manager
+        from app.services.chat import NEXUSAI_SYSTEM_PROMPT
+
+        manager = await get_langfuse_prompt_manager()
+        if not manager.enabled:
+            logger.debug("Langfuse prompts seeding skipped (not configured)")
+            return
+
+        result = await manager.sync_from_local(
+            name="nexusai-system-prompt",
+            template=NEXUSAI_SYSTEM_PROMPT,
+            labels=["production"],
+            tags=["system", "default"],
+            commit_message="Default NexusAI system prompt",
+        )
+        if result:
+            logger.info(
+                "Langfuse prompt seeded",
+                name="nexusai-system-prompt",
+                version=result.version if hasattr(result, "version") else "unknown",
+            )
+    except Exception as e:
+        logger.debug("Langfuse prompt seeding skipped", error=str(e))
 
 
 @asynccontextmanager
@@ -147,6 +198,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     # Seed development users
     await seed_dev_users_on_startup()
+
+    # Seed default prompts to Langfuse
+    await seed_langfuse_prompts()
 
     # Initialize Neo4j if enabled
     if neo4j_client and settings.NEO4J_ENABLED:

@@ -1,5 +1,7 @@
 """Chat API endpoints with MCP support."""
 
+import time
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -290,6 +292,7 @@ async def chat(
     db: AsyncSession = Depends(get_db),
 ):
     """Send a message and get AI response with optional MCP tool support."""
+    chat_start = time.perf_counter()
     # Parse external MCP server configs
     mcp_servers = []
     for server_data in request.mcp_servers:
@@ -361,6 +364,15 @@ async def chat(
                 user_message=request.message,
                 temperature=request.temperature,
                 max_tokens=request.max_tokens,
+            )
+
+            duration_ms = round((time.perf_counter() - chat_start) * 1000, 2)
+            logger.info(
+                "Chat response generated",
+                conversation_id=conversation_id,
+                user_id=str(user.id),
+                model=conversation.model_name,
+                duration_ms=duration_ms,
             )
 
             tool_calls, tool_results = _parse_tool_payloads(message.content)

@@ -10,6 +10,9 @@ from typing import Any
 
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
+
+logger = structlog.get_logger()
 
 from app.services.metrics.dora import DORAMetrics, DORAMetricsService, dora_metrics_service
 from app.services.metrics.space import SPACEMetricsService
@@ -146,7 +149,7 @@ class UnifiedMetricsService:
                 session, tenant_id, project_name, period_start, period_end
             )
         except Exception as e:
-            print(f"Error fetching DORA metrics: {e}")
+            logger.error("Error fetching DORA metrics", error=str(e))
 
         # Fetch Flow metrics
         try:
@@ -154,7 +157,7 @@ class UnifiedMetricsService:
                 project_name, period_start, period_end
             )
         except Exception as e:
-            print(f"Error fetching Flow metrics: {e}")
+            logger.error("Error fetching Flow metrics", error=str(e))
 
         # Fetch Team Productivity
         try:
@@ -162,7 +165,7 @@ class UnifiedMetricsService:
                 session, tenant_id, project_name, period_start, period_end
             )
         except Exception as e:
-            print(f"Error fetching productivity metrics: {e}")
+            logger.error("Error fetching productivity metrics", error=str(e))
 
         # Calculate health scores
         metrics.overall_health_score = self._calculate_health_score(metrics)
@@ -181,7 +184,7 @@ class UnifiedMetricsService:
                     metrics.dora, dora_trends
                 )
             except Exception as e:
-                print(f"Error generating insights: {e}")
+                logger.error("Error generating insights", error=str(e))
 
         # Generate AI summary
         if include_ai_summary and metrics.dora:
@@ -190,7 +193,7 @@ class UnifiedMetricsService:
                     metrics.dora, metrics.insights
                 )
             except Exception as e:
-                print(f"Error generating AI summary: {e}")
+                logger.error("Error generating AI summary", error=str(e))
 
         return metrics
 
@@ -223,7 +226,7 @@ class UnifiedMetricsService:
                 session, tenant_id, project_name, periods=12, granularity="weekly"
             )
         except Exception as e:
-            print(f"Error fetching DORA trend: {e}")
+            logger.error("Error fetching DORA trend", error=str(e))
 
         # Get benchmark comparison
         if dashboard.current and dashboard.current.dora:
@@ -232,7 +235,7 @@ class UnifiedMetricsService:
                     dashboard.current.dora
                 )
             except Exception as e:
-                print(f"Error fetching benchmark: {e}")
+                logger.error("Error fetching benchmark", error=str(e))
 
         # Get cumulative flow diagram data
         try:
@@ -240,7 +243,7 @@ class UnifiedMetricsService:
                 project_name, period_start, period_end
             )
         except Exception as e:
-            print(f"Error fetching CFD data: {e}")
+            logger.error("Error fetching CFD data", error=str(e))
 
         # Get cycle time histogram
         try:
@@ -248,7 +251,7 @@ class UnifiedMetricsService:
                 project_name, period_start, period_end
             )
         except Exception as e:
-            print(f"Error fetching cycle time histogram: {e}")
+            logger.error("Error fetching cycle time histogram", error=str(e))
 
         # Get throughput run chart
         try:
@@ -256,7 +259,7 @@ class UnifiedMetricsService:
                 project_name, period_start, period_end, granularity="weekly"
             )
         except Exception as e:
-            print(f"Error fetching throughput chart: {e}")
+            logger.error("Error fetching throughput chart", error=str(e))
 
         # Get top contributors
         try:
@@ -275,7 +278,7 @@ class UnifiedMetricsService:
                 for c in contributors
             ]
         except Exception as e:
-            print(f"Error fetching top contributors: {e}")
+            logger.error("Error fetching top contributors", error=str(e))
 
         # Period comparison (current vs previous)
         try:
@@ -292,7 +295,7 @@ class UnifiedMetricsService:
                 dashboard.current, previous_metrics
             )
         except Exception as e:
-            print(f"Error calculating period comparison: {e}")
+            logger.error("Error calculating period comparison", error=str(e))
 
         return dashboard
 

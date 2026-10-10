@@ -37,6 +37,9 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
         request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
         request_id_var.set(request_id)
 
+        structlog.contextvars.clear_contextvars()
+        structlog.contextvars.bind_contextvars(request_id=request_id)
+
         response = await call_next(request)
         response.headers["X-Request-ID"] = request_id
 
@@ -54,9 +57,13 @@ class ResponseTimeMiddleware(BaseHTTPMiddleware):
         process_time = (time.perf_counter() - start_time) * 1000  # ms
         response.headers["X-Process-Time"] = f"{process_time:.2f}ms"
 
-        # Log slow requests
-        if process_time > 1000:  # > 1 second
-            print(f"SLOW REQUEST: {request.method} {request.url.path} took {process_time:.2f}ms")
+        if process_time > 1000:
+            logger.warning(
+                "Slow request detected",
+                method=request.method,
+                path=request.url.path,
+                duration_ms=round(process_time, 2),
+            )
 
         return response
 
@@ -146,8 +153,8 @@ class TenantMiddleware(BaseHTTPMiddleware):
 
         if tenant_id:
             tenant_id_var.set(tenant_id)
+            structlog.contextvars.bind_contextvars(tenant_id=tenant_id)
 
-            # Also set in multitenancy context for database operations
             from app.core.multitenancy import set_current_tenant_id
             set_current_tenant_id(tenant_id)
 
@@ -458,7 +465,6 @@ class ErrorTrackingMiddleware(BaseHTTPMiddleware):
                 traceback=traceback.format_exc(),
             )
 
-            # Try to record in observability service
             try:
                 from app.services.observability.service import _observability_service
                 if _observability_service:
@@ -468,8 +474,8 @@ class ErrorTrackingMiddleware(BaseHTTPMiddleware):
                         status=500,
                         duration_ms=0,
                     )
-            except Exception:
-                pass  # Don't fail if observability is unavailable
+            except Exception as obs_err:
+                logger.debug("Failed to record error in observability service", error=str(obs_err))
 
             # Return a generic error response
             error_response = {

@@ -518,10 +518,10 @@ class DevLakeCreateConnectionHandler(MCPToolHandler):
             logger.warning(f"Using legacy 'provider' parameter instead of 'plugin': {plugin}")
         if not name and "connection_name" in arguments:
             name = arguments["connection_name"]
-            logger.warning(f"Using legacy 'connection_name' parameter instead of 'name': {name}")
+            logger.warning("Using legacy 'connection_name' parameter instead of 'name'")
         if not token and "auth_info" in arguments:
             token = arguments["auth_info"]
-            logger.warning(f"Using legacy 'auth_info' parameter instead of 'token'")
+            logger.warning("Using legacy 'auth_info' parameter instead of 'token'")
 
         # Validate required parameters
         if not plugin:
@@ -543,7 +543,7 @@ class DevLakeCreateConnectionHandler(MCPToolHandler):
 
         # Use default endpoint if not provided
         endpoint = arguments.get("endpoint") or self.DEFAULT_ENDPOINTS.get(plugin)
-        logger.info(f"Creating connection: plugin={plugin}, name={name}, endpoint={endpoint}, token_provided={bool(token)}")
+        logger.info("Creating connection", plugin=plugin, name=name, endpoint=endpoint, token_provided=bool(token))
 
         # Validate endpoint for Jira (requires user customization)
         if plugin == "jira" and (not endpoint or "your-domain" in endpoint):
@@ -2730,8 +2730,8 @@ class DevLakeSetupGitHubHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
-        logger.info(f"[DevLakeSetupGitHubHandler] Starting GitHub setup with arguments: {list(arguments.keys())}")
-        logger.debug(f"[DevLakeSetupGitHubHandler] Full arguments (token redacted): repo={arguments.get('repo')}, project_name={arguments.get('project_name')}, endpoint={arguments.get('endpoint')}")
+        logger.info("DevLakeSetupGitHubHandler starting", argument_keys=list(arguments.keys()))
+        logger.debug("DevLakeSetupGitHubHandler arguments", repo=arguments.get("repo"), project_name=arguments.get("project_name"), endpoint=arguments.get("endpoint"))
 
         token = arguments["token"]
         repo = arguments["repo"]

@@ -3,12 +3,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.core.database import get_db
 from app.core.security import Token
 from app.services.auth import AuthService
 
 router = APIRouter()
+logger = structlog.get_logger()
 
 
 class RegisterRequest(BaseModel):
@@ -79,7 +81,6 @@ async def register(
             detail="Username already taken",
         )
 
-    # Create user
     user = await auth_service.create_user(
         email=request.email,
         username=request.username,
@@ -87,7 +88,8 @@ async def register(
         full_name=request.full_name,
     )
 
-    # Generate tokens
+    logger.info("User registered", user_id=str(user.id), email=user.email)
+
     tokens = await auth_service.login(request.email, request.password)
 
     return AuthResponse(
@@ -109,14 +111,15 @@ async def login(
 
     tokens = await auth_service.login(request.email, request.password)
     if not tokens:
+        logger.warning("Login failed", email=request.email, reason="invalid_credentials")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
         )
 
     user = await auth_service.get_user_by_email(request.email)
+    logger.info("Login successful", user_id=str(user.id), email=user.email)
 
-    # Get user's first organization membership for organization_id
     organization_id = None
     try:
         result = await db.execute(
@@ -127,8 +130,8 @@ async def login(
         org_member = result.scalar_one_or_none()
         if org_member:
             organization_id = org_member
-    except Exception:
-        pass  # If organization lookup fails, continue without it
+    except Exception as e:
+        logger.warning("Organization lookup failed during login", user_id=str(user.id), error=str(e))
 
     user_response = UserResponse(
         id=str(user.id),
@@ -156,9 +159,11 @@ async def refresh_tokens(
 
     tokens = await auth_service.refresh_tokens(request.refresh_token)
     if not tokens:
+        logger.warning("Token refresh failed", reason="invalid_or_expired")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired refresh token",
         )
 
+    logger.info("Token refreshed successfully")
     return tokens

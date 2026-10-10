@@ -12,6 +12,11 @@ from app.services.guardrails.nemo import get_nemo_guardrails_adapter
 
 logger = structlog.get_logger()
 
+
+def _timed_check(result: dict, start: float) -> dict:
+    result["response_time_ms"] = round((time.perf_counter() - start) * 1000, 2)
+    return result
+
 router = APIRouter()
 
 # Simple in-memory metrics (for production, use prometheus_client library)
@@ -56,22 +61,24 @@ async def detailed_health_check() -> DetailedHealthResponse:
     checks: dict[str, Any] = {}
 
     # Database check
+    t0 = time.perf_counter()
     try:
         from app.core.database import check_db_health
         db_health = await check_db_health()
-        checks["database"] = db_health
+        checks["database"] = _timed_check(db_health, t0)
     except Exception as e:
         logger.error("Database health check failed", error=str(e))
-        checks["database"] = {"status": "unhealthy", "error": "Database connection failed"}
+        checks["database"] = _timed_check({"status": "unhealthy", "error": "Database connection failed"}, t0)
 
     # Redis check
+    t0 = time.perf_counter()
     try:
         from app.core.cache import cache
         redis_health = await cache.health_check()
-        checks["redis"] = redis_health
+        checks["redis"] = _timed_check(redis_health, t0)
     except Exception as e:
         logger.error("Redis health check failed", error=str(e))
-        checks["redis"] = {"status": "unhealthy", "error": "Cache service connection failed"}
+        checks["redis"] = _timed_check({"status": "unhealthy", "error": "Cache service connection failed"}, t0)
 
     # Guardrails / NeMo status
     try:
@@ -93,7 +100,6 @@ async def detailed_health_check() -> DetailedHealthResponse:
                 elif adapter.is_ready:
                     nemo_status = "ready"
                 else:
-                    # Not initialized yet; still healthy because fallback is available.
                     nemo_status = "not_initialized"
 
         checks["guardrails"] = {
@@ -107,9 +113,43 @@ async def detailed_health_check() -> DetailedHealthResponse:
         logger.error("Guardrails health check failed", error=str(e))
         checks["guardrails"] = {"status": "degraded", "error": "Guardrails check failed"}
 
+    # Langfuse observability check
+    try:
+        from app.services.observability.service import _observability_service
+        if _observability_service and _observability_service.langfuse._enabled:
+            connected = _observability_service.langfuse._client is not None
+            checks["langfuse"] = {
+                "status": "healthy" if connected else "degraded",
+                "connected": connected,
+            }
+        else:
+            checks["langfuse"] = {"status": "disabled"}
+    except Exception as e:
+        logger.error("Langfuse health check failed", error=str(e))
+        checks["langfuse"] = {"status": "degraded", "error": "Langfuse check failed"}
+
+    # LLM provider availability
+    try:
+        providers_configured = []
+        if settings.OPENAI_API_KEY and not settings.OPENAI_API_KEY.startswith("sk-your"):
+            providers_configured.append("openai")
+        if settings.ANTHROPIC_API_KEY:
+            providers_configured.append("anthropic")
+        if getattr(settings, "GOOGLE_API_KEY", None):
+            providers_configured.append("google")
+
+        checks["llm_providers"] = {
+            "status": "healthy" if providers_configured else "degraded",
+            "configured": providers_configured,
+            "count": len(providers_configured),
+        }
+    except Exception as e:
+        logger.error("LLM provider health check failed", error=str(e))
+        checks["llm_providers"] = {"status": "unknown", "error": "Check failed"}
+
     # Determine overall status
     all_healthy = all(
-        c.get("status") == "healthy" for c in checks.values()
+        c.get("status") in {"healthy", "disabled"} for c in checks.values()
     )
 
     return DetailedHealthResponse(

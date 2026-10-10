@@ -563,7 +563,7 @@ async def startup(ctx: dict) -> None:
 
     await cache.initialize()
     await init_db()
-    print("Worker started")
+    logger.info("Worker started")
 
 
 async def shutdown(ctx: dict) -> None:
@@ -573,7 +573,7 @@ async def shutdown(ctx: dict) -> None:
 
     await cache.close()
     await close_db()
-    print("Worker stopped")
+    logger.info("Worker stopped")
 
 
 # Worker class for ARQ

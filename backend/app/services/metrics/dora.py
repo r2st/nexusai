@@ -12,8 +12,11 @@ from typing import Any
 
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.services.devlake import devlake_service
+
+logger = structlog.get_logger()
 
 
 class DORAMetrics(BaseModel):
@@ -130,7 +133,7 @@ class DORAMetricsService:
             metrics.overall_level = self._calculate_overall_level(metrics)
 
         except Exception as e:
-            print(f"Error calculating DORA metrics: {e}")
+            logger.error("Error calculating DORA metrics", error=str(e))
 
         return metrics
 
