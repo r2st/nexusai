@@ -10,12 +10,15 @@ Provides endpoints for:
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
 from app.core.database import get_db
 
 from app.core.multitenancy import get_current_tenant_id
+from app.api.deps import get_current_user
+from app.models.user import User
 from app.models.personal_access_token import (
     pat_service,
     PATCreateRequest,
@@ -55,7 +58,7 @@ async def list_available_scopes() -> list[dict[str, str]]:
 @router.post("/", response_model=PATCreateResponse, status_code=status.HTTP_201_CREATED)
 async def create_token(
     request: PATCreateRequest,
-    user_id: str = Query(..., description="Current user ID"),  # In production, from auth
+    current_user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
 ) -> PATCreateResponse:
@@ -63,28 +66,21 @@ async def create_token(
 
     IMPORTANT: The token value is only returned once in this response.
     Store it securely - it cannot be retrieved again.
-
-    Args:
-        request: Token creation request
-        user_id: Current user ID
-
-    Returns:
-        Token details including the secret token (shown only once)
     """
     return await pat_service.create_token(
         session=session,
         tenant_id=tenant_id,
-        user_id=user_id,
+        user_id=str(current_user.id),
         request=request,
     )
 
 
 @router.get("/", response_model=list[PATInfo])
 async def list_tokens(
-    user_id: str = Query(..., description="Current user ID"),
     include_revoked: bool = Query(default=False),
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
+    current_user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
 ) -> list[PATInfo]:
@@ -95,7 +91,7 @@ async def list_tokens(
     return await pat_service.list_user_tokens(
         session=session,
         tenant_id=tenant_id,
-        user_id=user_id,
+        user_id=str(current_user.id),
         include_revoked=include_revoked,
         limit=limit,
         offset=offset,
@@ -105,8 +101,8 @@ async def list_tokens(
 @router.delete("/{token_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def revoke_token(
     token_id: str,
-    user_id: str = Query(..., description="Current user ID"),
     reason: str | None = Query(default=None),
+    current_user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
 ) -> Response:
@@ -117,7 +113,7 @@ async def revoke_token(
     success = await pat_service.revoke_token(
         session=session,
         token_id=token_id,
-        user_id=user_id,
+        user_id=str(current_user.id),
         reason=reason,
     )
 
@@ -133,7 +129,7 @@ async def revoke_token(
 @router.post("/{token_id}/rotate", response_model=PATCreateResponse)
 async def rotate_token(
     token_id: str,
-    user_id: str = Query(..., description="Current user ID"),
+    current_user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
 ) -> PATCreateResponse:
@@ -147,7 +143,7 @@ async def rotate_token(
     result = await pat_service.rotate_token(
         session=session,
         token_id=token_id,
-        user_id=user_id,
+        user_id=str(current_user.id),
     )
 
     if not result:
@@ -159,10 +155,16 @@ async def rotate_token(
     return result
 
 
+class ValidateTokenRequest(BaseModel):
+    """Token validation request — accepts token in body, not query string."""
+
+    token: str = Field(..., min_length=1)
+    required_scopes: list[str] = Field(default=[])
+
+
 @router.post("/validate")
 async def validate_token(
-    token: str = Query(..., description="Token to validate"),
-    required_scopes: list[str] = Query(default=[]),
+    request: ValidateTokenRequest,
     session: AsyncSession = Depends(get_db),
 ) -> dict[str, Any]:
     """Validate a token and check its scopes.
@@ -171,8 +173,8 @@ async def validate_token(
     """
     pat, error = await pat_service.validate_token(
         session=session,
-        token=token,
-        required_scopes=required_scopes if required_scopes else None,
+        token=request.token,
+        required_scopes=request.required_scopes if request.required_scopes else None,
     )
 
     if error:
