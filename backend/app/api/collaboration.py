@@ -5,12 +5,10 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, WebSocket, WebSocketDisconnect, status
 import structlog
-from app.api.deps import get_current_user
-from app.models.user import User
-
-logger = structlog.get_logger()
 from pydantic import BaseModel, Field
 
+from app.api.deps import get_current_user
+from app.models.user import User
 from app.services.collaboration import (
     get_collaboration_service,
     get_presence_service,
@@ -22,6 +20,8 @@ from app.services.collaboration import (
     AnnotationType,
     ActivityType,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/collaboration", tags=["collaboration"])
 

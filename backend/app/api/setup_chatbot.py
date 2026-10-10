@@ -8,7 +8,6 @@ import structlog
 
 from app.api.deps import get_current_user, get_current_tenant
 
-logger = structlog.get_logger()
 from app.models.user import User
 from app.services.setup_chatbot import (
     setup_chatbot_service,
@@ -18,6 +17,8 @@ from app.services.setup_chatbot import (
     PLUGIN_CONFIGS,
 )
 
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/setup-assistant", tags=["Setup Assistant"])
 

@@ -12,7 +12,6 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
-logger = structlog.get_logger()
 
 from app.services.metrics.dora import DORAMetrics, DORAMetricsService, dora_metrics_service
 from app.services.metrics.space import SPACEMetricsService
@@ -30,6 +29,8 @@ from app.services.metrics.insights import (
     insights_generator,
 )
 
+
+logger = structlog.get_logger()
 
 class UnifiedMetrics(BaseModel):
     """Unified metrics model combining all metric types."""

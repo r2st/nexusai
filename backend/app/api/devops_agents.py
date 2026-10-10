@@ -10,7 +10,6 @@ import structlog
 
 from app.core.config import settings
 
-logger = structlog.get_logger()
 from app.core.database import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
@@ -23,6 +22,8 @@ from app.services.agents.devops import (
 )
 from app.services.agents.devops.summary_agent import AudienceLevel
 from app.services.agents.devops.workflow import WorkflowType, WorkflowStatus
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/devops-agents", tags=["devops-agents"])
 

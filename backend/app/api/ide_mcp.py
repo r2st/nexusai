@@ -16,10 +16,12 @@ import structlog
 
 from app.api.deps import get_current_user
 
-logger = structlog.get_logger()
 from app.core.database import get_db
 from app.models.user import User
 from app.services.mcp import get_mcp_gateway, MCPGateway
+
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/ide", tags=["ide"])
 

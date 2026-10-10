@@ -18,7 +18,6 @@ import structlog
 
 from app.core.database import get_db
 
-logger = structlog.get_logger()
 from app.api.deps import get_current_user
 from app.core.multitenancy import get_current_tenant_id
 from app.models.user import User
@@ -31,6 +30,8 @@ from app.services.metrics import (
 from app.services.metrics.flow import flow_metrics_service
 from app.services.metrics.unified import unified_metrics_service
 from app.services.metrics.insights import insights_generator
+
+logger = structlog.get_logger()
 
 router = APIRouter()
 

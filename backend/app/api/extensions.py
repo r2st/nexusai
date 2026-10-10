@@ -7,8 +7,6 @@ from pydantic import BaseModel
 import structlog
 
 from app.api.deps import get_current_user
-
-logger = structlog.get_logger()
 from app.models.user import User
 from app.services.extensions import (
     ExtensionService,
@@ -27,6 +25,8 @@ from app.services.extensions import (
     QuickFix,
     HoverInfo,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/extensions", tags=["extensions"])
 

@@ -7,14 +7,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
 from app.api.deps import get_current_user, get_db
-
-logger = structlog.get_logger()
 from app.models.user import User
 from app.services.rollups import (
     RollupGranularity,
     RollupQuery,
     get_rollup_service,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/rollups", tags=["rollups"])
 

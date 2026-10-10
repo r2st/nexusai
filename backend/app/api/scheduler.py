@@ -10,7 +10,6 @@ import structlog
 
 from app.api.deps import get_current_user
 
-logger = structlog.get_logger()
 from app.core.database import get_db
 from app.models.user import User
 from app.services.agents.scheduler import (
@@ -22,6 +21,9 @@ from app.services.agents.scheduler import (
     TaskTriggerType,
     get_agent_scheduler,
 )
+
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/scheduler", tags=["scheduler"])
 

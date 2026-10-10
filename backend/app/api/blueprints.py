@@ -13,8 +13,6 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
-logger = structlog.get_logger()
-
 from app.core.database import get_db
 from app.core.multitenancy import get_current_tenant_id
 from app.services.devlake.blueprints import (
@@ -23,6 +21,8 @@ from app.services.devlake.blueprints import (
     BlueprintMode,
     BlueprintStatus,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter()
 

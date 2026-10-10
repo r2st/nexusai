@@ -17,7 +17,6 @@ import structlog
 
 from app.api.deps import get_current_user, get_db
 
-logger = structlog.get_logger()
 from app.models.user import User
 from app.services.events import (
     EventQuery,
@@ -30,6 +29,9 @@ from app.services.events import (
     get_webhook_handler,
     get_event_publisher,
 )
+
+
+logger = structlog.get_logger()
 
 router = APIRouter(tags=["events"])
 

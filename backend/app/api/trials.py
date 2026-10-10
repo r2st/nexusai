@@ -16,10 +16,12 @@ import structlog
 
 from app.api.deps import get_current_user, get_db
 
-logger = structlog.get_logger()
 from app.models.organization import Organization, OrganizationMember, MemberRole
 from app.models.user import User, UserRole
 from app.services.trial import TrialService
+
+
+logger = structlog.get_logger()
 
 router = APIRouter()
 

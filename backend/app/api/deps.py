@@ -8,7 +8,6 @@ import structlog
 
 from app.core.database import get_db, get_read_db
 
-logger = structlog.get_logger()
 from app.core.security import verify_token
 from app.core.multitenancy import (
     get_current_tenant_id,
@@ -17,6 +16,9 @@ from app.core.multitenancy import (
 )
 from app.models.user import User
 from app.services.auth import AuthService
+
+
+logger = structlog.get_logger()
 
 security = HTTPBearer()
 optional_security = HTTPBearer(auto_error=False)

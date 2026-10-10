@@ -10,10 +10,11 @@ import structlog
 
 from app.api.deps import get_current_user
 
-logger = structlog.get_logger()
 from app.core.database import get_db
 from app.models.user import User
 from app.services.audit import AuditService
+
+logger = structlog.get_logger()
 
 router = APIRouter()
 

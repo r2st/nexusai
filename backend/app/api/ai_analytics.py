@@ -15,8 +15,6 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
-logger = structlog.get_logger()
-
 from app.api.deps import get_current_user, get_db
 from app.core.multitenancy import get_current_tenant_id, set_tenant_context
 from app.models.user import User
@@ -28,6 +26,9 @@ from app.services.ai_analytics import (
     AISummaryService,
     AIROIService,
 )
+
+
+logger = structlog.get_logger()
 
 router = APIRouter()
 

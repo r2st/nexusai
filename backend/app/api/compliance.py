@@ -11,7 +11,6 @@ from app.services.compliance.gdpr import get_gdpr_service
 from app.api.deps import get_current_user
 from app.models.user import User
 
-logger = structlog.get_logger()
 from app.services.compliance.soc2 import get_soc2_service
 from app.services.compliance.models import (
     ComplianceStatus,
@@ -23,6 +22,8 @@ from app.services.compliance.models import (
     SOC2ControlStatus,
     SOC2EvidenceType,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/compliance", tags=["compliance"])
 

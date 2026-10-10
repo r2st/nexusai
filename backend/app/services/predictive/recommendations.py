@@ -5,8 +5,6 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-logger = logging.getLogger(__name__)
-
 from app.services.predictive.models import (
     Bottleneck,
     Recommendation,
@@ -17,6 +15,9 @@ from app.services.predictive.models import (
     TrendDirection,
 )
 
+
+
+logger = logging.getLogger(__name__)
 
 class RecommendationEngine:
     """Generates actionable recommendations based on analytics.

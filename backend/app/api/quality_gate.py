@@ -8,7 +8,6 @@ import structlog
 
 from app.api.deps import get_current_user
 
-logger = structlog.get_logger()
 from app.models.user import User
 from app.services.quality_gate import (
     QualityGateService,
@@ -22,6 +21,9 @@ from app.services.extensions import (
     get_extension_service,
     AnalysisRequest,
 )
+
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/quality-gate", tags=["quality-gate"])
 

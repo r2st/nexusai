@@ -19,7 +19,6 @@ import structlog
 
 from app.api.deps import get_current_user, get_db
 
-logger = structlog.get_logger()
 from app.core.authorization import (
     grant_org_membership,
     revoke_org_membership,
@@ -510,3 +509,6 @@ async def remove_member(
 
 # Import timedelta for invite expiration
 from datetime import timedelta
+
+logger = structlog.get_logger()
+

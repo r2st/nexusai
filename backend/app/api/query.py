@@ -8,6 +8,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
 from app.api.deps import get_current_user, get_db
+from app.models.user import User
+from app.services.query import (
+    DataSource,
+    QueryRequest,
+    get_query_gateway,
+)
+
+logger = structlog.get_logger()
 
 TIME_RANGE_DELTAS = {
     "1h": timedelta(hours=1),
@@ -16,14 +24,6 @@ TIME_RANGE_DELTAS = {
     "30d": timedelta(days=30),
     "90d": timedelta(days=90),
 }
-
-logger = structlog.get_logger()
-from app.models.user import User
-from app.services.query import (
-    DataSource,
-    QueryRequest,
-    get_query_gateway,
-)
 
 router = APIRouter(prefix="/query", tags=["query"])
 

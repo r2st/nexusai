@@ -15,7 +15,6 @@ import structlog
 
 from app.core.database import get_db
 
-logger = structlog.get_logger()
 from app.core.multitenancy import get_current_tenant_id
 from app.models.personal_access_token import (
     pat_service,
@@ -24,6 +23,8 @@ from app.models.personal_access_token import (
     PATInfo,
     TokenScope,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter()
 
