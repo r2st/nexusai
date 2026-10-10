@@ -15,6 +15,46 @@ from app.services.code_review.models import (
 class CodeSmellDetector:
     """Detects code smells and anti-patterns in code changes."""
 
+    _SECRET_PATTERNS_CONTENT: list[tuple[re.Pattern, str]] = [
+        (re.compile(r'(password|passwd|pwd)\s*=\s*["\'][^"\']+["\']', re.IGNORECASE), "Hardcoded password"),
+        (re.compile(r'(secret|api_key|apikey|api-key)\s*=\s*["\'][^"\']+["\']', re.IGNORECASE), "Hardcoded API key/secret"),
+        (re.compile(r'(token|auth_token)\s*=\s*["\'][^"\']+["\']', re.IGNORECASE), "Hardcoded token"),
+        (re.compile(r'["\']sk-[a-zA-Z0-9]{20,}["\']', re.IGNORECASE), "Hardcoded OpenAI API key"),
+        (re.compile(r'["\']ghp_[a-zA-Z0-9]{36,}["\']', re.IGNORECASE), "Hardcoded GitHub token"),
+    ]
+    _FUNC_PATTERN_PY: re.Pattern = re.compile(r'^\s*def\s+\w+\s*\(')
+    _FUNC_PATTERN_JS: re.Pattern = re.compile(r'^\s*(async\s+)?function\s+\w+|^\s*\w+\s*[=:]\s*(async\s+)?\(')
+    _TODO_PATTERN: re.Pattern = re.compile(r'\b(TODO|FIXME|HACK|XXX)\b', re.IGNORECASE)
+    _MUTABLE_DEFAULT_PY: re.Pattern = re.compile(r'def\s+\w+\([^)]*=\s*(\[\]|\{\}|\[\s*\]|\{\s*\})')
+    _BARE_EXCEPT_PY: re.Pattern = re.compile(r'except\s*:')
+    _STAR_IMPORT_PY: re.Pattern = re.compile(r'from\s+\S+\s+import\s+\*')
+    _EVAL_PY: re.Pattern = re.compile(r'\beval\s*\(')
+    _VAR_JS: re.Pattern = re.compile(r'\bvar\s+\w+')
+    _CONSOLE_JS: re.Pattern = re.compile(r'\bconsole\.(log|debug|info)\s*\(')
+    _ANY_TS: re.Pattern = re.compile(r':\s*any\b')
+    _BOOLEAN_OPS: re.Pattern = re.compile(r'(?:and|or|&&|\|\|)')
+    _MAGIC_NUMBER: re.Pattern = re.compile(r"(?<!['\"\w])(\d+(?:\.\d+)?)(?!['\"\w])")
+    _SECRET_PATTERNS_HUNK: list[tuple[re.Pattern, str]] = [
+        (re.compile(r"(?i)(api[_-]?key|apikey)\s*[=:]\s*['\"][^'\"]{10,}['\"]"), "API key"),
+        (re.compile(r"(?i)(secret|password|passwd|pwd)\s*[=:]\s*['\"][^'\"]{6,}['\"]"), "password/secret"),
+        (re.compile(r"(?i)(token|auth[_-]?token)\s*[=:]\s*['\"][^'\"]{10,}['\"]"), "token"),
+        (re.compile(r"(?i)(private[_-]?key)\s*[=:]\s*['\"][^'\"]{20,}['\"]"), "private key"),
+        (re.compile(r"sk-[a-zA-Z0-9]{20,}"), "OpenAI API key"),
+        (re.compile(r"sk-ant-[a-zA-Z0-9]{20,}"), "Anthropic API key"),
+        (re.compile(r"ghp_[a-zA-Z0-9]{36,}"), "GitHub PAT"),
+        (re.compile(r"gho_[a-zA-Z0-9]{36,}"), "GitHub OAuth token"),
+        (re.compile(r"xox[baprs]-[a-zA-Z0-9-]{10,}"), "Slack token"),
+    ]
+    _TODO_FIXME_HUNK: re.Pattern = re.compile(r"\b(TODO|FIXME|HACK|XXX|BUG)\b", re.IGNORECASE)
+    _MUTABLE_DEFAULT_HUNK: re.Pattern = re.compile(r"def\s+\w+\s*\([^)]*=\s*(\[\]|\{\}|\bset\(\)|\bdict\(\)|\blist\(\))")
+    _BARE_EXCEPT_HUNK: re.Pattern = re.compile(r"^\s*except\s*:")
+    _STAR_IMPORT_HUNK: re.Pattern = re.compile(r"from\s+\S+\s+import\s+\*")
+    _IMPORT_HUNK: re.Pattern = re.compile(r"^\s*(?:from\s+\S+\s+)?import\s+(.+)")
+    _IMPORT_NAMES: re.Pattern = re.compile(r"(\w+)(?:\s+as\s+(\w+))?")
+    _VAR_HUNK: re.Pattern = re.compile(r"\bvar\s+\w+")
+    _CONSOLE_HUNK: re.Pattern = re.compile(r"console\.(log|debug|info|warn|error)\s*\(")
+    _ANY_HUNK: re.Pattern = re.compile(r":\s*any\b")
+
     def __init__(self):
         """Initialize the detector with patterns."""
         self._detectors: dict[str, list[callable]] = {
@@ -101,17 +141,10 @@ class CodeSmellDetector:
     ) -> list[CodeSmell]:
         """Detect hardcoded secrets in content."""
         smells = []
-        secret_patterns = [
-            (r'(password|passwd|pwd)\s*=\s*["\'][^"\']+["\']', "Hardcoded password"),
-            (r'(secret|api_key|apikey|api-key)\s*=\s*["\'][^"\']+["\']', "Hardcoded API key/secret"),
-            (r'(token|auth_token)\s*=\s*["\'][^"\']+["\']', "Hardcoded token"),
-            (r'["\']sk-[a-zA-Z0-9]{20,}["\']', "Hardcoded OpenAI API key"),
-            (r'["\']ghp_[a-zA-Z0-9]{36,}["\']', "Hardcoded GitHub token"),
-        ]
 
         for line_num, line in enumerate(lines, 1):
-            for pattern, message in secret_patterns:
-                if re.search(pattern, line, re.IGNORECASE):
+            for pattern, message in self._SECRET_PATTERNS_CONTENT:
+                if pattern.search(line):
                     smells.append(CodeSmell(
                         type=SmellType.HARDCODED_SECRET,
                         severity=SmellSeverity.CRITICAL,
@@ -137,9 +170,9 @@ class CodeSmellDetector:
 
         # Detect function/method starts based on language
         if language == "python":
-            func_pattern = r'^\s*def\s+\w+\s*\('
+            func_re = self._FUNC_PATTERN_PY
         elif language in ("javascript", "typescript"):
-            func_pattern = r'^\s*(async\s+)?function\s+\w+|^\s*\w+\s*[=:]\s*(async\s+)?\('
+            func_re = self._FUNC_PATTERN_JS
         else:
             return smells
 
@@ -147,7 +180,7 @@ class CodeSmellDetector:
         current_indent = 0
 
         for line_num, line in enumerate(lines, 1):
-            if re.match(func_pattern, line):
+            if func_re.match(line):
                 # Check if previous function was too long
                 if current_func_start:
                     func_length = line_num - current_func_start
@@ -238,10 +271,9 @@ class CodeSmellDetector:
     ) -> list[CodeSmell]:
         """Detect TODO and FIXME comments in content."""
         smells = []
-        todo_pattern = r'\b(TODO|FIXME|HACK|XXX)\b'
 
         for line_num, line in enumerate(lines, 1):
-            match = re.search(todo_pattern, line, re.IGNORECASE)
+            match = self._TODO_PATTERN.search(line)
             if match:
                 smells.append(CodeSmell(
                     type=SmellType.TODO_COMMENT,
@@ -266,7 +298,7 @@ class CodeSmellDetector:
 
         for line_num, line in enumerate(lines, 1):
             # Mutable default arguments
-            if re.search(r'def\s+\w+\([^)]*=\s*(\[\]|\{\}|\[\s*\]|\{\s*\})', line):
+            if self._MUTABLE_DEFAULT_PY.search(line):
                 smells.append(CodeSmell(
                     type=SmellType.MUTABLE_DEFAULT,
                     severity=SmellSeverity.MAJOR,
@@ -278,7 +310,7 @@ class CodeSmellDetector:
                 ))
 
             # Bare except
-            if re.search(r'except\s*:', line):
+            if self._BARE_EXCEPT_PY.search(line):
                 smells.append(CodeSmell(
                     type=SmellType.BARE_EXCEPT,
                     severity=SmellSeverity.MAJOR,
@@ -290,7 +322,7 @@ class CodeSmellDetector:
                 ))
 
             # Star imports
-            if re.search(r'from\s+\S+\s+import\s+\*', line):
+            if self._STAR_IMPORT_PY.search(line):
                 smells.append(CodeSmell(
                     type=SmellType.STAR_IMPORT,
                     severity=SmellSeverity.MINOR,
@@ -302,7 +334,7 @@ class CodeSmellDetector:
                 ))
 
             # eval() usage
-            if re.search(r'\beval\s*\(', line):
+            if self._EVAL_PY.search(line):
                 smells.append(CodeSmell(
                     type=SmellType.DANGEROUS_EVAL,
                     severity=SmellSeverity.CRITICAL,
@@ -327,7 +359,7 @@ class CodeSmellDetector:
 
         for line_num, line in enumerate(lines, 1):
             # var usage (prefer let/const)
-            if re.search(r'\bvar\s+\w+', line):
+            if self._VAR_JS.search(line):
                 smells.append(CodeSmell(
                     type=SmellType.VAR_USAGE,
                     severity=SmellSeverity.MINOR,
@@ -339,7 +371,7 @@ class CodeSmellDetector:
                 ))
 
             # console.log (should be removed)
-            if re.search(r'\bconsole\.(log|debug|info)\s*\(', line):
+            if self._CONSOLE_JS.search(line):
                 smells.append(CodeSmell(
                     type=SmellType.CONSOLE_LOG,
                     severity=SmellSeverity.INFO,
@@ -351,7 +383,7 @@ class CodeSmellDetector:
                 ))
 
             # TypeScript 'any' type
-            if language == "typescript" and re.search(r':\s*any\b', line):
+            if language == "typescript" and self._ANY_TS.search(line):
                 smells.append(CodeSmell(
                     type=SmellType.ANY_TYPE,
                     severity=SmellSeverity.MINOR,
@@ -434,15 +466,12 @@ class CodeSmellDetector:
         """Detect overly complex conditional statements."""
         smells = []
 
-        # Pattern for multiple boolean operators
-        pattern = r"(?:and|or|&&|\|\|)"
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
                     continue
 
-                operators = len(re.findall(pattern, line.content))
+                operators = len(self._BOOLEAN_OPS.findall(line.content))
                 if operators >= 3:
                     smells.append(CodeSmell(
                         type=SmellType.COMPLEX_CONDITION,
@@ -499,9 +528,6 @@ class CodeSmellDetector:
         # Allowed numbers
         allowed = {"0", "1", "-1", "2", "100", "1000"}
 
-        # Pattern for standalone numbers (not in strings or comments)
-        pattern = r"(?<!['\"\w])(\d+(?:\.\d+)?)(?!['\"\w])"
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
@@ -513,7 +539,7 @@ class CodeSmellDetector:
                 if content.strip().startswith(("#", "//", "*", "/*")):
                     continue
 
-                matches = re.findall(pattern, content)
+                matches = self._MAGIC_NUMBER.findall(content)
                 for num in matches:
                     if num not in allowed and len(num) > 1:  # Skip single digits
                         smells.append(CodeSmell(
@@ -538,26 +564,13 @@ class CodeSmellDetector:
         """Detect potential hardcoded secrets."""
         smells = []
 
-        # Patterns for secrets
-        patterns = [
-            (r"(?i)(api[_-]?key|apikey)\s*[=:]\s*['\"][^'\"]{10,}['\"]", "API key"),
-            (r"(?i)(secret|password|passwd|pwd)\s*[=:]\s*['\"][^'\"]{6,}['\"]", "password/secret"),
-            (r"(?i)(token|auth[_-]?token)\s*[=:]\s*['\"][^'\"]{10,}['\"]", "token"),
-            (r"(?i)(private[_-]?key)\s*[=:]\s*['\"][^'\"]{20,}['\"]", "private key"),
-            (r"sk-[a-zA-Z0-9]{20,}", "OpenAI API key"),
-            (r"sk-ant-[a-zA-Z0-9]{20,}", "Anthropic API key"),
-            (r"ghp_[a-zA-Z0-9]{36,}", "GitHub PAT"),
-            (r"gho_[a-zA-Z0-9]{36,}", "GitHub OAuth token"),
-            (r"xox[baprs]-[a-zA-Z0-9-]{10,}", "Slack token"),
-        ]
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
                     continue
 
-                for pattern, secret_type in patterns:
-                    if re.search(pattern, line.content):
+                for pattern, secret_type in self._SECRET_PATTERNS_HUNK:
+                    if pattern.search(line.content):
                         smells.append(CodeSmell(
                             type=SmellType.HARDCODED_SECRET,
                             severity=SmellSeverity.CRITICAL,
@@ -579,14 +592,12 @@ class CodeSmellDetector:
         """Detect TODO/FIXME comments being added."""
         smells = []
 
-        pattern = r"(?i)\b(TODO|FIXME|HACK|XXX|BUG)\b"
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
                     continue
 
-                match = re.search(pattern, line.content)
+                match = self._TODO_FIXME_HUNK.search(line.content)
                 if match:
                     smells.append(CodeSmell(
                         type=SmellType.BAD_NAMING,  # Using as general marker
@@ -646,15 +657,12 @@ class CodeSmellDetector:
         """Detect mutable default arguments in Python."""
         smells = []
 
-        # Pattern for mutable defaults
-        pattern = r"def\s+\w+\s*\([^)]*=\s*(\[\]|\{\}|\bset\(\)|\bdict\(\)|\blist\(\))"
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
                     continue
 
-                if re.search(pattern, line.content):
+                if self._MUTABLE_DEFAULT_HUNK.search(line.content):
                     smells.append(CodeSmell(
                         type=SmellType.MUTABLE_DEFAULT,
                         severity=SmellSeverity.MAJOR,
@@ -675,14 +683,12 @@ class CodeSmellDetector:
         """Detect bare except clauses in Python."""
         smells = []
 
-        pattern = r"^\s*except\s*:"
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
                     continue
 
-                if re.match(pattern, line.content):
+                if self._BARE_EXCEPT_HUNK.match(line.content):
                     smells.append(CodeSmell(
                         type=SmellType.BARE_EXCEPT,
                         severity=SmellSeverity.MAJOR,
@@ -702,14 +708,12 @@ class CodeSmellDetector:
         """Detect star imports in Python."""
         smells = []
 
-        pattern = r"from\s+\S+\s+import\s+\*"
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
                     continue
 
-                if re.search(pattern, line.content):
+                if self._STAR_IMPORT_HUNK.search(line.content):
                     smells.append(CodeSmell(
                         type=SmellType.STAR_IMPORT,
                         severity=SmellSeverity.MINOR,
@@ -739,11 +743,11 @@ class CodeSmellDetector:
                     continue
 
                 # Check for import statement
-                import_match = re.match(r"^\s*(?:from\s+\S+\s+)?import\s+(.+)", line.content)
+                import_match = self._IMPORT_HUNK.match(line.content)
                 if import_match:
                     # Extract imported names
                     names = import_match.group(1)
-                    for name in re.findall(r"(\w+)(?:\s+as\s+(\w+))?", names):
+                    for name in self._IMPORT_NAMES.findall(names):
                         actual_name = name[1] if name[1] else name[0]
                         imports[actual_name] = hunk.new_start + i
 
@@ -762,14 +766,12 @@ class CodeSmellDetector:
         """Detect var keyword usage in JavaScript."""
         smells = []
 
-        pattern = r"\bvar\s+\w+"
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
                     continue
 
-                if re.search(pattern, line.content):
+                if self._VAR_HUNK.search(line.content):
                     smells.append(CodeSmell(
                         type=SmellType.BAD_NAMING,
                         severity=SmellSeverity.MINOR,
@@ -789,14 +791,12 @@ class CodeSmellDetector:
         """Detect console.log statements."""
         smells = []
 
-        pattern = r"console\.(log|debug|info|warn|error)\s*\("
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
                     continue
 
-                if re.search(pattern, line.content):
+                if self._CONSOLE_HUNK.search(line.content):
                     smells.append(CodeSmell(
                         type=SmellType.BAD_NAMING,
                         severity=SmellSeverity.INFO,
@@ -817,14 +817,12 @@ class CodeSmellDetector:
         """Detect 'any' type usage in TypeScript."""
         smells = []
 
-        pattern = r":\s*any\b"
-
         for hunk in hunks:
             for i, line in enumerate(hunk.lines):
                 if line.type != "addition":
                     continue
 
-                if re.search(pattern, line.content):
+                if self._ANY_HUNK.search(line.content):
                     smells.append(CodeSmell(
                         type=SmellType.PRIMITIVE_OBSESSION,
                         severity=SmellSeverity.MINOR,
