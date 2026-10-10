@@ -24,9 +24,9 @@ router = APIRouter(prefix="/code-review", tags=["code-review"])
 class ReviewPRRequest(BaseModel):
     """Request to review a PR."""
 
-    owner: str = Field(..., description="Repository owner")
-    repo: str = Field(..., description="Repository name")
-    pr_number: int = Field(..., description="Pull request number")
+    owner: str = Field(..., min_length=1, max_length=200, description="Repository owner")
+    repo: str = Field(..., min_length=1, max_length=200, description="Repository name")
+    pr_number: int = Field(..., ge=1, le=999999999, description="Pull request number")
     post_review: bool = Field(True, description="Post review to GitHub/GitLab")
     context: dict[str, Any] | None = Field(None, description="Additional context")
 
@@ -43,7 +43,7 @@ class ReviewMRRequest(BaseModel):
 class ReviewDiffRequest(BaseModel):
     """Request to review a diff directly."""
 
-    diff: str = Field(..., description="Unified diff content")
+    diff: str = Field(..., min_length=1, max_length=5000000, description="Unified diff content")
     pr_info: dict[str, Any] = Field(..., description="PR information")
     context: dict[str, Any] | None = Field(None, description="Additional context")
 

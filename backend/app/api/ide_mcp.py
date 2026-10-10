@@ -10,7 +10,7 @@ Provides IDE-specific endpoints that leverage MCP tools for:
 from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
@@ -32,11 +32,11 @@ router = APIRouter(prefix="/ide", tags=["ide"])
 class ContextSearchRequest(BaseModel):
     """Request for context-aware code search."""
 
-    query: str
-    file_path: str | None = None
-    language: str | None = None
-    repository: str | None = None
-    max_results: int = 10
+    query: str = Field(..., min_length=1, max_length=10000)
+    file_path: str | None = Field(default=None, max_length=1024)
+    language: str | None = Field(default=None, max_length=50)
+    repository: str | None = Field(default=None, max_length=200)
+    max_results: int = Field(default=10, ge=1, le=100)
     include_context: bool = True
 
 
@@ -57,10 +57,10 @@ class ContextSearchResult(BaseModel):
 class DocumentationRequest(BaseModel):
     """Request for documentation lookup."""
 
-    symbol: str
-    language: str
-    file_path: str | None = None
-    context: str | None = None
+    symbol: str = Field(..., min_length=1, max_length=500)
+    language: str = Field(..., min_length=1, max_length=50)
+    file_path: str | None = Field(default=None, max_length=1024)
+    context: str | None = Field(default=None, max_length=50000)
 
 
 class DocumentationResult(BaseModel):
@@ -87,9 +87,9 @@ class QuickMetricsResponse(BaseModel):
 class FileHistoryRequest(BaseModel):
     """Request for file history."""
 
-    file_path: str
-    repository: str | None = None
-    max_commits: int = 10
+    file_path: str = Field(..., min_length=1, max_length=1024)
+    repository: str | None = Field(default=None, max_length=200)
+    max_commits: int = Field(default=10, ge=1, le=500)
 
 
 class CommitInfo(BaseModel):
@@ -113,28 +113,28 @@ class FileBlameResult(BaseModel):
 class ExplainCodeRequest(BaseModel):
     """Request to explain code."""
 
-    code: str
-    language: str
-    context: str | None = None
-    detail_level: str = "medium"  # brief, medium, detailed
+    code: str = Field(..., min_length=1, max_length=500000)
+    language: str = Field(..., min_length=1, max_length=50)
+    context: str | None = Field(default=None, max_length=50000)
+    detail_level: str = Field(default="medium", max_length=20)
 
 
 class RefactorRequest(BaseModel):
     """Request for code refactoring suggestions."""
 
-    code: str
-    language: str
-    refactor_type: str | None = None  # extract_method, rename, simplify, etc.
-    context: str | None = None
+    code: str = Field(..., min_length=1, max_length=500000)
+    language: str = Field(..., min_length=1, max_length=50)
+    refactor_type: str | None = Field(default=None, max_length=50)
+    context: str | None = Field(default=None, max_length=50000)
 
 
 class TestGenerationRequest(BaseModel):
     """Request for test generation."""
 
-    code: str
-    language: str
-    test_framework: str | None = None
-    coverage_target: str = "happy_path"  # happy_path, edge_cases, full
+    code: str = Field(..., min_length=1, max_length=500000)
+    language: str = Field(..., min_length=1, max_length=50)
+    test_framework: str | None = Field(default=None, max_length=50)
+    coverage_target: str = Field(default="happy_path", max_length=20)
 
 
 # ============================================================================

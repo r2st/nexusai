@@ -110,8 +110,8 @@ class AgentResponse(BaseModel):
 class AgentExecuteRequest(BaseModel):
     """Request model for executing an agent."""
 
-    message: str
-    conversation_id: str | None = None
+    message: str = Field(..., min_length=1, max_length=100000)
+    conversation_id: str | None = Field(default=None, max_length=200)
     context: dict[str, Any] = Field(default_factory=dict)
     stream: bool = False
 
