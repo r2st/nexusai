@@ -11,7 +11,8 @@ from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field, field_validator
+import re as _re
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
@@ -42,10 +43,17 @@ router = APIRouter()
 class OrganizationCreate(BaseModel):
     """Create organization request."""
 
-    name: str
-    slug: str
-    description: str | None = None
-    website: str | None = None
+    name: str = Field(..., min_length=1, max_length=200)
+    slug: str = Field(..., min_length=2, max_length=100)
+    description: str | None = Field(default=None, max_length=2000)
+    website: str | None = Field(default=None, max_length=500)
+
+    @field_validator("slug")
+    @classmethod
+    def validate_slug(cls, v: str) -> str:
+        if not _re.match(r"^[a-z0-9][a-z0-9-]*[a-z0-9]$", v) and len(v) > 1:
+            raise ValueError("Slug must contain only lowercase alphanumeric characters and hyphens, and cannot start/end with a hyphen")
+        return v
 
 
 class OrganizationUpdate(BaseModel):

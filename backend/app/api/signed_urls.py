@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
 from app.core.database import get_db
+from app.core.input_validation import validate_no_path_traversal
 from app.api.deps import get_current_user
 from app.models.user import User
 from app.services.storage.manager import get_storage_manager
@@ -28,16 +29,22 @@ router = APIRouter()
 class SignedURLRequest(BaseModel):
     """Request for generating a signed URL."""
 
-    file_key: str = Field(..., description="Storage key of the file")
+    file_key: str = Field(..., min_length=1, max_length=1024, description="Storage key of the file")
     operation: str = Field(
         default="download",
         description="Operation type: 'download' or 'upload'",
     )
-    
+
+    @field_validator("file_key")
+    @classmethod
+    def validate_file_key(cls, v: str) -> str:
+        if ".." in v or v.startswith("/") or "\x00" in v:
+            raise ValueError("Invalid file key: path traversal not allowed")
+        return v
+
     @field_validator("operation")
     @classmethod
     def validate_operation(cls, v: str) -> str:
-        """Validate operation type."""
         if v not in ["download", "upload"]:
             raise ValueError("Operation must be 'download' or 'upload'")
         return v
@@ -280,9 +287,10 @@ async def generate_download_url(
 ) -> SignedURLResponse:
     """
     Generate a pre-signed URL for file download.
-    
+
     The file must exist and the user must have access.
     """
+    validate_no_path_traversal(file_key, "file_key")
     storage_manager = get_storage_manager()
     
     # Check file exists

@@ -1,7 +1,8 @@
 """Authentication API endpoints."""
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field, field_validator
+import re
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
@@ -17,9 +18,16 @@ class RegisterRequest(BaseModel):
     """User registration request."""
 
     email: EmailStr
-    username: str
-    password: str
-    full_name: str | None = None
+    username: str = Field(..., min_length=3, max_length=50)
+    password: str = Field(..., min_length=8, max_length=128)
+    full_name: str | None = Field(default=None, max_length=200)
+
+    @field_validator("username")
+    @classmethod
+    def validate_username(cls, v: str) -> str:
+        if not re.match(r"^[a-zA-Z0-9_-]+$", v):
+            raise ValueError("Username must contain only alphanumeric characters, hyphens, or underscores")
+        return v
 
 
 class LoginRequest(BaseModel):

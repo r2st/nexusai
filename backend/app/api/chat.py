@@ -4,7 +4,7 @@ import time
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import json
 import re
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -55,10 +55,10 @@ def get_default_provider() -> ModelProvider:
 class CreateConversationRequest(BaseModel):
     """Create conversation request."""
 
-    title: str = "New Conversation"
+    title: str = Field(default="New Conversation", max_length=500)
     model_provider: ModelProvider | None = None  # None means auto-detect
-    model_name: str | None = None
-    system_prompt: str | None = None
+    model_name: str | None = Field(default=None, max_length=200)
+    system_prompt: str | None = Field(default=None, max_length=50000)
 
 
 class ConversationResponse(BaseModel):
@@ -108,12 +108,12 @@ class MCPServerConfigRequest(BaseModel):
 class ChatRequest(BaseModel):
     """Chat request with MCP support."""
 
-    message: str
-    temperature: float = 0.7
-    max_tokens: int = 4096
+    message: str = Field(..., min_length=1, max_length=100000)
+    temperature: float = Field(default=0.7, ge=0.0, le=2.0)
+    max_tokens: int = Field(default=4096, ge=1, le=128000)
     stream: bool = True
-    use_mcp: bool = True  # Enable MCP tools by default
-    mcp_servers: list[MCPServerConfigRequest] = []  # Optional MCP server configs
+    use_mcp: bool = True
+    mcp_servers: list[MCPServerConfigRequest] = Field(default_factory=list, max_length=10)
 
 
 class ChatResponse(BaseModel):

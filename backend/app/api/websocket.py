@@ -341,7 +341,7 @@ async def handle_message(
 
     await manager.send_message(websocket, {
         "type": "error",
-        "error": f"Unknown message type: {msg_type}",
+        "error": "Unknown message type",
     })
 
 
@@ -355,8 +355,13 @@ async def handle_new_conversation(
     chat_service = ChatService(db)
 
     title = data.get("title", "New Conversation")
+    if not isinstance(title, str):
+        title = "New Conversation"
+    title = title[:500]
     model_provider_str = data.get("model_provider")
     model_name = data.get("model_name")
+    if isinstance(model_name, str):
+        model_name = model_name[:200]
 
     # Determine model provider
     if model_provider_str:
@@ -404,16 +409,8 @@ async def handle_chat(
     message = data.get("message")
     temperature = data.get("temperature", 0.7)
     max_tokens = data.get("max_tokens", 4096)
-    use_mcp = data.get("use_mcp", True)  # Enable MCP by default
-    mcp_servers_data = data.get("mcp_servers", [])  # Optional MCP server configs
-
-    logger.info(
-        "Handle chat called",
-        user_id=str(user.id),
-        conversation_id=conversation_id,
-        message_preview=message[:100] if message else None,
-        use_mcp=use_mcp,
-    )
+    use_mcp = data.get("use_mcp", True)
+    mcp_servers_data = data.get("mcp_servers", [])
 
     if not conversation_id or not message:
         await manager.send_message(websocket, {
@@ -421,6 +418,28 @@ async def handle_chat(
             "error": "conversation_id and message are required",
         })
         return
+
+    if not isinstance(message, str) or len(message) > 100000:
+        await manager.send_message(websocket, {
+            "type": "error",
+            "error": "message must be a string of at most 100000 characters",
+        })
+        return
+
+    if not isinstance(temperature, (int, float)) or not (0.0 <= temperature <= 2.0):
+        temperature = 0.7
+    if not isinstance(max_tokens, int) or not (1 <= max_tokens <= 128000):
+        max_tokens = 4096
+    if not isinstance(mcp_servers_data, list) or len(mcp_servers_data) > 10:
+        mcp_servers_data = []
+
+    logger.info(
+        "Handle chat called",
+        user_id=str(user.id),
+        conversation_id=conversation_id,
+        message_preview=message[:100],
+        use_mcp=use_mcp,
+    )
 
     # Parse external MCP server configs if provided
     mcp_servers = []

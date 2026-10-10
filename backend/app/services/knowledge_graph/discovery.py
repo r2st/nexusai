@@ -5,9 +5,13 @@ from datetime import datetime, UTC
 from enum import Enum
 from typing import Any
 
+import re
+
 import structlog
 
 from app.services.knowledge_graph.neo4j_client import Neo4jClient
+
+_CYPHER_IDENT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]{0,127}$")
 
 logger = structlog.get_logger()
 
@@ -288,8 +292,10 @@ class KnowledgeGraphDiscovery:
         max_depth: int = 5,
     ) -> list[dict[str, Any]]:
         """Discover data lineage (upstream sources or downstream consumers)."""
+        if not _CYPHER_IDENT_RE.match(entity_type):
+            raise ValueError(f"Invalid entity_type: {entity_type!r}")
+        max_depth = max(1, min(max_depth, 10))
         if direction == "upstream":
-            # Find sources that this entity depends on
             query = f"""
                 MATCH (target:{entity_type} {{name: $entity_name}})
                 MATCH path = (source)-[:PRODUCES|DERIVED_FROM|DEPENDS_ON*1..{max_depth}]->(target)
@@ -302,7 +308,6 @@ class KnowledgeGraphDiscovery:
                 LIMIT 100
             """
         else:
-            # Find consumers of this entity
             query = f"""
                 MATCH (source:{entity_type} {{name: $entity_name}})
                 MATCH path = (source)-[:PRODUCES|DERIVED_FROM|DEPENDS_ON*1..{max_depth}]->(target)
@@ -379,6 +384,9 @@ class KnowledgeGraphDiscovery:
     ) -> list[dict[str, Any]]:
         """Search for entities matching a search term."""
         types = entity_types or ["Table", "Column", "Metric", "Transformation"]
+        for t in types:
+            if not _CYPHER_IDENT_RE.match(t):
+                raise ValueError(f"Invalid entity type: {t!r}")
         type_filter = " OR ".join([f"n:{t}" for t in types])
 
         query = f"""

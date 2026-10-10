@@ -14,6 +14,7 @@ logger = structlog.get_logger()
 from app.core.database import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
+from app.core.input_validation import validate_cypher_identifier
 from app.services.knowledge_graph import (
     Neo4jClient,
     Neo4jConfig,
@@ -166,6 +167,7 @@ async def create_node(
     current_user: User = Depends(get_current_user),
 ):
     """Create a new node in the knowledge graph."""
+    validate_cypher_identifier(request.label, "label")
     client = get_neo4j_client()
     try:
         query = f"""
@@ -194,6 +196,8 @@ async def list_nodes(
     current_user: User = Depends(get_current_user),
 ):
     """List nodes in the knowledge graph."""
+    if label:
+        validate_cypher_identifier(label, "label")
     client = get_neo4j_client()
     try:
         if label:
@@ -224,6 +228,9 @@ async def create_relationship(
     current_user: User = Depends(get_current_user),
 ):
     """Create a relationship between nodes."""
+    validate_cypher_identifier(request.source_label, "source_label")
+    validate_cypher_identifier(request.target_label, "target_label")
+    validate_cypher_identifier(request.relationship_type, "relationship_type")
     client = get_neo4j_client()
     try:
         query = f"""
@@ -257,6 +264,8 @@ async def list_relationships(
     current_user: User = Depends(get_current_user),
 ):
     """List relationships in the knowledge graph."""
+    if relationship_type:
+        validate_cypher_identifier(relationship_type, "relationship_type")
     client = get_neo4j_client()
     try:
         if relationship_type:
@@ -409,6 +418,9 @@ async def search_entities(
     current_user: User = Depends(get_current_user),
 ):
     """Search for entities in the knowledge graph."""
+    if entity_types:
+        for et in entity_types:
+            validate_cypher_identifier(et, "entity_type")
     client = get_neo4j_client()
     try:
         discovery = KnowledgeGraphDiscovery(client)
@@ -436,6 +448,7 @@ async def get_data_lineage(
     current_user: User = Depends(get_current_user),
 ):
     """Get data lineage for an entity."""
+    validate_cypher_identifier(entity_type, "entity_type")
     client = get_neo4j_client()
     try:
         discovery = KnowledgeGraphDiscovery(client)
@@ -492,6 +505,7 @@ async def delete_node(
     current_user: User = Depends(get_current_user),
 ):
     """Delete a node from the knowledge graph."""
+    validate_cypher_identifier(label, "label")
     client = get_neo4j_client()
     try:
         query = f"""

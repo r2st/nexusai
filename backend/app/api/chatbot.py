@@ -131,17 +131,16 @@ async def slack_events(
     """Handle Slack event webhook."""
     service = get_chatbot_service()
 
-    # Get raw body for signature verification
     body = await request.body()
 
-    # Verify signature
-    if x_slack_signature and x_slack_request_timestamp:
-        if not service.verify_slack_signature(
-            timestamp=x_slack_request_timestamp,
-            signature=x_slack_signature,
-            body=body,
-        ):
-            raise HTTPException(status_code=401, detail="Invalid signature")
+    if not x_slack_signature or not x_slack_request_timestamp:
+        raise HTTPException(status_code=401, detail="Missing signature headers")
+    if not service.verify_slack_signature(
+        timestamp=x_slack_request_timestamp,
+        signature=x_slack_signature,
+        body=body,
+    ):
+        raise HTTPException(status_code=401, detail="Invalid signature")
 
     # Parse JSON
     try:
@@ -167,17 +166,16 @@ async def slack_commands(
     """Handle Slack slash command."""
     service = get_chatbot_service()
 
-    # Get raw body for signature verification
     body = await request.body()
 
-    # Verify signature
-    if x_slack_signature and x_slack_request_timestamp:
-        if not service.verify_slack_signature(
-            timestamp=x_slack_request_timestamp,
-            signature=x_slack_signature,
-            body=body,
-        ):
-            raise HTTPException(status_code=401, detail="Invalid signature")
+    if not x_slack_signature or not x_slack_request_timestamp:
+        raise HTTPException(status_code=401, detail="Missing signature headers")
+    if not service.verify_slack_signature(
+        timestamp=x_slack_request_timestamp,
+        signature=x_slack_signature,
+        body=body,
+    ):
+        raise HTTPException(status_code=401, detail="Invalid signature")
 
     # Parse form data
     form_data = await request.form()
@@ -198,17 +196,16 @@ async def slack_interactions(
     """Handle Slack interactive component."""
     service = get_chatbot_service()
 
-    # Get raw body for signature verification
     body = await request.body()
 
-    # Verify signature
-    if x_slack_signature and x_slack_request_timestamp:
-        if not service.verify_slack_signature(
-            timestamp=x_slack_request_timestamp,
-            signature=x_slack_signature,
-            body=body,
-        ):
-            raise HTTPException(status_code=401, detail="Invalid signature")
+    if not x_slack_signature or not x_slack_request_timestamp:
+        raise HTTPException(status_code=401, detail="Missing signature headers")
+    if not service.verify_slack_signature(
+        timestamp=x_slack_request_timestamp,
+        signature=x_slack_signature,
+        body=body,
+    ):
+        raise HTTPException(status_code=401, detail="Invalid signature")
 
     # Parse form data
     form_data = await request.form()
