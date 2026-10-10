@@ -7,7 +7,7 @@ Collects AI usage data from GitHub Copilot including:
 - Enterprise usage analytics
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 import httpx

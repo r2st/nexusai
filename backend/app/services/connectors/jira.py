@@ -7,7 +7,6 @@ Connector for Atlassian Jira issue tracking.
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-import asyncio
 import hashlib
 import hmac
 import logging

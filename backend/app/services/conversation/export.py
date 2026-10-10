@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any
 from uuid import uuid4
 
 import aiofiles

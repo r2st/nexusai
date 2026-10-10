@@ -5,12 +5,11 @@ SAML authentication implementation.
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 import base64
 import logging
 import secrets
-import uuid
 import zlib
 from xml.etree import ElementTree as ET
 

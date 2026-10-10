@@ -5,7 +5,7 @@ Safe tool execution with timeouts, rate limiting, and audit logging.
 """
 
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Callable
 from dataclasses import dataclass
 import logging

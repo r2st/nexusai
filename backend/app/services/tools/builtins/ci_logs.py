@@ -4,7 +4,7 @@ CI Logs Tool
 Access CI/CD build logs and test results.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from ..base import (
     Tool,
     ToolMetadata,

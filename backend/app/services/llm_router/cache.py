@@ -7,7 +7,6 @@ Cache LLM responses based on semantic similarity.
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
-import asyncio
 import hashlib
 import json
 import logging

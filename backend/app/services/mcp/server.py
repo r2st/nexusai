@@ -6,7 +6,7 @@ Exposes NexusAI capabilities as MCP tools and resources.
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Type
+from typing import Any, Dict, List, Optional, Type
 import asyncio
 import json
 import logging

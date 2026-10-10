@@ -2,7 +2,6 @@
 
 import asyncio
 from datetime import UTC, datetime
-from typing import Any
 
 import structlog
 from sqlalchemy import text

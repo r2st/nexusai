@@ -7,7 +7,7 @@ Supports fallback to in-memory queue for local development.
 import asyncio
 import json
 from collections.abc import Callable
-from datetime import UTC, datetime
+from datetime import datetime
 from typing import Any
 from uuid import uuid4
 

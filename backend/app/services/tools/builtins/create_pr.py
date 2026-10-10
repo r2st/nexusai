@@ -4,7 +4,7 @@ Create PR Tool
 Create pull requests with patches.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 from ..base import (
     Tool,
     ToolMetadata,

@@ -5,9 +5,8 @@ Events are stored with tenant isolation and time-based partitioning.
 """
 
 import json
-from datetime import UTC, datetime
+from datetime import datetime
 from typing import Any
-from uuid import uuid4
 
 import structlog
 from sqlalchemy import select, func, and_, text

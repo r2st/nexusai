@@ -5,7 +5,6 @@ Provides tools for distributed tracing, log aggregation, metrics queries,
 and alert management through MCP for AI assistant integration.
 """
 
-import json
 import logging
 import re
 import random

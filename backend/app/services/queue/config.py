@@ -1,6 +1,5 @@
 """Configuration for message queue service."""
 
-from typing import Any
 
 from pydantic import BaseModel, Field
 

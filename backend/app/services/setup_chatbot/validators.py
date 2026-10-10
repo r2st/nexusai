@@ -4,7 +4,7 @@ import re
 from dataclasses import dataclass, field
 from difflib import SequenceMatcher
 from enum import Enum
-from typing import Any, Callable
+from typing import Any
 from urllib.parse import urlparse
 import logging
 

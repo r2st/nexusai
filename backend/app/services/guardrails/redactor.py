@@ -15,7 +15,6 @@ from typing import Any, Callable, Dict, List, Optional, Set
 import re
 import logging
 import hashlib
-import uuid
 
 logger = logging.getLogger(__name__)
 

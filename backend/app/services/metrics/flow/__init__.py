@@ -1,6 +1,6 @@
 """Flow metrics for developer experience and work throughput."""
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 from pydantic import BaseModel

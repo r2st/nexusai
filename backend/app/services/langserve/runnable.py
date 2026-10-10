@@ -5,7 +5,6 @@ Exposes ChatService as a LangChain Runnable for LangServe deployment.
 """
 
 from typing import Any, AsyncIterator
-from uuid import uuid4
 
 from langchain_core.runnables import Runnable, RunnableConfig
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage

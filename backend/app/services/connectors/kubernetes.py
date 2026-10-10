@@ -6,8 +6,7 @@ Connector for Kubernetes cluster integration.
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, AsyncIterator
-import asyncio
+from typing import Any, Dict, List, Optional
 import logging
 import ssl
 import base64

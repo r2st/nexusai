@@ -8,7 +8,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Callable
-import asyncio
 import logging
 
 from .analyzer import DiffAnalyzer, FileAnalysis, RiskAssessment, RiskLevel

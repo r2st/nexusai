@@ -1,6 +1,6 @@
 """Neo4j client for knowledge graph operations."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 from contextlib import asynccontextmanager
 

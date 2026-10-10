@@ -6,7 +6,7 @@ import secrets
 import string
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Callable
+from typing import Callable
 
 from pydantic import BaseModel, Field
 

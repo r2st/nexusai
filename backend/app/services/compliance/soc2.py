@@ -2,7 +2,7 @@
 
 import logging
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 from app.services.compliance.models import (

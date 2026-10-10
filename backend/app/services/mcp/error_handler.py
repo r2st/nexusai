@@ -10,7 +10,7 @@ import json
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Awaitable, Optional
+from typing import Callable, Awaitable, Optional
 
 from .errors import (
     ErrorCategory,

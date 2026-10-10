@@ -1,14 +1,12 @@
 """Docker-based sandboxed execution environment for code interpreter."""
 
 import asyncio
-import os
 import tempfile
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any
 
 import aiofiles
 import structlog

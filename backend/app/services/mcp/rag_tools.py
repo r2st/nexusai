@@ -9,7 +9,7 @@ Exposes RAG capabilities through MCP:
 """
 
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Optional
 import structlog
 
 from .server import MCPToolHandler

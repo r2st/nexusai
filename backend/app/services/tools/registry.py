@@ -4,7 +4,7 @@ Tool Registry
 Central registry for discovering and managing tools.
 """
 
-from typing import Dict, List, Optional, Type, Set
+from typing import Dict, List, Optional, Set
 from dataclasses import dataclass, field
 import logging
 

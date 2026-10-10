@@ -1,7 +1,7 @@
 """Meilisearch integration for fast full-text search."""
 
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime
 from typing import Any
 
 import httpx

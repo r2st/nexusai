@@ -7,10 +7,8 @@ Intelligent routing of LLM requests.
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Set
-import asyncio
+from typing import Callable, Dict, List, Optional, Set
 import logging
-import random
 
 from .registry import (
     ModelRegistry,

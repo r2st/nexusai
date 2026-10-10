@@ -1,6 +1,6 @@
 """Bottleneck Detector - Identifies process bottlenecks."""
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 from app.services.predictive.models import (

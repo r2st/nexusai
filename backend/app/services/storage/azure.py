@@ -1,7 +1,7 @@
 """Azure Blob Storage backend."""
 
 import mimetypes
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 from typing import Any
 
 import structlog

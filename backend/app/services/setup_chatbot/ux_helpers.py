@@ -1,6 +1,5 @@
 """UX Helpers - Typing indicators, error recovery, and contextual help."""
 
-import asyncio
 import random
 from dataclasses import dataclass, field
 from datetime import datetime, UTC

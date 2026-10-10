@@ -1,6 +1,6 @@
 """AI SDLC Adoption Analyst Agent."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, UTC, timedelta
 from enum import Enum
 from typing import Any

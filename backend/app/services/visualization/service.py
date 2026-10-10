@@ -6,7 +6,6 @@ Main service for generating architecture diagrams and visualizations.
 
 import logging
 import time
-from typing import Optional
 from functools import lru_cache
 
 from .models import (

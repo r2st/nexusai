@@ -7,8 +7,7 @@ Multi-model embedding generation for semantic search.
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional
-import asyncio
+from typing import Any, List, Optional
 import hashlib
 import logging
 

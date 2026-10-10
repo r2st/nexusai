@@ -1,6 +1,5 @@
 """Hallucination evaluators for assessing LLM output quality using Phoenix."""
 
-from typing import Any
 
 import structlog
 

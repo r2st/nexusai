@@ -1,13 +1,11 @@
 """Configuration Security Checker."""
 
-import json
 import os
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class ConfigIssue(BaseModel):

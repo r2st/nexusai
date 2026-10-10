@@ -5,11 +5,10 @@ Connects to external MCP servers to consume their tools.
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 import asyncio
 import json
 import logging
-import uuid
 
 from .protocol import (
     MCPRequest,

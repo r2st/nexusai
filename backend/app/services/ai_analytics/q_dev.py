@@ -10,7 +10,6 @@ Collects AI usage data from Amazon Q Developer including:
 from datetime import datetime
 from typing import Any
 
-import httpx
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 

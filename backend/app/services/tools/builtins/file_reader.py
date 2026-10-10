@@ -4,7 +4,7 @@ File Reader Tool
 Read file contents from repositories.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from ..base import (
     Tool,
     ToolMetadata,

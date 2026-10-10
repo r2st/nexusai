@@ -1,6 +1,6 @@
 """Risk Scorer - Deployment and change risk assessment."""
 
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from typing import Any
 
 from app.services.predictive.models import (

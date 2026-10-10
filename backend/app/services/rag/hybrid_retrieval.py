@@ -4,8 +4,8 @@ Hybrid Retrieval Engine
 Combines keyword and semantic search with reranking.
 """
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from dataclasses import dataclass
+from typing import Dict, List, Optional
 import asyncio
 import logging
 import re

@@ -10,7 +10,6 @@ Novel business metrics for engineering organizations:
 """
 
 from datetime import datetime, timedelta
-from typing import Any
 
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession

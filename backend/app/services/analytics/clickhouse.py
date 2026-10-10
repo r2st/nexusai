@@ -9,7 +9,6 @@ ClickHouse provides high-performance OLAP queries for:
 
 from datetime import datetime, timedelta
 from typing import Any
-from uuid import uuid4
 
 import httpx
 from pydantic import BaseModel

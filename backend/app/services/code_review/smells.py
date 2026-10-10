@@ -1,7 +1,6 @@
 """Code Smell Detector - Detects common code smells and anti-patterns."""
 
 import re
-from typing import Any
 
 from app.services.code_review.models import (
     CodeSmell,

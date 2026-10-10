@@ -8,7 +8,7 @@ SPACE Framework measures developer productivity across 5 dimensions:
 - Efficiency and flow
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 from pydantic import BaseModel

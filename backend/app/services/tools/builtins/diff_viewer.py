@@ -4,7 +4,7 @@ Diff Viewer Tool
 Get and analyze diffs from PRs and commits.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from ..base import (
     Tool,
     ToolMetadata,

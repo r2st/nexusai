@@ -1,7 +1,6 @@
 """PII (Personally Identifiable Information) detection and redaction."""
 
 import re
-from typing import Any
 
 import structlog
 

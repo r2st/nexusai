@@ -7,15 +7,12 @@ OIDC authentication implementation.
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
-import asyncio
 import base64
 import hashlib
-import hmac
 import json
 import logging
 import secrets
 import urllib.parse
-import uuid
 
 import httpx
 import jwt

@@ -13,7 +13,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, UTC
 from enum import Enum
 from typing import Any, Optional
-from uuid import uuid4
 import structlog
 
 logger = structlog.get_logger()

@@ -6,12 +6,10 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
-from urllib.parse import urljoin
 
 import httpx
 import structlog
 from bs4 import BeautifulSoup
-from pydantic import BaseModel
 
 from app.core.config import settings
 

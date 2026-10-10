@@ -5,13 +5,12 @@ Provides RBAC (Role-Based Access Control), data redaction, and audit logging
 functionality through MCP tools for secure AI assistant integration.
 """
 
-import json
 import logging
 import re
 from datetime import UTC, datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from .server import MCPToolHandler
 from .protocol import MCPTool

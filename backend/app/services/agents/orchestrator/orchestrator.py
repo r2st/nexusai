@@ -1,6 +1,6 @@
 """Main agent orchestrator using LangGraph."""
 
-from typing import Any, Callable, Literal
+from typing import Any, Literal
 
 import structlog
 from langgraph.graph import StateGraph, END

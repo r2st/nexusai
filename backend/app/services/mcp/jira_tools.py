@@ -5,7 +5,6 @@ Provides tools for ticket management, sprint tracking, and issue analytics
 through MCP for AI assistant integration.
 """
 
-import json
 import logging
 import re
 from datetime import UTC, datetime, timedelta

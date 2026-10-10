@@ -3,7 +3,6 @@
 import json
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
-from typing import Any
 
 from app.core.config import settings
 from app.services.setup_chatbot.schemas import ChatMessage, SetupSession

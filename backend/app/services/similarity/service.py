@@ -14,7 +14,7 @@ from enum import Enum
 from typing import Any
 
 import httpx
-from sqlalchemy import select, text
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings

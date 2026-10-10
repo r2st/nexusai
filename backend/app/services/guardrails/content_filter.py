@@ -2,7 +2,6 @@
 
 import re
 from enum import Enum
-from typing import Any
 
 import structlog
 

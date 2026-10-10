@@ -7,7 +7,7 @@ Collects AI usage data from Cursor IDE including:
 - Composer usage
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 import httpx

@@ -5,7 +5,6 @@ Provides tools for accessing build logs, test results, pipeline failures,
 and CI/CD analytics through MCP for AI assistant integration.
 """
 
-import json
 import logging
 import re
 from datetime import UTC, datetime, timedelta

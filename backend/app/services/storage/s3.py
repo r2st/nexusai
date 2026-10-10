@@ -1,7 +1,7 @@
 """AWS S3 storage backend."""
 
 import mimetypes
-from datetime import UTC, datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 import structlog

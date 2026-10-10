@@ -7,7 +7,7 @@ Provides automated AI-generated summaries for:
 - Incident postmortems
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
