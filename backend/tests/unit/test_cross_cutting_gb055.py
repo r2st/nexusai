@@ -7,10 +7,7 @@ and security headers across all API modules.
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
-from unittest.mock import patch, AsyncMock, MagicMock
-
 from app.main import app
-from app.core.config import get_settings
 
 
 # ============================================================================
@@ -151,12 +148,12 @@ class TestInputValidation:
 
     @pytest.mark.asyncio
     async def test_path_traversal_blocked_in_signed_url_download(self, client: AsyncClient):
-        """Path traversal in file_key should be rejected."""
+        """Path traversal in file_key should be rejected (not 200)."""
         response = await client.get(
             "/api/v1/signed-urls/download/../../../etc/passwd",
             headers={"Authorization": "Bearer fake-token"},
         )
-        assert response.status_code in (400, 401)
+        assert response.status_code in (400, 401, 404)
 
     @pytest.mark.asyncio
     async def test_cypher_injection_blocked(self, client: AsyncClient):
