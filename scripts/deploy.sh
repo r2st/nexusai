@@ -132,26 +132,29 @@ check_env_file() {
 }
 
 get_compose_files() {
-    local files="-f ${PROJECT_ROOT}/docker-compose.yml"
+    local compose_dir="${PROJECT_ROOT}/docker/compose"
+    local files="-f ${compose_dir}/base/docker-compose.yml"
 
     if [[ "$ENVIRONMENT" == "dev" ]]; then
-        files="$files -f ${PROJECT_ROOT}/docker-compose.override.yml"
+        files="$files -f ${compose_dir}/dev/docker-compose.dev.yml"
+    elif [[ "$ENVIRONMENT" == "prod" ]]; then
+        files="$files -f ${compose_dir}/prod/docker-compose.prod.yml"
     fi
 
     if [[ "$INCLUDE_AUTH" == true ]]; then
-        files="$files -f ${PROJECT_ROOT}/docker-compose.auth.yml"
+        files="$files -f ${compose_dir}/services/docker-compose.auth.yml"
     fi
 
     if [[ "$INCLUDE_MONITORING" == true ]]; then
-        files="$files -f ${PROJECT_ROOT}/docker-compose.monitoring.yml"
+        files="$files -f ${compose_dir}/services/docker-compose.monitoring.yml"
     fi
 
     if [[ "$INCLUDE_MANAGEMENT" == true ]]; then
-        files="$files -f ${PROJECT_ROOT}/docker-compose.management.yml"
+        files="$files -f ${compose_dir}/services/docker-compose.management.yml"
     fi
 
     if [[ "$INCLUDE_MONGODB" == true ]]; then
-        files="$files -f ${PROJECT_ROOT}/docker-compose.mongodb.yml"
+        files="$files -f ${compose_dir}/services/docker-compose.mongodb.yml"
     fi
 
     echo "$files"

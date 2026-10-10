@@ -67,6 +67,7 @@ services:
     image: nexusai/backend:${VERSION:-latest}
     container_name: nexusai-backend
     restart: unless-stopped
+    stop_grace_period: 30s
     security_opt:
       - no-new-privileges:true
     read_only: true
@@ -126,6 +127,7 @@ services:
     image: nexusai/backend:${VERSION:-latest}
     container_name: nexusai-worker
     restart: unless-stopped
+    stop_grace_period: 60s
     command: ["python", "-m", "arq", "app.worker.WorkerSettings"]
     security_opt:
       - no-new-privileges:true
@@ -151,7 +153,7 @@ services:
       <<: *common-labels
     healthcheck:
       <<: *healthcheck-defaults
-      test: ["CMD", "python", "-c", "import redis; r = redis.from_url('redis://:${REDIS_PASSWORD:-}@redis:6379/0'); r.ping()"]
+      test: ["CMD-SHELL", "python -c \"import redis; r = redis.from_url('redis://:${REDIS_PASSWORD:-}@redis:6379/0'); r.ping()\""]
     deploy:
       resources:
         limits:

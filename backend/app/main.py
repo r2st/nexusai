@@ -9,6 +9,7 @@ from fastapi.responses import ORJSONResponse
 import structlog
 
 from app.api import api_router
+from app.core.cache import cache
 from app.core.config import settings
 from app.core.database import close_db, init_db
 
@@ -198,6 +199,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     await init_db()
     logger.info("Database initialized")
 
+    await cache.initialize()
+    logger.info("Redis cache initialized")
+
     # Seed development users
     await seed_dev_users_on_startup()
 
@@ -246,6 +250,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             logger.info("Neo4j connection closed")
         except Exception as e:
             logger.warning("Error closing Neo4j", error=str(e))
+
+    await cache.close()
+    logger.info("Redis cache closed")
 
     await close_db()
     logger.info("Database connections closed")

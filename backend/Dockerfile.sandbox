@@ -4,7 +4,7 @@
 FROM python:3.12-slim
 
 # Install Docker CLI for managing sandbox containers
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     docker.io \
     && rm -rf /var/lib/apt/lists/*
@@ -18,7 +18,7 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir \
     fastapi>=0.115.0 \
-    uvicorn[standard]>=0.32.0 \
+    "uvicorn[standard]>=0.32.0" \
     docker>=7.0.0 \
     aiofiles>=24.1.0 \
     structlog>=24.4.0 \
@@ -27,17 +27,21 @@ RUN pip install --no-cache-dir \
 # Copy sandbox service code
 COPY app/services/code_interpreter /app/services/code_interpreter
 
+# Create non-root user with docker group access
+RUN groupadd --gid 999 docker || true \
+    && useradd --create-home --shell /bin/bash --groups docker sandbox
+
 # Create sandbox API server
-RUN cat > /app/sandbox_server.py << 'EOF'
+RUN cat > /app/sandbox_server.py << 'SANDBOXEOF'
 """Sandbox Manager API Server.
 
 Provides HTTP API for managing sandboxed code execution containers.
 """
 
-import asyncio
+import os
+import tempfile
 import uuid
 from datetime import datetime, UTC
-from pathlib import Path
 from typing import Any
 
 import docker
@@ -52,7 +56,6 @@ app = FastAPI(title="NexusAI Code Sandbox", version="1.0.0")
 # Docker client
 docker_client = docker.from_env()
 
-# Sandbox configurations
 LANGUAGE_IMAGES = {
     "python": "python:3.12-slim",
     "node": "node:20-slim",
@@ -68,12 +71,25 @@ LANGUAGE_IMAGES = {
     "r": "r-base:4.3.2",
 }
 
-# Active containers
+LANG_CONFIG = {
+    "python":     {"ext": "py",   "run": "python /sandbox/code.py"},
+    "node":       {"ext": "js",   "run": "node /sandbox/code.js"},
+    "javascript": {"ext": "js",   "run": "node /sandbox/code.js"},
+    "typescript": {"ext": "ts",   "run": "npx ts-node /sandbox/code.ts"},
+    "go":         {"ext": "go",   "run": "go run /sandbox/code.go"},
+    "rust":       {"ext": "rs",   "run": "rustc /sandbox/code.rs -o /tmp/code && /tmp/code"},
+    "ruby":       {"ext": "rb",   "run": "ruby /sandbox/code.rb"},
+    "php":        {"ext": "php",  "run": "php /sandbox/code.php"},
+    "java":       {"ext": "java", "run": "cp /sandbox/code.java /tmp/Main.java && javac /tmp/Main.java -d /tmp && java -cp /tmp Main"},
+    "cpp":        {"ext": "cpp",  "run": "g++ /sandbox/code.cpp -o /tmp/code && /tmp/code"},
+    "c":          {"ext": "c",    "run": "gcc /sandbox/code.c -o /tmp/code && /tmp/code"},
+    "r":          {"ext": "R",    "run": "Rscript /sandbox/code.R"},
+}
+
 active_containers: dict[str, Any] = {}
 
 
 class ExecuteRequest(BaseModel):
-    """Code execution request."""
     code: str
     language: str
     timeout: int = 30
@@ -83,7 +99,6 @@ class ExecuteRequest(BaseModel):
 
 
 class ExecuteResponse(BaseModel):
-    """Code execution response."""
     execution_id: str
     status: str
     stdout: str
@@ -95,13 +110,11 @@ class ExecuteResponse(BaseModel):
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint."""
     return {"status": "healthy", "timestamp": datetime.now(UTC).isoformat()}
 
 
 @app.post("/execute", response_model=ExecuteResponse)
 async def execute_code(request: ExecuteRequest):
-    """Execute code in a sandboxed container."""
     execution_id = str(uuid.uuid4())
     language = request.language.lower()
 
@@ -112,62 +125,41 @@ async def execute_code(request: ExecuteRequest):
         )
 
     image = LANGUAGE_IMAGES[language]
-
-    # Build command based on language
-    if language == "python":
-        cmd = ["python", "-c", request.code]
-    elif language in ("node", "javascript"):
-        cmd = ["node", "-e", request.code]
-    elif language == "typescript":
-        # TypeScript needs compilation first
-        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/code.ts && npx ts-node /tmp/code.ts"]
-    elif language == "go":
-        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/main.go && go run /tmp/main.go"]
-    elif language == "rust":
-        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/main.rs && rustc /tmp/main.rs -o /tmp/main && /tmp/main"]
-    elif language == "ruby":
-        cmd = ["ruby", "-e", request.code]
-    elif language == "php":
-        cmd = ["php", "-r", request.code]
-    elif language == "java":
-        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/Main.java && javac /tmp/Main.java -d /tmp && java -cp /tmp Main"]
-    elif language in ("c", "cpp"):
-        ext = "cpp" if language == "cpp" else "c"
-        compiler = "g++" if language == "cpp" else "gcc"
-        cmd = ["sh", "-c", f"echo '{request.code}' > /tmp/code.{ext} && {compiler} /tmp/code.{ext} -o /tmp/code && /tmp/code"]
-    elif language == "r":
-        cmd = ["Rscript", "-e", request.code]
-    else:
-        raise HTTPException(status_code=400, detail=f"Unsupported language: {language}")
+    lang_cfg = LANG_CONFIG[language]
 
     start_time = datetime.now(UTC)
+    tmp_dir = None
 
     try:
-        # Pull image if not available
+        tmp_dir = tempfile.mkdtemp(prefix="sandbox_")
+        code_file = os.path.join(tmp_dir, f"code.{lang_cfg['ext']}")
+        with open(code_file, "w") as f:
+            f.write(request.code)
+        os.chmod(code_file, 0o444)
+
         try:
             docker_client.images.get(image)
         except docker.errors.ImageNotFound:
             logger.info("Pulling image", image=image)
             docker_client.images.pull(image)
 
-        # Create and run container
         container = docker_client.containers.run(
             image=image,
-            command=cmd,
+            command=["sh", "-c", lang_cfg["run"]],
             detach=True,
             mem_limit=request.memory_limit,
             cpu_period=100000,
             cpu_quota=int(100000 * request.cpu_limit),
-            network_disabled=True,  # No network access for security
+            network_disabled=True,
             read_only=False,
             remove=False,
             stdout=True,
             stderr=True,
+            volumes={tmp_dir: {"bind": "/sandbox", "mode": "ro"}},
         )
 
         active_containers[execution_id] = container
 
-        # Wait for completion with timeout
         try:
             result = container.wait(timeout=request.timeout)
             exit_code = result.get("StatusCode", -1)
@@ -176,27 +168,24 @@ async def execute_code(request: ExecuteRequest):
             container.kill()
             exit_code = -1
 
-        # Get output
         stdout = container.logs(stdout=True, stderr=False).decode("utf-8", errors="replace")
         stderr = container.logs(stdout=False, stderr=True).decode("utf-8", errors="replace")
 
-        # Get stats
         try:
             stats = container.stats(stream=False)
             memory_used = stats.get("memory_stats", {}).get("usage")
-        except:
+        except Exception:
             memory_used = None
 
-        # Cleanup
         container.remove(force=True)
-        del active_containers[execution_id]
+        active_containers.pop(execution_id, None)
 
         execution_time = (datetime.now(UTC) - start_time).total_seconds()
 
         return ExecuteResponse(
             execution_id=execution_id,
             status="completed" if exit_code == 0 else "error",
-            stdout=stdout[:100000],  # Limit output size
+            stdout=stdout[:100000],
             stderr=stderr[:100000],
             exit_code=exit_code,
             execution_time=execution_time,
@@ -215,11 +204,14 @@ async def execute_code(request: ExecuteRequest):
     except Exception as e:
         logger.error("Execution failed", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if tmp_dir:
+            import shutil
+            shutil.rmtree(tmp_dir, ignore_errors=True)
 
 
 @app.delete("/containers/{execution_id}")
 async def kill_container(execution_id: str):
-    """Kill a running container."""
     if execution_id in active_containers:
         try:
             active_containers[execution_id].kill()
@@ -233,7 +225,6 @@ async def kill_container(execution_id: str):
 
 @app.get("/containers")
 async def list_containers():
-    """List active containers."""
     return {
         "containers": [
             {"id": k, "status": v.status}
@@ -244,17 +235,25 @@ async def list_containers():
 
 @app.get("/languages")
 async def list_languages():
-    """List supported languages."""
     return {"languages": list(LANGUAGE_IMAGES.keys())}
 
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8090)
-EOF
+SANDBOXEOF
+
+# Create temp dir for sandbox code files
+RUN mkdir -p /app/sandbox-tmp && chown sandbox:docker /app/sandbox-tmp
+
+# Switch to non-root user
+USER sandbox
 
 # Expose port
 EXPOSE 8090
 
-# Run the sandbox server
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8090/health || exit 1
+
 CMD ["python", "/app/sandbox_server.py"]

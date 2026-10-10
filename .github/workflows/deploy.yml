@@ -349,11 +349,34 @@ jobs:
   rollback:
     name: Rollback Deployment
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && failure()
+    if: github.event_name == 'workflow_dispatch' && needs.deploy-prod.result == 'failure'
     needs: [deploy-prod]
     environment: production
 
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.28.0"
+
+      - name: Configure kubeconfig (Azure)
+        if: vars.CLOUD_PROVIDER == 'azure'
+        uses: azure/k8s-set-context@v3
+        with:
+          method: service-account
+          k8s-url: ${{ secrets.K8S_URL }}
+          k8s-secret: ${{ secrets.K8S_SECRET }}
+
+      - name: Configure kubeconfig (AWS)
+        if: vars.CLOUD_PROVIDER == 'aws'
+        run: |
+          aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }} --region ${{ vars.AWS_REGION }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - name: Rollback to previous version
         run: |
           kubectl rollout undo deployment/nexusai-backend -n nexusai
