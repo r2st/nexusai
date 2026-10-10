@@ -168,24 +168,27 @@ export default function SettingsPage() {
                 {/* Form */}
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium">Full Name</label>
+                    <label htmlFor="settings-fullname" className="text-sm font-medium">Full Name</label>
                     <Input
+                      id="settings-fullname"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       className="mt-1"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Username</label>
+                    <label htmlFor="settings-username" className="text-sm font-medium">Username</label>
                     <Input
+                      id="settings-username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       className="mt-1"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Email</label>
+                    <label htmlFor="settings-email" className="text-sm font-medium">Email</label>
                     <Input
+                      id="settings-email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -253,12 +256,15 @@ export default function SettingsPage() {
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium">Email Notifications</h3>
+                      <h3 className="font-medium" id="label-email-notif">Email Notifications</h3>
                       <p className="text-sm text-muted-foreground">
                         Receive email updates about your activity
                       </p>
                     </div>
                     <button
+                      role="switch"
+                      aria-checked={emailNotifications}
+                      aria-labelledby="label-email-notif"
                       onClick={() => setEmailNotifications(!emailNotifications)}
                       className={cn(
                         'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
@@ -276,12 +282,15 @@ export default function SettingsPage() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium">Marketing Emails</h3>
+                      <h3 className="font-medium" id="label-marketing">Marketing Emails</h3>
                       <p className="text-sm text-muted-foreground">
                         Receive updates about new features and offers
                       </p>
                     </div>
                     <button
+                      role="switch"
+                      aria-checked={marketingEmails}
+                      aria-labelledby="label-marketing"
                       onClick={() => setMarketingEmails(!marketingEmails)}
                       className={cn(
                         'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
@@ -299,12 +308,15 @@ export default function SettingsPage() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium">Security Alerts</h3>
+                      <h3 className="font-medium" id="label-security">Security Alerts</h3>
                       <p className="text-sm text-muted-foreground">
                         Get notified about security events on your account
                       </p>
                     </div>
                     <button
+                      role="switch"
+                      aria-checked={securityAlerts}
+                      aria-labelledby="label-security"
                       onClick={() => setSecurityAlerts(!securityAlerts)}
                       className={cn(
                         'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
