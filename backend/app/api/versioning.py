@@ -4,9 +4,9 @@ API Versioning
 API version management and routing.
 """
 
-from datetime import datetime, date
-from typing import Any, Callable, Dict, List, Optional, Type
-from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
+from datetime import date
+from typing import Callable, Dict, List, Optional
+from fastapi import APIRouter, Header, HTTPException, Request, Response
 from fastapi.routing import APIRoute
 from pydantic import BaseModel
 import structlog

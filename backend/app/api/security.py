@@ -1,6 +1,6 @@
 """Security Scanner API endpoints."""
 
-from typing import Annotated, Any
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field, field_validator
@@ -11,7 +11,6 @@ from app.models.user import User
 from app.services.security.scanner import (
     SecurityScannerService,
     get_security_scanner_service,
-    ScanThresholds,
 )
 from app.services.security.secrets import (
     SecretRotationService,

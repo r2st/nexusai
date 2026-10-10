@@ -3,10 +3,10 @@
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 import structlog
 
-from app.api.deps import get_current_user, get_optional_current_user
+from app.api.deps import get_current_user
 
 logger = structlog.get_logger()
 from app.models.user import User
@@ -14,7 +14,6 @@ from app.services.extensions import (
     ExtensionService,
     get_extension_service,
     AnalysisRequest,
-    AnalysisResult,
     DiagnosticRequest,
     DiagnosticResult,
     CompletionRequest,

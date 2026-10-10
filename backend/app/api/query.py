@@ -1,8 +1,6 @@
 """API endpoints for the Query Gateway."""
 
 from datetime import datetime, timedelta
-from typing import Any
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,7 +13,6 @@ from app.models.user import User
 from app.services.query import (
     DataSource,
     QueryRequest,
-    QueryGateway,
     get_query_gateway,
 )
 

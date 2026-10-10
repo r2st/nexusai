@@ -1,8 +1,6 @@
 """API endpoints for precomputed metric rollups."""
 
 from datetime import datetime, timedelta
-from typing import Any
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,7 +12,6 @@ logger = structlog.get_logger()
 from app.models.user import User
 from app.services.rollups import (
     RollupGranularity,
-    RollupService,
     RollupQuery,
     get_rollup_service,
 )

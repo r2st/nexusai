@@ -1,7 +1,5 @@
 """Data Residency API endpoints."""
 
-from typing import Any
-
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field
 import structlog

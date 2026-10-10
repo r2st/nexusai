@@ -7,10 +7,10 @@ Provides endpoints for:
 - Evaluation analytics and results
 """
 
-from datetime import datetime, timedelta, UTC
+from datetime import datetime
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
@@ -21,9 +21,7 @@ from app.models.user import User
 from app.services.ragas import (
     EvaluationDataset,
     EvaluationSample,
-    EvaluationStatus,
     MetricResult,
-    RAGASConfig,
     RAGASEvaluationRequest,
     RAGASEvaluationResult,
     RAGASMetricType,

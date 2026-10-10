@@ -8,8 +8,6 @@ Provides endpoints for:
 
 from datetime import datetime
 from typing import Any
-from uuid import UUID
-
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,7 +22,6 @@ from app.services.devlake.blueprints import (
     Blueprint,
     BlueprintMode,
     BlueprintStatus,
-    PipelineStatus,
 )
 
 router = APIRouter()
