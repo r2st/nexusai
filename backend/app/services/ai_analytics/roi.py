@@ -402,7 +402,7 @@ class AIROIService:
         # Normalize each factor to 0-1 range
         acceptance_score = min(1.0, acceptance_rate)
         lines_score = min(1.0, lines_per_event / 20)  # 20 lines per event is max
-        token_efficiency = min(1.0, 1 - (tokens_per_line / 500))  # Lower is better
+        token_efficiency = max(0.0, min(1.0, 1 - (tokens_per_line / 500)))
 
         # Weighted average
         score = (

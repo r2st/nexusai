@@ -1,5 +1,6 @@
 """Organization and multi-tenancy models."""
 
+import math
 from datetime import UTC, datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING
@@ -171,7 +172,10 @@ class Organization(Base):
         if not self.is_trial_active or self.trial_ends_at is None:
             return 0
         remaining = self.trial_ends_at - datetime.now(UTC)
-        return max(0, remaining.days)
+        remaining_seconds = remaining.total_seconds()
+        if remaining_seconds <= 0:
+            return 0
+        return max(1, math.ceil(remaining_seconds / 86400))
 
     @property
     def has_active_subscription(self) -> bool:

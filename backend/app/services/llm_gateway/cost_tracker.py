@@ -193,23 +193,26 @@ class CostTracker:
 
         # Total daily
         total_today = self._total_daily_costs.get(today, 0.0)
-        if total_today > self.config.cost.budget_total_daily * threshold:
+        budget_daily = self.config.cost.budget_total_daily
+        if budget_daily > 0 and total_today > budget_daily * threshold:
             alerts.append(
-                f"Total daily budget at {total_today / self.config.cost.budget_total_daily * 100:.1f}%"
+                f"Total daily budget at {total_today / budget_daily * 100:.1f}%"
             )
 
         # User budgets
         if user_id:
             user_today = self._user_daily_costs[user_id].get(today, 0.0)
-            if user_today > self.config.cost.budget_per_user_daily * threshold:
+            budget_user_daily = self.config.cost.budget_per_user_daily
+            if budget_user_daily > 0 and user_today > budget_user_daily * threshold:
                 alerts.append(
-                    f"User daily budget at {user_today / self.config.cost.budget_per_user_daily * 100:.1f}%"
+                    f"User daily budget at {user_today / budget_user_daily * 100:.1f}%"
                 )
 
             user_month = self._user_monthly_costs[user_id].get(month, 0.0)
-            if user_month > self.config.cost.budget_per_user_monthly * threshold:
+            budget_user_monthly = self.config.cost.budget_per_user_monthly
+            if budget_user_monthly > 0 and user_month > budget_user_monthly * threshold:
                 alerts.append(
-                    f"User monthly budget at {user_month / self.config.cost.budget_per_user_monthly * 100:.1f}%"
+                    f"User monthly budget at {user_month / budget_user_monthly * 100:.1f}%"
                 )
 
         return alerts
@@ -603,10 +606,11 @@ class CostTracker:
         now = datetime.now(UTC)
         seven_days_ago = now - timedelta(days=7)
 
-        # Get last 7 days of cost data
+        # Get last 7 days of cost data with actual day count
         query = select(
             func.sum(CostEntryModel.cost_usd).label("total_cost"),
             func.count(CostEntryModel.id).label("request_count"),
+            func.min(CostEntryModel.created_at).label("earliest_entry"),
         ).where(
             and_(
                 CostEntryModel.tenant_id == tenant_id,
@@ -626,14 +630,16 @@ class CostTracker:
                 "basis_days": 0,
             }
 
-        daily_average = float(row.total_cost) / 7
+        actual_days = max(1, (now - row.earliest_entry).total_seconds() / 86400)
+        basis_days = min(7, actual_days)
+        daily_average = float(row.total_cost) / basis_days
         projected_monthly = daily_average * 30
 
         return {
             "projected_monthly_cost": round(projected_monthly, 2),
             "daily_average": round(daily_average, 4),
-            "confidence": "medium" if row.request_count >= 10 else "low",
-            "basis_days": 7,
+            "confidence": "medium" if row.request_count >= 10 and basis_days >= 3 else "low",
+            "basis_days": round(basis_days, 1),
             "basis_cost": float(row.total_cost),
             "basis_requests": int(row.request_count),
         }
