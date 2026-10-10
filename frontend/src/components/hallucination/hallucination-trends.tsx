@@ -126,12 +126,13 @@ export function HallucinationTrendsChart({
         <Tooltip
           contentStyle={tooltipStyle}
           labelFormatter={formatDateFull}
-          formatter={(value: number | undefined, name: string | undefined) => {
-            const v = value ?? 0;
-            if (name === 'Hallucination Rate' || name === 'Avg Score') {
-              return [formatPercentage(v), name ?? ''];
+          formatter={(value, name) => {
+            const v = typeof value === 'number' ? value : 0;
+            const n = typeof name === 'string' ? name : '';
+            if (n === 'Hallucination Rate' || n === 'Avg Score') {
+              return [formatPercentage(v), n];
             }
-            return [v, name ?? ''];
+            return [v, n];
           }}
         />
         <Legend />

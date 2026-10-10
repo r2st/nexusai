@@ -143,10 +143,11 @@ export function CostTimeSeriesChart({
         <Tooltip
           contentStyle={tooltipStyle}
           labelFormatter={formatDateFull}
-          formatter={(value: number | undefined, name: string | undefined) => {
-            const v = value ?? 0;
-            if (name === 'Cost') return [formatCurrency(v), name];
-            return [formatNumber(v), name ?? ''];
+          formatter={(value, name) => {
+            const v = typeof value === 'number' ? value : 0;
+            const n = typeof name === 'string' ? name : '';
+            if (n === 'Cost') return [formatCurrency(v), n];
+            return [formatNumber(v), n];
           }}
         />
         <Legend />
