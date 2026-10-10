@@ -529,3 +529,234 @@ class TestSQLInjectionPayloads:
                     username=payload,
                     password="SecurePass123!",
                 )
+
+
+# ============================================================================
+# 14. Document Search Input Bounds
+# ============================================================================
+
+class TestDocumentSearchBounds:
+
+    def test_rejects_empty_query(self):
+        from app.api.documents import SearchRequest
+        with pytest.raises(ValidationError):
+            SearchRequest(query="")
+
+    def test_rejects_oversized_query(self):
+        from app.api.documents import SearchRequest
+        with pytest.raises(ValidationError):
+            SearchRequest(query="x" * 10001)
+
+    def test_rejects_limit_too_large(self):
+        from app.api.documents import SearchRequest
+        with pytest.raises(ValidationError):
+            SearchRequest(query="valid query", limit=999)
+
+    def test_rejects_negative_limit(self):
+        from app.api.documents import SearchRequest
+        with pytest.raises(ValidationError):
+            SearchRequest(query="valid query", limit=-1)
+
+    def test_rejects_similarity_out_of_range(self):
+        from app.api.documents import SearchRequest
+        with pytest.raises(ValidationError):
+            SearchRequest(query="valid query", similarity_threshold=1.5)
+
+    def test_accepts_valid_search(self):
+        from app.api.documents import SearchRequest
+        req = SearchRequest(query="find documents about GST", limit=20, similarity_threshold=0.8)
+        assert req.limit == 20
+
+
+# ============================================================================
+# 15. Workflow Request Bounds
+# ============================================================================
+
+class TestWorkflowRequestBounds:
+
+    def test_rejects_empty_name(self):
+        from app.api.workflows import CreateWorkflowRequest
+        with pytest.raises(ValidationError):
+            CreateWorkflowRequest(name="", organization_id="org-1")
+
+    def test_rejects_oversized_name(self):
+        from app.api.workflows import CreateWorkflowRequest
+        with pytest.raises(ValidationError):
+            CreateWorkflowRequest(name="x" * 201, organization_id="org-1")
+
+    def test_rejects_oversized_description(self):
+        from app.api.workflows import CreateWorkflowRequest
+        with pytest.raises(ValidationError):
+            CreateWorkflowRequest(name="valid", organization_id="org-1", description="x" * 2001)
+
+    def test_accepts_valid_workflow(self):
+        from app.api.workflows import CreateWorkflowRequest
+        req = CreateWorkflowRequest(name="My Workflow", organization_id="org-123")
+        assert req.name == "My Workflow"
+
+
+# ============================================================================
+# 16. Compliance Evidence Path Traversal
+# ============================================================================
+
+class TestComplianceEvidencePathTraversal:
+
+    def test_rejects_path_traversal_in_file_path(self):
+        from app.api.compliance import AddEvidenceRequest, SOC2EvidenceType
+        with pytest.raises(ValidationError):
+            AddEvidenceRequest(
+                control_id="ctrl-1",
+                evidence_type=SOC2EvidenceType.SCREENSHOT,
+                title="Test",
+                collected_by="admin",
+                file_path="../../etc/passwd",
+            )
+
+    def test_rejects_absolute_path(self):
+        from app.api.compliance import AddEvidenceRequest, SOC2EvidenceType
+        with pytest.raises(ValidationError):
+            AddEvidenceRequest(
+                control_id="ctrl-1",
+                evidence_type=SOC2EvidenceType.SCREENSHOT,
+                title="Test",
+                collected_by="admin",
+                file_path="/etc/passwd",
+            )
+
+    def test_rejects_null_byte_in_file_path(self):
+        from app.api.compliance import AddEvidenceRequest, SOC2EvidenceType
+        with pytest.raises(ValidationError):
+            AddEvidenceRequest(
+                control_id="ctrl-1",
+                evidence_type=SOC2EvidenceType.SCREENSHOT,
+                title="Test",
+                collected_by="admin",
+                file_path="report.pdf\x00.exe",
+            )
+
+    def test_accepts_valid_evidence(self):
+        from app.api.compliance import AddEvidenceRequest, SOC2EvidenceType
+        req = AddEvidenceRequest(
+            control_id="ctrl-1",
+            evidence_type=SOC2EvidenceType.SCREENSHOT,
+            title="Screenshot",
+            collected_by="admin",
+            file_path="evidence/screenshot.png",
+        )
+        assert req.file_path == "evidence/screenshot.png"
+
+
+# ============================================================================
+# 17. HIPAA PHI Detection Bounds
+# ============================================================================
+
+class TestHIPAAPHIDetectionBounds:
+
+    def test_rejects_empty_content(self):
+        from app.api.hipaa import DetectPHIRequest
+        with pytest.raises(ValidationError):
+            DetectPHIRequest(content="")
+
+    def test_rejects_oversized_content(self):
+        from app.api.hipaa import DetectPHIRequest
+        with pytest.raises(ValidationError):
+            DetectPHIRequest(content="x" * 500001)
+
+    def test_rejects_confidence_out_of_range(self):
+        from app.api.hipaa import DetectPHIRequest
+        with pytest.raises(ValidationError):
+            DetectPHIRequest(content="test data", min_confidence=2.0)
+
+    def test_rejects_path_traversal_in_baa_document(self):
+        from app.api.hipaa import ActivateBAARequest
+        with pytest.raises(ValidationError):
+            ActivateBAARequest(activated_by="admin", signed_document_path="../../etc/passwd")
+
+    def test_accepts_valid_phi_request(self):
+        from app.api.hipaa import DetectPHIRequest
+        req = DetectPHIRequest(content="Patient John Doe SSN 123-45-6789")
+        assert "Patient" in req.content
+
+
+# ============================================================================
+# 18. Scheduler Task Bounds
+# ============================================================================
+
+class TestSchedulerTaskBounds:
+
+    def test_rejects_extreme_timeout(self):
+        from app.api.scheduler import CreateTaskRequest
+        with pytest.raises(ValidationError):
+            CreateTaskRequest(
+                name="task", description="desc", task_type="agent",
+                trigger_type="cron", timeout_seconds=999999,
+            )
+
+    def test_rejects_extreme_retries(self):
+        from app.api.scheduler import CreateTaskRequest
+        with pytest.raises(ValidationError):
+            CreateTaskRequest(
+                name="task", description="desc", task_type="agent",
+                trigger_type="cron", max_retries=100,
+            )
+
+    def test_rejects_oversized_name(self):
+        from app.api.scheduler import CreateTaskRequest
+        with pytest.raises(ValidationError):
+            CreateTaskRequest(
+                name="x" * 201, description="desc", task_type="agent",
+                trigger_type="cron",
+            )
+
+    def test_accepts_valid_task(self):
+        from app.api.scheduler import CreateTaskRequest
+        req = CreateTaskRequest(
+            name="My Task", description="Run nightly", task_type="agent",
+            trigger_type="cron", cron_expression="0 0 * * *",
+        )
+        assert req.timeout_seconds == 300
+
+
+# ============================================================================
+# 19. LangServe Batch Size Limit
+# ============================================================================
+
+class TestLangServeBatchBounds:
+
+    def test_rejects_oversized_batch(self):
+        from app.api.langserve import BatchRequest
+        with pytest.raises(ValidationError):
+            BatchRequest(inputs=["prompt"] * 51)
+
+    def test_accepts_valid_batch(self):
+        from app.api.langserve import BatchRequest
+        req = BatchRequest(inputs=["prompt1", "prompt2"])
+        assert len(req.inputs) == 2
+
+
+# ============================================================================
+# 20. Grafana RBAC Role Validation
+# ============================================================================
+
+class TestGrafanaRBACRoleValidation:
+
+    def test_rejects_invalid_role(self):
+        from app.api.grafana_rbac import SyncUserRequest
+        with pytest.raises(ValidationError):
+            SyncUserRequest(role="SuperAdmin")
+
+    def test_rejects_injection_in_role(self):
+        from app.api.grafana_rbac import SyncUserRequest
+        with pytest.raises(ValidationError):
+            SyncUserRequest(role="Admin'; DROP TABLE users;--")
+
+    def test_accepts_valid_roles(self):
+        from app.api.grafana_rbac import SyncUserRequest
+        for role in ("Admin", "Editor", "Viewer"):
+            req = SyncUserRequest(role=role)
+            assert req.role == role
+
+    def test_assign_role_rejects_invalid(self):
+        from app.api.grafana_rbac import AssignRoleRequest
+        with pytest.raises(ValidationError):
+            AssignRoleRequest(user_id=1, role="hacker")

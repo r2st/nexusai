@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 import structlog
 
 from app.services.compliance.hipaa import (
@@ -28,39 +28,46 @@ router = APIRouter(prefix="/hipaa", tags=["hipaa"])
 
 class DetectPHIRequest(BaseModel):
     """Request to detect PHI in content."""
-    content: str
+    content: str = Field(..., min_length=1, max_length=500000)
     categories: list[PHICategory] | None = None
-    min_confidence: float = 0.7
+    min_confidence: float = Field(default=0.7, ge=0.0, le=1.0)
 
 
 class DetectPHIInCodeRequest(BaseModel):
     """Request to detect PHI in source code."""
-    code: str
-    language: str | None = None
+    code: str = Field(..., min_length=1, max_length=500000)
+    language: str | None = Field(default=None, max_length=50)
 
 
 class CreateBAARequest(BaseModel):
     """Request to create a BAA."""
-    organization_id: str
-    covered_entity: str
-    business_associate: str
+    organization_id: str = Field(..., min_length=1, max_length=200)
+    covered_entity: str = Field(..., min_length=1, max_length=500)
+    business_associate: str = Field(..., min_length=1, max_length=500)
     baa_type: BAAType = BAAType.FULL_BAA
-    ba_contact_name: str | None = None
-    ba_contact_email: str | None = None
-    phi_categories_shared: list[PHICategory] = Field(default_factory=list)
-    permitted_uses: list[str] = Field(default_factory=list)
-    permitted_disclosures: list[str] = Field(default_factory=list)
+    ba_contact_name: str | None = Field(default=None, max_length=200)
+    ba_contact_email: str | None = Field(default=None, max_length=320)
+    phi_categories_shared: list[PHICategory] = Field(default_factory=list, max_length=50)
+    permitted_uses: list[str] = Field(default_factory=list, max_length=50)
+    permitted_disclosures: list[str] = Field(default_factory=list, max_length=50)
     encryption_required: bool = True
-    breach_notification_hours: int = 24
-    created_by: str | None = None
+    breach_notification_hours: int = Field(default=24, ge=1, le=720)
+    created_by: str | None = Field(default=None, max_length=200)
 
 
 class ActivateBAARequest(BaseModel):
     """Request to activate a BAA."""
-    activated_by: str
+    activated_by: str = Field(..., min_length=1, max_length=200)
     effective_date: datetime | None = None
     expiration_date: datetime | None = None
-    signed_document_path: str | None = None
+    signed_document_path: str | None = Field(default=None, max_length=1024)
+
+    @field_validator("signed_document_path")
+    @classmethod
+    def validate_signed_document_path(cls, v: str | None) -> str | None:
+        if v is not None and (".." in v or v.startswith("/") or "\x00" in v):
+            raise ValueError("Invalid signed_document_path: path traversal not allowed")
+        return v
 
 
 class RenewBAARequest(BaseModel):

@@ -1,7 +1,7 @@
 """Documents API endpoints for RAG."""
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
@@ -35,9 +35,9 @@ class DocumentResponse(BaseModel):
 class SearchRequest(BaseModel):
     """Document search request."""
 
-    query: str
-    limit: int = 10
-    similarity_threshold: float = 0.7
+    query: str = Field(..., min_length=1, max_length=10000)
+    limit: int = Field(default=10, ge=1, le=100)
+    similarity_threshold: float = Field(default=0.7, ge=0.0, le=1.0)
 
 
 class SearchResult(BaseModel):

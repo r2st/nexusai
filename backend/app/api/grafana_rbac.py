@@ -9,7 +9,9 @@ Provides endpoints for:
 
 from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+
+_GRAFANA_ROLES = {"Admin", "Editor", "Viewer"}
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
@@ -26,8 +28,15 @@ router = APIRouter()
 class SyncUserRequest(BaseModel):
     """Request to sync user to Grafana."""
 
-    role: str = "Viewer"  # Admin, Editor, Viewer
+    role: str = "Viewer"
     org_id: int = 1
+
+    @field_validator("role")
+    @classmethod
+    def validate_role(cls, v: str) -> str:
+        if v not in _GRAFANA_ROLES:
+            raise ValueError(f"role must be one of {sorted(_GRAFANA_ROLES)}")
+        return v
 
 
 class AssignRoleRequest(BaseModel):
@@ -36,6 +45,13 @@ class AssignRoleRequest(BaseModel):
     user_id: int
     role: str
     org_id: int = 1
+
+    @field_validator("role")
+    @classmethod
+    def validate_role(cls, v: str) -> str:
+        if v not in _GRAFANA_ROLES:
+            raise ValueError(f"role must be one of {sorted(_GRAFANA_ROLES)}")
+        return v
 
 
 @router.post("/sync-user")

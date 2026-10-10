@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
@@ -34,27 +34,27 @@ router = APIRouter(prefix="/scheduler", tags=["scheduler"])
 class CreateTaskRequest(BaseModel):
     """Request to create a scheduled task."""
 
-    name: str
-    description: str
-    task_type: str
-    trigger_type: str  # cron, interval, event, one_time
-    priority: str = "normal"
+    name: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., max_length=2000)
+    task_type: str = Field(..., min_length=1, max_length=100)
+    trigger_type: str = Field(..., min_length=1, max_length=50)
+    priority: str = Field(default="normal", max_length=20)
 
     # Scheduling options
-    cron_expression: str | None = None
-    interval_seconds: int | None = None
-    event_trigger: str | None = None
+    cron_expression: str | None = Field(default=None, max_length=100)
+    interval_seconds: int | None = Field(default=None, ge=1, le=86400)
+    event_trigger: str | None = Field(default=None, max_length=200)
     scheduled_time: datetime | None = None
 
     # Execution options
-    handler: str | None = None
+    handler: str | None = Field(default=None, max_length=500)
     arguments: dict[str, Any] = {}
-    timeout_seconds: int = 300
-    max_retries: int = 3
+    timeout_seconds: int = Field(default=300, ge=1, le=3600)
+    max_retries: int = Field(default=3, ge=0, le=10)
 
     # Context
-    organization_id: str | None = None
-    tags: list[str] = []
+    organization_id: str | None = Field(default=None, max_length=200)
+    tags: list[str] = Field(default_factory=list, max_length=20)
 
 
 class TaskResponse(BaseModel):

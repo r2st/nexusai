@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 import structlog
 
 from app.services.compliance.gdpr import get_gdpr_service
@@ -109,15 +109,22 @@ class RecordControlTestRequest(BaseModel):
 
 class AddEvidenceRequest(BaseModel):
     """Request to add evidence."""
-    control_id: str
+    control_id: str = Field(..., min_length=1, max_length=200)
     evidence_type: SOC2EvidenceType
-    title: str
-    collected_by: str
-    description: str | None = None
-    file_path: str | None = None
-    content: str | None = None
-    url: str | None = None
+    title: str = Field(..., min_length=1, max_length=500)
+    collected_by: str = Field(..., min_length=1, max_length=200)
+    description: str | None = Field(default=None, max_length=5000)
+    file_path: str | None = Field(default=None, max_length=1024)
+    content: str | None = Field(default=None, max_length=100000)
+    url: str | None = Field(default=None, max_length=2000)
     valid_until: datetime | None = None
+
+    @field_validator("file_path")
+    @classmethod
+    def validate_file_path(cls, v: str | None) -> str | None:
+        if v is not None and (".." in v or v.startswith("/") or "\x00" in v):
+            raise ValueError("Invalid file_path: path traversal not allowed")
+        return v
 
 
 class CreateAccessReviewRequest(BaseModel):

@@ -8,7 +8,7 @@ including streaming, batch processing, and a playground UI.
 from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.responses import StreamingResponse, JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 import json
 import structlog
@@ -37,7 +37,7 @@ class StreamRequest(BaseModel):
 
 class BatchRequest(BaseModel):
     """Request model for LangServe batch endpoint."""
-    inputs: list[dict[str, Any] | str]
+    inputs: list[dict[str, Any] | str] = Field(..., max_length=50)
     config: dict[str, Any] | None = None
 
 

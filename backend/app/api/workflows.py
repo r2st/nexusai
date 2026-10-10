@@ -22,19 +22,19 @@ router = APIRouter(prefix="/workflows", tags=["workflows"])
 
 class CreateWorkflowRequest(BaseModel):
     """Request to create a workflow."""
-    name: str
-    organization_id: str
-    description: str | None = None
-    triggers: list[dict[str, Any]] = Field(default_factory=list)
-    steps: list[dict[str, Any]] = Field(default_factory=list)
-    created_by: str | None = None
+    name: str = Field(..., min_length=1, max_length=200)
+    organization_id: str = Field(..., min_length=1, max_length=200)
+    description: str | None = Field(default=None, max_length=2000)
+    triggers: list[dict[str, Any]] = Field(default_factory=list, max_length=50)
+    steps: list[dict[str, Any]] = Field(default_factory=list, max_length=100)
+    created_by: str | None = Field(default=None, max_length=200)
 
 
 class CreateFromTemplateRequest(BaseModel):
     """Request to create workflow from template."""
-    template_name: str
-    organization_id: str
-    created_by: str | None = None
+    template_name: str = Field(..., min_length=1, max_length=200)
+    organization_id: str = Field(..., min_length=1, max_length=200)
+    created_by: str | None = Field(default=None, max_length=200)
     overrides: dict[str, Any] | None = None
 
 
