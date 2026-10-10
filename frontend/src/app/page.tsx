@@ -257,7 +257,7 @@ export default function Home() {
               </Link>
             </nav>
             <p className="text-sm text-muted-foreground">
-              \u00a9 2025 NexusAI. Open Source under MIT License.
+              &copy; {new Date().getFullYear()} NexusAI. Open Source under MIT License.
             </p>
           </div>
         </div>

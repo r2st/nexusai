@@ -17,6 +17,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import { agentsApi, type Agent } from '@/lib/api';
 import { AgentCard } from '@/components/agents/agent-card';
 import { CreateAgentModal } from '@/components/agents/create-agent-modal';
@@ -41,6 +42,7 @@ export default function AgentsPage() {
       setAgents(data);
     } catch (error) {
       console.error('Failed to load agents:', error);
+      toast.error('Failed to load agents');
     } finally {
       setIsLoading(false);
     }
@@ -53,6 +55,7 @@ export default function AgentsPage() {
       setShowCreateModal(false);
     } catch (error) {
       console.error('Failed to create agent:', error);
+      toast.error('Failed to create agent');
       throw error;
     }
   };
@@ -65,6 +68,7 @@ export default function AgentsPage() {
       setAgents((prev) => prev.filter((a) => a.id !== agentId));
     } catch (error) {
       console.error('Failed to delete agent:', error);
+      toast.error('Failed to delete agent');
     }
   };
 
