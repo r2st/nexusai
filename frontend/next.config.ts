@@ -22,7 +22,10 @@ const nextConfig: NextConfig = {
       '@radix-ui/react-tabs',
       '@radix-ui/react-tooltip',
       'react-syntax-highlighter',
+      'react-markdown',
+      'remark-gfm',
       'date-fns',
+      'sonner',
     ],
   },
 
@@ -90,6 +93,12 @@ const nextConfig: NextConfig = {
             highlighter: {
               test: /[\\/]node_modules[\\/]react-syntax-highlighter[\\/]/,
               name: 'highlighter',
+              chunks: 'all',
+              priority: 20,
+            },
+            markdown: {
+              test: /[\\/]node_modules[\\/](react-markdown|remark-|rehype-|unified|mdast-|micromark|hast-)[\\/]/,
+              name: 'markdown',
               chunks: 'all',
               priority: 20,
             },
