@@ -187,8 +187,8 @@ class TrendPredictor:
                     if historical_at_phase:
                         seasonal_mean = sum(historical_at_phase) / len(historical_at_phase)
                         overall_mean = sum(values) / len(values)
-                        seasonal_factor = seasonal_mean / overall_mean if overall_mean else 1
-                        predicted *= seasonal_factor
+                        seasonal_factor = seasonal_mean / overall_mean if overall_mean > 0 else 1
+                        predicted *= max(0, seasonal_factor)
 
             # Ensure non-negative for most metrics
             predicted = max(0, predicted)

@@ -31,7 +31,7 @@ class CostEntry:
     completion_tokens: int
     total_tokens: int
     cost_usd: float
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -66,7 +66,7 @@ class CostTracker:
         self._model_configs: dict[str, ModelConfig] = {
             m.name: m for m in config.models
         }
-        self._last_prune: datetime = datetime.utcnow()
+        self._last_prune: datetime = datetime.now(UTC)
         self._prune_interval: timedelta = timedelta(minutes=5)
 
     def calculate_cost(
@@ -76,6 +76,8 @@ class CostTracker:
         completion_tokens: int,
     ) -> float:
         """Calculate cost for token usage."""
+        prompt_tokens = max(0, prompt_tokens)
+        completion_tokens = max(0, completion_tokens)
         model_config = self._model_configs.get(model)
 
         if not model_config:
@@ -124,7 +126,7 @@ class CostTracker:
         self.entries.append(entry)
         self._update_aggregates(entry)
 
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
         if now - self._last_prune > self._prune_interval:
             self._prune_old_entries()
             self._last_prune = now
@@ -146,7 +148,7 @@ class CostTracker:
 
     def _prune_old_entries(self):
         """Remove entries older than 7 days."""
-        cutoff = datetime.utcnow() - timedelta(days=7)
+        cutoff = datetime.now(UTC) - timedelta(days=7)
         self.entries = [e for e in self.entries if e.timestamp > cutoff]
 
     def check_budget(
@@ -163,8 +165,8 @@ class CostTracker:
         if not self.config.cost.enabled:
             return True, None
 
-        today = datetime.utcnow().strftime("%Y-%m-%d")
-        month = datetime.utcnow().strftime("%Y-%m")
+        today = datetime.now(UTC).strftime("%Y-%m-%d")
+        month = datetime.now(UTC).strftime("%Y-%m")
 
         # Check total daily budget
         total_today = self._total_daily_costs.get(today, 0.0) + additional_cost
@@ -188,8 +190,8 @@ class CostTracker:
         alerts = []
         threshold = self.config.cost.alert_threshold
 
-        today = datetime.utcnow().strftime("%Y-%m-%d")
-        month = datetime.utcnow().strftime("%Y-%m")
+        today = datetime.now(UTC).strftime("%Y-%m-%d")
+        month = datetime.now(UTC).strftime("%Y-%m")
 
         # Total daily
         total_today = self._total_daily_costs.get(today, 0.0)
@@ -223,7 +225,7 @@ class CostTracker:
         days: int = 30,
     ) -> dict[str, Any]:
         """Get usage statistics for a user."""
-        cutoff = datetime.utcnow() - timedelta(days=days)
+        cutoff = datetime.now(UTC) - timedelta(days=days)
         user_entries = [
             e for e in self.entries
             if e.user_id == user_id and e.timestamp > cutoff
@@ -256,7 +258,7 @@ class CostTracker:
     ) -> CostReport:
         """Generate a cost report."""
         if end_time is None:
-            end_time = datetime.utcnow()
+            end_time = datetime.now(UTC)
         if start_time is None:
             start_time = end_time - timedelta(days=1)
 
@@ -292,7 +294,7 @@ class CostTracker:
 
     def get_today_cost(self) -> float:
         """Get total cost for today."""
-        today = datetime.utcnow().strftime("%Y-%m-%d")
+        today = datetime.now(UTC).strftime("%Y-%m-%d")
         return self._total_daily_costs.get(today, 0.0)
 
     def estimate_cost(

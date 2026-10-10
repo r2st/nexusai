@@ -98,7 +98,7 @@ class RollupService:
                 rollup.lead_time_hours = sum(lead_times) / len(lead_times)
                 sorted_times = sorted(lead_times)
                 rollup.lead_time_p50 = sorted_times[len(sorted_times) // 2]
-                rollup.lead_time_p95 = sorted_times[int(len(sorted_times) * 0.95)]
+                rollup.lead_time_p95 = sorted_times[min(int(len(sorted_times) * 0.95), len(sorted_times) - 1)]
                 rollup.data_points += len(lead_times)
 
             # Get incident data for MTTR
@@ -116,7 +116,7 @@ class RollupService:
                 rollup.mttr_hours = sum(recovery_times) / len(recovery_times)
                 sorted_times = sorted(recovery_times)
                 rollup.mttr_p50 = sorted_times[len(sorted_times) // 2]
-                rollup.mttr_p95 = sorted_times[int(len(sorted_times) * 0.95)]
+                rollup.mttr_p95 = sorted_times[min(int(len(sorted_times) * 0.95), len(sorted_times) - 1)]
                 rollup.incidents_resolved = len(recovery_times)
 
             # Calculate change failure rate

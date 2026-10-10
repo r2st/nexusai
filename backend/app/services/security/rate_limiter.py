@@ -229,9 +229,9 @@ class RateLimiter:
             logger.warning(f"Unknown rate limit: {limit_name}")
             return RateLimitResult(
                 allowed=True,
-                remaining=float("inf"),
+                remaining=999999,
                 reset_after_seconds=0,
-                limit=float("inf"),
+                limit=999999,
             )
 
         key = self._get_key(limit_name, identifier, tenant_id)
@@ -325,11 +325,10 @@ class RateLimiter:
 
         # Refill tokens
         time_passed = now - state.last_refill
-        tokens_to_add = time_passed * (config.refill_rate or 1)
-        state.tokens = min(
-            config.burst_limit or config.max_requests,
-            state.tokens + tokens_to_add
-        )
+        refill_rate = config.refill_rate if config.refill_rate else 1.0
+        burst_limit = config.burst_limit if config.burst_limit else config.max_requests
+        tokens_to_add = time_passed * refill_rate
+        state.tokens = min(burst_limit, state.tokens + tokens_to_add)
         state.last_refill = now
 
         if state.tokens >= cost:
@@ -339,19 +338,19 @@ class RateLimiter:
                 allowed=True,
                 remaining=int(state.tokens),
                 reset_after_seconds=config.window_seconds,
-                limit=config.burst_limit or config.max_requests,
+                limit=burst_limit,
             )
 
         # Not enough tokens
         tokens_needed = cost - state.tokens
-        wait_time = tokens_needed / (config.refill_rate or 1)
+        wait_time = tokens_needed / refill_rate
 
         return RateLimitResult(
             allowed=False,
             remaining=0,
             reset_after_seconds=config.window_seconds,
             retry_after_seconds=wait_time,
-            limit=config.burst_limit or config.max_requests,
+            limit=burst_limit,
         )
 
     def _check_fixed_window(
