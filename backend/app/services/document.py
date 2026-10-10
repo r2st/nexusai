@@ -18,20 +18,31 @@ class DocumentService:
 
     def __init__(self, db: AsyncSession):
         self.db = db
-        from langchain_text_splitters import RecursiveCharacterTextSplitter
-        from langchain_openai import OpenAIEmbeddings
+        self._embeddings = None
+        self._text_splitter = None
 
-        self.embeddings = OpenAIEmbeddings(
-            model=settings.EMBEDDING_MODEL,
-            api_key=settings.OPENAI_API_KEY,
-            dimensions=settings.EMBEDDING_DIMENSIONS,
-        )
-        self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=settings.CHUNK_SIZE,
-            chunk_overlap=settings.CHUNK_OVERLAP,
-            length_function=len,
-            separators=["\n\n", "\n", ". ", " ", ""],
-        )
+    @property
+    def embeddings(self):
+        if self._embeddings is None:
+            from langchain_openai import OpenAIEmbeddings
+            self._embeddings = OpenAIEmbeddings(
+                model=settings.EMBEDDING_MODEL,
+                api_key=settings.OPENAI_API_KEY,
+                dimensions=settings.EMBEDDING_DIMENSIONS,
+            )
+        return self._embeddings
+
+    @property
+    def text_splitter(self):
+        if self._text_splitter is None:
+            from langchain_text_splitters import RecursiveCharacterTextSplitter
+            self._text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=settings.CHUNK_SIZE,
+                chunk_overlap=settings.CHUNK_OVERLAP,
+                length_function=len,
+                separators=["\n\n", "\n", ". ", " ", ""],
+            )
+        return self._text_splitter
 
     def _get_document_type(self, filename: str) -> DocumentType:
         """Determine document type from filename."""
