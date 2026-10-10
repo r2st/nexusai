@@ -8,14 +8,11 @@ This module provides:
 """
 
 from contextvars import ContextVar
-from typing import TYPE_CHECKING, Any
+from typing import Any
 from uuid import uuid4
 
 from sqlalchemy import event, text
 from sqlalchemy.ext.asyncio import AsyncSession
-
-if TYPE_CHECKING:
-    from sqlalchemy.engine import Connection
 
 # Context variable to hold current tenant ID for RLS
 current_tenant_id: ContextVar[str | None] = ContextVar("current_tenant_id", default=None)

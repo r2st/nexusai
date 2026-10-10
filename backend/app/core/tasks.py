@@ -8,7 +8,6 @@ Provides:
 - Priority queues
 """
 
-import asyncio
 from datetime import datetime, timedelta
 from typing import Any, Callable, TypeVar
 from functools import wraps

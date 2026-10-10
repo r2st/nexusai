@@ -10,7 +10,6 @@ Personal Access Tokens provide API access for:
 import secrets
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any
 from uuid import uuid4
 
 from pydantic import BaseModel

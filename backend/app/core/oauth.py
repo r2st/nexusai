@@ -10,7 +10,7 @@ Supports multiple identity providers:
 """
 
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 from urllib.parse import urlencode
 

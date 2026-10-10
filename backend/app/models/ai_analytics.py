@@ -11,7 +11,6 @@ Supports the following AI tools:
 
 from datetime import UTC, datetime
 from enum import Enum
-from typing import TYPE_CHECKING
 from uuid import uuid4
 
 from sqlalchemy import (
@@ -25,13 +24,9 @@ from sqlalchemy import (
     Text,
 )
 from sqlalchemy.dialects.postgresql import JSONB, UUID
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base
-
-if TYPE_CHECKING:
-    from app.models.project import Project
-
 
 class AIToolType(str, Enum):
     """Types of AI development tools."""

@@ -1,7 +1,7 @@
 """Organization and multi-tenancy models."""
 
 import math
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from enum import Enum
 from typing import TYPE_CHECKING
 from uuid import uuid4
