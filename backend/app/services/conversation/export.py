@@ -130,7 +130,7 @@ class ConversationExporter:
         if conversation_ids:
             query = query.where(Conversation.id.in_(conversation_ids))
 
-        result = await self.db.execute(query.order_by(Conversation.created_at.desc()))
+        result = await self.db.execute(query.order_by(Conversation.created_at.desc()).limit(500))
         conversations = list(result.scalars().all())
 
         if not conversations:

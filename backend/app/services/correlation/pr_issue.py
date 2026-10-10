@@ -396,6 +396,7 @@ class PRIssueCorrelationService:
         tenant_id: str,
         pr_id: str,
         min_confidence: float = 0.5,
+        limit: int = 100,
     ) -> list[PRIssueCorrelation]:
         """Get issues correlated with a PR.
 
@@ -404,6 +405,7 @@ class PRIssueCorrelationService:
             tenant_id: Tenant ID
             pr_id: Pull request ID
             min_confidence: Minimum confidence threshold
+            limit: Max results to return
 
         Returns:
             List of correlations
@@ -418,6 +420,7 @@ class PRIssueCorrelationService:
                 PRIssueCorrelation.confidence_score >= min_confidence,
             )
             .order_by(PRIssueCorrelation.confidence_score.desc())
+            .limit(limit)
         )
 
         return list(result.scalars().all())
@@ -428,6 +431,7 @@ class PRIssueCorrelationService:
         tenant_id: str,
         issue_id: str,
         min_confidence: float = 0.5,
+        limit: int = 100,
     ) -> list[PRIssueCorrelation]:
         """Get PRs correlated with an issue.
 
@@ -436,6 +440,7 @@ class PRIssueCorrelationService:
             tenant_id: Tenant ID
             issue_id: Issue ID
             min_confidence: Minimum confidence threshold
+            limit: Max results to return
 
         Returns:
             List of correlations
@@ -450,6 +455,7 @@ class PRIssueCorrelationService:
                 PRIssueCorrelation.confidence_score >= min_confidence,
             )
             .order_by(PRIssueCorrelation.confidence_score.desc())
+            .limit(limit)
         )
 
         return list(result.scalars().all())

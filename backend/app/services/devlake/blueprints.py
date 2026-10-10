@@ -539,6 +539,8 @@ class BlueprintService:
         tenant_id: str,
         project_id: str | None = None,
         status: BlueprintStatus | None = None,
+        limit: int = 100,
+        offset: int = 0,
     ) -> list[Blueprint]:
         """List blueprints for a tenant.
 
@@ -547,6 +549,8 @@ class BlueprintService:
             tenant_id: Tenant ID
             project_id: Optional project filter
             status: Optional status filter
+            limit: Max results to return
+            offset: Pagination offset
 
         Returns:
             List of Blueprints
@@ -560,6 +564,8 @@ class BlueprintService:
 
         if status:
             query = query.where(Blueprint.status == status)
+
+        query = query.order_by(Blueprint.created_at.desc()).offset(offset).limit(limit)
 
         result = await session.execute(query)
         return list(result.scalars().all())

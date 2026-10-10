@@ -166,6 +166,8 @@ async def create_organization(
 
 @router.get("", response_model=list[OrganizationResponse])
 async def list_organizations(
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> list[Organization]:
@@ -177,8 +179,11 @@ async def list_organizations(
             OrganizationMember.user_id == current_user.id,
             OrganizationMember.is_active == True,
         )
+        .order_by(Organization.created_at.desc())
+        .offset(offset)
+        .limit(limit)
     )
-    return result.scalars().all()
+    return list(result.scalars().all())
 
 
 @router.get("/{org_id}", response_model=OrganizationResponse)

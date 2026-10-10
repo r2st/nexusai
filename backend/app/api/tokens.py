@@ -82,6 +82,8 @@ async def create_token(
 async def list_tokens(
     user_id: str = Query(..., description="Current user ID"),
     include_revoked: bool = Query(default=False),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
 ) -> list[PATInfo]:
@@ -94,6 +96,8 @@ async def list_tokens(
         tenant_id=tenant_id,
         user_id=user_id,
         include_revoked=include_revoked,
+        limit=limit,
+        offset=offset,
     )
 
 

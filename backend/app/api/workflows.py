@@ -96,11 +96,19 @@ async def list_templates():
 async def list_workflows(
     organization_id: str | None = None,
     status: WorkflowStatus | None = None,
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
 ):
     """List workflows with optional filters."""
     engine = get_workflow_engine()
     workflows = await engine.list_workflows(organization_id, status)
-    return {"workflows": [w.model_dump() for w in workflows]}
+    paginated = workflows[offset:offset + limit]
+    return {
+        "workflows": [w.model_dump() for w in paginated],
+        "total": len(workflows),
+        "limit": limit,
+        "offset": offset,
+    }
 
 
 @router.get("/{workflow_id}")

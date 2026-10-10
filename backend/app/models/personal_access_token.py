@@ -326,6 +326,8 @@ class PersonalAccessTokenService:
         tenant_id: str,
         user_id: str,
         include_revoked: bool = False,
+        limit: int = 50,
+        offset: int = 0,
     ) -> list[PATInfo]:
         """List all PATs for a user.
 
@@ -334,6 +336,8 @@ class PersonalAccessTokenService:
             tenant_id: Tenant ID
             user_id: User ID
             include_revoked: Include revoked tokens
+            limit: Max tokens to return
+            offset: Pagination offset
 
         Returns:
             List of PATInfo
@@ -348,7 +352,7 @@ class PersonalAccessTokenService:
         if not include_revoked:
             query = query.where(PersonalAccessToken.is_active == True)
 
-        query = query.order_by(PersonalAccessToken.created_at.desc())
+        query = query.order_by(PersonalAccessToken.created_at.desc()).offset(offset).limit(limit)
 
         result = await session.execute(query)
         tokens = result.scalars().all()
