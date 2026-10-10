@@ -439,6 +439,9 @@ async def execute_agent(
 
     execution_time = (datetime.now(UTC) - start_time).total_seconds() * 1000
 
+    if execution_time > 5000:
+        logger.warning("Slow agent execution", agent_id=agent_id, user_id=str(current_user.id), duration_ms=round(execution_time, 2))
+
     return AgentExecutionResponse(
         execution_id=result.get("execution_id", ""),
         agent_id=agent_id,

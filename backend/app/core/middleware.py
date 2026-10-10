@@ -57,13 +57,18 @@ class ResponseTimeMiddleware(BaseHTTPMiddleware):
         process_time = (time.perf_counter() - start_time) * 1000  # ms
         response.headers["X-Process-Time"] = f"{process_time:.2f}ms"
 
-        if process_time > 1000:
-            logger.warning(
-                "Slow request detected",
-                method=request.method,
-                path=request.url.path,
-                duration_ms=round(process_time, 2),
-            )
+        path = request.url.path
+        if path not in ("/health", "/healthz", "/api/health", "/api/healthz"):
+            log_data = {
+                "method": request.method,
+                "path": path,
+                "status_code": response.status_code,
+                "duration_ms": round(process_time, 2),
+            }
+            if process_time > 1000:
+                logger.warning("Slow request detected", **log_data)
+            elif process_time > 500:
+                logger.info("Request completed", **log_data)
 
         return response
 
@@ -113,8 +118,8 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
             return response
 
-        except Exception:
-            # Fail open if Redis is unavailable
+        except Exception as e:
+            logger.debug("Rate limiter unavailable, failing open", error=str(e))
             return await call_next(request)
 
     def _get_client_id(self, request: Request) -> str:
@@ -249,8 +254,8 @@ class TenantRateLimitMiddleware(BaseHTTPMiddleware):
             response = await call_next(request)
             return response
 
-        except Exception:
-            # Fail open if rate limiting service is unavailable
+        except Exception as e:
+            logger.debug("Tenant rate limiter unavailable, failing open", tenant_id=tenant_id, error=str(e))
             return await call_next(request)
 
 

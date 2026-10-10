@@ -6,8 +6,11 @@ from typing import Any
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
+import structlog
 
 from app.core.config import settings
+
+logger = structlog.get_logger()
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -103,7 +106,8 @@ def decode_token(token: str) -> TokenData | None:
             scopes=payload.get("scopes", []),
             exp=datetime.fromtimestamp(payload.get("exp", 0), tz=UTC),
         )
-    except JWTError:
+    except JWTError as e:
+        logger.debug("Token decode failed", error=str(e))
         return None
 
 
@@ -129,5 +133,6 @@ def verify_token(token: str, token_type: str = "access") -> TokenData | None:
             scopes=payload.get("scopes", []),
             exp=datetime.fromtimestamp(payload.get("exp", 0), tz=UTC),
         )
-    except JWTError:
+    except JWTError as e:
+        logger.debug("Token verification failed", token_type=token_type, error=str(e))
         return None
