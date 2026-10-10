@@ -1,6 +1,6 @@
 """Risk Scorer - Deployment and change risk assessment."""
 
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from app.services.predictive.models import (
@@ -276,7 +276,7 @@ class RiskScorer:
 
     def _assess_timing(self, deployment: dict[str, Any]) -> RiskFactor:
         """Assess risk from deployment timing."""
-        deploy_time = deployment.get("scheduled_time", datetime.utcnow())
+        deploy_time = deployment.get("scheduled_time", datetime.now(UTC))
         if isinstance(deploy_time, str):
             deploy_time = datetime.fromisoformat(deploy_time)
 
@@ -570,7 +570,9 @@ class RiskScorer:
             created_at = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
 
         if created_at:
-            age_days = (datetime.utcnow() - created_at.replace(tzinfo=None)).days
+            if created_at.tzinfo is None:
+                created_at = created_at.replace(tzinfo=UTC)
+            age_days = (datetime.now(UTC) - created_at).days
         else:
             age_days = 0
 

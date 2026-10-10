@@ -275,7 +275,11 @@ class PersonalAccessTokenService:
         if token:
             token.last_used_at = datetime.utcnow()
             token.last_used_ip = ip_address
-            token.use_count = str(int(token.use_count or "0") + 1)
+            try:
+                count = int(token.use_count or "0")
+            except (ValueError, TypeError):
+                count = 0
+            token.use_count = str(count + 1)
             await session.commit()
 
     async def revoke_token(
