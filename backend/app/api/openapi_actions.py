@@ -218,10 +218,10 @@ async def register_from_spec(
             spec = json.loads(content)
         else:
             spec = yaml.safe_load(content)
-    except Exception as e:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Failed to parse OpenAPI spec: {e}",
+            detail="Failed to parse OpenAPI spec. Please provide a valid JSON or YAML file.",
         )
 
     # Map auth type

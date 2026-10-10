@@ -287,8 +287,8 @@ async def register_storage_location(request: RegisterStorageRequest):
             registered_by=request.registered_by,
         )
         return {"location": location.model_dump()}
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid storage location configuration. Please check the input parameters.")
 
 
 @router.get("/storage")

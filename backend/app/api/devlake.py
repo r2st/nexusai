@@ -9,8 +9,11 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+import structlog
 
 from app.services.devlake.service import devlake_service
+
+logger = structlog.get_logger()
 
 
 def _calculate_spent_seconds(began_at: str | None, finished_at: str | None) -> int:
@@ -113,7 +116,7 @@ async def get_pipeline_status(pipeline_id: int) -> dict[str, Any]:
         logger.error(f"Failed to get pipeline {pipeline_id} status: {e}")
         raise HTTPException(
             status_code=500,
-            detail=f"Failed to get pipeline status: {str(e)}",
+            detail="Failed to get pipeline status. Please try again later.",
         )
 
 
@@ -131,9 +134,10 @@ async def get_pipeline_tasks(pipeline_id: int) -> dict[str, Any]:
             response.raise_for_status()
             return response.json()
     except Exception as e:
+        logger.error("Failed to get pipeline tasks", pipeline_id=pipeline_id, error=str(e))
         raise HTTPException(
             status_code=500,
-            detail=f"Failed to get pipeline tasks: {str(e)}",
+            detail="Failed to get pipeline tasks. Please try again later.",
         )
 
 
@@ -147,8 +151,9 @@ async def devlake_health() -> dict[str, Any]:
             "base_url": devlake_service.base_url,
         }
     except Exception as e:
+        logger.error("DevLake health check failed", error=str(e))
         return {
             "healthy": False,
             "base_url": devlake_service.base_url,
-            "error": str(e),
+            "error": "Health check failed",
         }

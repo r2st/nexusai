@@ -183,7 +183,7 @@ async def websocket_chat(
         "type": "new_conversation",
         "title": "New Chat",
         "model_provider": "google",  // optional
-        "model_name": "gemini-2.0-flash-exp"  // optional
+        "model_name": "gemini-2.5-flash"  // optional
     }
     
     {
@@ -312,7 +312,7 @@ async def websocket_chat(
                     logger.error("WebSocket message handling error", error=str(e))
                     await manager.send_message(websocket, {
                         "type": "error",
-                        "error": str(e),
+                        "error": "An unexpected error occurred. Please try again.",
                     })
         finally:
             manager.disconnect(websocket)
@@ -530,7 +530,7 @@ async def handle_chat(
         logger.error("Chat streaming error", error=str(e))
         await manager.send_message(websocket, {
             "type": "error",
-            "error": f"Chat error: {str(e)}",
+            "error": "Chat request failed. Please try again.",
             "conversation_id": str(conversation_id),
         })
     finally:

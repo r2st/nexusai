@@ -4,8 +4,11 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect, status
 from pydantic import BaseModel, Field
+import structlog
 
 from app.api.deps import get_current_user, get_optional_current_user
+
+logger = structlog.get_logger()
 from app.models.user import User
 from app.services.extensions import (
     ExtensionService,
@@ -119,9 +122,10 @@ async def analyze_file(
         )
 
     except Exception as e:
+        logger.error("Code analysis failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Analysis failed: {e}",
+            detail="Code analysis failed. Please try again later.",
         )
 
 
@@ -139,9 +143,10 @@ async def get_diagnostics(
     try:
         return await service.get_diagnostics(request)
     except Exception as e:
+        logger.error("Diagnostics failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Diagnostics failed: {e}",
+            detail="Diagnostics failed. Please try again later.",
         )
 
 
@@ -159,9 +164,10 @@ async def get_completions(
     try:
         return await service.get_completions(request)
     except Exception as e:
+        logger.error("Completions failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Completions failed: {e}",
+            detail="Failed to generate completions. Please try again later.",
         )
 
 
@@ -183,9 +189,10 @@ async def get_hover(
             language_id=request.language_id,
         )
     except Exception as e:
+        logger.error("Hover info failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Hover info failed: {e}",
+            detail="Failed to retrieve hover information. Please try again later.",
         )
 
 
@@ -207,9 +214,10 @@ async def get_quick_fixes(
             language_id=request.language_id,
         )
     except Exception as e:
+        logger.error("Quick fixes failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Quick fixes failed: {e}",
+            detail="Failed to generate quick fixes. Please try again later.",
         )
 
 
@@ -228,9 +236,10 @@ async def chat(
     try:
         return await service.chat(request, user_id=str(current_user.id))
     except Exception as e:
+        logger.error("Extension chat failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Chat failed: {e}",
+            detail="Chat request failed. Please try again later.",
         )
 
 

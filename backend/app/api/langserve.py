@@ -93,7 +93,7 @@ async def langserve_invoke(
         logger.error("LangServe invoke failed", error=str(e), exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Invoke failed: {str(e)}",
+            detail="Request failed. Please try again later.",
         )
 
 
@@ -127,7 +127,7 @@ async def langserve_stream(
             yield "data: [DONE]\n\n"
         except Exception as e:
             logger.error("LangServe stream failed", error=str(e), exc_info=True)
-            error_chunk = {"error": str(e), "type": "error"}
+            error_chunk = {"error": "Streaming failed. Please try again.", "type": "error"}
             yield f"data: {json.dumps(error_chunk)}\n\n"
     
     return StreamingResponse(
@@ -184,7 +184,7 @@ async def langserve_batch(
         logger.error("LangServe batch failed", error=str(e), exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Batch processing failed: {str(e)}",
+            detail="Batch processing failed. Please try again later.",
         )
 
 

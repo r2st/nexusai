@@ -4,6 +4,7 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
+import structlog
 
 from app.api.deps import get_current_user
 from app.models.user import User
@@ -20,6 +21,8 @@ from app.services.notifications import (
     TeamsConfig,
     DiscordConfig,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/notifications", tags=["notifications"])
 
@@ -109,9 +112,10 @@ async def send_notification(
         )
 
     except Exception as e:
+        logger.error("Failed to send notification", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to send notification: {e}",
+            detail="Failed to send notification. Please try again later.",
         )
 
 

@@ -103,7 +103,7 @@ async def generate_signed_url(
         if not exists:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"File not found: {request.file_key}",
+                detail="File not found.",
             )
     
     # Get appropriate backend
@@ -161,7 +161,7 @@ async def generate_signed_url(
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to generate signed URL: {str(e)}",
+            detail="Failed to generate signed URL. Please try again later.",
         )
 
 
@@ -213,7 +213,7 @@ async def generate_upload_url(
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid category: {category}",
+            detail="Invalid file category. Supported categories: document, image, video, audio.",
         )
     
     backend = storage_manager.get_backend(category=file_category)
@@ -290,7 +290,7 @@ async def generate_download_url(
     if not exists:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"File not found: {file_key}",
+            detail="File not found.",
         )
     
     # Generate download URL

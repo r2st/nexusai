@@ -5,8 +5,12 @@ from typing import Any
 
 from fastapi import APIRouter, Response
 from pydantic import BaseModel
+import structlog
 
 from app.core.config import settings
+from app.services.guardrails.nemo import get_nemo_guardrails_adapter
+
+logger = structlog.get_logger()
 
 router = APIRouter()
 
@@ -57,7 +61,8 @@ async def detailed_health_check() -> DetailedHealthResponse:
         db_health = await check_db_health()
         checks["database"] = db_health
     except Exception as e:
-        checks["database"] = {"status": "unhealthy", "error": str(e)}
+        logger.error("Database health check failed", error=str(e))
+        checks["database"] = {"status": "unhealthy", "error": "Database connection failed"}
 
     # Redis check
     try:
@@ -65,7 +70,42 @@ async def detailed_health_check() -> DetailedHealthResponse:
         redis_health = await cache.health_check()
         checks["redis"] = redis_health
     except Exception as e:
-        checks["redis"] = {"status": "unhealthy", "error": str(e)}
+        logger.error("Redis health check failed", error=str(e))
+        checks["redis"] = {"status": "unhealthy", "error": "Cache service connection failed"}
+
+    # Guardrails / NeMo status
+    try:
+        guardrails_status = "disabled"
+        nemo_status = "disabled"
+
+        if settings.GUARDRAILS_ENABLED:
+            guardrails_status = "enabled"
+
+        if settings.NEMO_GUARDRAILS_ENABLED:
+            if not settings.NEMO_GUARDRAILS_CONFIG_PATH:
+                nemo_status = "misconfigured"
+                guardrails_status = "degraded"
+            else:
+                adapter = get_nemo_guardrails_adapter()
+                if adapter is None:
+                    nemo_status = "unavailable"
+                    guardrails_status = "degraded"
+                elif adapter.is_ready:
+                    nemo_status = "ready"
+                else:
+                    # Not initialized yet; still healthy because fallback is available.
+                    nemo_status = "not_initialized"
+
+        checks["guardrails"] = {
+            "status": "healthy" if guardrails_status in {"enabled", "disabled"} else "degraded",
+            "guardrails_enabled": settings.GUARDRAILS_ENABLED,
+            "nemo_enabled": settings.NEMO_GUARDRAILS_ENABLED,
+            "nemo_config_path_set": bool(settings.NEMO_GUARDRAILS_CONFIG_PATH),
+            "nemo_status": nemo_status,
+        }
+    except Exception as e:
+        logger.error("Guardrails health check failed", error=str(e))
+        checks["guardrails"] = {"status": "degraded", "error": "Guardrails check failed"}
 
     # Determine overall status
     all_healthy = all(
@@ -103,6 +143,12 @@ async def readiness_check() -> dict:
         checks["redis"] = redis_status.get("status") == "healthy"
     except Exception:
         checks["redis"] = False
+
+    # Check guardrails configuration readiness
+    if settings.GUARDRAILS_ENABLED and settings.NEMO_GUARDRAILS_ENABLED:
+        checks["guardrails"] = bool(settings.NEMO_GUARDRAILS_CONFIG_PATH)
+    else:
+        checks["guardrails"] = True
 
     is_ready = all(checks.values())
 

@@ -77,8 +77,8 @@ async def create_from_template(request: CreateFromTemplateRequest):
             overrides=request.overrides,
         )
         return {"workflow": workflow.model_dump()}
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid workflow configuration. Please check the template name and parameters.")
 
 
 @router.get("/templates")
@@ -153,8 +153,8 @@ async def start_execution(workflow_id: str, request: StartExecutionRequest):
             triggered_by=request.triggered_by,
         )
         return {"execution": execution.model_dump()}
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Workflow not found.")
 
 
 @router.post("/trigger")

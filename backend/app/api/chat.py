@@ -431,5 +431,5 @@ async def list_available_tools(
         logger.error("Failed to list tools", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to list tools: {str(e)}",
+            detail="Failed to list available tools. Please try again later.",
         )

@@ -275,8 +275,8 @@ async def run_blueprint(
             finished_at=pipeline_run.finished_at,
             created_at=pipeline_run.created_at,
         )
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Pipeline not found or invalid configuration.")
 
 
 @router.get("/pipelines/{pipeline_id}", response_model=PipelineRunResponse)

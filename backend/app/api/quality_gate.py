@@ -4,8 +4,11 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
+import structlog
 
 from app.api.deps import get_current_user
+
+logger = structlog.get_logger()
 from app.models.user import User
 from app.services.quality_gate import (
     QualityGateService,
@@ -128,9 +131,10 @@ async def evaluate_quality_gate(
         )
 
     except Exception as e:
+        logger.error("Quality gate evaluation failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Quality gate evaluation failed: {e}",
+            detail="Quality gate evaluation failed. Please try again later.",
         )
 
 
@@ -211,9 +215,10 @@ async def evaluate_batch(
         )
 
     except Exception as e:
+        logger.error("Batch quality gate evaluation failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Batch evaluation failed: {e}",
+            detail="Batch evaluation failed. Please try again later.",
         )
 
 
@@ -253,9 +258,10 @@ async def evaluate_pr(
         )
 
     except Exception as e:
+        logger.error("PR quality gate evaluation failed", owner=request.owner, repo=request.repo, pr=request.pr_number, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"PR evaluation failed: {e}",
+            detail="PR evaluation failed. Please try again later.",
         )
 
 
