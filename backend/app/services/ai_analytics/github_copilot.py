@@ -209,7 +209,7 @@ class GitHubCopilotPlugin(AIAnalyticsPlugin):
                     return False, f"Copilot API error: {response.status_code}"
 
         except Exception as e:
-            return False, f"Connection error: {str(e)}"
+            return False, "Connection failed. Please check your credentials and try again."
 
     async def aggregate_metrics(
         self,

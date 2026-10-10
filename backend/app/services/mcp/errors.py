@@ -87,7 +87,7 @@ class ToolErrorResponse:
                 "related_tools": self.related_tools,
                 "documentation_url": self.documentation_url,
             },
-            "details": self.details,
+            "details": {k: v for k, v in self.details.items() if k not in ("original_error", "error")},
         }
 
     def to_llm_context(self) -> str:
@@ -346,7 +346,7 @@ def internal_error(
     return ToolErrorResponse(
         error_category=ErrorCategory.INTERNAL,
         error_code="INTERNAL_ERROR",
-        error_message=f"Internal error during '{operation}': {error_message}",
+        error_message=f"Internal error during '{operation}'",
         severity=ErrorSeverity.ERROR,
         user_message="An unexpected error occurred. Our team has been notified.",
         suggestions=[

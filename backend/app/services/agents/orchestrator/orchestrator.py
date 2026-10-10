@@ -307,7 +307,7 @@ class AgentOrchestrator:
 
             state.status = WorkflowStatus.FAILED
             state.add_error(str(e))
-            state.final_response = f"I encountered an error processing your request: {str(e)}"
+            state.final_response = "I encountered an error processing your request. Please try again or contact support if the issue persists."
 
             return state
 

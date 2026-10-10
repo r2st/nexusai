@@ -97,7 +97,7 @@ Be helpful, concise, and accurate. If you need more information, ask clarifying 
             return response.content
         except Exception as e:
             logger.error("LLM call failed", error=str(e), agent=self.name)
-            return f"Error calling LLM: {str(e)}"
+            return "I'm having trouble processing your request right now. Please try again."
 
 
 class SupervisorNode(BaseAgentNode):

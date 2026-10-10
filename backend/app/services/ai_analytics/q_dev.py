@@ -194,7 +194,7 @@ class QDevPlugin(AIAnalyticsPlugin):
         except ClientError as e:
             return False, f"AWS error: {e.response['Error']['Message']}"
         except Exception as e:
-            return False, f"Connection error: {str(e)}"
+            return False, "Connection failed. Please check your credentials and try again."
 
     async def aggregate_metrics(
         self,

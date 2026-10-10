@@ -404,7 +404,7 @@ class MCPServer:
             return await handler(params)
         except Exception as e:
             logger.error("MCP handler error", method=method, error=str(e))
-            return {"error": {"code": -32603, "message": str(e)}}
+            return {"error": {"code": -32603, "message": "Internal error processing request"}}
 
     async def _handle_initialize(self, params: dict[str, Any]) -> dict[str, Any]:
         """Handle initialize request."""

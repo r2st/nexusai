@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
 from app.core.config import settings
+from app.core.multitenancy import get_current_tenant_id
 from app.models.conversation import Conversation, Message, MessageRole, ModelProvider
 from app.services.agents.mcp import MCPClient, MCPServerConfig, MCPTool, mcp_manager
 from app.services.mcp import get_mcp_server, get_devlake_tools_summary
@@ -25,6 +26,12 @@ from app.services.mcp.errors import ToolErrorResponse, ErrorCategory
 from app.services.mcp.error_handler import MCPErrorHandler, ErrorContext, RecoveryAction
 from app.services.observability.service import ObservabilityService, get_observability_service
 from app.services.observability.langfuse_client import TraceContext
+from app.services.guardrails.models import GuardrailConfig, GuardrailResult
+from app.services.guardrails.nemo import (
+    NeMoGuardrailsAdapter,
+    get_nemo_guardrails_adapter,
+)
+from app.services.guardrails.service import GuardrailsService, get_guardrails_service
 
 if TYPE_CHECKING:
     from langchain_anthropic import ChatAnthropic
@@ -163,6 +170,14 @@ class ChatService:
         self._error_handler: MCPErrorHandler | None = None  # Initialized after tools are loaded
         self._observability: ObservabilityService | None = None  # Langfuse tracing
         self._current_trace: TraceContext | None = None  # Current active trace
+        self._langfuse_system_prompt: Any | None = None  # Langfuse PromptClient for system prompt
+        self._guardrails: GuardrailsService | None = (
+            get_guardrails_service() if settings.GUARDRAILS_ENABLED else None
+        )
+        self._nemo_guardrails: NeMoGuardrailsAdapter | None = (
+            get_nemo_guardrails_adapter() if settings.NEMO_GUARDRAILS_ENABLED else None
+        )
+        self._stream_holdback_chars = max(0, int(settings.GUARDRAILS_STREAM_HOLDBACK_CHARS))
 
     async def initialize_mcp(self) -> None:
         """Initialize MCP server connections and discover tools."""
@@ -173,6 +188,26 @@ class ChatService:
         except Exception as e:
             logger.warning("Failed to initialize observability", error=str(e))
             self._observability = None
+
+        # Fetch system prompt from Langfuse (with hardcoded fallback)
+        try:
+            from app.services.prompts.langfuse_manager import get_langfuse_prompt_manager
+
+            manager = await get_langfuse_prompt_manager()
+            if manager.enabled:
+                self._langfuse_system_prompt = await manager.get_prompt(
+                    "nexusai-system-prompt",
+                    type="text",
+                    fallback=NEXUSAI_SYSTEM_PROMPT,
+                )
+                if self._langfuse_system_prompt:
+                    logger.info(
+                        "System prompt loaded from Langfuse",
+                        version=self._langfuse_system_prompt.version,
+                        is_fallback=self._langfuse_system_prompt.is_fallback,
+                    )
+        except Exception as e:
+            logger.debug("Langfuse prompt fetch skipped", error=str(e))
 
         # Initialize built-in DevLake tools
         if self.enable_builtin_tools:
@@ -232,6 +267,200 @@ class ChatService:
         if self.user_id:
             await mcp_manager.disconnect_all(self.user_id)
         # Built-in handlers don't need cleanup
+
+    def _get_tenant_guardrail_policy_overrides(
+        self,
+        conversation: Conversation | None = None,
+    ) -> tuple[str | None, dict[str, Any]]:
+        """Resolve tenant-scoped guardrail overrides from settings and conversation."""
+        tenant_id = get_current_tenant_id()
+        overrides: dict[str, Any] = {}
+
+        # Global per-tenant map from configuration JSON
+        try:
+            policies = json.loads(settings.GUARDRAILS_TENANT_POLICIES or "{}")
+            if isinstance(policies, dict) and tenant_id and isinstance(policies.get(tenant_id), dict):
+                overrides.update(policies.get(tenant_id, {}))
+        except json.JSONDecodeError:
+            logger.warning("Invalid GUARDRAILS_TENANT_POLICIES JSON; ignoring overrides")
+
+        # Optional conversation-level policy (takes precedence over tenant map)
+        if conversation and isinstance(conversation.settings, dict):
+            conv_policy = conversation.settings.get("guardrails")
+            if isinstance(conv_policy, dict):
+                overrides.update(conv_policy)
+
+            if not tenant_id:
+                conv_tenant = conversation.settings.get("tenant_id")
+                if isinstance(conv_tenant, str) and conv_tenant.strip():
+                    tenant_id = conv_tenant
+
+        return tenant_id, overrides
+
+    def _resolve_guardrails_service(
+        self,
+        conversation: Conversation | None = None,
+    ) -> tuple[GuardrailsService | None, str | None]:
+        """Resolve effective guardrails service and tenant context for the request."""
+        if not self._guardrails:
+            return None, None
+
+        tenant_id, overrides = self._get_tenant_guardrail_policy_overrides(conversation)
+        if not overrides:
+            return self._guardrails, tenant_id
+
+        base = self._guardrails.config.model_dump()
+        allowed_keys = set(GuardrailConfig.model_fields.keys())
+        sanitized = {k: v for k, v in overrides.items() if k in allowed_keys}
+        effective = GuardrailConfig(**(base | sanitized))
+        return GuardrailsService(config=effective), tenant_id
+
+    def _record_guardrails_observation(
+        self,
+        check_type: str,
+        result: GuardrailResult,
+    ) -> None:
+        """Record guardrail outcomes in observability when available."""
+        if not self._observability:
+            return
+        self._observability.record_guardrails_check(
+            trace=self._current_trace,
+            check_type=check_type,
+            passed=not result.blocked,
+            details={
+                "modified": result.modified,
+                "threat_level": result.threat_level.value,
+                "threats_detected": result.threats_detected[:5],
+                "check_time_ms": result.check_time_ms,
+            },
+            blocked_reason=result.message,
+        )
+
+    async def _apply_input_guardrails(
+        self,
+        text: str,
+        conversation: Conversation | None = None,
+    ) -> GuardrailResult | None:
+        """Run input guardrails when enabled."""
+        service, tenant_id = self._resolve_guardrails_service(conversation)
+        if not service:
+            return None
+        result = await service.check_input(
+            text=text,
+            user_id=self.user_id,
+            tenant_id=tenant_id,
+        )
+        self._record_guardrails_observation("input", result)
+        return result
+
+    async def _apply_output_guardrails(
+        self,
+        text: str,
+        conversation: Conversation | None = None,
+    ) -> GuardrailResult | None:
+        """Run output guardrails when enabled."""
+        service, tenant_id = self._resolve_guardrails_service(conversation)
+        if not service:
+            return None
+        result = await service.check_output(
+            text=text,
+            user_id=self.user_id,
+            tenant_id=tenant_id,
+        )
+        self._record_guardrails_observation("output", result)
+        return result
+
+    async def _apply_stream_output_guardrails(
+        self,
+        text: str,
+        conversation: Conversation | None = None,
+    ) -> GuardrailResult | None:
+        """Run lightweight stream-time output guardrails."""
+        service, tenant_id = self._resolve_guardrails_service(conversation)
+        if not service:
+            return None
+        result = await service.check_stream_output(
+            text=text,
+            user_id=self.user_id,
+            tenant_id=tenant_id,
+        )
+        self._record_guardrails_observation("stream_output", result)
+        return result
+
+    async def _stream_guardrail_gate(
+        self,
+        raw_text: str,
+        emitted_chars: int,
+        conversation: Conversation,
+    ) -> tuple[str, int, bool]:
+        """
+        Gate incremental stream output through lightweight guardrails.
+
+        Returns:
+            (text_to_emit, new_emitted_chars, blocked)
+        """
+        if not self._guardrails:
+            if emitted_chars >= len(raw_text):
+                return "", emitted_chars, False
+            return raw_text[emitted_chars:], len(raw_text), False
+
+        stream_guard = await self._apply_stream_output_guardrails(
+            raw_text,
+            conversation=conversation,
+        )
+        if stream_guard and stream_guard.blocked:
+            blocked_text = (
+                stream_guard.message
+                or "The response was blocked by safety guardrails."
+            )
+            return blocked_text, emitted_chars, True
+
+        # Keep a holdback tail to reduce risk of leaking partially unsafe content.
+        safe_upto = max(0, len(raw_text) - self._stream_holdback_chars)
+        if safe_upto <= emitted_chars:
+            return "", emitted_chars, False
+        return raw_text[emitted_chars:safe_upto], safe_upto, False
+
+    def _to_nemo_messages(
+        self,
+        messages: list[Message],
+        system_prompt: str | None,
+    ) -> list[dict[str, str]]:
+        """Convert stored conversation messages to NeMo message format."""
+        nemo_messages: list[dict[str, str]] = []
+
+        if system_prompt:
+            effective_prompt = system_prompt
+        elif self._langfuse_system_prompt and not self._langfuse_system_prompt.is_fallback:
+            effective_prompt = self._langfuse_system_prompt.compile()
+        else:
+            effective_prompt = NEXUSAI_SYSTEM_PROMPT
+        if effective_prompt:
+            nemo_messages.append({"role": "system", "content": effective_prompt})
+
+        for msg in messages:
+            if msg.role not in (
+                MessageRole.SYSTEM.value,
+                MessageRole.USER.value,
+                MessageRole.ASSISTANT.value,
+            ):
+                continue
+            if not msg.content:
+                continue
+            nemo_messages.append({"role": msg.role, "content": msg.content})
+
+        return nemo_messages
+
+    async def _generate_with_nemo(
+        self,
+        messages: list[Message],
+        system_prompt: str | None,
+    ) -> str | None:
+        """Generate response with NeMo Guardrails when configured."""
+        if not self._nemo_guardrails:
+            return None
+        nemo_messages = self._to_nemo_messages(messages, system_prompt)
+        return await self._nemo_guardrails.generate(nemo_messages)
 
     def _create_langchain_tools(self) -> list[StructuredTool]:
         """Convert MCP tools to LangChain StructuredTool format."""
@@ -644,7 +873,7 @@ class ChatService:
                 "success": False,
                 "error": {
                     "category": "internal",
-                    "message": f"Error executing tool: {str(e)}",
+                    "message": "Tool execution failed. Please try again.",
                 },
                 "guidance": {
                     "suggestions": ["Try the operation again", "Check if the service is available"],
@@ -964,8 +1193,13 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
 
         lc_messages = []
 
-        # Use custom system prompt or default NexusAI prompt
-        effective_prompt = system_prompt if system_prompt else NEXUSAI_SYSTEM_PROMPT
+        # Use custom system prompt, or Langfuse-managed prompt, or hardcoded default
+        if system_prompt:
+            effective_prompt = system_prompt
+        elif self._langfuse_system_prompt and not self._langfuse_system_prompt.is_fallback:
+            effective_prompt = self._langfuse_system_prompt.compile()
+        else:
+            effective_prompt = NEXUSAI_SYSTEM_PROMPT
 
         # Add MCP tools description to system prompt if available
         if include_mcp_tools and self._mcp_tools:
@@ -1017,7 +1251,12 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
         """Convert database messages to provider messages."""
         provider_messages: list[ProviderChatMessage] = []
 
-        effective_prompt = system_prompt if system_prompt else NEXUSAI_SYSTEM_PROMPT
+        if system_prompt:
+            effective_prompt = system_prompt
+        elif self._langfuse_system_prompt and not self._langfuse_system_prompt.is_fallback:
+            effective_prompt = self._langfuse_system_prompt.compile()
+        else:
+            effective_prompt = NEXUSAI_SYSTEM_PROMPT
         if include_mcp_tools and self._mcp_tools:
             effective_prompt += self._get_mcp_tools_description()
 
@@ -1180,35 +1419,84 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
             self._current_trace = trace
 
         try:
+            # Apply input guardrails before persisting/sending user text
+            message_to_store = user_message
+            input_guard = await self._apply_input_guardrails(
+                user_message,
+                conversation=conversation,
+            )
+            if input_guard:
+                if input_guard.blocked:
+                    blocked_text = (
+                        input_guard.message
+                        or "Your message was blocked by safety guardrails."
+                    )
+                    await self.add_message(
+                        conversation=conversation,
+                        role=MessageRole.USER,
+                        content=user_message,
+                    )
+                    return await self.add_message(
+                        conversation=conversation,
+                        role=MessageRole.ASSISTANT,
+                        content=blocked_text,
+                        model_name=conversation.model_name,
+                    )
+                if input_guard.modified and input_guard.modified_content:
+                    message_to_store = input_guard.modified_content
+
             # Add user message
-            await self.add_message(conversation, MessageRole.USER, user_message)
+            await self.add_message(conversation, MessageRole.USER, message_to_store)
 
             # Get conversation history
             messages = await self.get_messages(conversation.id)
 
-            # Convert to LangChain format
-            lc_messages = self._convert_messages(messages, conversation.system_prompt)
-
-            # Get LLM
-            llm = self._get_llm(
-                provider=ModelProvider(conversation.model_provider),
-                model_name=conversation.model_name,
-                temperature=temperature,
-                max_tokens=max_tokens,
-                streaming=False,
+            token_usage = {}
+            response_content = await self._generate_with_nemo(
+                messages=messages,
+                system_prompt=conversation.system_prompt,
             )
 
-            # Generate response
-            response = await llm.ainvoke(lc_messages)
+            # Fallback to existing provider flow if NeMo is disabled/unavailable
+            if response_content is None:
+                # Convert to LangChain format
+                lc_messages = self._convert_messages(messages, conversation.system_prompt)
 
-            # Extract token usage
-            token_usage = {}
-            if hasattr(response, "usage_metadata") and response.usage_metadata:
-                token_usage = {
-                    "prompt_tokens": response.usage_metadata.get("input_tokens", 0),
-                    "completion_tokens": response.usage_metadata.get("output_tokens", 0),
-                    "total_tokens": response.usage_metadata.get("total_tokens", 0),
-                }
+                # Get LLM
+                llm = self._get_llm(
+                    provider=ModelProvider(conversation.model_provider),
+                    model_name=conversation.model_name,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    streaming=False,
+                )
+
+                # Generate response
+                response = await llm.ainvoke(lc_messages)
+                response_content = response.content
+
+                # Extract token usage
+                if hasattr(response, "usage_metadata") and response.usage_metadata:
+                    token_usage = {
+                        "prompt_tokens": response.usage_metadata.get("input_tokens", 0),
+                        "completion_tokens": response.usage_metadata.get("output_tokens", 0),
+                        "total_tokens": response.usage_metadata.get("total_tokens", 0),
+                    }
+
+            # Apply output guardrails before persisting/returning assistant text
+            assistant_content = response_content or ""
+            output_guard = await self._apply_output_guardrails(
+                assistant_content,
+                conversation=conversation,
+            )
+            if output_guard:
+                if output_guard.blocked:
+                    assistant_content = (
+                        output_guard.message
+                        or "The response was blocked by safety guardrails."
+                    )
+                elif output_guard.modified and output_guard.modified_content:
+                    assistant_content = output_guard.modified_content
 
             # Log LLM generation to Langfuse
             latency_ms = int((time.time() - start_time) * 1000)
@@ -1221,7 +1509,7 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
                     provider=conversation.model_provider,
                     operation="chat",
                     input_messages=input_messages,
-                    output=response.content[:1000] if response.content else "",
+                    output=assistant_content[:1000],
                     input_tokens=token_usage.get("prompt_tokens", 0),
                     output_tokens=token_usage.get("completion_tokens", 0),
                     latency_ms=latency_ms,
@@ -1232,7 +1520,7 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
             assistant_message = await self.add_message(
                 conversation=conversation,
                 role=MessageRole.ASSISTANT,
-                content=response.content,
+                content=assistant_content,
                 model_name=conversation.model_name,
                 token_usage=token_usage,
             )
@@ -1408,7 +1696,12 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
         )
 
         # Build the system instruction with MCP tools if available
-        effective_prompt = conversation.system_prompt if conversation.system_prompt else NEXUSAI_SYSTEM_PROMPT
+        if conversation.system_prompt:
+            effective_prompt = conversation.system_prompt
+        elif self._langfuse_system_prompt and not self._langfuse_system_prompt.is_fallback:
+            effective_prompt = self._langfuse_system_prompt.compile()
+        else:
+            effective_prompt = NEXUSAI_SYSTEM_PROMPT
         if use_mcp_tools and self._mcp_tools:
             effective_prompt += self._get_mcp_tools_description()
 
@@ -1545,8 +1838,36 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
             )
             self._current_trace = trace
 
+        # Apply input guardrails before persisting/sending user text
+        message_to_store = user_message
+        input_guard = await self._apply_input_guardrails(
+            user_message,
+            conversation=conversation,
+        )
+        if input_guard:
+            if input_guard.blocked:
+                blocked_text = (
+                    input_guard.message
+                    or "Your message was blocked by safety guardrails."
+                )
+                await self.add_message(conversation, MessageRole.USER, user_message)
+                await self.add_message(
+                    conversation=conversation,
+                    role=MessageRole.ASSISTANT,
+                    content=blocked_text,
+                    model_name=conversation.model_name,
+                )
+                yield blocked_text
+                if self._observability and trace:
+                    self._observability.langfuse.end_trace(trace, status="success")
+                    self._observability.langfuse.flush()
+                    self._current_trace = None
+                return
+            if input_guard.modified and input_guard.modified_content:
+                message_to_store = input_guard.modified_content
+
         # Add user message
-        await self.add_message(conversation, MessageRole.USER, user_message)
+        await self.add_message(conversation, MessageRole.USER, message_to_store)
 
         # Get conversation history
         messages = await self.get_messages(conversation.id)
@@ -1586,18 +1907,50 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
             model_name = settings.OLLAMA_DEFAULT_MODEL
 
         # Use native Google SDK for Google models due to LangChain compatibility issues
+        stream_blocked = False
+        emitted_chars = 0
+
         if provider == ModelProvider.GOOGLE:
             full_content = ""
             async for chunk in self._chat_stream_google(
                 conversation, messages, temperature, max_tokens, use_mcp_tools, model_name
             ):
                 full_content += chunk
-                yield chunk
+                emit_text, emitted_chars, blocked = await self._stream_guardrail_gate(
+                    raw_text=full_content,
+                    emitted_chars=emitted_chars,
+                    conversation=conversation,
+                )
+                if emit_text:
+                    yield emit_text
+                if blocked:
+                    stream_blocked = True
+                    break
+
+            # Flush any holdback content when stream was not blocked.
+            if not stream_blocked and emitted_chars < len(full_content):
+                yield full_content[emitted_chars:]
+                emitted_chars = len(full_content)
+
+            guarded_full_content = full_content
+            output_guard = await self._apply_output_guardrails(
+                full_content,
+                conversation=conversation,
+            )
+            if output_guard:
+                if output_guard.blocked:
+                    guarded_full_content = (
+                        output_guard.message
+                        or "The response was blocked by safety guardrails."
+                    )
+                elif output_guard.modified and output_guard.modified_content:
+                    guarded_full_content = output_guard.modified_content
+
             # Add assistant message after streaming completes (single point of persistence)
             await self.add_message(
                 conversation=conversation,
                 role=MessageRole.ASSISTANT,
-                content=full_content,
+                content=guarded_full_content,
                 model_name=model_name,
             )
             # Log generation to Langfuse
@@ -1610,7 +1963,7 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
                     provider=provider.value,
                     operation="chat_stream",
                     input_messages=input_messages,
-                    output=full_content[:1000] if full_content else "",
+                    output=guarded_full_content[:1000] if guarded_full_content else "",
                     latency_ms=latency_ms,
                     success=True,
                 )
@@ -1694,7 +2047,16 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
                         current_tool_calls.extend(chunk.tool_calls)
                     elif chunk.content:
                         full_content += chunk.content
-                        yield chunk.content
+                        emit_text, emitted_chars, blocked = await self._stream_guardrail_gate(
+                            raw_text=full_content,
+                            emitted_chars=emitted_chars,
+                            conversation=conversation,
+                        )
+                        if emit_text:
+                            yield emit_text
+                        if blocked:
+                            stream_blocked = True
+                            break
             except Exception as stream_error:
                 logger.error(
                     "LLM streaming error",
@@ -1705,6 +2067,9 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
                     message_types=[type(m).__name__ for m in lc_messages],
                 )
                 raise
+
+            if stream_blocked:
+                break
 
             # If tool calls were made, execute them and continue
             if tool_call_detected and current_tool_calls:
@@ -1758,11 +2123,30 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
             # No tool calls, we're done
             break
 
+        # Flush any holdback content when stream was not blocked.
+        if not stream_blocked and emitted_chars < len(full_content):
+            yield full_content[emitted_chars:]
+            emitted_chars = len(full_content)
+
         # Add assistant message after streaming completes
+        guarded_full_content = full_content
+        output_guard = await self._apply_output_guardrails(
+            full_content,
+            conversation=conversation,
+        )
+        if output_guard:
+            if output_guard.blocked:
+                guarded_full_content = (
+                    output_guard.message
+                    or "The response was blocked by safety guardrails."
+                )
+            elif output_guard.modified and output_guard.modified_content:
+                guarded_full_content = output_guard.modified_content
+
         await self.add_message(
             conversation=conversation,
             role=MessageRole.ASSISTANT,
-            content=full_content,
+            content=guarded_full_content,
             model_name=conversation.model_name,
         )
 
@@ -1776,7 +2160,7 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
                 provider=conversation.model_provider,
                 operation="chat_stream",
                 input_messages=input_messages,
-                output=full_content[:1000] if full_content else "",
+                output=guarded_full_content[:1000] if guarded_full_content else "",
                 latency_ms=latency_ms,
                 success=True,
             )

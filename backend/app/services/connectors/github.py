@@ -103,7 +103,8 @@ class GitHubConnector(BaseConnector):
                 return False, f"API error: {response.status_code}"
 
         except Exception as e:
-            return False, f"Connection error: {str(e)}"
+            logger.error("GitHub connection test failed", error=str(e))
+            return False, "Connection failed. Please check your credentials and try again."
 
     async def sync(
         self,
@@ -147,9 +148,9 @@ class GitHubConnector(BaseConnector):
             self.update_status(ConnectorStatus.ACTIVE, f"Synced {result.events_fetched} events")
 
         except Exception as e:
-            result.error_message = str(e)
+            result.error_message = "Sync failed. Please try again later."
             logger.error("GitHub sync failed", error=str(e))
-            self.update_status(ConnectorStatus.ERROR, str(e))
+            self.update_status(ConnectorStatus.ERROR, "Sync failed")
 
         return result
 
@@ -185,7 +186,7 @@ class GitHubConnector(BaseConnector):
             result.completed_at = datetime.now(UTC)
 
         except Exception as e:
-            result.error_message = str(e)
+            result.error_message = "Entity sync failed. Please try again later."
             logger.error("GitHub entity sync failed", error=str(e))
 
         return result

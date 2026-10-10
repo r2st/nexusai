@@ -233,7 +233,7 @@ class ClaudeCodePlugin(AIAnalyticsPlugin):
                 else:
                     return False, f"Connection failed: {response.status_code}"
         except Exception as e:
-            return False, f"Connection error: {str(e)}"
+            return False, "Connection failed. Please check your credentials and try again."
 
     async def aggregate_metrics(
         self,
