@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { knowledgeGraphApi, type KnowledgeGraphStats, type DiscoveryResult } from '@/lib/api';
+import { toast } from 'sonner';
 
 export default function KnowledgeGraphPage() {
   const [stats, setStats] = useState<KnowledgeGraphStats | null>(null);
@@ -54,11 +55,10 @@ export default function KnowledgeGraphPage() {
     setIsSyncing(true);
     try {
       const result = await knowledgeGraphApi.syncFromPostgres();
-      alert(`Synced ${result.synced_entities} entities from PostgreSQL`);
+      toast.success(`Synced ${result.synced_entities} entities from PostgreSQL`);
       loadData();
-    } catch (error) {
-      console.error('Sync failed:', error);
-      alert('Failed to sync from PostgreSQL');
+    } catch {
+      toast.error('Failed to sync from PostgreSQL');
     } finally {
       setIsSyncing(false);
     }

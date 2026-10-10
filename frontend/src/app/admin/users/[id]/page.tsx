@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { api, User } from '@/lib/api';
+import { toast } from 'sonner';
 
 // Extended user type for admin
 interface AdminUserDetail extends User {
@@ -191,7 +192,7 @@ export default function AdminUserDetailPage() {
     try {
       // await api.post(`/admin/users/${userId}/reset-password`);
       setShowPasswordResetModal(false);
-      alert('Password reset email sent');
+      toast.success('Password reset email sent');
     } catch (error) {
       console.error('Failed to send password reset:', error);
     }

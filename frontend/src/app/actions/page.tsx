@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { actionsApi, type OpenAPIAction } from '@/lib/api';
+import { toast } from 'sonner';
 
 export default function ActionsPage() {
   const [actions, setActions] = useState<OpenAPIAction[]>([]);
@@ -414,7 +415,7 @@ function RegisterActionModal({ onClose, onRegister }: RegisterActionModalProps) 
       }
     } catch (error) {
       console.error('Failed to register action:', error);
-      alert('Failed to register action');
+      toast.error('Failed to register action');
     } finally {
       setIsSubmitting(false);
     }

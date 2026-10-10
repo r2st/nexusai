@@ -106,54 +106,33 @@ const getSeverityColor = (severity: string) => {
   }
 };
 
-// Generate mock audit log data
-const generateMockLogs = (): AuditLogEntry[] => {
-  const actions = [
-    { action: 'user.login', severity: 'info' as const, resource_type: 'user' },
-    { action: 'user.logout', severity: 'info' as const, resource_type: 'user' },
-    { action: 'user.login_failed', severity: 'warning' as const, resource_type: 'user' },
-    { action: 'member.invited', severity: 'info' as const, resource_type: 'member' },
-    { action: 'member.removed', severity: 'warning' as const, resource_type: 'member' },
-    { action: 'api_key.created', severity: 'info' as const, resource_type: 'api_key' },
-    { action: 'api_key.deleted', severity: 'warning' as const, resource_type: 'api_key' },
-    { action: 'document.uploaded', severity: 'info' as const, resource_type: 'document' },
-    { action: 'document.deleted', severity: 'warning' as const, resource_type: 'document' },
-    { action: 'agent.executed', severity: 'info' as const, resource_type: 'agent' },
-    { action: 'settings.updated', severity: 'info' as const, resource_type: 'settings' },
-    { action: 'integration.connected', severity: 'info' as const, resource_type: 'integration' },
-  ];
+const PAGE_SIZE = 20;
 
-  const users = [
-    { id: '1', name: 'John Doe', email: 'john@example.com' },
-    { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
-    { id: '3', name: 'Bob Wilson', email: 'bob@example.com' },
-  ];
+function mapApiLogToEntry(apiLog: Record<string, unknown>): AuditLogEntry {
+  const eventType = (apiLog.event_type as string) || '';
+  const severityRaw = (apiLog.severity as string) || 'info';
+  const severity = (['info', 'warning', 'critical'].includes(severityRaw)
+    ? severityRaw
+    : 'info') as 'info' | 'warning' | 'critical';
 
-  const logs: AuditLogEntry[] = [];
-  
-  for (let i = 0; i < 50; i++) {
-    const actionData = actions[Math.floor(Math.random() * actions.length)];
-    const user = users[Math.floor(Math.random() * users.length)];
-    const date = new Date();
-    date.setMinutes(date.getMinutes() - i * 30);
-
-    logs.push({
-      id: `log-${i}`,
-      timestamp: date.toISOString(),
-      action: actionData.action,
-      actor: user,
-      resource_type: actionData.resource_type,
-      resource_id: `${actionData.resource_type}-${Math.random().toString(36).substr(2, 9)}`,
-      resource_name: `${actionData.resource_type.charAt(0).toUpperCase() + actionData.resource_type.slice(1)} ${i + 1}`,
-      ip_address: `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
-      user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
-      metadata: {},
-      severity: actionData.severity,
-    });
-  }
-
-  return logs;
-};
+  return {
+    id: apiLog.id as string,
+    timestamp: apiLog.timestamp as string,
+    action: eventType,
+    actor: {
+      id: (apiLog.user_id as string) || 'system',
+      name: (apiLog.user_id as string) || 'System',
+      email: '',
+    },
+    resource_type: (apiLog.tool_name as string) || (apiLog.service_name as string) || eventType.split('.')[0] || 'unknown',
+    resource_id: (apiLog.request_id as string) || (apiLog.id as string),
+    resource_name: (apiLog.output_summary as string) || undefined,
+    ip_address: '',
+    user_agent: '',
+    metadata: (apiLog.metadata as Record<string, unknown>) || {},
+    severity,
+  };
+}
 
 export default function AuditLogsPage() {
   const router = useRouter();
@@ -165,6 +144,8 @@ export default function AuditLogsPage() {
   const [selectedSeverity, setSelectedSeverity] = useState<string>('all');
   const [dateRange, setDateRange] = useState<string>('7d');
   const [expandedLog, setExpandedLog] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -175,16 +156,31 @@ export default function AuditLogsPage() {
   const loadLogs = useCallback(async () => {
     setIsLoading(true);
     try {
-      // In production, this would be an API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setLogs(generateMockLogs());
-    } catch (error) {
-      console.error('Failed to load audit logs:', error);
+      const token = localStorage.getItem('access_token');
+      const params = new URLSearchParams();
+      params.set('limit', String(PAGE_SIZE));
+      params.set('offset', String((page - 1) * PAGE_SIZE));
+      if (selectedSeverity !== 'all') params.set('severity', selectedSeverity);
+      if (selectedAction !== 'all') params.set('event_types', selectedAction);
+
+      const response = await fetch(`/api/v1/audit/logs?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const mapped = (Array.isArray(data) ? data : []).map(mapApiLogToEntry);
+        setLogs(mapped);
+        setTotalCount(mapped.length < PAGE_SIZE ? (page - 1) * PAGE_SIZE + mapped.length : (page + 1) * PAGE_SIZE);
+      } else {
+        toast.error('Failed to load audit logs');
+      }
+    } catch {
       toast.error('Failed to load audit logs');
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [page, selectedSeverity, selectedAction]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -476,17 +472,28 @@ export default function AuditLogsPage() {
           </div>
         )}
 
-        {/* Pagination placeholder */}
         {filteredLogs.length > 0 && (
           <div className="flex items-center justify-between mt-4">
             <p className="text-sm text-muted-foreground">
-              Showing {filteredLogs.length} of {logs.length} entries
+              Showing {(page - 1) * PAGE_SIZE + 1} to{' '}
+              {(page - 1) * PAGE_SIZE + filteredLogs.length} entries
             </p>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" disabled>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page === 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
                 Previous
               </Button>
-              <Button variant="outline" size="sm" disabled>
+              <span className="text-sm text-muted-foreground">Page {page}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={logs.length < PAGE_SIZE}
+                onClick={() => setPage((p) => p + 1)}
+              >
                 Next
               </Button>
             </div>

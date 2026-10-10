@@ -76,6 +76,7 @@ export default function DocumentsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [previewDoc, setPreviewDoc] = useState<Document | null>(null);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -392,7 +393,7 @@ export default function DocumentsPage() {
                         variant="ghost"
                         size="sm"
                         className="flex-1"
-                        onClick={() => toast.info('Preview coming soon')}
+                        onClick={() => setPreviewDoc(doc)}
                       >
                         <Eye className="mr-2 h-4 w-4" />
                         Preview
@@ -441,6 +442,103 @@ export default function DocumentsPage() {
           </div>
         </section>
       </main>
+
+      {/* Document Preview Modal */}
+      {previewDoc && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setPreviewDoc(null)}
+          />
+          <div className="relative z-10 w-full max-w-lg rounded-lg bg-background p-6 shadow-lg">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Document Details</h2>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setPreviewDoc(null)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                {(() => {
+                  const Icon = getFileIcon(previewDoc.mime_type);
+                  return (
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                      <Icon className="h-6 w-6 text-primary" />
+                    </div>
+                  );
+                })()}
+                <div>
+                  <p className="font-medium">{previewDoc.original_filename}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {previewDoc.mime_type}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 rounded-lg border p-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">File Size</p>
+                  <p className="font-medium">
+                    {formatFileSize(previewDoc.file_size)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Status</p>
+                  <div className="flex items-center gap-1.5">
+                    {getStatusIcon(previewDoc.status as DocumentStatus)}
+                    <span className="font-medium">
+                      {getStatusLabel(previewDoc.status as DocumentStatus)}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Chunks</p>
+                  <p className="font-medium">{previewDoc.chunk_count}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Uploaded</p>
+                  <p className="font-medium">
+                    {formatRelativeTime(previewDoc.created_at)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Type</p>
+                  <p className="font-medium">{previewDoc.document_type}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">ID</p>
+                  <p className="font-mono text-xs truncate">{previewDoc.id}</p>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setPreviewDoc(null)}
+                >
+                  Close
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    handleDelete(previewDoc.id);
+                    setPreviewDoc(null);
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* AI Assistant */}
       <FloatingAssistant context="documents" />

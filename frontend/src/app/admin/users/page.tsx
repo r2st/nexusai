@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { api, User } from '@/lib/api';
+import { toast } from 'sonner';
 
 // Extended user type for admin
 interface AdminUser extends User {
@@ -248,7 +249,7 @@ function AdminUsersContent() {
   const handleResendVerification = async (user: AdminUser) => {
     try {
       // await api.post(`/admin/users/${user.id}/resend-verification`);
-      alert('Verification email sent');
+      toast.success('Verification email sent');
     } catch (error) {
       console.error('Failed to resend verification:', error);
     }

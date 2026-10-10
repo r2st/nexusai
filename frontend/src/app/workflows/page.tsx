@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -43,70 +43,90 @@ import {
   XCircle,
   Clock,
   LayoutTemplate,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 
-// Mock data for existing workflows
-const MOCK_WORKFLOWS = [
-  {
-    id: "wf-1",
-    name: "PR Quality Gate",
-    description: "Run quality checks on every PR",
-    enabled: true,
-    trigger: "pr_opened",
-    lastRun: "2 hours ago",
-    runCount: 145,
-    successRate: 94,
-    status: "active",
-  },
-  {
-    id: "wf-2",
-    name: "Security Alert Handler",
-    description: "Create tickets for critical vulnerabilities",
-    enabled: true,
-    trigger: "security_alert",
-    lastRun: "1 day ago",
-    runCount: 23,
-    successRate: 100,
-    status: "active",
-  },
-  {
-    id: "wf-3",
-    name: "Weekly Report",
-    description: "Generate and send weekly engineering report",
-    enabled: false,
-    trigger: "schedule",
-    lastRun: "5 days ago",
-    runCount: 12,
-    successRate: 83,
-    status: "paused",
-  },
-  {
-    id: "wf-4",
-    name: "Deploy Tracker",
-    description: "Track deployments and notify team",
-    enabled: true,
-    trigger: "webhook",
-    lastRun: "30 min ago",
-    runCount: 89,
-    successRate: 98,
-    status: "active",
-  },
-];
+interface Workflow {
+  id: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+  trigger: string;
+  lastRun: string;
+  runCount: number;
+  successRate: number;
+  status: string;
+}
+
+interface ExecutionRecord {
+  id: string;
+  workflow_name: string;
+  status: string;
+  trigger_type: string;
+  started_at: string | null;
+  duration_ms: number | null;
+}
 
 export default function WorkflowsPage() {
+  const [workflows, setWorkflows] = useState<Workflow[]>([]);
+  const [executions, setExecutions] = useState<ExecutionRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("my-workflows");
   const [showDesigner, setShowDesigner] = useState(false);
   const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
 
-  const filteredWorkflows = MOCK_WORKFLOWS.filter(
+  const loadWorkflows = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem("access_token");
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const [wfRes, exRes] = await Promise.all([
+        fetch("/api/v1/workflows", { headers }),
+        fetch("/api/v1/workflows/executions?limit=10", { headers }),
+      ]);
+
+      if (wfRes.ok) {
+        const wfData = await wfRes.json();
+        const mapped = (wfData.workflows || []).map((w: any) => ({
+          id: w.id,
+          name: w.name,
+          description: w.description || "",
+          enabled: w.status === "active",
+          trigger: w.triggers?.[0]?.trigger_type || "manual",
+          lastRun: "",
+          runCount: 0,
+          successRate: 0,
+          status: w.status,
+        }));
+        setWorkflows(mapped);
+      }
+
+      if (exRes.ok) {
+        const exData = await exRes.json();
+        setExecutions(exData.executions || []);
+      }
+    } catch {
+      toast.error("Failed to load workflows");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadWorkflows();
+  }, [loadWorkflows]);
+
+  const filteredWorkflows = workflows.filter(
     (w) =>
       w.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       w.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleCreateFromTemplate = (template: WorkflowTemplate) => {
-    // Create new workflow from template
     const newWorkflow = {
       id: crypto.randomUUID(),
       name: template.name,
@@ -137,10 +157,122 @@ export default function WorkflowsPage() {
     setShowDesigner(true);
   };
 
-  const handleSaveWorkflow = (workflow: any) => {
-    console.log("Saving workflow:", workflow);
-    setShowDesigner(false);
-    // API call to save workflow
+  const handleSaveWorkflow = async (workflow: any) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      await fetch("/api/v1/workflows", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          name: workflow.name,
+          organization_id: workflow.organization_id || "default",
+          description: workflow.description,
+          triggers: workflow.triggers || [],
+          steps: workflow.steps || [],
+        }),
+      });
+
+      toast.success("Workflow saved");
+      setShowDesigner(false);
+      loadWorkflows();
+    } catch {
+      toast.error("Failed to save workflow");
+    }
+  };
+
+  const handleToggleWorkflow = async (workflow: Workflow) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const endpoint = workflow.enabled
+        ? `/api/v1/workflows/${workflow.id}/pause`
+        : `/api/v1/workflows/${workflow.id}/activate`;
+
+      const res = await fetch(endpoint, { method: "POST", headers });
+      if (res.ok) {
+        toast.success(workflow.enabled ? "Workflow paused" : "Workflow activated");
+        loadWorkflows();
+      } else {
+        toast.error("Failed to update workflow");
+      }
+    } catch {
+      toast.error("Failed to update workflow");
+    }
+  };
+
+  const handleDeleteWorkflow = async (workflow: Workflow) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const res = await fetch(`/api/v1/workflows/${workflow.id}`, {
+        method: "DELETE",
+        headers,
+      });
+      if (res.ok) {
+        toast.success("Workflow deleted");
+        setWorkflows((prev) => prev.filter((w) => w.id !== workflow.id));
+      } else {
+        toast.error("Failed to delete workflow");
+      }
+    } catch {
+      toast.error("Failed to delete workflow");
+    }
+  };
+
+  const handleDuplicateWorkflow = async (workflow: Workflow) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const res = await fetch("/api/v1/workflows", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          name: `${workflow.name} (copy)`,
+          organization_id: "default",
+          description: workflow.description,
+          triggers: [],
+          steps: [],
+        }),
+      });
+
+      if (res.ok) {
+        toast.success("Workflow duplicated");
+        loadWorkflows();
+      } else {
+        toast.error("Failed to duplicate workflow");
+      }
+    } catch {
+      toast.error("Failed to duplicate workflow");
+    }
+  };
+
+  const formatDuration = (ms: number | null): string => {
+    if (ms == null) return "—";
+    if (ms < 1000) return `${ms}ms`;
+    return `${(ms / 1000).toFixed(1)}s`;
+  };
+
+  const formatTime = (iso: string | null): string => {
+    if (!iso) return "—";
+    const d = new Date(iso);
+    const diff = Date.now() - d.getTime();
+    if (diff < 60000) return "just now";
+    if (diff < 3600000) return `${Math.floor(diff / 60000)} min ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)} hours ago`;
+    return `${Math.floor(diff / 86400000)} days ago`;
   };
 
   if (showDesigner) {
@@ -207,7 +339,11 @@ export default function WorkflowsPage() {
         </div>
 
         <TabsContent value="my-workflows">
-          {filteredWorkflows.length === 0 ? (
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : filteredWorkflows.length === 0 ? (
             <Card className="text-center py-12">
               <CardContent>
                 <Zap className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
@@ -271,11 +407,11 @@ export default function WorkflowsPage() {
                             <Edit className="h-4 w-4 mr-2" />
                             Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDuplicateWorkflow(workflow)}>
                             <Copy className="h-4 w-4 mr-2" />
                             Duplicate
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleToggleWorkflow(workflow)}>
                             {workflow.enabled ? (
                               <>
                                 <Pause className="h-4 w-4 mr-2" />
@@ -288,12 +424,15 @@ export default function WorkflowsPage() {
                               </>
                             )}
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setActiveTab("history")}>
                             <History className="h-4 w-4 mr-2" />
                             View History
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive">
+                          <DropdownMenuItem
+                            className="text-destructive"
+                            onClick={() => handleDeleteWorkflow(workflow)}
+                          >
                             <Trash2 className="h-4 w-4 mr-2" />
                             Delete
                           </DropdownMenuItem>
@@ -306,17 +445,6 @@ export default function WorkflowsPage() {
                       <div className="flex items-center gap-1.5">
                         <Clock className="h-4 w-4" />
                         <span>Trigger: {workflow.trigger.replace(/_/g, " ")}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Play className="h-4 w-4" />
-                        <span>{workflow.runCount} runs</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        <span>{workflow.successRate}% success</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span>Last run: {workflow.lastRun}</span>
                       </div>
                     </div>
                   </CardContent>
@@ -339,70 +467,44 @@ export default function WorkflowsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {[
-                  {
-                    workflow: "PR Quality Gate",
-                    status: "success",
-                    duration: "2.3s",
-                    time: "2 hours ago",
-                    trigger: "PR #142 opened",
-                  },
-                  {
-                    workflow: "Deploy Tracker",
-                    status: "success",
-                    duration: "1.1s",
-                    time: "30 min ago",
-                    trigger: "Webhook from CI",
-                  },
-                  {
-                    workflow: "PR Quality Gate",
-                    status: "failed",
-                    duration: "5.2s",
-                    time: "3 hours ago",
-                    trigger: "PR #141 opened",
-                  },
-                  {
-                    workflow: "Security Alert Handler",
-                    status: "success",
-                    duration: "3.8s",
-                    time: "1 day ago",
-                    trigger: "Security alert detected",
-                  },
-                  {
-                    workflow: "Weekly Report",
-                    status: "success",
-                    duration: "12.4s",
-                    time: "5 days ago",
-                    trigger: "Scheduled (Monday 9am)",
-                  },
-                ].map((run, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between py-3 border-b last:border-0"
-                  >
-                    <div className="flex items-center gap-3">
-                      {run.status === "success" ? (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
-                      ) : (
-                        <XCircle className="h-5 w-5 text-red-500" />
-                      )}
-                      <div>
-                        <p className="font-medium">{run.workflow}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {run.trigger}
+              {executions.length === 0 ? (
+                <p className="text-center text-muted-foreground py-8">
+                  No execution history yet
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {executions.map((run) => (
+                    <div
+                      key={run.id}
+                      className="flex items-center justify-between py-3 border-b last:border-0"
+                    >
+                      <div className="flex items-center gap-3">
+                        {run.status === "completed" ? (
+                          <CheckCircle className="h-5 w-5 text-green-500" />
+                        ) : run.status === "failed" ? (
+                          <XCircle className="h-5 w-5 text-red-500" />
+                        ) : (
+                          <Loader2 className="h-5 w-5 animate-spin text-blue-500" />
+                        )}
+                        <div>
+                          <p className="font-medium">{run.workflow_name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {run.trigger_type.replace(/_/g, " ")}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right text-sm">
+                        <p className="text-muted-foreground">
+                          {formatTime(run.started_at)}
+                        </p>
+                        <p className="text-muted-foreground">
+                          Duration: {formatDuration(run.duration_ms)}
                         </p>
                       </div>
                     </div>
-                    <div className="text-right text-sm">
-                      <p className="text-muted-foreground">{run.time}</p>
-                      <p className="text-muted-foreground">
-                        Duration: {run.duration}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

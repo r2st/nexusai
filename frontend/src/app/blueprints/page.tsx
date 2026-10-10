@@ -43,6 +43,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 interface Blueprint {
   id: string;
@@ -128,11 +129,11 @@ export default function BlueprintsPage() {
         resetForm();
       } else {
         const error = await response.json();
-        alert(`Failed to create blueprint: ${error.detail || 'Unknown error'}`);
+        toast.error(`Failed to create blueprint: ${error.detail || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Failed to create blueprint:', error);
-      alert('Failed to create blueprint');
+      toast.error('Failed to create blueprint');
     } finally {
       setIsCreating(false);
     }
@@ -152,11 +153,10 @@ export default function BlueprintsPage() {
       if (response.ok) {
         setBlueprints((prev) => prev.filter((b) => b.id !== blueprintId));
       } else {
-        alert('Failed to delete blueprint');
+        toast.error('Failed to delete blueprint');
       }
-    } catch (error) {
-      console.error('Failed to delete blueprint:', error);
-      alert('Failed to delete blueprint');
+    } catch {
+      toast.error('Failed to delete blueprint');
     }
   };
 
@@ -170,14 +170,13 @@ export default function BlueprintsPage() {
       });
 
       if (response.ok) {
-        alert('Blueprint triggered successfully');
+        toast.success('Blueprint triggered successfully');
         loadBlueprints();
       } else {
-        alert('Failed to trigger blueprint');
+        toast.error('Failed to trigger blueprint');
       }
-    } catch (error) {
-      console.error('Failed to trigger blueprint:', error);
-      alert('Failed to trigger blueprint');
+    } catch {
+      toast.error('Failed to trigger blueprint');
     }
   };
 
