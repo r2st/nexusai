@@ -225,6 +225,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     }
     logger.info("Feature flags loaded", features=app.state.features)
 
+    # Log observability configuration summary
+    logger.info(
+        "Observability configuration",
+        log_format=settings.LOG_FORMAT,
+        otel_enabled=settings.OTEL_ENABLED,
+        multi_tenant=settings.MULTI_TENANT_ENABLED,
+        environment=settings.ENVIRONMENT,
+    )
+
     yield
 
     # Shutdown

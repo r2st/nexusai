@@ -9,7 +9,6 @@ Provides:
 """
 
 import asyncio
-import logging
 from datetime import datetime, timedelta
 from typing import Any, Callable, TypeVar
 from functools import wraps
@@ -18,11 +17,12 @@ import uuid
 from arq import create_pool, ArqRedis
 from arq.connections import RedisSettings
 from arq.jobs import Job
+import structlog
 
 from app.core.config import settings
 from app.core.multitenancy import set_current_tenant_id, clear_tenant_context
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 T = TypeVar("T")
 

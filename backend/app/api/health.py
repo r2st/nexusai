@@ -147,6 +147,24 @@ async def detailed_health_check() -> DetailedHealthResponse:
         logger.error("LLM provider health check failed", error=str(e))
         checks["llm_providers"] = {"status": "unknown", "error": "Check failed"}
 
+    # Circuit breaker status
+    try:
+        from app.core.middleware import circuit_breakers
+        cb_status = {}
+        for name, cb in circuit_breakers.items():
+            cb_status[name] = {
+                "state": cb.state,
+                "failure_count": cb._failure_count,
+            }
+        any_open = any(s["state"] == "open" for s in cb_status.values())
+        checks["circuit_breakers"] = {
+            "status": "degraded" if any_open else "healthy",
+            "breakers": cb_status,
+        }
+    except Exception as e:
+        logger.error("Circuit breaker health check failed", error=str(e))
+        checks["circuit_breakers"] = {"status": "unknown", "error": "Check failed"}
+
     # Determine overall status
     all_healthy = all(
         c.get("status") in {"healthy", "disabled"} for c in checks.values()

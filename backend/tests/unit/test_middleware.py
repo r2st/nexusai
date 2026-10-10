@@ -54,6 +54,7 @@ def mock_response():
     """Create a mock response."""
     response = MagicMock(spec=Response)
     response.headers = {}
+    response.status_code = 200
     return response
 
 
@@ -158,20 +159,22 @@ class TestResponseTimeMiddleware:
         assert time_ms >= 100  # At least 100ms
 
     @pytest.mark.asyncio
-    async def test_logs_slow_requests(self, mock_request, capsys):
-        """Test that slow requests are logged."""
+    async def test_logs_slow_requests(self, mock_request):
+        """Test that slow requests are logged as warnings."""
         middleware = ResponseTimeMiddleware(MagicMock())
 
         async def very_slow_call_next(request):
             await asyncio.sleep(1.1)  # > 1 second
             response = MagicMock()
             response.headers = {}
+            response.status_code = 200
             return response
 
-        await middleware.dispatch(mock_request, very_slow_call_next)
-
-        captured = capsys.readouterr()
-        assert "SLOW REQUEST" in captured.out
+        with patch("app.core.middleware.logger") as mock_logger:
+            await middleware.dispatch(mock_request, very_slow_call_next)
+            mock_logger.warning.assert_called()
+            call_args = mock_logger.warning.call_args
+            assert "Slow request" in call_args[0][0]
 
 
 # =============================================================================

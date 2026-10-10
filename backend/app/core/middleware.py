@@ -68,7 +68,9 @@ class ResponseTimeMiddleware(BaseHTTPMiddleware):
             if process_time > 1000:
                 logger.warning("Slow request detected", **log_data)
             elif process_time > 500:
-                logger.info("Request completed", **log_data)
+                logger.info("Request completed (slow)", **log_data)
+            else:
+                logger.debug("Request completed", **log_data)
 
         return response
 
