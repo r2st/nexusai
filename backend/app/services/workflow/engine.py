@@ -330,41 +330,46 @@ class WorkflowEngine:
         execution.started_at = datetime.utcnow()
 
         try:
-            # Build step map
-            step_map = {step.id: step for step in workflow.steps}
+            async def _run_steps() -> None:
+                step_map = {step.id: step for step in workflow.steps}
+                current_step_id = workflow.entry_step_id
+                while current_step_id:
+                    step = step_map.get(current_step_id)
+                    if not step:
+                        break
 
-            # Start from entry step
-            current_step_id = workflow.entry_step_id
-            while current_step_id:
-                step = step_map.get(current_step_id)
-                if not step:
-                    break
+                    execution.current_step_id = current_step_id
+                    step_result = await self._execute_step(execution, step)
+                    execution.step_executions.append(step_result)
 
-                execution.current_step_id = current_step_id
-
-                # Execute step
-                step_result = await self._execute_step(execution, step)
-                execution.step_executions.append(step_result)
-
-                # Determine next step
-                if step_result.status == StepExecutionStatus.COMPLETED:
-                    current_step_id = step.on_success
-                elif step_result.status == StepExecutionStatus.FAILED:
-                    if step.on_failure:
-                        current_step_id = step.on_failure
+                    if step_result.status == StepExecutionStatus.COMPLETED:
+                        current_step_id = step.on_success
+                    elif step_result.status == StepExecutionStatus.FAILED:
+                        if step.on_failure:
+                            current_step_id = step.on_failure
+                        else:
+                            raise Exception(f"Step failed: {step.name}")
+                    elif step_result.status == StepExecutionStatus.SKIPPED:
+                        current_step_id = step.on_skip or step.on_success
                     else:
-                        raise Exception(f"Step failed: {step.name}")
-                elif step_result.status == StepExecutionStatus.SKIPPED:
-                    current_step_id = step.on_skip or step.on_success
-                else:
-                    break
+                        break
 
-            # Mark completed
+            await asyncio.wait_for(
+                _run_steps(),
+                timeout=workflow.timeout_seconds,
+            )
+
             execution.status = WorkflowExecutionStatus.COMPLETED
             execution.completed_at = datetime.utcnow()
             execution.duration_ms = int(
                 (execution.completed_at - execution.started_at).total_seconds() * 1000
             )
+
+        except asyncio.TimeoutError:
+            logger.error(f"Workflow execution timed out: {execution.id}")
+            execution.status = WorkflowExecutionStatus.TIMED_OUT
+            execution.error = f"Workflow timed out after {workflow.timeout_seconds}s"
+            execution.completed_at = datetime.utcnow()
 
         except Exception as e:
             logger.error(f"Workflow execution failed: {execution.id} error={e}")
@@ -377,7 +382,7 @@ class WorkflowEngine:
         execution: WorkflowExecution,
         step: WorkflowStep,
     ) -> StepExecution:
-        """Execute a single workflow step."""
+        """Execute a single workflow step with retry loop."""
         step_execution = StepExecution(
             id=str(uuid.uuid4()),
             step_id=step.id,
@@ -389,47 +394,49 @@ class WorkflowEngine:
         step_execution.started_at = datetime.utcnow()
         step_execution.status = StepExecutionStatus.RUNNING
 
-        try:
-            # Check conditions
-            if step.conditions:
-                should_run = self._evaluate_conditions(step.conditions, execution.context)
-                if not should_run:
-                    step_execution.status = StepExecutionStatus.SKIPPED
-                    step_execution.completed_at = datetime.utcnow()
-                    return step_execution
+        # Check conditions before any attempt
+        if step.conditions:
+            should_run = self._evaluate_conditions(step.conditions, execution.context)
+            if not should_run:
+                step_execution.status = StepExecutionStatus.SKIPPED
+                step_execution.completed_at = datetime.utcnow()
+                return step_execution
 
-            # Get executor
-            executor = self._step_executors.get(step.type)
-            if not executor:
-                raise ValueError(f"No executor for step type: {step.type}")
+        max_attempts = step.retry_count + 1
+        last_error: Exception | None = None
+        for attempt_num in range(1, max_attempts + 1):
+            step_execution.attempt = attempt_num
+            try:
+                executor = self._step_executors.get(step.type)
+                if not executor:
+                    raise ValueError(f"No executor for step type: {step.type}")
 
-            # Execute with timeout
-            result = await asyncio.wait_for(
-                executor(step, execution.context),
-                timeout=step.timeout_seconds,
-            )
+                result = await asyncio.wait_for(
+                    executor(step, execution.context),
+                    timeout=step.timeout_seconds,
+                )
 
-            # Update context with result
-            execution.context[f"steps.{step.id}"] = result
-            step_execution.output_data = result
+                execution.context[f"steps.{step.id}"] = result
+                step_execution.output_data = result
+                step_execution.status = StepExecutionStatus.COMPLETED
+                last_error = None
+                break
 
-            step_execution.status = StepExecutionStatus.COMPLETED
+            except asyncio.TimeoutError:
+                step_execution.status = StepExecutionStatus.FAILED
+                step_execution.error = f"Step timed out after {step.timeout_seconds}s"
+                last_error = None
+                break
 
-        except asyncio.TimeoutError:
+            except Exception as e:
+                last_error = e
+                logger.error(f"Step execution failed: {step.id} attempt={attempt_num} error={e}")
+                if attempt_num < max_attempts:
+                    await asyncio.sleep(step.retry_delay_seconds)
+
+        if last_error is not None:
             step_execution.status = StepExecutionStatus.FAILED
-            step_execution.error = f"Step timed out after {step.timeout_seconds}s"
-
-        except Exception as e:
-            logger.error(f"Step execution failed: {step.id} error={e}")
-
-            # Retry if configured
-            if step_execution.attempt <= step.retry_count:
-                step_execution.attempt += 1
-                await asyncio.sleep(step.retry_delay_seconds)
-                return await self._execute_step(execution, step)
-
-            step_execution.status = StepExecutionStatus.FAILED
-            step_execution.error = str(e)
+            step_execution.error = str(last_error)
 
         step_execution.completed_at = datetime.utcnow()
         step_execution.duration_ms = int(

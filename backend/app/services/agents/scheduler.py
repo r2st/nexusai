@@ -247,6 +247,8 @@ class BackgroundAgentScheduler:
         task.last_run_at = execution.started_at
         task.run_count += 1
 
+        needs_retry = False
+
         logger.info(
             f"Starting task execution",
             task_id=task.id,
@@ -255,12 +257,10 @@ class BackgroundAgentScheduler:
         )
 
         try:
-            # Get handler
             handler = self._task_handlers.get(task.handler or task.task_type)
             if not handler:
                 raise ValueError(f"No handler found for task type: {task.task_type}")
 
-            # Execute with timeout
             async_task = asyncio.create_task(
                 handler(task.arguments, task=task)
             )
@@ -273,7 +273,6 @@ class BackgroundAgentScheduler:
                 )
                 execution.result = result
                 execution.status = TaskStatus.COMPLETED
-                task.status = TaskStatus.COMPLETED
                 task.failure_count = 0
                 task.last_error = None
 
@@ -287,9 +286,9 @@ class BackgroundAgentScheduler:
             except asyncio.TimeoutError:
                 execution.status = TaskStatus.FAILED
                 execution.error = f"Task timed out after {task.timeout_seconds}s"
-                task.status = TaskStatus.FAILED
                 task.failure_count += 1
                 task.last_error = execution.error
+                needs_retry = task.failure_count < task.max_retries
 
                 logger.error(
                     f"Task timed out",
@@ -300,9 +299,9 @@ class BackgroundAgentScheduler:
         except Exception as e:
             execution.status = TaskStatus.FAILED
             execution.error = str(e)
-            task.status = TaskStatus.FAILED
             task.failure_count += 1
             task.last_error = str(e)
+            needs_retry = task.failure_count < task.max_retries
 
             logger.error(
                 f"Task failed",
@@ -310,18 +309,6 @@ class BackgroundAgentScheduler:
                 execution_id=execution_id,
                 error=str(e),
             )
-
-            # Retry if applicable
-            if task.failure_count < task.max_retries:
-                task.next_run_at = datetime.now(UTC) + timedelta(
-                    seconds=task.retry_delay_seconds
-                )
-                task.status = TaskStatus.PENDING
-                logger.info(
-                    f"Task scheduled for retry",
-                    task_id=task.id,
-                    retry_count=task.failure_count,
-                )
 
         finally:
             execution.completed_at = datetime.now(UTC)
@@ -332,8 +319,23 @@ class BackgroundAgentScheduler:
             if execution_id in self._current_executions:
                 del self._current_executions[execution_id]
 
-            # Calculate next run time
-            self._update_next_run_time(task)
+            if needs_retry:
+                task.next_run_at = datetime.now(UTC) + timedelta(
+                    seconds=task.retry_delay_seconds
+                )
+                task.status = TaskStatus.PENDING
+                logger.info(
+                    f"Task scheduled for retry",
+                    task_id=task.id,
+                    retry_count=task.failure_count,
+                )
+            elif execution.status == TaskStatus.COMPLETED:
+                self._update_next_run_time(task)
+                task.status = TaskStatus.PENDING if task.next_run_at else TaskStatus.COMPLETED
+            else:
+                self._update_next_run_time(task)
+                task.status = TaskStatus.FAILED
+
             task.updated_at = datetime.now(UTC)
 
     def _update_next_run_time(self, task: ScheduledTask) -> None:
@@ -449,8 +451,12 @@ class BackgroundAgentScheduler:
         if not task:
             return False
 
+        if task.status == TaskStatus.CANCELLED:
+            return False
+
         task.next_run_at = datetime.now(UTC)
         task.status = TaskStatus.PENDING
+        task.enabled = True
         logger.info(f"Task triggered manually", task_id=task_id)
         return True
 
