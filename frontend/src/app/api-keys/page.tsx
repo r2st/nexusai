@@ -346,7 +346,10 @@ export default function ApiKeysPage() {
 
       {/* Create API Key Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onKeyDown={(e) => { if (e.key === 'Escape') setShowCreateModal(false); }}
+        >
           <div className="bg-background rounded-lg border shadow-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Create API Key</h2>

@@ -445,7 +445,10 @@ export default function DocumentsPage() {
 
       {/* Document Preview Modal */}
       {previewDoc && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          onKeyDown={(e) => { if (e.key === 'Escape') setPreviewDoc(null); }}
+        >
           <div
             className="absolute inset-0 bg-black/50"
             onClick={() => setPreviewDoc(null)}

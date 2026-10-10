@@ -461,7 +461,10 @@ export default function TeamPage() {
 
       {/* Invite Modal */}
       {showInviteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onKeyDown={(e) => { if (e.key === 'Escape') setShowInviteModal(false); }}
+        >
           <div className="bg-background rounded-lg border shadow-lg w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Invite Team Member</h2>
