@@ -5,11 +5,14 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request, Header, Response
 from pydantic import BaseModel, Field
+import structlog
 
 from app.services.chatbot import (
     get_chatbot_service,
     ChatPlatform,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/chatbot", tags=["chatbot"])
 

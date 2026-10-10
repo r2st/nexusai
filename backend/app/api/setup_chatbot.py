@@ -4,8 +4,11 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
+import structlog
 
 from app.api.deps import get_current_user, get_current_tenant
+
+logger = structlog.get_logger()
 from app.models.user import User
 from app.services.setup_chatbot import (
     setup_chatbot_service,

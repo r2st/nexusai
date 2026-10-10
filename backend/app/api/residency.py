@@ -4,6 +4,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
+import structlog
 
 from app.services.residency import (
     get_data_residency_service,
@@ -12,6 +13,8 @@ from app.services.residency import (
     TransferStatus,
     ViolationSeverity,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/residency", tags=["residency"])
 

@@ -14,8 +14,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.api.deps import get_current_user, get_db
+
+logger = structlog.get_logger()
 from app.core.authorization import (
     grant_org_membership,
     revoke_org_membership,

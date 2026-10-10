@@ -7,8 +7,11 @@ for external LLM clients (Claude, Cursor, etc.) to connect.
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
+import structlog
 
 from app.api.deps import get_current_user
+
+logger = structlog.get_logger()
 from app.models.user import User
 from app.services.mcp import (
     create_nexusai_mcp_server,

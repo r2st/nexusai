@@ -4,8 +4,11 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
+import structlog
 
 from app.services.workflow.engine import get_workflow_engine
+
+logger = structlog.get_logger()
 from app.services.workflow.models import (
     WorkflowExecutionStatus,
     WorkflowStatus,

@@ -5,6 +5,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
+import structlog
 
 from app.services.compliance.hipaa import (
     get_hipaa_service,
@@ -17,6 +18,8 @@ from app.services.compliance.hipaa import (
     HIPAAControlCategory,
     HIPAAControlStatus,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/hipaa", tags=["hipaa"])
 

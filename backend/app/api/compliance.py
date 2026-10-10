@@ -5,8 +5,11 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
+import structlog
 
 from app.services.compliance.gdpr import get_gdpr_service
+
+logger = structlog.get_logger()
 from app.services.compliance.soc2 import get_soc2_service
 from app.services.compliance.models import (
     ComplianceStatus,

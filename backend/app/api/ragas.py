@@ -253,7 +253,7 @@ async def evaluate(
             try:
                 metrics.append(RAGASMetricType(m))
             except ValueError:
-                logger.warning(f"Unknown metric: {m}, skipping")
+                logger.warning("Unknown metric, skipping", metric=m)
 
         if not metrics:
             raise HTTPException(
@@ -309,7 +309,7 @@ async def quick_evaluate(
             try:
                 metrics.append(RAGASMetricType(m))
             except ValueError:
-                logger.warning(f"Unknown metric: {m}, skipping")
+                logger.warning("Unknown metric, skipping", metric=m)
 
         if not metrics:
             metrics = [

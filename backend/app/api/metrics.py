@@ -14,8 +14,11 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.core.database import get_db
+
+logger = structlog.get_logger()
 from app.core.multitenancy import get_current_tenant_id
 from app.services.metrics import (
     dora_metrics_service,

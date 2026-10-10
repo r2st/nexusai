@@ -12,8 +12,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.api.deps import get_current_user
+
+logger = structlog.get_logger()
 from app.core.database import get_db
 from app.models.user import User
 from app.services.mcp import get_mcp_gateway, MCPGateway

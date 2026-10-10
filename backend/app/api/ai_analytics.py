@@ -13,6 +13,9 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
+
+logger = structlog.get_logger()
 
 from app.api.deps import get_current_user, get_db
 from app.core.multitenancy import get_current_tenant_id, set_tenant_context

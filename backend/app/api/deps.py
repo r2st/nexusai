@@ -4,8 +4,11 @@ from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.core.database import get_db, get_read_db
+
+logger = structlog.get_logger()
 from app.core.security import verify_token
 from app.core.multitenancy import (
     get_current_tenant_id,

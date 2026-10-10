@@ -6,8 +6,11 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.core.config import settings
+
+logger = structlog.get_logger()
 from app.core.database import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
