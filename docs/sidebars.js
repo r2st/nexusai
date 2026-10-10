@@ -8,6 +8,7 @@ const sidebars = {
       type: 'category',
       label: 'Getting Started',
       items: [
+        'getting-started/index',
         'getting-started/installation',
         'getting-started/quickstart',
         'getting-started/configuration',
@@ -17,6 +18,7 @@ const sidebars = {
       type: 'category',
       label: 'Features',
       items: [
+        'features/index',
         'features/chat',
         'features/agents',
         'features/documents',
@@ -28,6 +30,7 @@ const sidebars = {
       type: 'category',
       label: 'Architecture',
       items: [
+        'architecture/index',
         'architecture/overview',
         'architecture/backend',
         'architecture/frontend',
@@ -39,6 +42,7 @@ const sidebars = {
       type: 'category',
       label: 'API Reference',
       items: [
+        'api/index',
         'api/overview',
         'api/authentication',
         'api/chat',
@@ -51,6 +55,7 @@ const sidebars = {
       type: 'category',
       label: 'Deployment',
       items: [
+        'deployment/index',
         'deployment/docker',
         'deployment/kubernetes',
         'deployment/terraform',
@@ -61,6 +66,7 @@ const sidebars = {
       type: 'category',
       label: 'Administration',
       items: [
+        'admin/index',
         'admin/user-management',
         'admin/organization-management',
         'admin/security',

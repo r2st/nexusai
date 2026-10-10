@@ -199,7 +199,7 @@ export default function PrivacyPage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              © 2025 NexusAI. All rights reserved.
+              © 2025 NexusAI Contributors.
             </p>
             <div className="flex items-center gap-6">
               <Link

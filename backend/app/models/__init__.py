@@ -19,6 +19,17 @@ from app.models.audit_log import (
     AuditSeverity,
     ApprovalRecord,
 )
+from app.models.cost_entry import (
+    CostEntry,
+    CostBudget,
+    CostAlert,
+    RequestType,
+)
+from app.models.hallucination_log import (
+    HallucinationLog,
+    HallucinationMetric,
+    CheckType,
+)
 
 __all__ = [
     # User
@@ -49,4 +60,13 @@ __all__ = [
     "AuditEventType",
     "AuditSeverity",
     "ApprovalRecord",
+    # Cost Tracking
+    "CostEntry",
+    "CostBudget",
+    "CostAlert",
+    "RequestType",
+    # Hallucination Detection
+    "HallucinationLog",
+    "HallucinationMetric",
+    "CheckType",
 ]

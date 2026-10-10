@@ -40,12 +40,8 @@ else:
 TEST_DATABASE_URL = os.environ.get("TEST_DATABASE_URL", _default_db_url)
 TEST_REDIS_URL = os.environ.get("TEST_REDIS_URL", _default_redis_url)
 
-# Clear the lru_cache on get_settings before importing app modules
-# This ensures settings will be reloaded with our test environment
-from app.core.config import get_settings
-get_settings.cache_clear()
-
-# Now set the DATABASE_URL that Settings will read
+# Set DATABASE_URL and REDIS_URL BEFORE importing app.core.config
+# because the import triggers module-level settings = get_settings() validation
 os.environ["DATABASE_URL"] = TEST_DATABASE_URL
 os.environ["REDIS_URL"] = TEST_REDIS_URL
 
@@ -68,6 +64,9 @@ if redis_match:
     os.environ["REDIS_HOST"] = redis_match.group(2)
     os.environ["REDIS_PORT"] = redis_match.group(3)
     os.environ["REDIS_DB"] = redis_match.group(4)
+
+from app.core.config import get_settings
+get_settings.cache_clear()
 
 from app.main import app
 from app.core.database import Base, get_db

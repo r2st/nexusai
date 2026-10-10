@@ -564,7 +564,7 @@ A **Personal Access Token (PAT)** is like a password that lets DevLake access yo
                 """,
                 keywords=["github", "token", "pat", "access", "authentication", "credentials"],
                 related_topics=["github_scopes", "connection_testing"],
-                examples=["ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"],
+                examples=["ghp_example_token"],
             ),
             HelpTopic(
                 topic_id="github_scopes",

@@ -5,7 +5,7 @@ const { themes } = require('prism-react-renderer');
 const config = {
   title: 'NexusAI Documentation',
   tagline: 'AI-Powered Chat and Analytics Platform',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.svg',
   url: process.env.DOCS_URL || 'https://docs.nexusai.example.com',
   baseUrl: '/',
   organizationName: 'nexusai',
@@ -29,10 +29,7 @@ const config = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
         },
-        blog: {
-          showReadingTime: true,
-          editUrl: 'https://github.com/nexusai/nexusai/tree/main/docs/',
-        },
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -43,7 +40,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: 'img/nexusai-social-card.png',
+      image: 'img/nexusai-social-card.svg',
       navbar: {
         title: 'NexusAI',
         logo: {
@@ -60,11 +57,6 @@ const config = {
           {
             to: '/docs/api',
             label: 'API Reference',
-            position: 'left',
-          },
-          {
-            to: '/blog',
-            label: 'Blog',
             position: 'left',
           },
           {
@@ -110,10 +102,6 @@ const config = {
           {
             title: 'More',
             items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
               {
                 label: 'GitHub',
                 href: 'https://github.com/nexusai/nexusai',

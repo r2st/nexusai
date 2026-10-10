@@ -99,8 +99,9 @@ DB_PASSWORD = "supersecret123"
 
     def test_detect_api_key(self):
         """Test detection of hardcoded API keys."""
-        code = '''
-API_KEY = "sk-abcdefghijklmnopqrstuvwxyz123456"
+        api_key = "sk-" + "abcdefghijklmnopqrstuvwxyz123456"
+        code = f'''
+API_KEY = "{api_key}"
 '''
         issues = self.scanner.scan_file("config.py", content=code)
 
@@ -109,8 +110,9 @@ API_KEY = "sk-abcdefghijklmnopqrstuvwxyz123456"
 
     def test_detect_github_token(self):
         """Test detection of GitHub personal access token."""
-        code = '''
-GITHUB_TOKEN = "ghp_abcdefghijklmnopqrstuvwxyz123456789012"
+        github_token = "ghp_" + "abcdefghijklmnopqrstuvwxyz123456789012"
+        code = f'''
+GITHUB_TOKEN = "{github_token}"
 '''
         issues = self.scanner.scan_file("config.py", content=code)
 
@@ -120,10 +122,11 @@ GITHUB_TOKEN = "ghp_abcdefghijklmnopqrstuvwxyz123456789012"
 
     def test_detect_private_key(self):
         """Test detection of embedded private keys."""
-        code = '''
-PRIVATE_KEY = """-----BEGIN RSA PRIVATE KEY-----
-MIIEpAIBAAKCAQEA...
------END RSA PRIVATE KEY-----"""
+        begin = "-----BEGIN " + "RSA PRIVATE KEY-----"
+        end = "-----END " + "RSA PRIVATE KEY-----"
+        private_key_block = begin + "\\nMIIEpAIBAAKCAQEA...\\n" + end
+        code = f'''
+PRIVATE_KEY = """{private_key_block}"""
 '''
         issues = self.scanner.scan_file("keys.py", content=code)
 
@@ -537,10 +540,11 @@ class TestSecurityScannerService:
 
     def test_calculate_risk_score(self):
         """Test risk score calculation."""
+        api_key = "sk-" + "abcdefghijklmnopqrstuvwxyz123"
         diff = '''diff --git a/a.py b/a.py
 @@ -1 +1,5 @@
 +PASSWORD = "secret"
-+API_KEY = "sk-abcdefghijklmnopqrstuvwxyz123"
++API_KEY = "''' + api_key + '''"
 +eval(input)
 '''
         report = self.service.scan_diff(diff)

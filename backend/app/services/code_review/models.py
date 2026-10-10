@@ -260,6 +260,6 @@ class ReviewConfig(BaseModel):
     focus_areas: list[ReviewCategory] = Field(default_factory=lambda: [
         ReviewCategory.SECURITY, ReviewCategory.BUG, ReviewCategory.PERFORMANCE
     ])
-    llm_model: str = "gemini-2.0-flash-exp"
+    llm_model: str = "gemini-2.5-flash"
     max_comments_per_file: int = 10
     include_code_suggestions: bool = True

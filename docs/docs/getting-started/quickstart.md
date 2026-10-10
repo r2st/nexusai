@@ -99,14 +99,11 @@ Response:
 ### Create a Chat Completion
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/chat/completions \
+curl -X POST http://localhost:8000/api/v1/chat/conversations/CONVERSATION_ID/chat \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "messages": [
-      {"role": "user", "content": "Hello, how are you?"}
-    ],
-    "model": "gpt-4"
+    "message": "Hello, how are you?"
   }'
 ```
 

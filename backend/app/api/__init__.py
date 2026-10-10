@@ -21,6 +21,9 @@ from app.api.trials import router as trials_router
 from app.api.subscriptions import router as subscriptions_router
 from app.api.setup_chatbot import router as setup_chatbot_router
 from app.api.llm import router as llm_router
+from app.api.costs import router as costs_router
+from app.api.hallucination import router as hallucination_router
+from app.api.ragas import router as ragas_router
 from app.api.code_review import router as code_review_router
 from app.api.predictive import router as predictive_router
 from app.api.security import router as security_router
@@ -93,6 +96,15 @@ api_router.include_router(setup_chatbot_router)
 
 # LLM Gateway
 api_router.include_router(llm_router)
+
+# Cost Analytics
+api_router.include_router(costs_router)
+
+# Hallucination Detection
+api_router.include_router(hallucination_router)
+
+# RAGAS - RAG Evaluation Framework
+api_router.include_router(ragas_router)
 
 # Code Review Automation
 api_router.include_router(code_review_router)

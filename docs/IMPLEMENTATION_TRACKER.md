@@ -28,9 +28,9 @@ This document tracks the implementation progress of NexusAI's core components as
 - **Architecture Document Review** - Mapped existing implementation against Software Intelligence Platform spec
 - **Added Phase 5: Integration & Ecosystem** - IDE plugins, CI/CD hooks, notifications
 - **Added Phase 6: Compliance & Enterprise** - SOC 2, HIPAA, GDPR tooling
-- **Default LLM Provider changed to Google Gemini** (gemini-2.0-flash-exp)
+- **Default LLM Provider changed to Google Gemini** (gemini-2.5-flash)
 - Provider priority order: Google → Anthropic → OpenAI → Ollama
-- Added Gemini 2.0 Flash and 1.5 Flash model configurations
+- Added Gemini 2.5 Flash and 2.5 Flash-Lite model configurations
 - **Implemented Code Review Automation** (Phase 4.1 - Complete)
 - **Implemented Predictive Analytics** (Phase 4.2 - Complete)
 - **Implemented Secret Rotation Service** (P3 - Complete)

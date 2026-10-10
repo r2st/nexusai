@@ -350,7 +350,7 @@ export default function PricingPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © 2025 NexusAI. All rights reserved.
+              © 2025 NexusAI Contributors.
             </p>
             <div className="flex items-center gap-6">
               <Link

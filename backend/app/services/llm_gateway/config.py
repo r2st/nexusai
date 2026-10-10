@@ -61,6 +61,42 @@ class CacheConfig(BaseModel):
     max_entries: int = 10000
 
 
+class AllowlistConfig(BaseModel):
+    """Allowlist configuration for constraining which models and providers can be used.
+
+    When a list is empty (the default), all models/providers are allowed.
+    When populated, only items in the list are permitted.
+    """
+
+    # Allowed provider names (e.g. ["openai", "anthropic"]).  Empty = all.
+    allowed_providers: list[str] = Field(default_factory=list)
+
+    # Allowed model names (e.g. ["gpt-4o", "claude-3-5-sonnet"]).  Empty = all.
+    allowed_models: list[str] = Field(default_factory=list)
+
+    # Explicitly blocked models — always rejected even if in allowed_models.
+    blocked_models: list[str] = Field(default_factory=list)
+
+    # Explicitly blocked providers — always rejected.
+    blocked_providers: list[str] = Field(default_factory=list)
+
+    def is_provider_allowed(self, provider: str) -> bool:
+        """Check if a provider is allowed."""
+        if provider in self.blocked_providers:
+            return False
+        if self.allowed_providers and provider not in self.allowed_providers:
+            return False
+        return True
+
+    def is_model_allowed(self, model: str) -> bool:
+        """Check if a model is allowed."""
+        if model in self.blocked_models:
+            return False
+        if self.allowed_models and model not in self.allowed_models:
+            return False
+        return True
+
+
 class GatewayConfig(BaseModel):
     """Complete gateway configuration."""
 
@@ -88,13 +124,16 @@ class GatewayConfig(BaseModel):
     global_rate_limit_per_minute: int = 1000
     user_rate_limit_per_minute: int = 60
 
+    # Allowlists — constrain which providers / models are permitted
+    allowlist: AllowlistConfig = Field(default_factory=AllowlistConfig)
+
 
 # Default provider configurations - Gemini is the default/priority provider
 DEFAULT_PROVIDERS = [
     ProviderPriority(
         name="google",
         priority=1,
-        models=["gemini-2.0-flash-exp", "gemini-1.5-pro", "gemini-1.5-flash", "gemini-pro"],
+        models=["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash", "gemini-pro"],
     ),
     ProviderPriority(
         name="anthropic",
@@ -195,25 +234,25 @@ DEFAULT_MODELS = [
     ),
     # Google - Gemini models (default provider)
     ModelConfig(
-        name="gemini-2.0-flash-exp",
+        name="gemini-2.5-flash",
         provider="google",
         context_window=1000000,
         max_output_tokens=8192,
-        input_cost_per_1k=0.0,  # Free during experimental phase
-        output_cost_per_1k=0.0,
+        input_cost_per_1k=0.00015,
+        output_cost_per_1k=0.0006,
         supports_vision=True,
     ),
     ModelConfig(
-        name="gemini-1.5-pro",
+        name="gemini-2.5-flash-lite",
         provider="google",
         context_window=1000000,
         max_output_tokens=8192,
-        input_cost_per_1k=0.00125,
-        output_cost_per_1k=0.005,
+        input_cost_per_1k=0.000075,
+        output_cost_per_1k=0.0003,
         supports_vision=True,
     ),
     ModelConfig(
-        name="gemini-1.5-flash",
+        name="gemini-2.0-flash",
         provider="google",
         context_window=1000000,
         max_output_tokens=8192,
@@ -297,9 +336,9 @@ def get_gateway_config() -> GatewayConfig:
         },
         "google": {
             "api_key_attr": "GOOGLE_API_KEY",
-            "models": ["gemini-2.0-flash-exp", "gemini-1.5-pro", "gemini-1.5-flash", "gemini-pro"],
+            "models": ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash", "gemini-pro"],
             "default_model_attr": "GOOGLE_DEFAULT_MODEL",
-            "fallback_model": "gemini-2.0-flash-exp",
+            "fallback_model": "gemini-2.5-flash",
         },
         "openai": {
             "api_key_attr": "OPENAI_API_KEY",

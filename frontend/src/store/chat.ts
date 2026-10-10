@@ -4,7 +4,7 @@ import type { Conversation, Message } from '@/lib/api';
 
 // Default model - will be overridden by API response
 // This is just a fallback if API is unavailable
-export const DEFAULT_MODEL = 'gemini-2.0-flash-exp';
+export const DEFAULT_MODEL = 'gemini-2.5-flash';
 
 interface ChatState {
   conversations: Conversation[];

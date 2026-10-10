@@ -302,6 +302,7 @@ class LangfuseClient:
         usage: dict[str, int] | None = None,
         model_parameters: dict[str, Any] | None = None,
         latency_ms: int | None = None,
+        prompt: Any | None = None,
     ) -> None:
         """
         Log an LLM generation.
@@ -315,6 +316,8 @@ class LangfuseClient:
             usage: Token usage stats
             model_parameters: Model parameters (temperature, etc.)
             latency_ms: Latency in milliseconds
+            prompt: Optional Langfuse PromptClient to link this generation
+                    to a specific prompt version in the Langfuse dashboard.
         """
         generation_id = str(uuid4())
 
@@ -324,13 +327,18 @@ class LangfuseClient:
                 langfuse_trace_ctx = {"trace_id": trace.trace_id}
                 if trace._trace and hasattr(trace._trace, 'id'):
                     langfuse_trace_ctx["parent_span_id"] = trace._trace.id
-                generation = self._client.start_generation(
-                    trace_context=langfuse_trace_ctx,
-                    name=name,
-                    model=model,
-                    input=input_messages,
-                    model_parameters=model_parameters,
-                )
+
+                gen_kwargs: dict[str, Any] = {
+                    "trace_context": langfuse_trace_ctx,
+                    "name": name,
+                    "model": model,
+                    "input": input_messages,
+                    "model_parameters": model_parameters,
+                }
+                if prompt is not None:
+                    gen_kwargs["prompt"] = prompt
+
+                generation = self._client.start_generation(**gen_kwargs)
                 # End the generation immediately with output and usage
                 generation.end(
                     output=output,
@@ -504,6 +512,112 @@ class LangfuseClient:
             self.end_span(context, status="error", error=str(e))
             raise
 
+    # -----------------------------------------------------------------
+    # Prompt Management helpers
+    # -----------------------------------------------------------------
+
+    def get_prompt(
+        self,
+        name: str,
+        *,
+        label: str | None = None,
+        version: int | None = None,
+        type: str = "text",
+        cache_ttl_seconds: int | None = None,
+        fallback: Any = None,
+    ) -> Any | None:
+        """Fetch a prompt from Langfuse.
+
+        Thin wrapper around the Langfuse SDK ``get_prompt`` method.
+        Returns None when Langfuse is not available.
+
+        Args:
+            name: Prompt name.
+            label: Label to fetch ("production", "staging", "latest").
+            version: Specific version number.
+            type: "text" or "chat".
+            cache_ttl_seconds: Override cache TTL (default 60s).
+            fallback: Fallback template if fetch fails.
+
+        Returns:
+            A PromptClient (TextPromptClient or ChatPromptClient) or None.
+        """
+        if not self._enabled or not self._client:
+            return None
+
+        try:
+            kwargs: dict[str, Any] = {"name": name, "type": type}
+            if label is not None:
+                kwargs["label"] = label
+            if version is not None:
+                kwargs["version"] = version
+            if cache_ttl_seconds is not None:
+                kwargs["cache_ttl_seconds"] = cache_ttl_seconds
+            if fallback is not None:
+                kwargs["fallback"] = fallback
+
+            return self._client.get_prompt(**kwargs)
+        except Exception as e:
+            logger.warning("Failed to fetch Langfuse prompt", name=name, error=str(e))
+            return None
+
+    def create_prompt(
+        self,
+        name: str,
+        prompt: Any,
+        *,
+        labels: list[str] | None = None,
+        tags: list[str] | None = None,
+        type: str = "text",
+        config: dict[str, Any] | None = None,
+        commit_message: str | None = None,
+    ) -> Any | None:
+        """Create or version a prompt in Langfuse.
+
+        If a prompt with the given name already exists, a new version
+        is created.
+
+        Args:
+            name: Prompt identifier.
+            prompt: Template string (text) or list of messages (chat).
+            labels: Labels to assign (e.g. ["production"]).
+            tags: Tags for organization.
+            type: "text" or "chat".
+            config: Additional config (model params, etc.).
+            commit_message: Version change description.
+
+        Returns:
+            The created PromptClient or None.
+        """
+        if not self._enabled or not self._client:
+            return None
+
+        try:
+            kwargs: dict[str, Any] = {
+                "name": name,
+                "prompt": prompt,
+                "type": type,
+            }
+            if labels is not None:
+                kwargs["labels"] = labels
+            if tags is not None:
+                kwargs["tags"] = tags
+            if config is not None:
+                kwargs["config"] = config
+            if commit_message is not None:
+                kwargs["commit_message"] = commit_message
+
+            result = self._client.create_prompt(**kwargs)
+            logger.info(
+                "langfuse_prompt_created",
+                name=name,
+                version=result.version if result else None,
+            )
+            return result
+        except Exception as e:
+            logger.error("Failed to create Langfuse prompt", name=name, error=str(e))
+            return None
+
     def get_metrics(self) -> dict[str, Any]:
         """Get collected metrics."""
         total_tokens = sum(g.get("total_tokens", 0) for g in self._metrics["generations"])
@@ -526,6 +640,165 @@ class LangfuseClient:
                 self._client.flush()
             except Exception as e:
                 logger.error("Failed to flush Langfuse", error=str(e))
+
+    def log_hallucination_score(
+        self,
+        trace: TraceContext,
+        hallucination_score: float,
+        grounding_score: float | None = None,
+        relevance_score: float | None = None,
+        factuality_score: float | None = None,
+        consistency_score: float | None = None,
+        is_hallucination: bool = False,
+        issues: list[str] | None = None,
+        check_type: str = "standard",
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
+        """
+        Log hallucination detection scores to a Langfuse trace.
+
+        This adds quality scores to the trace for monitoring and analysis.
+
+        Args:
+            trace: Parent trace context
+            hallucination_score: Main hallucination score (0-1, lower is better)
+            grounding_score: RAG grounding score (0-1, higher is better)
+            relevance_score: Response relevance score (0-1, higher is better)
+            factuality_score: Factuality score (0-1, higher is better)
+            consistency_score: Consistency score (0-1, higher is better)
+            is_hallucination: Whether hallucination was detected
+            issues: List of detected issues
+            check_type: Type of check performed
+            metadata: Additional metadata
+        """
+        if self._enabled and self._client:
+            try:
+                # In Langfuse v3, scores are added using the score method
+                langfuse_trace_ctx = {"trace_id": trace.trace_id}
+
+                # Log main hallucination score (inverted: 1 = no hallucination)
+                self._client.score(
+                    trace_context=langfuse_trace_ctx,
+                    name="hallucination_score",
+                    value=1.0 - hallucination_score,  # Invert so higher = better
+                    comment=f"Check type: {check_type}. Detected: {is_hallucination}",
+                    data_type="NUMERIC",
+                )
+
+                # Log grounding score if provided
+                if grounding_score is not None:
+                    self._client.score(
+                        trace_context=langfuse_trace_ctx,
+                        name="grounding_score",
+                        value=grounding_score,
+                        data_type="NUMERIC",
+                    )
+
+                # Log relevance score if provided
+                if relevance_score is not None:
+                    self._client.score(
+                        trace_context=langfuse_trace_ctx,
+                        name="relevance_score",
+                        value=relevance_score,
+                        data_type="NUMERIC",
+                    )
+
+                # Log factuality score if provided
+                if factuality_score is not None:
+                    self._client.score(
+                        trace_context=langfuse_trace_ctx,
+                        name="factuality_score",
+                        value=factuality_score,
+                        data_type="NUMERIC",
+                    )
+
+                # Log consistency score if provided
+                if consistency_score is not None:
+                    self._client.score(
+                        trace_context=langfuse_trace_ctx,
+                        name="consistency_score",
+                        value=consistency_score,
+                        data_type="NUMERIC",
+                    )
+
+                # Log boolean hallucination detection result
+                self._client.score(
+                    trace_context=langfuse_trace_ctx,
+                    name="hallucination_detected",
+                    value=1 if is_hallucination else 0,
+                    data_type="BOOLEAN",
+                )
+
+                logger.debug(
+                    "hallucination_scores_logged",
+                    trace_id=trace.trace_id,
+                    hallucination_score=hallucination_score,
+                    is_hallucination=is_hallucination,
+                )
+
+            except Exception as e:
+                logger.error(
+                    "Failed to log hallucination scores to Langfuse",
+                    error=str(e),
+                    trace_id=trace.trace_id,
+                )
+
+        # Store in local metrics for tracking
+        self._metrics.setdefault("hallucination_checks", []).append({
+            "trace_id": trace.trace_id,
+            "hallucination_score": hallucination_score,
+            "grounding_score": grounding_score,
+            "relevance_score": relevance_score,
+            "factuality_score": factuality_score,
+            "consistency_score": consistency_score,
+            "is_hallucination": is_hallucination,
+            "issues": issues or [],
+            "check_type": check_type,
+            "timestamp": datetime.now(UTC).isoformat(),
+            "metadata": metadata or {},
+        })
+
+    def log_quality_evaluation(
+        self,
+        trace: TraceContext,
+        evaluation_name: str,
+        score: float,
+        comment: str | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
+        """
+        Log a generic quality evaluation score.
+
+        Use this for custom quality metrics beyond hallucination detection.
+
+        Args:
+            trace: Parent trace context
+            evaluation_name: Name of the evaluation
+            score: Score value (0-1)
+            comment: Optional comment explaining the score
+            metadata: Additional metadata
+        """
+        if self._enabled and self._client:
+            try:
+                langfuse_trace_ctx = {"trace_id": trace.trace_id}
+                self._client.score(
+                    trace_context=langfuse_trace_ctx,
+                    name=evaluation_name,
+                    value=score,
+                    comment=comment,
+                    data_type="NUMERIC",
+                )
+                logger.debug(
+                    "quality_score_logged",
+                    trace_id=trace.trace_id,
+                    evaluation=evaluation_name,
+                    score=score,
+                )
+            except Exception as e:
+                logger.error(
+                    "Failed to log quality score to Langfuse",
+                    error=str(e),
+                )
 
 
 # Global client instance

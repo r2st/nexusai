@@ -93,10 +93,12 @@ All responses follow a consistent JSON format:
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/chat/completions` | Create a chat completion |
+| POST | `/chat/conversations` | Create a conversation |
 | GET | `/chat/conversations` | List conversations |
-| GET | `/chat/conversations/{id}` | Get conversation details |
-| DELETE | `/chat/conversations/{id}` | Delete conversation |
+| GET | `/chat/conversations/{conversation_id}` | Get conversation details |
+| GET | `/chat/conversations/{conversation_id}/messages` | List messages |
+| POST | `/chat/conversations/{conversation_id}/chat` | Send a message |
+| DELETE | `/chat/conversations/{conversation_id}` | Delete conversation |
 
 ### Documents
 

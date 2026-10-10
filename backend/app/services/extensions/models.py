@@ -254,7 +254,7 @@ class ExtensionConfig(BaseModel):
     ])
     severity_threshold: IssueSeverity = IssueSeverity.INFO
     categories: list[IssueCategory] = Field(default_factory=lambda: list(IssueCategory))
-    llm_model: str = "gemini-2.0-flash-exp"
+    llm_model: str = "gemini-2.5-flash"
     enable_telemetry: bool = True
 
 

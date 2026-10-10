@@ -115,7 +115,7 @@ export const apiResponses = {
     id: 'msg-123',
     role: 'assistant',
     content: 'This is a test response from the AI assistant.',
-    model_name: 'gemini-2.0-flash-exp',
+    model_name: 'gemini-2.5-flash',
     created_at: new Date().toISOString(),
   },
   streamingResponse: `data: {"content": "This "}

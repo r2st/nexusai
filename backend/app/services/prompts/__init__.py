@@ -6,6 +6,7 @@ This module provides:
 - Performance tracking and analytics
 - Template variable substitution
 - Safe variable injection
+- Langfuse prompt management integration
 """
 
 from app.services.prompts.models import (
@@ -31,6 +32,10 @@ from app.services.prompts.experiments import (
     PromptVariant,
     VariantType,
 )
+from app.services.prompts.langfuse_manager import (
+    LangfusePromptManager,
+    get_langfuse_prompt_manager,
+)
 
 __all__ = [
     # Models
@@ -55,4 +60,7 @@ __all__ = [
     "ExperimentStatus",
     "PromptVariant",
     "VariantType",
+    # Langfuse Prompt Management
+    "LangfusePromptManager",
+    "get_langfuse_prompt_manager",
 ]

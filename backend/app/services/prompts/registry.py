@@ -654,6 +654,173 @@ class PromptRegistry:
             period_end=end_date,
         )
 
+    # -----------------------------------------------------------------
+    # Langfuse integration
+    # -----------------------------------------------------------------
+
+    async def get_langfuse_prompt(
+        self,
+        name: str,
+        variables: dict[str, Any],
+        *,
+        label: str | None = None,
+        version: int | None = None,
+        fallback_template: str | None = None,
+    ) -> tuple[str | None, str | None, Any | None]:
+        """Fetch a prompt from Langfuse, compile it, and return.
+
+        Falls back to None values if Langfuse is unavailable.
+
+        Args:
+            name: Prompt name in Langfuse.
+            variables: Template variables for compilation.
+            label: Label to fetch (default: "production").
+            version: Specific version number.
+            fallback_template: Fallback template if Langfuse is unavailable.
+
+        Returns:
+            Tuple of (compiled_template, system_prompt_from_config, prompt_client).
+            All None if Langfuse is unavailable.
+        """
+        from app.services.prompts.langfuse_manager import get_langfuse_prompt_manager
+
+        manager = await get_langfuse_prompt_manager()
+        if not manager.enabled:
+            return None, None, None
+
+        prompt_client = await manager.get_prompt(
+            name,
+            label=label,
+            version=version,
+            fallback=fallback_template,
+        )
+        if prompt_client is None:
+            return None, None, None
+
+        try:
+            compiled = prompt_client.compile(**variables)
+
+            # Extract system_prompt from config if stored there
+            system_prompt = None
+            if hasattr(prompt_client, "config") and prompt_client.config:
+                system_prompt = prompt_client.config.get("system_prompt")
+
+            return compiled, system_prompt, prompt_client
+        except Exception as e:
+            logger.warning(
+                "langfuse_prompt_compile_failed",
+                name=name,
+                error=str(e),
+            )
+            return None, None, prompt_client
+
+    async def render_prompt_with_langfuse(
+        self,
+        session: AsyncSession,
+        prompt_id: str,
+        variables: dict[str, Any],
+        version: int | None = None,
+        user_id: str | None = None,
+        langfuse_name: str | None = None,
+        langfuse_label: str | None = None,
+    ) -> tuple[str, str | None, int, Any | None]:
+        """Render a prompt, trying Langfuse first then falling back to local DB.
+
+        Args:
+            session: Database session.
+            prompt_id: Local prompt ID.
+            variables: Template variables.
+            version: Specific version.
+            user_id: User ID for experiment assignment.
+            langfuse_name: Langfuse prompt name. If None, uses prompt slug.
+            langfuse_label: Langfuse label to fetch.
+
+        Returns:
+            Tuple of (rendered_template, rendered_system_prompt, version, prompt_client).
+            prompt_client is the Langfuse PromptClient (or None if local fallback).
+        """
+        prompt_client = None
+
+        # Try Langfuse first
+        if langfuse_name:
+            lf_name = langfuse_name
+        else:
+            # Use the prompt slug as Langfuse name
+            prompt = await self.get_prompt(session, prompt_id)
+            lf_name = prompt.slug if prompt else None
+
+        if lf_name:
+            compiled, system_prompt, prompt_client = await self.get_langfuse_prompt(
+                lf_name, variables, label=langfuse_label
+            )
+            if compiled is not None:
+                logger.debug(
+                    "prompt_rendered_from_langfuse",
+                    name=lf_name,
+                    version=prompt_client.version if prompt_client else None,
+                )
+                return compiled, system_prompt, (prompt_client.version if prompt_client else 1), prompt_client
+
+        # Fall back to local DB
+        rendered, rendered_system, ver = await self.render_prompt(
+            session, prompt_id, variables, version, user_id
+        )
+        return rendered, rendered_system, ver, None
+
+    async def sync_to_langfuse(
+        self,
+        session: AsyncSession,
+        prompt_id: str,
+        *,
+        labels: list[str] | None = None,
+        tags: list[str] | None = None,
+        commit_message: str | None = None,
+    ) -> Any | None:
+        """Push a local prompt to Langfuse.
+
+        Creates a new version in Langfuse from the current local prompt data.
+
+        Args:
+            session: Database session.
+            prompt_id: Local prompt ID.
+            labels: Labels to assign (default: ["production"]).
+            tags: Tags for organization.
+            commit_message: Version description.
+
+        Returns:
+            The Langfuse PromptClient if created, None if unavailable.
+        """
+        from app.services.prompts.langfuse_manager import get_langfuse_prompt_manager
+
+        prompt = await self.get_prompt(session, prompt_id)
+        if not prompt:
+            logger.warning("sync_to_langfuse_prompt_not_found", prompt_id=prompt_id)
+            return None
+
+        manager = await get_langfuse_prompt_manager()
+        if not manager.enabled:
+            return None
+
+        config: dict[str, Any] = {}
+        if prompt.system_prompt:
+            config["system_prompt"] = prompt.system_prompt
+        if prompt.default_model:
+            config["model"] = prompt.default_model
+        if prompt.default_temperature is not None:
+            config["temperature"] = prompt.default_temperature
+        if prompt.default_max_tokens is not None:
+            config["max_tokens"] = prompt.default_max_tokens
+
+        return await manager.sync_from_local(
+            name=prompt.slug,
+            template=prompt.template,
+            system_prompt=prompt.system_prompt,
+            config=config if config else None,
+            labels=labels or ["production"],
+            tags=tags or prompt.tags,
+            commit_message=commit_message or f"Synced v{prompt.current_version} from local",
+        )
+
     def _extract_variables(self, template: str) -> list[str]:
         """Extract variable names from a template."""
         return list(set(self.VARIABLE_PATTERN.findall(template)))

@@ -230,7 +230,7 @@ class TestChatServiceWithTools:
         mock_conversation = MagicMock(spec=Conversation)
         mock_conversation.id = "test-conv-id"
         mock_conversation.model_provider = ModelProvider.GOOGLE.value
-        mock_conversation.model_name = "gemini-2.0-flash-exp"
+        mock_conversation.model_name = "gemini-2.5-flash"
         mock_conversation.system_prompt = None
 
         with patch("app.services.mcp.devlake_tools.devlake_service") as mock_devlake:

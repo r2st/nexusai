@@ -22,6 +22,7 @@ ENV/
 htmlcov/
 .tox/
 .nox/
+coverage/
 
 # Build outputs
 .next/
@@ -29,6 +30,11 @@ out/
 build/
 dist/
 *.js.map
+docs/build/
+docs/.docusaurus/
+frontend/playwright-report/
+frontend/test-results/
+frontend/.next/
 
 # Environment
 .env

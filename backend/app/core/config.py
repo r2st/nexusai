@@ -5,6 +5,7 @@ No hardcoded defaults for critical infrastructure settings.
 Copy .env.example to .env and customize as needed.
 """
 
+import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Annotated, Any
@@ -68,8 +69,19 @@ class Settings(BaseSettings):
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
     ENVIRONMENT: str = "development"
-    SECRET_KEY: str  # REQUIRED - no default, must be in .env
+    SECRET_KEY: str | None = None
     API_PREFIX: str = "/api/v1"
+
+    @field_validator("SECRET_KEY", mode="before")
+    @classmethod
+    def secret_key_from_jwt(cls, v: Any) -> str:
+        """Accept SECRET_KEY or fall back to JWT_SECRET."""
+        if v:
+            return v
+        jwt = os.environ.get("JWT_SECRET")
+        if jwt:
+            return jwt
+        raise ValueError("SECRET_KEY or JWT_SECRET must be set")
 
     # Server
     HOST: str = "0.0.0.0"

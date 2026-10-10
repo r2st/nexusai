@@ -246,7 +246,7 @@ PLUGIN_CONFIGS: dict[str, PluginConfig] = {
             "rate_limit": "Custom rate limit (requests/hour)",
         },
         field_examples={
-            "token": "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "token": "ghp_example_token",
             "endpoint": "https://github.mycompany.com/api/v3",
             "proxy": "http://proxy.company.com:8080",
         },
@@ -693,7 +693,7 @@ PLUGIN_CONFIGS: dict[str, PluginConfig] = {
             "proxy": "HTTP proxy URL if needed",
         },
         field_examples={
-            "token": "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "token": "ghp_example_token",
         },
         field_patterns={
             "token": r"^gh[ps]_[A-Za-z0-9_]{36,}$|^github_pat_[A-Za-z0-9_]{22,}$",
@@ -1168,7 +1168,7 @@ PLUGIN_CONFIGS: dict[str, PluginConfig] = {
             "team_id": "Workspace/Team ID",
         },
         field_examples={
-            "token": "xoxb-xxxxxxxxxxxxx-xxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx",
+            "token": "xoxb-example-token",
             "team_id": "T12345678",
         },
         field_patterns={

@@ -187,15 +187,18 @@ class EvalRunner:
         cost_usd = None
 
         try:
-            # Get rendered prompt
+            # Get rendered prompt — try Langfuse first, fall back to local DB
             registry = get_prompt_registry()
-            rendered, system_prompt, version = await registry.render_prompt(
-                session, prompt_id, test_case.input_variables, prompt_version
+            rendered, system_prompt, version, langfuse_prompt = (
+                await registry.render_prompt_with_langfuse(
+                    session,
+                    prompt_id,
+                    test_case.input_variables,
+                    prompt_version,
+                )
             )
 
             # Execute LLM call
-            # In production, this would call the LLM gateway
-            # For now, simulate a response
             from app.services.llm_gateway import get_llm_gateway
 
             try:

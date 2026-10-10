@@ -76,6 +76,10 @@ from app.services.guardrails.service import (
     GuardrailsService,
     get_guardrails_service,
 )
+from app.services.guardrails.nemo import (
+    NeMoGuardrailsAdapter,
+    get_nemo_guardrails_adapter,
+)
 
 __all__ = [
     # Models
@@ -116,4 +120,7 @@ __all__ = [
     # Service
     "GuardrailsService",
     "get_guardrails_service",
+    # NeMo integration
+    "NeMoGuardrailsAdapter",
+    "get_nemo_guardrails_adapter",
 ]

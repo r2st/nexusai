@@ -6,7 +6,7 @@
         prod prod-up prod-down prod-logs \
         docker-build docker-push \
         backup restore \
-        docs api-docs
+        docs api-docs oss-check
 
 # Default target
 .DEFAULT_GOAL := help
@@ -97,6 +97,9 @@ env-check: ## Verify required environment variables
 		echo "Run: make env-setup"; \
 		exit 1; \
 	fi
+
+oss-check: ## Scan for secrets before open-sourcing
+	@./$(SCRIPTS_DIR)/oss-check.sh
 
 ##@ Development
 
@@ -665,6 +668,18 @@ docs: ## Open documentation
 	@echo "  Setup Chatbot: docs/SETUP_CHATBOT.md"
 	@echo "  Improvements:  docs/DEVLAKE_IMPROVEMENTS.md"
 	@echo "  API Docs:      http://localhost:8000/docs (when running)"
+
+docs-site-install: ## Install documentation site dependencies (Docusaurus)
+	@cd docs && npm install
+
+docs-site-dev: ## Run documentation site locally (Docusaurus)
+	@cd docs && npm install && npm run start
+
+docs-site-build: ## Build static HTML documentation (outputs docs/build/)
+	@cd docs && npm install && npm run build
+
+docs-site-serve: ## Serve the built static HTML docs (from docs/build/)
+	@cd docs && npm install && npm run serve
 
 api-docs: ## Open API documentation in browser
 	@echo "$(GREEN)Opening API docs...$(RESET)"

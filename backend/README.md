@@ -89,4 +89,4 @@ Once running, visit:
 
 ## License
 
-Proprietary - All rights reserved.
+MIT. See the repository root `LICENSE`.

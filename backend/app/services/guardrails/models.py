@@ -127,3 +127,32 @@ class GuardrailConfig(BaseModel):
     # Logging
     log_all_events: bool = True
     log_blocked_content: bool = True
+
+    # Contextual allowlists (to reduce false positives in docs/training examples)
+    allowlist_enabled: bool = True
+    allowlist_phrases: list[str] = Field(
+        default_factory=lambda: [
+            "for documentation",
+            "as an example",
+            "security training",
+            "quoted text",
+            "example payload",
+            "red team exercise",
+        ]
+    )
+    allowlist_context_keywords: list[str] = Field(
+        default_factory=lambda: [
+            "example",
+            "documentation",
+            "docs",
+            "quoted",
+            "tutorial",
+            "training",
+            "test case",
+        ]
+    )
+    allowlist_regex_patterns: list[str] = Field(default_factory=list)
+
+    # NeMo Guardrails integration (optional)
+    enable_nemo_guardrails: bool = False
+    nemo_config_path: str | None = None

@@ -182,6 +182,7 @@ OPENAI_API_KEY=sk-your-key
 - [Development Guide](docs/DEVELOPMENT.md) - Full setup, commands, and architecture
 - [Setup Chatbot](docs/SETUP_CHATBOT.md) - AI assistant documentation
 - [DevLake Improvements](docs/DEVLAKE_IMPROVEMENTS.md) - Enhancement details
+- HTML docs site (Docusaurus): `make docs-site-build` → open `docs/build/index.html`
 
 ## License
 

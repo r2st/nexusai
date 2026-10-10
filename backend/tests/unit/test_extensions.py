@@ -59,18 +59,19 @@ def process_data(data):
 @pytest.fixture
 def typescript_code():
     """Sample TypeScript code for testing."""
-    return '''
-function fetchData(url: string) {
-    const apiKey = "sk-12345678901234567890";
-    return fetch(url + "?key=" + apiKey);
-}
-
-async function processItems(items: any[]) {
-    for (let i = 0; i < items.length; i++) {
-        await process(items[i]);
-    }
-}
-'''
+    api_key = "sk-" + "12345678901234567890"
+    return (
+        "function fetchData(url: string) {\n"
+        f'    const apiKey = "{api_key}";\n'
+        '    return fetch(url + "?key=" + apiKey);\n'
+        "}\n"
+        "\n"
+        "async function processItems(items: any[]) {\n"
+        "    for (let i = 0; i < items.length; i++) {\n"
+        "        await process(items[i]);\n"
+        "    }\n"
+        "}\n"
+    )
 
 
 class TestExtensionService:
