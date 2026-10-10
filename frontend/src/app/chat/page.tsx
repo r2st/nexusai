@@ -36,7 +36,10 @@ export default function ChatPage() {
     messages,
     setMessages,
     addMessage,
+    isLoading,
     setIsLoading,
+    isStreaming,
+    streamingContent,
     setIsStreaming,
     clearStreamingContent,
     selectedModel,
@@ -331,7 +334,6 @@ export default function ChatPage() {
     return null;
   }
 
-  const { isStreaming, streamingContent } = useChatStore.getState();
   const displayStreaming = wsIsStreaming || isStreaming;
   const displayContent = wsIsStreaming ? wsStreamingContent : streamingContent;
 
@@ -442,7 +444,7 @@ export default function ChatPage() {
         </div>
 
         {/* Loading indicator for screen readers */}
-        {useChatStore.getState().isLoading && (
+        {isLoading && (
           <div className="sr-only" aria-live="assertive" aria-busy="true">
             Loading response...
           </div>
@@ -451,7 +453,7 @@ export default function ChatPage() {
         {/* Input */}
         <ChatInput
           onSend={handleSendMessage}
-          isLoading={useChatStore.getState().isLoading}
+          isLoading={isLoading}
           toolsEnabled={useMcpTools}
           onToggleTools={setUseMcpTools}
         />

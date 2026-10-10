@@ -38,6 +38,9 @@ export default function ChatConversationPage() {
     messages,
     setMessages,
     addMessage,
+    isLoading,
+    isStreaming,
+    streamingContent,
     setIsLoading,
     setIsStreaming,
     setStreamingContent,
@@ -368,9 +371,9 @@ export default function ChatConversationPage() {
   // Get current streaming content
   const displayStreamingContent = wsIsStreaming && streamingConversationId === conversationId
     ? wsStreamingContent
-    : useChatStore.getState().streamingContent;
+    : streamingContent;
 
-  const isCurrentlyStreaming = (wsIsStreaming && streamingConversationId === conversationId) || useChatStore.getState().isStreaming;
+  const isCurrentlyStreaming = (wsIsStreaming && streamingConversationId === conversationId) || isStreaming;
 
   return (
     <div className="flex h-screen">
@@ -484,7 +487,7 @@ export default function ChatConversationPage() {
         </div>
 
         {/* Loading indicator for screen readers */}
-        {useChatStore.getState().isLoading && (
+        {isLoading && (
           <div className="sr-only" aria-live="assertive" aria-busy="true">
             Loading response...
           </div>
@@ -493,7 +496,7 @@ export default function ChatConversationPage() {
         {/* Input */}
         <ChatInput
           onSend={handleSendMessage}
-          isLoading={useChatStore.getState().isLoading}
+          isLoading={isLoading}
           toolsEnabled={useMcpTools}
           onToggleTools={setUseMcpTools}
         />
