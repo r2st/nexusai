@@ -191,7 +191,7 @@ async def github_webhook(
 
     except Exception as e:
         logger.error("GitHub webhook processing failed", event=x_github_event, error=str(e))
-        return {"status": "error", "error": "Webhook processing failed"}
+        raise HTTPException(status_code=500, detail="Webhook processing failed")
 
 
 @router.post("/webhook/gitlab")
@@ -227,7 +227,7 @@ async def gitlab_webhook(
 
     except Exception as e:
         logger.error("GitLab webhook processing failed", event=event_type, error=str(e))
-        return {"status": "error", "error": "Webhook processing failed"}
+        raise HTTPException(status_code=500, detail="Webhook processing failed")
 
 
 @router.get("/health")
