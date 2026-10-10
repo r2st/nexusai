@@ -20,8 +20,11 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.pool import NullPool
+import structlog
 
 from app.core.config import settings
+
+logger = structlog.get_logger()
 
 # Naming convention for constraints
 convention = {
@@ -139,7 +142,8 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         try:
             yield session
             await session.commit()
-        except Exception:
+        except Exception as e:
+            logger.warning("Database session rollback", error_type=type(e).__name__, error=str(e))
             await session.rollback()
             raise
         finally:
@@ -162,7 +166,8 @@ async def get_db_context() -> AsyncGenerator[AsyncSession, None]:
         try:
             yield session
             await session.commit()
-        except Exception:
+        except Exception as e:
+            logger.warning("Database context rollback", error_type=type(e).__name__, error=str(e))
             await session.rollback()
             raise
         finally:
@@ -204,7 +209,8 @@ async def get_db_context_with_tenant(tenant_id: str) -> AsyncGenerator[AsyncSess
 
             yield session
             await session.commit()
-        except Exception:
+        except Exception as e:
+            logger.warning("Database tenant context rollback", tenant_id=tenant_id, error_type=type(e).__name__, error=str(e))
             await session.rollback()
             raise
         finally:

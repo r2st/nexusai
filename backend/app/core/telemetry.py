@@ -7,9 +7,10 @@ Provides:
 - Performance monitoring
 """
 
-import logging
 from functools import wraps
 from typing import Any, Callable
+
+import structlog
 
 from app.core.config import settings
 
@@ -31,7 +32,7 @@ if settings.OTEL_ENABLED:
     from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 
 class TelemetryService:
@@ -77,7 +78,7 @@ class TelemetryService:
             logger.info("OpenTelemetry initialized successfully")
 
         except Exception as e:
-            logger.error(f"Failed to initialize OpenTelemetry: {e}")
+            logger.error("Failed to initialize OpenTelemetry", error=str(e))
 
     def _init_tracing(self, resource: "Resource") -> None:
         """Initialize distributed tracing."""

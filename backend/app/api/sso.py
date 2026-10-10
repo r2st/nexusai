@@ -8,9 +8,9 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
-import logging
+import structlog
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/sso", tags=["SSO"])
 

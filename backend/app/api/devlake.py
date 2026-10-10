@@ -47,8 +47,7 @@ def _calculate_spent_seconds(began_at: str | None, finished_at: str | None) -> i
         elapsed = end_time - start_time
         return max(0, int(elapsed.total_seconds()))
     except (ValueError, TypeError) as e:
-        import logging
-        logging.getLogger(__name__).warning(f"Failed to parse beganAt timestamp '{began_at}': {e}")
+        logger.warning("Failed to parse beganAt timestamp", began_at=began_at, error=str(e))
         return 0
 
 router = APIRouter(prefix="/devlake", tags=["devlake"])
@@ -76,12 +75,9 @@ async def get_pipeline_status(pipeline_id: int) -> dict[str, Any]:
 
     This endpoint is used by the frontend to poll for pipeline progress updates.
     """
-    import logging
-    logger = logging.getLogger(__name__)
-
     try:
         pipeline = await devlake_service.get_pipeline(pipeline_id)
-        logger.debug(f"Pipeline {pipeline_id} data: {pipeline}")
+        logger.debug("Pipeline data fetched", pipeline_id=pipeline_id)
 
         # Calculate progress percentage
         total_tasks = pipeline.get("totalTasks", 1)
@@ -110,10 +106,10 @@ async def get_pipeline_status(pipeline_id: int) -> dict[str, Any]:
             "beganAt": began_at,
             "finishedAt": finished_at,
         }
-        logger.debug(f"Pipeline {pipeline_id} response: {result}")
+        logger.debug("Pipeline response prepared", pipeline_id=pipeline_id, status=result.get("status"))
         return result
     except Exception as e:
-        logger.error(f"Failed to get pipeline {pipeline_id} status: {e}")
+        logger.error("Failed to get pipeline status", pipeline_id=pipeline_id, error=str(e))
         raise HTTPException(
             status_code=500,
             detail="Failed to get pipeline status. Please try again later.",

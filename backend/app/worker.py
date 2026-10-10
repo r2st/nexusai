@@ -5,16 +5,16 @@ This module configures the ARQ (Async Redis Queue) worker for background task pr
 """
 
 import asyncio
-import logging
 import os
 from typing import Any
 
 from arq import cron
 from arq.connections import RedisSettings
+import structlog
 
 from app.core.config import settings
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 
 # =============================================================================
@@ -32,7 +32,7 @@ async def process_document(ctx: dict[str, Any], document_id: str) -> dict[str, A
     Returns:
         Processing result with status and metadata
     """
-    logger.info(f"Processing document: {document_id}")
+    logger.info("Processing document", document_id=document_id)
 
     try:
         # TODO: Implement document processing logic
@@ -50,7 +50,7 @@ async def process_document(ctx: dict[str, Any], document_id: str) -> dict[str, A
             "chunks_processed": 0,
         }
     except Exception as e:
-        logger.error(f"Error processing document {document_id}: {e}")
+        logger.error("Error processing document", document_id=document_id, error=str(e))
         return {
             "status": "failed",
             "document_id": document_id,
@@ -76,7 +76,7 @@ async def send_notification(
     Returns:
         Send result with status
     """
-    logger.info(f"Sending {notification_type} notification to user: {user_id}")
+    logger.info("Sending notification", notification_type=notification_type, user_id=user_id)
 
     try:
         # TODO: Implement notification logic based on type
@@ -88,7 +88,7 @@ async def send_notification(
             "notification_type": notification_type,
         }
     except Exception as e:
-        logger.error(f"Error sending notification to {user_id}: {e}")
+        logger.error("Error sending notification", user_id=user_id, error=str(e))
         return {
             "status": "failed",
             "user_id": user_id,
@@ -113,7 +113,7 @@ async def cleanup_expired_sessions(ctx: dict[str, Any]) -> dict[str, Any]:
             "sessions_cleaned": cleaned_count,
         }
     except Exception as e:
-        logger.error(f"Error cleaning up sessions: {e}")
+        logger.error("Error cleaning up sessions", error=str(e))
         return {
             "status": "failed",
             "error": str(e),
@@ -131,7 +131,7 @@ async def generate_analytics_report(ctx: dict[str, Any], report_type: str) -> di
     Returns:
         Report generation result
     """
-    logger.info(f"Generating {report_type} analytics report")
+    logger.info("Generating analytics report", report_type=report_type)
 
     try:
         # TODO: Implement report generation logic
@@ -142,7 +142,7 @@ async def generate_analytics_report(ctx: dict[str, Any], report_type: str) -> di
             "report_type": report_type,
         }
     except Exception as e:
-        logger.error(f"Error generating {report_type} report: {e}")
+        logger.error("Error generating report", report_type=report_type, error=str(e))
         return {
             "status": "failed",
             "report_type": report_type,
@@ -174,14 +174,14 @@ async def process_trial_expirations(ctx: dict[str, Any]) -> dict[str, Any]:
                 try:
                     await trial_service.expire_trial(org, triggered_by=None)
                     expired_count += 1
-                    logger.info(f"Expired trial for organization: {org.id} ({org.name})")
+                    logger.info("Expired trial for organization", org_id=str(org.id), org_name=org.name)
                 except Exception as e:
                     failed_count += 1
-                    logger.error(f"Error expiring trial for org {org.id}: {e}")
+                    logger.error("Error expiring trial", org_id=str(org.id), error=str(e))
 
             await db.commit()
 
-        logger.info(f"Processed {expired_count} expired trials, {failed_count} failed")
+        logger.info("Processed expired trials", expired_count=expired_count, failed_count=failed_count)
 
         return {
             "status": "completed" if failed_count == 0 else "partial",
@@ -189,7 +189,7 @@ async def process_trial_expirations(ctx: dict[str, Any]) -> dict[str, Any]:
             "trials_failed": failed_count,
         }
     except Exception as e:
-        logger.error(f"Error processing trial expirations: {e}")
+        logger.error("Error processing trial expirations", error=str(e))
         return {
             "status": "failed",
             "error": str(e),
@@ -221,15 +221,17 @@ async def send_trial_expiry_reminders(ctx: dict[str, Any]) -> dict[str, Any]:
             for org in expiring_orgs:
                 try:
                     logger.info(
-                        f"Would send reminder to org {org.id} ({org.name}), "
-                        f"trial expires in {org.trial_days_remaining} days"
+                        "Sending trial expiry reminder",
+                        org_id=str(org.id),
+                        org_name=org.name,
+                        days_remaining=org.trial_days_remaining,
                     )
                     reminder_count += 1
                 except Exception as e:
                     failed_count += 1
-                    logger.error(f"Error sending reminder for org {org.id}: {e}")
+                    logger.error("Error sending trial reminder", org_id=str(org.id), error=str(e))
 
-        logger.info(f"Sent {reminder_count} trial expiry reminders, {failed_count} failed")
+        logger.info("Sent trial expiry reminders", reminder_count=reminder_count, failed_count=failed_count)
 
         return {
             "status": "completed" if failed_count == 0 else "partial",
@@ -237,7 +239,7 @@ async def send_trial_expiry_reminders(ctx: dict[str, Any]) -> dict[str, Any]:
             "reminders_failed": failed_count,
         }
     except Exception as e:
-        logger.error(f"Error sending trial expiry reminders: {e}")
+        logger.error("Error sending trial expiry reminders", error=str(e))
         return {
             "status": "failed",
             "error": str(e),
@@ -250,7 +252,7 @@ async def send_trial_expiry_reminders(ctx: dict[str, Any]) -> dict[str, Any]:
 
 async def startup(ctx: dict[str, Any]) -> None:
     """Initialize worker on startup."""
-    logger.info("Worker starting up...")
+    logger.info("Worker starting up")
     # TODO: Initialize any resources needed by tasks
     # - Database connections
     # - External API clients
@@ -259,7 +261,7 @@ async def startup(ctx: dict[str, Any]) -> None:
 
 async def shutdown(ctx: dict[str, Any]) -> None:
     """Cleanup worker on shutdown."""
-    logger.info("Worker shutting down...")
+    logger.info("Worker shutting down")
     # TODO: Cleanup resources
     # - Close database connections
     # - Flush buffers

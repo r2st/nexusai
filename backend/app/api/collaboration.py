@@ -1,12 +1,12 @@
 """Real-time Collaboration API endpoints."""
 
-import logging
 from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, WebSocket, WebSocketDisconnect
+import structlog
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 from pydantic import BaseModel, Field
 
 from app.services.collaboration import (

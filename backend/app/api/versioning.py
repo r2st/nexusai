@@ -9,10 +9,10 @@ from typing import Any, Callable, Dict, List, Optional, Type
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 from fastapi.routing import APIRoute
 from pydantic import BaseModel
-import logging
+import structlog
 import re
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger()
 
 
 # Version Configuration

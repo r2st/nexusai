@@ -320,11 +320,30 @@ def create_app() -> FastAPI:
     @app.get("/api/health")
     @app.get("/api/healthz")
     async def health():
-        """Simple health check for Docker and load balancers."""
-        return {
-            "status": "healthy",
-            "version": settings.APP_VERSION,
-        }
+        """Health check for Docker and load balancers.
+
+        Verifies DB connectivity with a lightweight query.
+        """
+        from sqlalchemy import text
+        from app.core.database import async_session_factory
+
+        db_ok = True
+        try:
+            async with async_session_factory() as session:
+                await session.execute(text("SELECT 1"))
+        except Exception as e:
+            db_ok = False
+            logger.error("Health check DB probe failed", error=str(e))
+
+        status = "healthy" if db_ok else "degraded"
+        return ORJSONResponse(
+            content={
+                "status": status,
+                "version": settings.APP_VERSION,
+                "database": "ok" if db_ok else "unreachable",
+            },
+            status_code=200 if db_ok else 503,
+        )
 
     # Features endpoint
     @app.get("/features")
