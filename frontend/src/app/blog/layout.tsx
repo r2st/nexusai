@@ -56,6 +56,10 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
                 <li><Link href="/blog/gst-invoice-format-guide" className="hover:text-blue-600 dark:hover:text-blue-400">GST Invoice Format</Link></li>
                 <li><Link href="/blog/gst-hsn-code-list" className="hover:text-blue-600 dark:hover:text-blue-400">HSN Code List</Link></li>
                 <li><Link href="/blog/gst-composition-scheme-guide" className="hover:text-blue-600 dark:hover:text-blue-400">Composition Scheme Guide</Link></li>
+                <li><Link href="/blog/gst-rate-list-2026" className="hover:text-blue-600 dark:hover:text-blue-400">GST Rate List 2026</Link></li>
+                <li><Link href="/blog/e-way-bill-guide" className="hover:text-blue-600 dark:hover:text-blue-400">E-Way Bill Guide</Link></li>
+                <li><Link href="/blog/gst-annual-return-gstr-9-guide" className="hover:text-blue-600 dark:hover:text-blue-400">GSTR-9 Annual Return</Link></li>
+                <li><Link href="/blog/reverse-charge-mechanism-rcm-gst" className="hover:text-blue-600 dark:hover:text-blue-400">Reverse Charge (RCM)</Link></li>
               </ul>
             </div>
           </div>

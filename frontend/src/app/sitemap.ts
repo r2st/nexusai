@@ -53,6 +53,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/blog/gst-rate-list-2026`,
+      lastModified: new Date('2026-10-10'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog/e-way-bill-guide`,
+      lastModified: new Date('2026-10-10'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog/gst-annual-return-gstr-9-guide`,
+      lastModified: new Date('2026-10-10'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog/reverse-charge-mechanism-rcm-gst`,
+      lastModified: new Date('2026-10-10'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/pricing`,
       lastModified: new Date('2026-10-10'),
       changeFrequency: 'monthly',

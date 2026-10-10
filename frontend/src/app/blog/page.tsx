@@ -15,6 +15,38 @@ export const metadata: Metadata = {
 
 const blogPosts = [
   {
+    slug: 'gst-rate-list-2026',
+    title: 'GST Rate List 2026: Complete Slab-Wise Rate Table for Goods & Services',
+    description: 'Complete GST rate list for 2026 with slab-wise breakdown at 5%, 12%, 18% & 28%. Find GST rates for all goods and services with HSN/SAC codes.',
+    date: '2026-10-10',
+    readTime: '20 min read',
+    category: 'GST Rates',
+  },
+  {
+    slug: 'e-way-bill-guide',
+    title: 'E-Way Bill Guide 2026: Rules, How to Generate, Validity & Penalties',
+    description: 'Complete e-way bill guide for 2026. Learn when e-way bill is needed, how to generate on ewaybillgst.gov.in, validity rules, penalties & exemptions.',
+    date: '2026-10-10',
+    readTime: '18 min read',
+    category: 'E-Way Bill',
+  },
+  {
+    slug: 'gst-annual-return-gstr-9-guide',
+    title: 'GST Annual Return (GSTR-9) Guide 2026: Who Files, Deadlines & How to Fill',
+    description: 'Complete GSTR-9 annual return guide for 2026. Who must file, due dates, step-by-step filling instructions, GSTR-9C reconciliation & common mistakes.',
+    date: '2026-10-10',
+    readTime: '17 min read',
+    category: 'Annual Return',
+  },
+  {
+    slug: 'reverse-charge-mechanism-rcm-gst',
+    title: 'Reverse Charge Mechanism (RCM) Under GST: Complete Guide with List of Goods & Services',
+    description: 'Complete guide to Reverse Charge Mechanism (RCM) under GST. What is RCM, when it applies, list of goods & services under RCM, ITC rules & compliance.',
+    date: '2026-10-10',
+    readTime: '16 min read',
+    category: 'RCM / Tax',
+  },
+  {
     slug: 'gst-invoice-format-guide',
     title: 'GST Invoice Format 2026: Mandatory Fields, Templates & E-Invoicing Rules',
     description: 'Complete guide to GST invoice format with mandatory fields, templates, e-invoicing rules, and bill of supply format for Indian businesses in 2026-27.',
