@@ -760,3 +760,89 @@ class TestGrafanaRBACRoleValidation:
         from app.api.grafana_rbac import AssignRoleRequest
         with pytest.raises(ValidationError):
             AssignRoleRequest(user_id=1, role="hacker")
+
+
+# ============================================================================
+# 21. Security Scanner Path Traversal
+# ============================================================================
+
+class TestSecurityScannerPathTraversal:
+
+    def test_rejects_path_traversal_in_project_path(self):
+        from app.api.security import ScanProjectRequest
+        with pytest.raises(ValidationError):
+            ScanProjectRequest(project_path="../../etc")
+
+    def test_rejects_null_byte_in_project_path(self):
+        from app.api.security import ScanProjectRequest
+        with pytest.raises(ValidationError):
+            ScanProjectRequest(project_path="/project\x00inject")
+
+    def test_rejects_path_traversal_in_base_path(self):
+        from app.api.security import ScanDiffRequest
+        with pytest.raises(ValidationError):
+            ScanDiffRequest(diff_content="--- a/file\n+++ b/file", base_path="../../../etc")
+
+    def test_accepts_valid_scan(self):
+        from app.api.security import ScanProjectRequest
+        req = ScanProjectRequest(project_path="/home/user/project")
+        assert req.project_path == "/home/user/project"
+
+
+# ============================================================================
+# 22. SSO Provider Input Bounds
+# ============================================================================
+
+class TestSSOProviderBounds:
+
+    def test_rejects_oversized_name(self):
+        from app.api.sso import ProviderCreateRequest
+        with pytest.raises(ValidationError):
+            ProviderCreateRequest(name="x" * 101, display_name="Test", client_id="id")
+
+    def test_rejects_empty_client_id(self):
+        from app.api.sso import ProviderCreateRequest
+        with pytest.raises(ValidationError):
+            ProviderCreateRequest(name="google", display_name="Google", client_id="")
+
+    def test_accepts_valid_provider(self):
+        from app.api.sso import ProviderCreateRequest
+        req = ProviderCreateRequest(name="google", display_name="Google Workspace", client_id="abc123")
+        assert req.name == "google"
+
+
+# ============================================================================
+# 23. Collaboration Session Bounds
+# ============================================================================
+
+class TestCollaborationSessionBounds:
+
+    def test_rejects_extreme_max_participants(self):
+        from app.api.collaboration import CreateSessionRequest, SessionType
+        with pytest.raises(ValidationError):
+            CreateSessionRequest(
+                organization_id="org-1", session_type=SessionType.CODE_REVIEW,
+                title="Review", host_user_id="u1", host_username="user1",
+                max_participants=999,
+            )
+
+    def test_rejects_oversized_message(self):
+        from app.api.collaboration import SessionMessageRequest
+        with pytest.raises(ValidationError):
+            SessionMessageRequest(user_id="u1", username="user1", message="x" * 50001)
+
+    def test_rejects_empty_title(self):
+        from app.api.collaboration import CreateSessionRequest, SessionType
+        with pytest.raises(ValidationError):
+            CreateSessionRequest(
+                organization_id="org-1", session_type=SessionType.CODE_REVIEW,
+                title="", host_user_id="u1", host_username="user1",
+            )
+
+    def test_accepts_valid_session(self):
+        from app.api.collaboration import CreateSessionRequest, SessionType
+        req = CreateSessionRequest(
+            organization_id="org-1", session_type=SessionType.CODE_REVIEW,
+            title="PR Review", host_user_id="u1", host_username="user1",
+        )
+        assert req.max_participants == 10

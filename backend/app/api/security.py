@@ -3,7 +3,7 @@
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 import structlog
 
 from app.api.deps import get_current_user
@@ -28,18 +28,32 @@ router = APIRouter(prefix="/security", tags=["security"])
 class ScanProjectRequest(BaseModel):
     """Request to scan a project."""
 
-    project_path: str = Field(..., description="Path to project root")
+    project_path: str = Field(..., min_length=1, max_length=1024, description="Path to project root")
     scan_dependencies: bool = Field(True, description="Scan dependencies")
     scan_code: bool = Field(True, description="Scan source code")
     scan_config: bool = Field(True, description="Check configuration")
-    file_extensions: list[str] | None = Field(None, description="Extensions to scan")
+    file_extensions: list[str] | None = Field(None, max_length=50, description="Extensions to scan")
+
+    @field_validator("project_path")
+    @classmethod
+    def validate_project_path(cls, v: str) -> str:
+        if ".." in v or "\x00" in v:
+            raise ValueError("Invalid project_path: path traversal not allowed")
+        return v
 
 
 class ScanDiffRequest(BaseModel):
     """Request to scan a diff."""
 
-    diff_content: str = Field(..., description="Unified diff content")
-    base_path: str = Field("", description="Base path for files")
+    diff_content: str = Field(..., min_length=1, max_length=5000000, description="Unified diff content")
+    base_path: str = Field("", max_length=1024, description="Base path for files")
+
+    @field_validator("base_path")
+    @classmethod
+    def validate_base_path(cls, v: str) -> str:
+        if ".." in v or "\x00" in v:
+            raise ValueError("Invalid base_path: path traversal not allowed")
+        return v
 
 
 class ScanResponse(BaseModel):

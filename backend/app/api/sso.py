@@ -7,7 +7,8 @@ REST endpoints for Single Sign-On authentication.
 from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from fastapi.responses import RedirectResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+from urllib.parse import urlparse as _urlparse
 import structlog
 
 logger = structlog.get_logger()
@@ -31,17 +32,17 @@ class ProviderResponse(BaseModel):
 
 class ProviderCreateRequest(BaseModel):
     """Create SSO provider request."""
-    name: str
-    display_name: str
-    type: str = "oidc"
-    issuer_url: Optional[str] = None
-    metadata_url: Optional[str] = None
-    client_id: str
-    client_secret: Optional[str] = None
-    scopes: List[str] = ["openid", "profile", "email"]
+    name: str = Field(..., min_length=1, max_length=100)
+    display_name: str = Field(..., min_length=1, max_length=200)
+    type: str = Field(default="oidc", max_length=20)
+    issuer_url: Optional[str] = Field(default=None, max_length=2000)
+    metadata_url: Optional[str] = Field(default=None, max_length=2000)
+    client_id: str = Field(..., min_length=1, max_length=500)
+    client_secret: Optional[str] = Field(default=None, max_length=500)
+    scopes: List[str] = Field(default=["openid", "profile", "email"], max_length=20)
     auto_provision_users: bool = True
-    default_role: str = "user"
-    allowed_domains: List[str] = []
+    default_role: str = Field(default="user", max_length=50)
+    allowed_domains: List[str] = Field(default=[], max_length=50)
 
 
 class AuthStartResponse(BaseModel):
@@ -161,9 +162,21 @@ async def start_authentication(
     #     provider_id, redirect_uri, tenant_id
     # )
     
+    parsed = _urlparse(redirect_uri)
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        raise HTTPException(status_code=400, detail="Invalid redirect_uri")
+
     # For now, return mock URL
-    auth_url = f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=xxx&redirect_uri={redirect_uri}&scope=openid+email+profile&state=mock_state"
-    
+    from urllib.parse import urlencode as _urlencode
+    params = _urlencode({
+        "response_type": "code",
+        "client_id": "xxx",
+        "redirect_uri": redirect_uri,
+        "scope": "openid email profile",
+        "state": "mock_state",
+    })
+    auth_url = f"https://accounts.google.com/o/oauth2/auth?{params}"
+
     return RedirectResponse(url=auth_url)
 
 

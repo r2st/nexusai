@@ -47,17 +47,17 @@ class HeartbeatRequest(BaseModel):
 
 class CreateSessionRequest(BaseModel):
     """Request to create a session."""
-    organization_id: str
+    organization_id: str = Field(..., min_length=1, max_length=200)
     session_type: SessionType
-    title: str
-    host_user_id: str
-    host_username: str
-    description: str | None = None
-    project_id: str | None = None
-    file_path: str | None = None
-    pr_id: str | None = None
+    title: str = Field(..., min_length=1, max_length=500)
+    host_user_id: str = Field(..., min_length=1, max_length=200)
+    host_username: str = Field(..., min_length=1, max_length=200)
+    description: str | None = Field(default=None, max_length=2000)
+    project_id: str | None = Field(default=None, max_length=200)
+    file_path: str | None = Field(default=None, max_length=1024)
+    pr_id: str | None = Field(default=None, max_length=200)
     is_public: bool = False
-    max_participants: int = 10
+    max_participants: int = Field(default=10, ge=1, le=100)
 
 
 class JoinSessionRequest(BaseModel):
@@ -69,31 +69,31 @@ class JoinSessionRequest(BaseModel):
 
 class SessionMessageRequest(BaseModel):
     """Request to send a session message."""
-    user_id: str
-    username: str
-    message: str
-    message_type: str = "text"
+    user_id: str = Field(..., min_length=1, max_length=200)
+    username: str = Field(..., min_length=1, max_length=200)
+    message: str = Field(..., min_length=1, max_length=50000)
+    message_type: str = Field(default="text", max_length=50)
 
 
 class CreateAnnotationRequest(BaseModel):
     """Request to create an annotation."""
-    organization_id: str
-    project_id: str
-    file_path: str
-    start_line: int
-    end_line: int
+    organization_id: str = Field(..., min_length=1, max_length=200)
+    project_id: str = Field(..., min_length=1, max_length=200)
+    file_path: str = Field(..., min_length=1, max_length=1024)
+    start_line: int = Field(..., ge=1, le=1000000)
+    end_line: int = Field(..., ge=1, le=1000000)
     annotation_type: AnnotationType
-    content: str
-    author_id: str
-    author_username: str
-    title: str | None = None
-    start_column: int | None = None
-    end_column: int | None = None
-    code_snippet: str | None = None
-    mentions: list[str] = Field(default_factory=list)
-    commit_sha: str | None = None
-    branch: str | None = None
-    parent_id: str | None = None
+    content: str = Field(..., min_length=1, max_length=50000)
+    author_id: str = Field(..., min_length=1, max_length=200)
+    author_username: str = Field(..., min_length=1, max_length=200)
+    title: str | None = Field(default=None, max_length=500)
+    start_column: int | None = Field(default=None, ge=0, le=10000)
+    end_column: int | None = Field(default=None, ge=0, le=10000)
+    code_snippet: str | None = Field(default=None, max_length=50000)
+    mentions: list[str] = Field(default_factory=list, max_length=50)
+    commit_sha: str | None = Field(default=None, max_length=64)
+    branch: str | None = Field(default=None, max_length=200)
+    parent_id: str | None = Field(default=None, max_length=200)
 
 
 class UpdateAnnotationRequest(BaseModel):
