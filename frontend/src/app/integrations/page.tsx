@@ -497,7 +497,10 @@ export default function IntegrationsPage() {
 
       {/* Config Modal */}
       {showConfigModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onKeyDown={(e) => { if (e.key === 'Escape') setShowConfigModal(null); }}
+        >
           <div className="bg-background rounded-lg border shadow-lg w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Integration Settings</h2>

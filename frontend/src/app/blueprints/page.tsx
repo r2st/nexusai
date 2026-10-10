@@ -98,6 +98,7 @@ export default function BlueprintsPage() {
       }
     } catch (error) {
       console.error('Failed to load blueprints:', error);
+      toast.error('Failed to load blueprints');
     } finally {
       setIsLoading(false);
     }

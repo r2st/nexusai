@@ -21,6 +21,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { devopsApi, type DORAAnalysis, type WorkflowExecution } from '@/lib/api';
+import { toast } from 'sonner';
 
 export default function DevOpsPage() {
   const [projectId, setProjectId] = useState('');
@@ -41,6 +42,7 @@ export default function DevOpsPage() {
       setDoraAnalysis(result);
     } catch (error) {
       console.error('DORA analysis failed:', error);
+      toast.error('DORA analysis failed');
     } finally {
       setIsAnalyzing(false);
     }
@@ -55,6 +57,7 @@ export default function DevOpsPage() {
       setAdoptionAnalysis(result);
     } catch (error) {
       console.error('Adoption analysis failed:', error);
+      toast.error('Adoption analysis failed');
     } finally {
       setIsAnalyzing(false);
     }
@@ -72,6 +75,7 @@ export default function DevOpsPage() {
       setActiveTab('workflow');
     } catch (error) {
       console.error('Workflow failed:', error);
+      toast.error('Workflow execution failed');
     } finally {
       setIsAnalyzing(false);
     }

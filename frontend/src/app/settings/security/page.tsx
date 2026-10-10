@@ -667,6 +667,9 @@ export default function SecuritySettingsPage() {
                             <span className="text-sm">{setting.label}</span>
                             <button
                               onClick={() => setting.onChange(!setting.value)}
+                              role="switch"
+                              aria-checked={setting.value}
+                              aria-label={setting.label}
                               className={cn(
                                 'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
                                 setting.value ? 'bg-primary' : 'bg-muted'

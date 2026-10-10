@@ -46,6 +46,7 @@ export default function KnowledgeGraphPage() {
       setMetrics(metricsData.metrics);
     } catch (error) {
       console.error('Failed to load knowledge graph data:', error);
+      toast.error('Failed to load knowledge graph data');
     } finally {
       setIsLoading(false);
     }

@@ -179,6 +179,9 @@ export default function PricingPage() {
             onClick={() =>
               setBillingCycle(billingCycle === 'monthly' ? 'annual' : 'monthly')
             }
+            role="switch"
+            aria-checked={billingCycle === 'annual'}
+            aria-label="Toggle annual billing"
             className={cn(
               'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
               billingCycle === 'annual' ? 'bg-primary' : 'bg-muted'
@@ -350,7 +353,7 @@ export default function PricingPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © 2025 NexusAI Contributors.
+              &copy; {new Date().getFullYear()} NexusAI Contributors.
             </p>
             <div className="flex items-center gap-6">
               <Link

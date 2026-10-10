@@ -42,6 +42,7 @@ export default function ActionsPage() {
       setActions(data);
     } catch (error) {
       console.error('Failed to load actions:', error);
+      toast.error('Failed to load actions');
     } finally {
       setIsLoading(false);
     }
@@ -55,6 +56,7 @@ export default function ActionsPage() {
       setActions((prev) => prev.filter((a) => a.action_id !== actionId));
     } catch (error) {
       console.error('Failed to delete action:', error);
+      toast.error('Failed to delete action');
     }
   };
 
