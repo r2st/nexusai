@@ -93,8 +93,11 @@ class Settings(BaseSettings):
     # CORS - use str type to prevent auto JSON parsing, validator converts to list
     CORS_ORIGINS: str | list[str] = ["http://localhost:3000", "http://localhost:8000"]
     CORS_ALLOW_CREDENTIALS: bool = True
-    CORS_ALLOW_METHODS: str | list[str] = ["*"]
-    CORS_ALLOW_HEADERS: str | list[str] = ["*"]
+    CORS_ALLOW_METHODS: str | list[str] = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+    CORS_ALLOW_HEADERS: str | list[str] = [
+        "Authorization", "Content-Type", "X-Request-ID",
+        "X-Tenant-ID", "X-Organization-ID",
+    ]
 
     @field_validator("CORS_ORIGINS", "CORS_ALLOW_METHODS", "CORS_ALLOW_HEADERS", "ALLOWED_EXTENSIONS", mode="before")
     @classmethod

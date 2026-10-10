@@ -151,7 +151,6 @@ async def seed_dev_users_on_startup() -> None:
                 "Development users ready",
                 created=created_count,
                 existing=len(existing_users),
-                accounts="admin@nexusai.dev | user@nexusai.dev | viewer@nexusai.dev",
             )
 
     except Exception as e:
@@ -264,9 +263,9 @@ def create_app() -> FastAPI:
         title=settings.APP_NAME,
         version=settings.APP_VERSION,
         description="Modern AI-powered chat and analytics platform",
-        docs_url="/docs",
-        redoc_url="/redoc",
-        openapi_url="/openapi.json",
+        docs_url="/docs" if not settings.is_production else None,
+        redoc_url="/redoc" if not settings.is_production else None,
+        openapi_url="/openapi.json" if not settings.is_production else None,
         default_response_class=ORJSONResponse,
         lifespan=lifespan,
     )
