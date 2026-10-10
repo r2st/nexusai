@@ -4,10 +4,13 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
+import structlog
 
 from app.api.deps import get_current_user
 from app.models.user import User
 from app.services.devlake import DORAMetrics, devlake_service
+
+logger = structlog.get_logger()
 
 router = APIRouter()
 
@@ -108,9 +111,10 @@ async def list_projects(
     try:
         return await devlake_service.list_projects()
     except Exception as e:
+        logger.error("Failed to fetch projects from DevLake", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch projects from DevLake: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -131,9 +135,10 @@ async def get_project(
     except HTTPException:
         raise
     except Exception as e:
+        logger.error("Failed to fetch project from DevLake", project=project_name, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch project from DevLake: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -149,9 +154,10 @@ async def create_project(
             description=request.description,
         )
     except Exception as e:
+        logger.error("Failed to create project in DevLake", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to create project in DevLake: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -178,9 +184,10 @@ async def get_dora_metrics(
     try:
         return await devlake_service.get_dora_metrics(project_name, time_range)
     except Exception as e:
+        logger.error("Failed to fetch DORA metrics", project=project_name, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch DORA metrics: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -198,9 +205,10 @@ async def list_connections(
     try:
         return await devlake_service.list_connections(plugin)
     except Exception as e:
+        logger.error("Failed to fetch connections", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch connections: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -214,9 +222,10 @@ async def get_connection(
     try:
         return await devlake_service.get_connection(plugin, connection_id)
     except Exception as e:
+        logger.error("Failed to fetch connection", plugin=plugin, connection_id=connection_id, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch connection: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -235,9 +244,10 @@ async def create_connection(
             token=request.token,
         )
     except Exception as e:
+        logger.error("Failed to create connection", plugin=plugin, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to create connection: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -251,9 +261,10 @@ async def test_connection(
     try:
         return await devlake_service.test_connection(plugin, connection_id)
     except Exception as e:
+        logger.error("Failed to test connection", plugin=plugin, connection_id=connection_id, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to test connection: {str(e)}",
+            detail="Connection test failed. Please verify the connection settings and try again.",
         )
 
 
@@ -270,9 +281,10 @@ async def list_blueprints(
     try:
         return await devlake_service.list_blueprints()
     except Exception as e:
+        logger.error("Failed to fetch blueprints", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch blueprints: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -285,9 +297,10 @@ async def get_blueprint(
     try:
         return await devlake_service.get_blueprint(blueprint_id)
     except Exception as e:
+        logger.error("Failed to fetch blueprint", blueprint_id=blueprint_id, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch blueprint: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -300,9 +313,10 @@ async def trigger_blueprint(
     try:
         return await devlake_service.trigger_blueprint(blueprint_id)
     except Exception as e:
+        logger.error("Failed to trigger blueprint", blueprint_id=blueprint_id, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to trigger blueprint: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -321,9 +335,10 @@ async def list_pipelines(
     try:
         return await devlake_service.list_pipelines(page, page_size)
     except Exception as e:
+        logger.error("Failed to fetch pipelines", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch pipelines: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -336,9 +351,10 @@ async def get_pipeline(
     try:
         return await devlake_service.get_pipeline(pipeline_id)
     except Exception as e:
+        logger.error("Failed to fetch pipeline", pipeline_id=pipeline_id, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch pipeline: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -351,9 +367,10 @@ async def cancel_pipeline(
     try:
         return await devlake_service.cancel_pipeline(pipeline_id)
     except Exception as e:
+        logger.error("Failed to cancel pipeline", pipeline_id=pipeline_id, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to cancel pipeline: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -370,9 +387,10 @@ async def list_plugins(
     try:
         return await devlake_service.list_plugins()
     except Exception as e:
+        logger.error("Failed to fetch plugins", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch plugins: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )
 
 
@@ -385,7 +403,8 @@ async def get_plugin(
     try:
         return await devlake_service.get_plugin(plugin)
     except Exception as e:
+        logger.error("Failed to fetch plugin details", plugin=plugin, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Failed to fetch plugin details: {str(e)}",
+            detail="Analytics service is temporarily unavailable. Please try again later.",
         )

@@ -3,8 +3,11 @@
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.api.deps import get_current_user
+
+logger = structlog.get_logger()
 from app.core.config import settings
 from app.core.database import get_db
 from app.models.user import User
@@ -111,9 +114,10 @@ async def process_document(
     try:
         document = await doc_service.process_document(document)
     except Exception as e:
+        logger.error("Failed to process document", document_id=document_id, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to process document: {str(e)}",
+            detail="Failed to process document. Please try again later.",
         )
 
     return DocumentResponse(

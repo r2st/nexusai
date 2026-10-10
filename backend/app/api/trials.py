@@ -12,8 +12,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.api.deps import get_current_user, get_db
+
+logger = structlog.get_logger()
 from app.models.organization import Organization, OrganizationMember, MemberRole
 from app.models.user import User, UserRole
 from app.services.trial import TrialService
@@ -180,7 +183,8 @@ async def start_trial(
         await db.refresh(org)
         return await trial_service.get_organization_trial_status(org)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        logger.warning("Trial start failed", org_id=org_id, error=str(e))
+        raise HTTPException(status_code=400, detail="Unable to start trial. The organization may already have an active or expired trial.")
 
 
 # Admin endpoints
@@ -273,7 +277,8 @@ async def extend_trial(
             "days_added": request.days,
         }
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        logger.warning("Trial extension failed", org_id=org_id, error=str(e))
+        raise HTTPException(status_code=400, detail="Unable to extend trial. Please check the organization's trial status.")
 
 
 @router.post("/admin/trials/{org_id}/expire")
@@ -305,4 +310,5 @@ async def force_expire_trial(
             "organization_id": org_id,
         }
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        logger.warning("Trial expiration failed", org_id=org_id, error=str(e))
+        raise HTTPException(status_code=400, detail="Unable to expire trial. Please check the organization's trial status.")

@@ -13,8 +13,11 @@ from typing import Any
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.api.deps import get_current_user, get_db
+
+logger = structlog.get_logger()
 from app.models.user import User
 from app.services.events import (
     EventQuery,
@@ -150,16 +153,17 @@ async def receive_webhook(
             "source": event.source.value,
         }
 
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
+            detail="Invalid webhook payload. Please check the request format.",
         )
     except Exception as e:
         await db.rollback()
+        logger.error("Failed to process webhook", source=source.value, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to process webhook: {str(e)}",
+            detail="Failed to process webhook. Please try again later.",
         )
 
 

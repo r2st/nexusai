@@ -4,6 +4,7 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
+import structlog
 
 from app.api.deps import get_current_user
 from app.models.user import User
@@ -11,6 +12,8 @@ from app.services.predictive import (
     PredictiveAnalyticsService,
     get_predictive_analytics_service,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/predictive", tags=["predictive-analytics"])
 
@@ -147,9 +150,10 @@ async def predict_trend(
         )
 
     except Exception as e:
+        logger.error("Failed to predict trend", metric=request.metric_name, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to predict trend: {e}",
+            detail="Failed to generate trend prediction. Please try again later.",
         )
 
 
@@ -181,9 +185,10 @@ async def detect_bottlenecks(
         ]
 
     except Exception as e:
+        logger.error("Failed to detect bottlenecks", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to detect bottlenecks: {e}",
+            detail="Failed to detect bottlenecks. Please try again later.",
         )
 
 
@@ -219,9 +224,10 @@ async def assess_deployment_risk(
         )
 
     except Exception as e:
+        logger.error("Failed to assess deployment risk", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to assess risk: {e}",
+            detail="Failed to assess deployment risk. Please try again later.",
         )
 
 
@@ -256,9 +262,10 @@ async def assess_pr_risk(
         )
 
     except Exception as e:
+        logger.error("Failed to assess PR risk", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to assess PR risk: {e}",
+            detail="Failed to assess PR risk. Please try again later.",
         )
 
 
@@ -313,9 +320,10 @@ async def get_insights(
         )
 
     except Exception as e:
+        logger.error("Failed to get predictive insights", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get insights: {e}",
+            detail="Failed to generate insights. Please try again later.",
         )
 
 
@@ -352,9 +360,10 @@ async def detect_anomalies(
         ]
 
     except Exception as e:
+        logger.error("Failed to detect anomalies", metric=request.metric_name, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to detect anomalies: {e}",
+            detail="Failed to detect anomalies. Please try again later.",
         )
 
 

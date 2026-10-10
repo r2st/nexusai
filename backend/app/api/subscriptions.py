@@ -12,8 +12,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.api.deps import get_current_user, get_db
+
+logger = structlog.get_logger()
 from app.models.organization import Organization, OrganizationMember, MemberRole
 from app.models.user import User, UserRole
 from app.services.subscription import SubscriptionService
@@ -178,7 +181,8 @@ async def cancel_subscription(
                 "new_tier": org.tier,
             }
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        logger.warning("Subscription cancellation failed", org_id=org_id, error=str(e))
+        raise HTTPException(status_code=400, detail="Unable to cancel subscription. Please check the subscription status.")
 
 
 @router.post("/{org_id}/subscription/resume")
@@ -204,7 +208,8 @@ async def resume_subscription(
             "tier": org.tier,
         }
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        logger.warning("Subscription resume failed", org_id=org_id, error=str(e))
+        raise HTTPException(status_code=400, detail="Unable to resume subscription. Please check the subscription status.")
 
 
 # Admin endpoints

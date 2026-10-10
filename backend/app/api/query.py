@@ -126,10 +126,10 @@ async def execute_dashboard_query(
         response = await gateway.query_dashboard(
             db, tenant_id, dashboard_name, filters
         )
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e),
+            detail=f"Dashboard '{dashboard_name}' not found. Use GET /query/dashboards to see available dashboards.",
         )
 
     return {

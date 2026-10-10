@@ -4,6 +4,7 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
+import structlog
 
 from app.api.deps import get_current_user
 from app.models.user import User
@@ -17,6 +18,8 @@ from app.services.security.secrets import (
     get_secret_rotation_service,
     SecretType,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/security", tags=["security"])
 
@@ -168,9 +171,10 @@ async def scan_project(
         )
 
     except Exception as e:
+        logger.error("Failed to scan project", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to scan project: {e}",
+            detail="Security scan failed. Please try again later.",
         )
 
 
@@ -204,9 +208,10 @@ async def scan_diff(
         )
 
     except Exception as e:
+        logger.error("Failed to scan diff", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to scan diff: {e}",
+            detail="Security scan failed. Please try again later.",
         )
 
 
@@ -231,9 +236,10 @@ async def scan_dependencies(
         )
 
     except Exception as e:
+        logger.error("Failed to scan dependencies", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to scan dependencies: {e}",
+            detail="Dependency scan failed. Please try again later.",
         )
 
 
@@ -263,9 +269,10 @@ async def scan_code(
         ]
 
     except Exception as e:
+        logger.error("Failed to scan code", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to scan code: {e}",
+            detail="Code scan failed. Please try again later.",
         )
 
 
@@ -293,9 +300,10 @@ async def scan_config(
         ]
 
     except Exception as e:
+        logger.error("Failed to scan config", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to scan config: {e}",
+            detail="Configuration scan failed. Please try again later.",
         )
 
 
@@ -327,15 +335,16 @@ async def register_secret(
             is_active=metadata.is_active,
         )
 
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
+            detail="Invalid secret type. Supported types: api_key, database, oauth, certificate, custom.",
         )
     except Exception as e:
+        logger.error("Failed to register secret", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to register secret: {e}",
+            detail="Failed to register secret. Please try again later.",
         )
 
 
@@ -359,9 +368,10 @@ async def rotate_secret(
         )
 
     except Exception as e:
+        logger.error("Failed to rotate secret", secret_name=name, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to rotate secret: {e}",
+            detail="Failed to rotate secret. Please try again later.",
         )
 
 

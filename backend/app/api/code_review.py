@@ -4,6 +4,7 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Header, Request, status
 from pydantic import BaseModel, Field
+import structlog
 
 from app.api.deps import get_current_user
 from app.models.user import User
@@ -13,6 +14,8 @@ from app.services.code_review import (
     PRInfo,
     get_code_review_service,
 )
+
+logger = structlog.get_logger()
 
 router = APIRouter(prefix="/code-review", tags=["code-review"])
 
@@ -97,15 +100,16 @@ async def review_github_pr(
             metrics=review.metrics,
         )
 
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
+            detail="Invalid review request. Please check the repository and PR details.",
         )
     except Exception as e:
+        logger.error("Failed to review GitHub PR", owner=request.owner, repo=request.repo, pr=request.pr_number, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to review PR: {e}",
+            detail="Failed to review PR. Please try again later.",
         )
 
 
@@ -140,15 +144,16 @@ async def review_gitlab_mr(
             metrics=review.metrics,
         )
 
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
+            detail="Invalid review request. Please check the project and MR details.",
         )
     except Exception as e:
+        logger.error("Failed to review GitLab MR", project=request.project, mr_iid=request.mr_iid, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to review MR: {e}",
+            detail="Failed to review MR. Please try again later.",
         )
 
 
@@ -185,7 +190,8 @@ async def github_webhook(
         return {"status": "skipped", "reason": "Event not configured for review"}
 
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        logger.error("GitHub webhook processing failed", event=x_github_event, error=str(e))
+        return {"status": "error", "error": "Webhook processing failed"}
 
 
 @router.post("/webhook/gitlab")
@@ -220,7 +226,8 @@ async def gitlab_webhook(
         return {"status": "skipped", "reason": "Event not configured for review"}
 
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        logger.error("GitLab webhook processing failed", event=event_type, error=str(e))
+        return {"status": "error", "error": "Webhook processing failed"}
 
 
 @router.get("/health")

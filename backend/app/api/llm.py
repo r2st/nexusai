@@ -180,7 +180,7 @@ async def create_chat_completion(
         logger.error("Chat completion failed", error=str(e), user_id=str(current_user.id))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e),
+            detail="Chat completion failed. Please try again later.",
         )
 
 
@@ -200,8 +200,7 @@ async def _stream_response(
 
     except Exception as e:
         logger.error("Streaming failed", error=str(e))
-        error_data = {"error": str(e)}
-        yield f"data: {error_data}\n\n"
+        yield 'data: {"error": "Streaming failed. Please try again."}\n\n'
 
 
 @router.get(
@@ -365,5 +364,115 @@ async def test_connection(
         logger.error("Test connection failed", error=str(e))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Connection test failed: {str(e)}",
+            detail="Connection test failed. Please verify provider configuration and try again.",
+        )
+
+
+# =============================================================================
+# Circuit Breaker Endpoints
+# =============================================================================
+
+
+class CircuitBreakerStatus(BaseModel):
+    """Circuit breaker status for a provider."""
+
+    provider: str
+    state: str = Field(..., description="Circuit state: closed, open, or half_open")
+    metrics: dict[str, Any] = Field(..., description="Circuit breaker metrics")
+    config: dict[str, Any] = Field(..., description="Circuit breaker configuration")
+    redis_available: bool = Field(..., description="Whether Redis persistence is available")
+    time_until_half_open_seconds: float | None = Field(
+        None, description="Time until circuit enters half-open state (only for open circuits)"
+    )
+
+
+class AllCircuitBreakersResponse(BaseModel):
+    """Response containing all circuit breaker statuses."""
+
+    circuit_breakers: dict[str, CircuitBreakerStatus]
+
+
+@router.get(
+    "/circuit-breakers",
+    response_model=AllCircuitBreakersResponse,
+    summary="Get all circuit breaker statuses",
+    description="Get the current status of all provider circuit breakers.",
+)
+async def get_circuit_breakers(
+    gateway: Annotated[LLMGateway, Depends(get_gateway)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> AllCircuitBreakersResponse:
+    """Get status of all circuit breakers."""
+    try:
+        statuses = await gateway.router.get_all_circuit_statuses()
+        return AllCircuitBreakersResponse(
+            circuit_breakers={
+                name: CircuitBreakerStatus(
+                    provider=status["provider"],
+                    state=status["state"],
+                    metrics=status["metrics"],
+                    config=status["config"],
+                    redis_available=status["redis_available"],
+                    time_until_half_open_seconds=status.get("time_until_half_open_seconds"),
+                )
+                for name, status in statuses.items()
+            }
+        )
+    except Exception as e:
+        logger.error("Failed to get circuit breaker statuses", error=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to retrieve circuit breaker statuses. Please try again later.",
+        )
+
+
+@router.get(
+    "/circuit-breakers/{provider}",
+    response_model=CircuitBreakerStatus,
+    summary="Get circuit breaker status for a provider",
+    description="Get the current status of a specific provider's circuit breaker.",
+)
+async def get_circuit_breaker(
+    provider: str,
+    gateway: Annotated[LLMGateway, Depends(get_gateway)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> CircuitBreakerStatus:
+    """Get circuit breaker status for a specific provider."""
+    try:
+        status_data = await gateway.router.get_circuit_status(provider)
+        return CircuitBreakerStatus(
+            provider=status_data["provider"],
+            state=status_data["state"],
+            metrics=status_data["metrics"],
+            config=status_data["config"],
+            redis_available=status_data["redis_available"],
+            time_until_half_open_seconds=status_data.get("time_until_half_open_seconds"),
+        )
+    except Exception as e:
+        logger.error("Failed to get circuit breaker status", provider=provider, error=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to retrieve circuit breaker status. Please try again later.",
+        )
+
+
+@router.post(
+    "/circuit-breakers/{provider}/reset",
+    summary="Reset circuit breaker for a provider",
+    description="Manually reset a provider's circuit breaker to closed state.",
+)
+async def reset_circuit_breaker(
+    provider: str,
+    gateway: Annotated[LLMGateway, Depends(get_gateway)],
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> dict[str, str]:
+    """Manually reset a circuit breaker."""
+    try:
+        await gateway.router.reset_circuit(provider)
+        return {"status": "success", "message": f"Circuit breaker for {provider} has been reset"}
+    except Exception as e:
+        logger.error("Failed to reset circuit breaker", provider=provider, error=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to reset circuit breaker. Please try again later.",
         )
