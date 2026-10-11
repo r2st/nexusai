@@ -128,12 +128,7 @@ export function MobileChat({
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') setSidebarOpen(false);
-          }}
-          role="button"
-          tabIndex={0}
-          aria-label="Close sidebar overlay"
+          aria-hidden="true"
         />
       )}
 
@@ -143,6 +138,10 @@ export function MobileChat({
           'fixed inset-y-0 left-0 z-50 w-72 bg-background border-r transform transition-transform duration-200 ease-in-out lg:relative lg:translate-x-0',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
+        aria-label="Conversations"
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') setSidebarOpen(false);
+        }}
       >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b">
