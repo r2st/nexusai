@@ -185,7 +185,13 @@ class CapabilityListResponse(BaseModel):
 # Endpoints
 # ======================
 
-@router.post("", response_model=AgentResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    response_model=AgentResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create an agent",
+    description="Create a new AI agent with specified capabilities, model provider, and tool configuration.",
+)
 async def create_agent(
     request: AgentCreate,
     current_user: User = Depends(get_current_user),
@@ -252,7 +258,7 @@ async def create_agent(
     )
 
 
-@router.get("", response_model=AgentListResponse)
+@router.get("", response_model=AgentListResponse, summary="List agents")
 async def list_agents(
     page: int = 1,
     page_size: int = 20,
@@ -304,7 +310,7 @@ async def list_agents(
     )
 
 
-@router.get("/{agent_id}", response_model=AgentResponse)
+@router.get("/{agent_id}", response_model=AgentResponse, summary="Get agent details")
 async def get_agent(
     agent_id: str,
     current_user: User = Depends(get_current_user),
@@ -350,7 +356,7 @@ async def get_agent(
     )
 
 
-@router.patch("/{agent_id}", response_model=AgentResponse)
+@router.patch("/{agent_id}", response_model=AgentResponse, summary="Update an agent")
 async def update_agent(
     agent_id: str,
     request: AgentUpdate,
@@ -401,7 +407,7 @@ async def update_agent(
     )
 
 
-@router.delete("/{agent_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{agent_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete an agent")
 async def delete_agent(
     agent_id: str,
     current_user: User = Depends(get_current_user),
@@ -426,7 +432,7 @@ async def delete_agent(
     await service.delete_agent(agent_id)
 
 
-@router.post("/{agent_id}/execute", response_model=AgentExecutionResponse)
+@router.post("/{agent_id}/execute", response_model=AgentExecutionResponse, summary="Execute an agent")
 async def execute_agent(
     agent_id: str,
     request: AgentExecuteRequest,
@@ -485,7 +491,7 @@ async def execute_agent(
     )
 
 
-@router.get("/{agent_id}/executions", response_model=AgentExecutionListResponse)
+@router.get("/{agent_id}/executions", response_model=AgentExecutionListResponse, summary="List agent executions")
 async def list_agent_executions(
     agent_id: str,
     page: int = 1,
@@ -522,7 +528,7 @@ async def list_agent_executions(
     )
 
 
-@router.post("/{agent_id}/tools", response_model=AgentToolResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/{agent_id}/tools", response_model=AgentToolResponse, status_code=status.HTTP_201_CREATED, summary="Add tool to agent")
 async def add_agent_tool(
     agent_id: str,
     request: ToolCreate,
@@ -562,7 +568,7 @@ async def add_agent_tool(
     )
 
 
-@router.get("/capabilities/list", response_model=CapabilityListResponse)
+@router.get("/capabilities/list", response_model=CapabilityListResponse, summary="List agent capabilities")
 async def list_capabilities() -> CapabilityListResponse:
     """List all available agent capabilities."""
     return CapabilityListResponse(

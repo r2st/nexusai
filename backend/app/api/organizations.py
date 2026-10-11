@@ -113,7 +113,7 @@ class UpdateMemberRequest(BaseModel):
     department: str | None = None
 
 
-@router.post("", response_model=OrganizationResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=OrganizationResponse, status_code=status.HTTP_201_CREATED, summary="Create an organization")
 async def create_organization(
     request: OrganizationCreate,
     db: AsyncSession = Depends(get_db),
@@ -163,7 +163,7 @@ async def create_organization(
     return org
 
 
-@router.get("", response_model=list[OrganizationResponse])
+@router.get("", response_model=list[OrganizationResponse], summary="List organizations")
 async def list_organizations(
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
@@ -185,7 +185,7 @@ async def list_organizations(
     return list(result.scalars().all())
 
 
-@router.get("/{org_id}", response_model=OrganizationResponse)
+@router.get("/{org_id}", response_model=OrganizationResponse, summary="Get organization details")
 async def get_organization(
     org_id: str,
     db: AsyncSession = Depends(get_db),
@@ -215,7 +215,7 @@ async def get_organization(
     return org
 
 
-@router.patch("/{org_id}", response_model=OrganizationResponse)
+@router.patch("/{org_id}", response_model=OrganizationResponse, summary="Update organization")
 async def update_organization(
     org_id: str,
     request: OrganizationUpdate,
@@ -256,7 +256,7 @@ async def update_organization(
     return org
 
 
-@router.delete("/{org_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{org_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete organization")
 async def delete_organization(
     org_id: str,
     db: AsyncSession = Depends(get_db),
@@ -292,7 +292,7 @@ async def delete_organization(
 
 
 # Member management
-@router.get("/{org_id}/members", response_model=list[MemberResponse])
+@router.get("/{org_id}/members", response_model=list[MemberResponse], summary="List organization members")
 async def list_members(
     org_id: str,
     db: AsyncSession = Depends(get_db),
@@ -337,7 +337,7 @@ async def list_members(
     return members
 
 
-@router.post("/{org_id}/members/invite", status_code=status.HTTP_201_CREATED)
+@router.post("/{org_id}/members/invite", status_code=status.HTTP_201_CREATED, summary="Invite a member")
 async def invite_member(
     org_id: str,
     request: InviteMemberRequest,
@@ -405,7 +405,7 @@ async def invite_member(
     }
 
 
-@router.patch("/{org_id}/members/{member_id}")
+@router.patch("/{org_id}/members/{member_id}", summary="Update member role")
 async def update_member(
     org_id: str,
     member_id: str,
@@ -469,7 +469,7 @@ async def update_member(
     )
 
 
-@router.delete("/{org_id}/members/{member_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{org_id}/members/{member_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Remove organization member")
 async def remove_member(
     org_id: str,
     member_id: str,
