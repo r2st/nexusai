@@ -264,13 +264,14 @@ export default function DocumentsPage() {
         <div className="mb-8">
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
               <Input
                 placeholder="Search documents using natural language..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 className="pl-10"
+                aria-label="Search documents"
               />
             </div>
             <Button onClick={handleSearch} disabled={isSearching}>
@@ -403,8 +404,9 @@ export default function DocumentsPage() {
                         size="sm"
                         className="text-destructive hover:text-destructive"
                         onClick={() => handleDelete(doc.id)}
+                        aria-label={`Delete ${doc.original_filename}`}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </div>
                   </div>
@@ -447,22 +449,26 @@ export default function DocumentsPage() {
       {previewDoc && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="doc-preview-title"
           onKeyDown={(e) => { if (e.key === 'Escape') setPreviewDoc(null); }}
         >
           <div
             className="absolute inset-0 bg-black/50"
             onClick={() => setPreviewDoc(null)}
+            aria-hidden="true"
           />
           <div className="relative z-10 w-full max-w-lg rounded-lg bg-background p-6 shadow-lg">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Document Details</h2>
+              <h2 id="doc-preview-title" className="text-lg font-semibold">Document Details</h2>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setPreviewDoc(null)}
+                aria-label="Close"
               >
-                <X className="h-4 w-4" />
-              </Button>
+                <X className="h-4 w-4" aria-hidden="true" />
             </div>
 
             <div className="space-y-4">
