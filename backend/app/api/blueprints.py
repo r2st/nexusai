@@ -96,7 +96,7 @@ class PipelineCancelResponse(BaseModel):
 
 # ============= Blueprint Endpoints =============
 
-@router.post("/blueprints", response_model=BlueprintResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/blueprints", response_model=BlueprintResponse, status_code=status.HTTP_201_CREATED, summary="Create a new blueprint for data collection")
 async def create_blueprint(
     request: BlueprintCreateRequest,
     session: AsyncSession = Depends(get_db),
@@ -137,7 +137,7 @@ async def create_blueprint(
     )
 
 
-@router.get("/blueprints", response_model=list[BlueprintResponse])
+@router.get("/blueprints", response_model=list[BlueprintResponse], summary="List all blueprints for the tenant")
 async def list_blueprints(
     project_id: str | None = None,
     status: str | None = None,
@@ -179,7 +179,7 @@ async def list_blueprints(
     ]
 
 
-@router.get("/blueprints/{blueprint_id}", response_model=BlueprintDetailResponse)
+@router.get("/blueprints/{blueprint_id}", response_model=BlueprintDetailResponse, summary="Get a blueprint by ID with full details including plan")
 async def get_blueprint(
     blueprint_id: str,
     session: AsyncSession = Depends(get_db),
@@ -216,7 +216,7 @@ async def get_blueprint(
     )
 
 
-@router.patch("/blueprints/{blueprint_id}/status", response_model=BlueprintStatusUpdate)
+@router.patch("/blueprints/{blueprint_id}/status", response_model=BlueprintStatusUpdate, summary="Update blueprint status (ACTIVE, PAUSED, DISABLED)")
 async def update_blueprint_status(
     blueprint_id: str,
     new_status: str = Query(..., alias="status", pattern="^(ACTIVE|PAUSED|DISABLED)$"),
@@ -245,7 +245,7 @@ async def update_blueprint_status(
     return BlueprintStatusUpdate(status="updated", new_status=new_status)
 
 
-@router.delete("/blueprints/{blueprint_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/blueprints/{blueprint_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete a blueprint")
 async def delete_blueprint(
     blueprint_id: str,
     session: AsyncSession = Depends(get_db),
@@ -274,7 +274,7 @@ async def delete_blueprint(
 
 # ============= Pipeline Run Endpoints =============
 
-@router.post("/blueprints/{blueprint_id}/run", response_model=PipelineRunResponse)
+@router.post("/blueprints/{blueprint_id}/run", response_model=PipelineRunResponse, summary="Trigger a pipeline run from a blueprint")
 async def run_blueprint(
     blueprint_id: str,
     full_sync: bool = Query(default=False),
@@ -312,7 +312,7 @@ async def run_blueprint(
         raise HTTPException(status_code=404, detail="Pipeline not found or invalid configuration.")
 
 
-@router.get("/pipelines/{pipeline_id}", response_model=PipelineRunResponse)
+@router.get("/pipelines/{pipeline_id}", response_model=PipelineRunResponse, summary="Get pipeline run status")
 async def get_pipeline_status(
     pipeline_id: str,
     session: AsyncSession = Depends(get_db),
@@ -343,7 +343,7 @@ async def get_pipeline_status(
     )
 
 
-@router.post("/pipelines/{pipeline_id}/cancel", response_model=PipelineCancelResponse)
+@router.post("/pipelines/{pipeline_id}/cancel", response_model=PipelineCancelResponse, summary="Cancel a running pipeline")
 async def cancel_pipeline(
     pipeline_id: str,
     session: AsyncSession = Depends(get_db),
@@ -365,7 +365,7 @@ async def cancel_pipeline(
     return PipelineCancelResponse(status="cancelled", pipeline_id=pipeline_id)
 
 
-@router.get("/blueprints/{blueprint_id}/history", response_model=list[PipelineRunResponse])
+@router.get("/blueprints/{blueprint_id}/history", response_model=list[PipelineRunResponse], summary="Get pipeline run history for a blueprint")
 async def get_pipeline_history(
     blueprint_id: str,
     limit: int = Query(default=10, ge=1, le=100),

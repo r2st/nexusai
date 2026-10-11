@@ -38,7 +38,7 @@ router = APIRouter()
 
 # ============= DORA Metrics =============
 
-@router.get("/dora/{project_name}")
+@router.get("/dora/{project_name}", summary="Get DORA metrics for a project")
 async def get_dora_metrics(
     project_name: str,
     period_start: datetime | None = None,
@@ -62,7 +62,7 @@ async def get_dora_metrics(
     return metrics.model_dump()
 
 
-@router.get("/dora/{project_name}/trend")
+@router.get("/dora/{project_name}/trend", summary="Get DORA metrics trend over time")
 async def get_dora_trend(
     project_name: str,
     periods: int = Query(default=6, ge=1, le=24),
@@ -78,7 +78,7 @@ async def get_dora_trend(
     return [t.model_dump() for t in trends]
 
 
-@router.get("/dora/{project_name}/benchmark")
+@router.get("/dora/{project_name}/benchmark", summary="Compare project DORA metrics against industry benchmarks")
 async def get_dora_benchmark(
     project_name: str,
     session: AsyncSession = Depends(get_db),
@@ -94,7 +94,7 @@ async def get_dora_benchmark(
 
 # ============= SPACE Framework =============
 
-@router.get("/space/{project_name}")
+@router.get("/space/{project_name}", summary="Get SPACE framework metrics for a project")
 async def get_space_metrics(
     project_name: str,
     period_start: datetime | None = None,
@@ -118,7 +118,7 @@ async def get_space_metrics(
     return metrics.model_dump()
 
 
-@router.get("/space/{project_name}/trend")
+@router.get("/space/{project_name}/trend", summary="Get SPACE metrics trend over time")
 async def get_space_trend(
     project_name: str,
     periods: int = Query(default=6, ge=1, le=24),
@@ -133,7 +133,7 @@ async def get_space_trend(
     return [t.model_dump() for t in trends]
 
 
-@router.get("/space/{project_name}/recommendations")
+@router.get("/space/{project_name}/recommendations", summary="Get recommendations for improving SPACE metrics")
 async def get_space_recommendations(
     project_name: str,
     session: AsyncSession = Depends(get_db),
@@ -148,7 +148,7 @@ async def get_space_recommendations(
 
 # ============= Business Metrics =============
 
-@router.get("/business/{project_name}")
+@router.get("/business/{project_name}", summary="Get business metrics for a project")
 async def get_business_metrics(
     project_name: str,
     period_start: datetime | None = None,
@@ -173,7 +173,7 @@ async def get_business_metrics(
     return metrics.model_dump()
 
 
-@router.get("/business/{project_name}/trend")
+@router.get("/business/{project_name}/trend", summary="Get business metrics trend over time")
 async def get_business_trend(
     project_name: str,
     periods: int = Query(default=6, ge=1, le=24),
@@ -188,7 +188,7 @@ async def get_business_trend(
     return [t.model_dump() for t in trends]
 
 
-@router.get("/business/{project_name}/executive-summary")
+@router.get("/business/{project_name}/executive-summary", summary="Get executive summary of business metrics")
 async def get_executive_summary(
     project_name: str,
     session: AsyncSession = Depends(get_db),
@@ -203,7 +203,7 @@ async def get_executive_summary(
 
 # ============= Productivity =============
 
-@router.get("/productivity/team/{project_name}")
+@router.get("/productivity/team/{project_name}", summary="Get team productivity metrics")
 async def get_team_productivity(
     project_name: str,
     period_start: datetime | None = None,
@@ -219,7 +219,7 @@ async def get_team_productivity(
     return metrics.model_dump()
 
 
-@router.get("/productivity/individual/{developer_id}")
+@router.get("/productivity/individual/{developer_id}", summary="Get individual developer productivity metrics")
 async def get_individual_productivity(
     developer_id: str,
     period_start: datetime | None = None,
@@ -235,7 +235,7 @@ async def get_individual_productivity(
     return metrics.model_dump()
 
 
-@router.get("/productivity/leaderboard/{project_name}")
+@router.get("/productivity/leaderboard/{project_name}", summary="Get productivity leaderboard for a project")
 async def get_productivity_leaderboard(
     project_name: str,
     metric: str = Query(default="overall", pattern="^(overall|velocity|quality|collaboration)$"),
@@ -253,7 +253,7 @@ async def get_productivity_leaderboard(
     return [r.model_dump() for r in results]
 
 
-@router.get("/productivity/insights/{project_name}")
+@router.get("/productivity/insights/{project_name}", summary="Get actionable productivity insights for a project")
 async def get_productivity_insights(
     project_name: str,
     session: AsyncSession = Depends(get_db),
@@ -268,7 +268,7 @@ async def get_productivity_insights(
 
 # ============= Combined Dashboard =============
 
-@router.get("/dashboard/{project_name}")
+@router.get("/dashboard/{project_name}", summary="Get combined metrics dashboard for a project")
 async def get_metrics_dashboard(
     project_name: str,
     session: AsyncSession = Depends(get_db),
@@ -305,7 +305,7 @@ async def get_metrics_dashboard(
 
 # ============= Flow Metrics =============
 
-@router.get("/flow/{project_name}")
+@router.get("/flow/{project_name}", summary="Get Flow metrics for a project")
 async def get_flow_metrics(
     project_name: str,
     period_start: datetime | None = None,
@@ -333,7 +333,7 @@ async def get_flow_metrics(
     return metrics.model_dump()
 
 
-@router.get("/flow/{project_name}/cfd")
+@router.get("/flow/{project_name}/cfd", summary="Get Cumulative Flow Diagram data")
 async def get_cumulative_flow_diagram(
     project_name: str,
     period_start: datetime | None = None,
@@ -351,7 +351,7 @@ async def get_cumulative_flow_diagram(
     )
 
 
-@router.get("/flow/{project_name}/cycle-time-histogram")
+@router.get("/flow/{project_name}/cycle-time-histogram", summary="Get cycle time distribution data")
 async def get_cycle_time_histogram(
     project_name: str,
     period_start: datetime | None = None,
@@ -369,7 +369,7 @@ async def get_cycle_time_histogram(
     )
 
 
-@router.get("/flow/{project_name}/throughput")
+@router.get("/flow/{project_name}/throughput", summary="Get throughput run chart data")
 async def get_throughput_chart(
     project_name: str,
     period_start: datetime | None = None,
@@ -390,7 +390,7 @@ async def get_throughput_chart(
 
 # ============= Unified Metrics with AI Insights =============
 
-@router.get("/unified/{project_name}")
+@router.get("/unified/{project_name}", summary="Get unified metrics combining DORA, Flow, and Productivity")
 async def get_unified_metrics(
     project_name: str,
     period_start: datetime | None = None,
@@ -423,7 +423,7 @@ async def get_unified_metrics(
     return metrics.model_dump()
 
 
-@router.get("/unified/{project_name}/summary")
+@router.get("/unified/{project_name}/summary", summary="Get a quick summary of current metrics state")
 async def get_metrics_summary(
     project_name: str,
     session: AsyncSession = Depends(get_db),
@@ -439,7 +439,7 @@ async def get_metrics_summary(
     )
 
 
-@router.get("/unified/{project_name}/dashboard")
+@router.get("/unified/{project_name}/dashboard", summary="Get complete dashboard data for metrics visualization")
 async def get_unified_dashboard(
     project_name: str,
     period_start: datetime | None = None,
@@ -481,7 +481,7 @@ async def get_unified_dashboard(
 
 # ============= AI Insights =============
 
-@router.get("/insights/{project_name}")
+@router.get("/insights/{project_name}", summary="Get AI-generated insights for a project")
 async def get_ai_insights(
     project_name: str,
     period_start: datetime | None = None,
@@ -528,7 +528,7 @@ async def get_ai_insights(
     }
 
 
-@router.post("/insights/{project_name}/chat")
+@router.post("/insights/{project_name}/chat", summary="Ask questions about metrics in natural language")
 async def chat_about_metrics(
     project_name: str,
     question: str = Query(..., min_length=5, max_length=500),

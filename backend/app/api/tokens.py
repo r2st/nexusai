@@ -55,7 +55,7 @@ async def list_available_scopes() -> list[dict[str, str]]:
     ]
 
 
-@router.post("/", response_model=PATCreateResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=PATCreateResponse, status_code=status.HTTP_201_CREATED, summary="Create a new Personal Access Token")
 async def create_token(
     request: PATCreateRequest,
     current_user: User = Depends(get_current_user),
@@ -75,7 +75,7 @@ async def create_token(
     )
 
 
-@router.get("/", response_model=list[PATInfo])
+@router.get("/", response_model=list[PATInfo], summary="List all Personal Access Tokens for the current user")
 async def list_tokens(
     include_revoked: bool = Query(default=False),
     limit: int = Query(default=50, ge=1, le=200),
@@ -98,7 +98,7 @@ async def list_tokens(
     )
 
 
-@router.delete("/{token_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{token_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Revoke a Personal Access Token")
 async def revoke_token(
     token_id: str,
     reason: str | None = Query(default=None),
@@ -126,7 +126,7 @@ async def revoke_token(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.post("/{token_id}/rotate", response_model=PATCreateResponse)
+@router.post("/{token_id}/rotate", response_model=PATCreateResponse, summary="Rotate a Personal Access Token")
 async def rotate_token(
     token_id: str,
     current_user: User = Depends(get_current_user),
@@ -162,7 +162,7 @@ class ValidateTokenRequest(BaseModel):
     required_scopes: list[str] = Field(default=[])
 
 
-@router.post("/validate")
+@router.post("/validate", summary="Validate a token and check its scopes")
 async def validate_token(
     request: ValidateTokenRequest,
     session: AsyncSession = Depends(get_db),

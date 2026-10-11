@@ -124,7 +124,7 @@ async def configure_teams(request: ConfigureTeamsRequest, _current_user: User = 
 
 # --- Slack Webhook Endpoints ---
 
-@router.post("/slack/events")
+@router.post("/slack/events", summary="Handle Slack event webhook")
 async def slack_events(
     request: Request,
     x_slack_signature: str = Header(None, alias="X-Slack-Signature"),
@@ -159,7 +159,7 @@ async def slack_events(
     return {"ok": True}
 
 
-@router.post("/slack/commands")
+@router.post("/slack/commands", summary="Handle Slack slash command")
 async def slack_commands(
     request: Request,
     x_slack_signature: str = Header(None, alias="X-Slack-Signature"),
@@ -189,7 +189,7 @@ async def slack_commands(
     return result
 
 
-@router.post("/slack/interactions")
+@router.post("/slack/interactions", summary="Handle Slack interactive component")
 async def slack_interactions(
     request: Request,
     x_slack_signature: str = Header(None, alias="X-Slack-Signature"),

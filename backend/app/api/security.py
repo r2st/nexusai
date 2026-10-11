@@ -149,7 +149,7 @@ async def get_rotation_service() -> SecretRotationService:
 
 
 # Scanner Endpoints
-@router.post("/scan/project", response_model=ScanResponse)
+@router.post("/scan/project", response_model=ScanResponse, summary="Scan a project for security issues")
 async def scan_project(
     request: ScanProjectRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -191,7 +191,7 @@ async def scan_project(
         )
 
 
-@router.post("/scan/diff", response_model=ScanResponse)
+@router.post("/scan/diff", response_model=ScanResponse, summary="Scan a diff for security issues")
 async def scan_diff(
     request: ScanDiffRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -228,7 +228,7 @@ async def scan_diff(
         )
 
 
-@router.post("/scan/dependencies", response_model=VulnerabilityResponse)
+@router.post("/scan/dependencies", response_model=VulnerabilityResponse, summary="Scan project dependencies for vulnerabilities")
 async def scan_dependencies(
     project_path: str,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -256,7 +256,7 @@ async def scan_dependencies(
         )
 
 
-@router.post("/scan/code", response_model=list[CodeIssueResponse])
+@router.post("/scan/code", response_model=list[CodeIssueResponse], summary="Scan source code for security issues")
 async def scan_code(
     project_path: str,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -289,7 +289,7 @@ async def scan_code(
         )
 
 
-@router.post("/scan/config", response_model=list[ConfigIssueResponse])
+@router.post("/scan/config", response_model=list[ConfigIssueResponse], summary="Check configuration files for security issues")
 async def scan_config(
     project_path: str,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -321,7 +321,7 @@ async def scan_config(
 
 
 # Secret Rotation Endpoints
-@router.post("/secrets/register", response_model=SecretResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/secrets/register", response_model=SecretResponse, status_code=status.HTTP_201_CREATED, summary="Register a secret for rotation management")
 async def register_secret(
     request: SecretRegisterRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -361,7 +361,7 @@ async def register_secret(
         )
 
 
-@router.post("/secrets/{name}/rotate", response_model=RotationResponse)
+@router.post("/secrets/{name}/rotate", response_model=RotationResponse, summary="Rotate a secret to a new value")
 async def rotate_secret(
     name: str,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -388,7 +388,7 @@ async def rotate_secret(
         )
 
 
-@router.get("/secrets", response_model=list[SecretResponse])
+@router.get("/secrets", response_model=list[SecretResponse], summary="List all managed secrets")
 async def list_secrets(
     current_user: Annotated[User, Depends(get_current_user)],
     service: Annotated[SecretRotationService, Depends(get_rotation_service)],
@@ -410,7 +410,7 @@ async def list_secrets(
     ]
 
 
-@router.get("/secrets/expiring", response_model=list[SecretResponse])
+@router.get("/secrets/expiring", response_model=list[SecretResponse], summary="Get secrets that are expiring soon")
 async def get_expiring_secrets(
     current_user: Annotated[User, Depends(get_current_user)],
     service: Annotated[SecretRotationService, Depends(get_rotation_service)],
@@ -431,7 +431,7 @@ async def get_expiring_secrets(
     ]
 
 
-@router.post("/secrets/rotate-all", response_model=list[RotationResponse])
+@router.post("/secrets/rotate-all", response_model=list[RotationResponse], summary="Rotate all secrets that are due for rotation")
 async def rotate_all_due(
     current_user: Annotated[User, Depends(get_current_user)],
     service: Annotated[SecretRotationService, Depends(get_rotation_service)],

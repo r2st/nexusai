@@ -146,7 +146,7 @@ async def get_plugin(plugin_id: str, _current_user: User = Depends(get_current_u
     }
 
 
-@router.post("/connections", status_code=status.HTTP_201_CREATED)
+@router.post("/connections", status_code=status.HTTP_201_CREATED, summary="Create a new AI tool connection")
 async def create_connection(
     request: AIToolConnectionCreate,
     db: AsyncSession = Depends(get_db),
@@ -187,7 +187,7 @@ async def create_connection(
     )
 
 
-@router.post("/connections/{connection_id}/test")
+@router.post("/connections/{connection_id}/test", summary="Test an AI tool connection")
 async def test_connection(
     connection_id: str,
     db: AsyncSession = Depends(get_db),
@@ -243,7 +243,7 @@ async def test_connection(
     }
 
 
-@router.post("/connections/{connection_id}/collect")
+@router.post("/connections/{connection_id}/collect", summary="Trigger data collection for an AI tool connection")
 async def collect_data(
     connection_id: str,
     since: datetime | None = None,
@@ -305,7 +305,7 @@ async def collect_data(
     }
 
 
-@router.get("/metrics")
+@router.get("/metrics", summary="Get AI usage metrics")
 async def get_metrics(
     tool_type: str | None = None,
     project_id: str | None = None,
@@ -353,7 +353,7 @@ async def get_metrics(
     return metrics
 
 
-@router.get("/roi")
+@router.get("/roi", summary="Get AI ROI metrics")
 async def get_roi(
     project_id: str | None = None,
     period_start: datetime | None = None,
@@ -388,7 +388,7 @@ async def get_roi(
     )
 
 
-@router.get("/roi/trend")
+@router.get("/roi/trend", summary="Get ROI trend over time")
 async def get_roi_trend(
     project_id: str | None = None,
     periods: int = Query(default=6, ge=1, le=12),
@@ -407,7 +407,7 @@ async def get_roi_trend(
     )
 
 
-@router.get("/productivity")
+@router.get("/productivity", summary="Get detailed productivity metrics")
 async def get_productivity(
     project_id: str | None = None,
     period_start: datetime | None = None,
@@ -430,7 +430,7 @@ async def get_productivity(
     )
 
 
-@router.post("/summaries")
+@router.post("/summaries", summary="Generate an AI summary")
 async def generate_summary(
     request: SummaryRequest,
     db: AsyncSession = Depends(get_db),
@@ -495,7 +495,7 @@ async def generate_summary(
     )
 
 
-@router.get("/summaries")
+@router.get("/summaries", summary="List AI summaries")
 async def list_summaries(
     project_id: str | None = None,
     summary_type: str | None = None,

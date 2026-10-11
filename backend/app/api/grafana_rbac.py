@@ -54,7 +54,7 @@ class AssignRoleRequest(BaseModel):
         return v
 
 
-@router.post("/sync-user")
+@router.post("/sync-user", summary="Sync NexusAI user to Grafana with appropriate role")
 async def sync_user_to_grafana(
     request: SyncUserRequest,
     user: User = Depends(get_current_user),
@@ -95,7 +95,7 @@ async def sync_user_to_grafana(
     }
 
 
-@router.post("/assign-role")
+@router.post("/assign-role", summary="Assign role to Grafana user")
 async def assign_grafana_role(
     request: AssignRoleRequest,
     _: User = Depends(get_current_admin_user),
@@ -134,7 +134,7 @@ async def assign_grafana_role(
     }
 
 
-@router.post("/sync-permissions")
+@router.post("/sync-permissions", summary="Sync user permissions from NexusAI to Grafana")
 async def sync_user_permissions(
     project_id: str | None = None,
     organization_id: str | None = None,
@@ -168,7 +168,7 @@ async def sync_user_permissions(
     }
 
 
-@router.get("/health")
+@router.get("/health", summary="Check Grafana RBAC service health")
 async def grafana_rbac_health(
     _: User = Depends(get_current_user),
 ) -> dict[str, Any]:

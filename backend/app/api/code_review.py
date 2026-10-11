@@ -66,7 +66,7 @@ async def get_review_service() -> CodeReviewService:
 
 
 # Endpoints
-@router.post("/github/review", response_model=ReviewResponse)
+@router.post("/github/review", response_model=ReviewResponse, summary="Review a GitHub pull request")
 async def review_github_pr(
     request: ReviewPRRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -111,7 +111,7 @@ async def review_github_pr(
         )
 
 
-@router.post("/gitlab/review", response_model=ReviewResponse)
+@router.post("/gitlab/review", response_model=ReviewResponse, summary="Review a GitLab merge request")
 async def review_gitlab_mr(
     request: ReviewMRRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -155,7 +155,7 @@ async def review_gitlab_mr(
         )
 
 
-@router.post("/webhook/github")
+@router.post("/webhook/github", summary="Handle GitHub webhook events")
 async def github_webhook(
     request: Request,
     service: Annotated[CodeReviewService, Depends(get_review_service)],
@@ -192,7 +192,7 @@ async def github_webhook(
         raise HTTPException(status_code=500, detail="Webhook processing failed")
 
 
-@router.post("/webhook/gitlab")
+@router.post("/webhook/gitlab", summary="Handle GitLab webhook events")
 async def gitlab_webhook(
     request: Request,
     service: Annotated[CodeReviewService, Depends(get_review_service)],

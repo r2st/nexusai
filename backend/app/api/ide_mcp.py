@@ -143,7 +143,7 @@ class TestGenerationRequest(BaseModel):
 # ============================================================================
 
 
-@router.post("/search/context", response_model=list[ContextSearchResult])
+@router.post("/search/context", response_model=list[ContextSearchResult], summary="Search code with context awareness")
 async def context_search(
     request: ContextSearchRequest,
     user: User = Depends(get_current_user),
@@ -197,7 +197,7 @@ async def context_search(
     ]
 
 
-@router.post("/docs/lookup", response_model=DocumentationResult)
+@router.post("/docs/lookup", response_model=DocumentationResult, summary="Look up documentation for a symbol")
 async def lookup_documentation(
     request: DocumentationRequest,
     user: User = Depends(get_current_user),
@@ -259,7 +259,7 @@ async def lookup_documentation(
     )
 
 
-@router.get("/metrics/quick", response_model=QuickMetricsResponse)
+@router.get("/metrics/quick", response_model=QuickMetricsResponse, summary="Get quick DORA metrics for IDE status bar")
 async def get_quick_metrics(
     repository: str | None = None,
     user: User = Depends(get_current_user),
@@ -308,7 +308,7 @@ async def get_quick_metrics(
     )
 
 
-@router.post("/history/file", response_model=list[CommitInfo])
+@router.post("/history/file", response_model=list[CommitInfo], summary="Get commit history for a file")
 async def get_file_history(
     request: FileHistoryRequest,
     user: User = Depends(get_current_user),
@@ -358,7 +358,7 @@ async def get_file_history(
     ]
 
 
-@router.get("/blame/{file_path:path}", response_model=FileBlameResult)
+@router.get("/blame/{file_path:path}", response_model=FileBlameResult, summary="Get blame information for a file")
 async def get_file_blame(
     file_path: str,
     repository: str | None = None,
@@ -399,7 +399,7 @@ async def get_file_blame(
     )
 
 
-@router.post("/ai/explain")
+@router.post("/ai/explain", summary="Get AI explanation for code")
 async def explain_code(
     request: ExplainCodeRequest,
     user: User = Depends(get_current_user),
@@ -454,7 +454,7 @@ Provide a clear, concise explanation.""",
     }
 
 
-@router.post("/ai/refactor")
+@router.post("/ai/refactor", summary="Get AI refactoring suggestions")
 async def suggest_refactoring(
     request: RefactorRequest,
     user: User = Depends(get_current_user),
@@ -485,7 +485,7 @@ Provide:
     }
 
 
-@router.post("/ai/generate-tests")
+@router.post("/ai/generate-tests", summary="Generate tests for code")
 async def generate_tests(
     request: TestGenerationRequest,
     user: User = Depends(get_current_user),
@@ -516,7 +516,7 @@ Provide complete, runnable test code.""",
     }
 
 
-@router.get("/tools")
+@router.get("/tools", summary="List MCP tools available for IDE integration")
 async def list_available_tools(
     user: User = Depends(get_current_user),
 ) -> dict[str, Any]:

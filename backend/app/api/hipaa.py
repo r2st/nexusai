@@ -197,7 +197,7 @@ async def create_baa(request: CreateBAARequest, _current_user: User = Depends(ge
     return {"baa": baa.model_dump()}
 
 
-@router.get("/baa")
+@router.get("/baa", summary="List Business Associate Agreements")
 async def list_baas(
     organization_id: str | None = None,
     status: BAAStatus | None = None,
@@ -365,7 +365,7 @@ async def get_encryption_algorithms(_current_user: User = Depends(get_current_us
 
 # --- Control Management Endpoints ---
 
-@router.get("/controls")
+@router.get("/controls", summary="List HIPAA controls")
 async def list_controls(
     category: HIPAAControlCategory | None = None,
     status: HIPAAControlStatus | None = None,
@@ -485,7 +485,7 @@ async def deny_access(justification_id: str, request: DenyAccessRequest, _curren
 
 # --- Compliance Report Endpoints ---
 
-@router.get("/report")
+@router.get("/report", summary="Generate HIPAA compliance report")
 async def get_hipaa_compliance_report(
     _current_user: User = Depends(get_current_user),
     report_period: str = Query(default="Q1 2024"),
@@ -497,7 +497,7 @@ async def get_hipaa_compliance_report(
     return {"report": report.model_dump()}
 
 
-@router.get("/audit-log")
+@router.get("/audit-log", summary="Get HIPAA audit log entries")
 async def get_hipaa_audit_log(
     resource_type: str | None = None,
     _current_user: User = Depends(get_current_user),

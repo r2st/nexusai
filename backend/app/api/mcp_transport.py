@@ -66,7 +66,7 @@ def get_mcp_router() -> APIRouter:
 mcp_transport_router = APIRouter(prefix="/mcp", tags=["mcp-transport"])
 
 
-@mcp_transport_router.get("/info")
+@mcp_transport_router.get("/info", summary="Get MCP server information")
 async def get_mcp_info(
     user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
@@ -89,7 +89,7 @@ async def get_mcp_info(
     }
 
 
-@mcp_transport_router.get("/tools")
+@mcp_transport_router.get("/tools", summary="List available MCP tools")
 async def list_mcp_tools(
     user: User = Depends(get_current_user),
 ) -> dict[str, Any]:
@@ -99,7 +99,7 @@ async def list_mcp_tools(
     return get_all_tools_summary()
 
 
-@mcp_transport_router.post("/start")
+@mcp_transport_router.post("/start", summary="Start the MCP HTTP transport")
 async def start_transport(
     user: User = Depends(get_current_user),
 ) -> dict[str, str]:
@@ -116,7 +116,7 @@ async def start_transport(
     return {"status": "started"}
 
 
-@mcp_transport_router.post("/stop")
+@mcp_transport_router.post("/stop", summary="Stop the MCP HTTP transport")
 async def stop_transport(
     user: User = Depends(get_current_user),
 ) -> dict[str, str]:

@@ -85,7 +85,7 @@ class CreateConnectionRequest(BaseModel):
 # ======================
 
 
-@router.get("/health", response_model=HealthResponse)
+@router.get("/health", response_model=HealthResponse, summary="Check if DevLake is available")
 async def check_devlake_health(
     _: User = Depends(get_current_user),
 ) -> HealthResponse:
@@ -103,7 +103,7 @@ async def check_devlake_health(
 # ======================
 
 
-@router.get("/projects")
+@router.get("/projects", summary="List all DevLake projects")
 async def list_projects(
     _: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
@@ -118,7 +118,7 @@ async def list_projects(
         )
 
 
-@router.get("/projects/{project_name}")
+@router.get("/projects/{project_name}", summary="Get a specific project")
 async def get_project(
     project_name: str,
     _: User = Depends(get_current_user),
@@ -142,7 +142,7 @@ async def get_project(
         )
 
 
-@router.post("/projects", status_code=status.HTTP_201_CREATED)
+@router.post("/projects", status_code=status.HTTP_201_CREATED, summary="Create a new project in DevLake")
 async def create_project(
     request: CreateProjectRequest,
     _: User = Depends(get_current_user),
@@ -166,7 +166,7 @@ async def create_project(
 # ======================
 
 
-@router.get("/projects/{project_name}/dora", response_model=DORAMetrics)
+@router.get("/projects/{project_name}/dora", response_model=DORAMetrics, summary="Get DORA metrics for a project")
 async def get_dora_metrics(
     project_name: str,
     time_range: str = "past_6_months",
@@ -196,7 +196,7 @@ async def get_dora_metrics(
 # ======================
 
 
-@router.get("/connections")
+@router.get("/connections", summary="List all connections, optionally filtered by plugin")
 async def list_connections(
     plugin: str | None = None,
     _: User = Depends(get_current_user),
@@ -212,7 +212,7 @@ async def list_connections(
         )
 
 
-@router.get("/plugins/{plugin}/connections/{connection_id}")
+@router.get("/plugins/{plugin}/connections/{connection_id}", summary="Get a specific connection")
 async def get_connection(
     plugin: str,
     connection_id: int,
@@ -229,7 +229,7 @@ async def get_connection(
         )
 
 
-@router.post("/plugins/{plugin}/connections", status_code=status.HTTP_201_CREATED)
+@router.post("/plugins/{plugin}/connections", status_code=status.HTTP_201_CREATED, summary="Create a new connection for a plugin")
 async def create_connection(
     plugin: str,
     request: CreateConnectionRequest,
@@ -251,7 +251,7 @@ async def create_connection(
         )
 
 
-@router.post("/plugins/{plugin}/connections/{connection_id}/test")
+@router.post("/plugins/{plugin}/connections/{connection_id}/test", summary="Test a connection")
 async def test_connection(
     plugin: str,
     connection_id: int,
@@ -273,7 +273,7 @@ async def test_connection(
 # ======================
 
 
-@router.get("/blueprints")
+@router.get("/blueprints", summary="List all blueprints")
 async def list_blueprints(
     _: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
@@ -288,7 +288,7 @@ async def list_blueprints(
         )
 
 
-@router.get("/blueprints/{blueprint_id}")
+@router.get("/blueprints/{blueprint_id}", summary="Get a specific blueprint")
 async def get_blueprint(
     blueprint_id: int,
     _: User = Depends(get_current_user),
@@ -304,7 +304,7 @@ async def get_blueprint(
         )
 
 
-@router.post("/blueprints/{blueprint_id}/trigger")
+@router.post("/blueprints/{blueprint_id}/trigger", summary="Trigger a blueprint to run")
 async def trigger_blueprint(
     blueprint_id: int,
     _: User = Depends(get_current_user),
@@ -325,7 +325,7 @@ async def trigger_blueprint(
 # ======================
 
 
-@router.get("/pipelines")
+@router.get("/pipelines", summary="List pipelines with pagination")
 async def list_pipelines(
     page: int = 1,
     page_size: int = 20,
@@ -342,7 +342,7 @@ async def list_pipelines(
         )
 
 
-@router.get("/pipelines/{pipeline_id}")
+@router.get("/pipelines/{pipeline_id}", summary="Get a specific pipeline")
 async def get_pipeline(
     pipeline_id: int,
     _: User = Depends(get_current_user),
@@ -358,7 +358,7 @@ async def get_pipeline(
         )
 
 
-@router.delete("/pipelines/{pipeline_id}")
+@router.delete("/pipelines/{pipeline_id}", summary="Cancel a running pipeline")
 async def cancel_pipeline(
     pipeline_id: int,
     _: User = Depends(get_current_user),
@@ -379,7 +379,7 @@ async def cancel_pipeline(
 # ======================
 
 
-@router.get("/plugins")
+@router.get("/plugins", summary="List all available DevLake plugins")
 async def list_plugins(
     _: User = Depends(get_current_user),
 ) -> list[dict[str, Any]]:
@@ -394,7 +394,7 @@ async def list_plugins(
         )
 
 
-@router.get("/plugins/{plugin}")
+@router.get("/plugins/{plugin}", summary="Get details about a specific plugin")
 async def get_plugin(
     plugin: str,
     _: User = Depends(get_current_user),

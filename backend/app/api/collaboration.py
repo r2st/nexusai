@@ -148,7 +148,7 @@ async def get_presence(user_id: str, _current_user: User = Depends(get_current_u
     return {"presence": presence.model_dump()}
 
 
-@router.get("/presence")
+@router.get("/presence", summary="Get team presence")
 async def get_team_presence(
     project_id: str | None = None,
     status: PresenceStatus | None = None,
@@ -186,7 +186,7 @@ async def set_offline(user_id: str, _current_user: User = Depends(get_current_us
     return {"presence": presence.model_dump()}
 
 
-@router.get("/presence/file/{project_id}")
+@router.get("/presence/file/{project_id}", summary="Get users viewing a specific file")
 async def get_users_in_file(
     project_id: str,
     file_path: str,
@@ -220,7 +220,7 @@ async def create_session(request: CreateSessionRequest, _current_user: User = De
     return {"session": session.model_dump()}
 
 
-@router.get("/sessions")
+@router.get("/sessions", summary="List collaborative sessions")
 async def list_sessions(
     organization_id: str | None = None,
     session_type: SessionType | None = None,
@@ -327,7 +327,7 @@ async def create_annotation(request: CreateAnnotationRequest, _current_user: Use
     return {"annotation": annotation.model_dump()}
 
 
-@router.get("/annotations")
+@router.get("/annotations", summary="List annotations")
 async def list_annotations(
     organization_id: str,
     project_id: str | None = None,
@@ -428,7 +428,7 @@ async def get_user_mentions(user_id: str, unresolved_only: bool = True, _current
 
 # --- Activity Feed Endpoints ---
 
-@router.get("/activity/organization/{organization_id}")
+@router.get("/activity/organization/{organization_id}", summary="Get organization activity feed")
 async def get_organization_activity(
     organization_id: str,
     viewer_user_id: str | None = None,
@@ -456,7 +456,7 @@ async def get_organization_activity(
     return {"events": [e.model_dump() for e in events]}
 
 
-@router.get("/activity/project/{project_id}")
+@router.get("/activity/project/{project_id}", summary="Get project activity feed")
 async def get_project_activity(
     project_id: str,
     viewer_user_id: str | None = None,
@@ -482,7 +482,7 @@ async def get_project_activity(
     return {"events": [e.model_dump() for e in events]}
 
 
-@router.get("/activity/user/{user_id}")
+@router.get("/activity/user/{user_id}", summary="Get user activity feed")
 async def get_user_activity(
     user_id: str,
     viewer_user_id: str | None = None,
@@ -499,7 +499,7 @@ async def get_user_activity(
     return {"events": [e.model_dump() for e in events]}
 
 
-@router.get("/activity/summary/{organization_id}")
+@router.get("/activity/summary/{organization_id}", summary="Get activity summary")
 async def get_activity_summary(
     organization_id: str,
     project_id: str | None = None,
@@ -552,7 +552,7 @@ async def get_room_members(room_type: str, room_key: str, _current_user: User = 
 
 # --- Dashboard Endpoint ---
 
-@router.get("/dashboard/{organization_id}")
+@router.get("/dashboard/{organization_id}", summary="Get collaboration dashboard data")
 async def get_collaboration_dashboard(
     organization_id: str,
     project_id: str | None = None,

@@ -126,7 +126,7 @@ class TriggerEventRequest(BaseModel):
 # ============================================================================
 
 
-@router.get("/status", response_model=SchedulerStatsResponse)
+@router.get("/status", response_model=SchedulerStatsResponse, summary="Get scheduler status and statistics")
 async def get_scheduler_status(
     user: User = Depends(get_current_user),
 ) -> SchedulerStatsResponse:
@@ -142,7 +142,7 @@ async def get_scheduler_status(
     return SchedulerStatsResponse(**stats)
 
 
-@router.post("/start")
+@router.post("/start", summary="Start the background scheduler")
 async def start_scheduler(
     user: User = Depends(get_current_user),
 ) -> dict[str, str]:
@@ -158,7 +158,7 @@ async def start_scheduler(
     return {"status": "started", "message": "Scheduler started successfully"}
 
 
-@router.post("/stop")
+@router.post("/stop", summary="Stop the background scheduler")
 async def stop_scheduler(
     user: User = Depends(get_current_user),
 ) -> dict[str, str]:
@@ -174,7 +174,7 @@ async def stop_scheduler(
     return {"status": "stopped", "message": "Scheduler stopped successfully"}
 
 
-@router.get("/tasks", response_model=list[TaskResponse])
+@router.get("/tasks", response_model=list[TaskResponse], summary="List all scheduled tasks")
 async def list_tasks(
     status_filter: str | None = None,
     task_type: str | None = None,
@@ -215,7 +215,7 @@ async def list_tasks(
     ]
 
 
-@router.post("/tasks", response_model=TaskResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/tasks", response_model=TaskResponse, status_code=status.HTTP_201_CREATED, summary="Create a new scheduled task")
 async def create_task(
     request: CreateTaskRequest,
     user: User = Depends(get_current_user),
@@ -275,7 +275,7 @@ async def create_task(
     )
 
 
-@router.get("/tasks/{task_id}", response_model=TaskResponse)
+@router.get("/tasks/{task_id}", response_model=TaskResponse, summary="Get a specific task")
 async def get_task(
     task_id: str,
     user: User = Depends(get_current_user),
@@ -312,7 +312,7 @@ async def get_task(
     )
 
 
-@router.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete a scheduled task")
 async def delete_task(
     task_id: str,
     user: User = Depends(get_current_user),
@@ -333,7 +333,7 @@ async def delete_task(
         )
 
 
-@router.post("/tasks/{task_id}/trigger")
+@router.post("/tasks/{task_id}/trigger", summary="Manually trigger a task to run immediately")
 async def trigger_task(
     task_id: str,
     user: User = Depends(get_current_user),
@@ -350,7 +350,7 @@ async def trigger_task(
     return {"status": "triggered", "task_id": task_id}
 
 
-@router.post("/tasks/{task_id}/pause")
+@router.post("/tasks/{task_id}/pause", summary="Pause a scheduled task")
 async def pause_task(
     task_id: str,
     user: User = Depends(get_current_user),
@@ -373,7 +373,7 @@ async def pause_task(
     return {"status": "paused", "task_id": task_id}
 
 
-@router.post("/tasks/{task_id}/resume")
+@router.post("/tasks/{task_id}/resume", summary="Resume a paused task")
 async def resume_task(
     task_id: str,
     user: User = Depends(get_current_user),
@@ -396,7 +396,7 @@ async def resume_task(
     return {"status": "resumed", "task_id": task_id}
 
 
-@router.get("/tasks/{task_id}/executions", response_model=list[ExecutionResponse])
+@router.get("/tasks/{task_id}/executions", response_model=list[ExecutionResponse], summary="Get execution history for a task")
 async def get_task_executions(
     task_id: str,
     limit: int = 10,
@@ -427,7 +427,7 @@ async def get_task_executions(
     ]
 
 
-@router.post("/events/trigger")
+@router.post("/events/trigger", summary="Trigger an event to run event-based tasks")
 async def trigger_event(
     request: TriggerEventRequest,
     user: User = Depends(get_current_user),

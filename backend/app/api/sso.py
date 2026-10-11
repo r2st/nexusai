@@ -86,7 +86,7 @@ class SessionResponse(BaseModel):
 
 # API Endpoints
 
-@router.get("/providers", response_model=List[ProviderResponse])
+@router.get("/providers", response_model=List[ProviderResponse], summary="List available SSO providers")
 async def list_providers(
     tenant_id: Optional[str] = Query(None),
     _current_user: User = Depends(get_current_admin_user),
@@ -121,7 +121,7 @@ async def delete_provider(provider_id: str, _current_user: User = Depends(get_cu
     _raise_not_configured()
 
 
-@router.get("/auth/{provider_id}")
+@router.get("/auth/{provider_id}", summary="Start SSO authentication flow")
 async def start_authentication(
     provider_id: str,
     redirect_uri: str = Query(..., description="URI to redirect after authentication"),
@@ -135,7 +135,7 @@ async def start_authentication(
     _raise_not_configured()
 
 
-@router.get("/auth/{provider_id}/url", response_model=AuthStartResponse)
+@router.get("/auth/{provider_id}/url", response_model=AuthStartResponse, summary="Get authorization URL without redirecting")
 async def get_authorization_url(
     provider_id: str,
     redirect_uri: str = Query(...),
@@ -149,7 +149,7 @@ async def get_authorization_url(
     _raise_not_configured()
 
 
-@router.get("/callback/oidc")
+@router.get("/callback/oidc", summary="Handle OIDC callback from identity provider")
 async def oidc_callback(
     code: str = Query(...),
     state: str = Query(...),
@@ -199,7 +199,7 @@ async def get_sp_metadata(provider_id: str) -> None:
     _raise_not_configured()
 
 
-@router.post("/token/refresh", response_model=TokenResponse)
+@router.post("/token/refresh", response_model=TokenResponse, summary="Refresh access token")
 async def refresh_token(
     request: "SSORefreshRequest",
     _current_user: User = Depends(get_current_admin_user),
@@ -212,7 +212,7 @@ async def refresh_token(
     _raise_not_configured()
 
 
-@router.get("/session", response_model=SessionResponse)
+@router.get("/session", response_model=SessionResponse, summary="Get current session information")
 async def get_session(
     session_id: str = Query(...),
     _current_user: User = Depends(get_current_admin_user),
@@ -221,7 +221,7 @@ async def get_session(
     _raise_not_configured()
 
 
-@router.post("/logout")
+@router.post("/logout", summary="Logout from SSO")
 async def logout(
     session_id: str = Query(...),
     post_logout_uri: str = Query("/"),

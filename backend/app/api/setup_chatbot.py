@@ -95,7 +95,7 @@ class SessionInfoResponse(BaseModel):
 # ===================
 
 
-@router.post("/sessions", response_model=StartSessionResponse)
+@router.post("/sessions", response_model=StartSessionResponse, summary="Start a new setup assistant session")
 async def start_session(
     request: StartSessionRequest,
     current_user: User = Depends(get_current_user),
@@ -174,7 +174,7 @@ async def start_session(
     )
 
 
-@router.post("/sessions/{session_id}/messages", response_model=ChatResponse)
+@router.post("/sessions/{session_id}/messages", response_model=ChatResponse, summary="Send a message to the setup assistant")
 async def send_message(
     session_id: str,
     request: SendMessageRequest,
@@ -219,7 +219,7 @@ async def send_message(
     return response
 
 
-@router.get("/sessions/{session_id}", response_model=SessionInfoResponse)
+@router.get("/sessions/{session_id}", response_model=SessionInfoResponse, summary="Get information about a session")
 async def get_session(
     session_id: str,
     current_user: User = Depends(get_current_user),
@@ -250,7 +250,7 @@ async def get_session(
     )
 
 
-@router.get("/sessions/{session_id}/messages", response_model=list[ChatMessage])
+@router.get("/sessions/{session_id}/messages", response_model=list[ChatMessage], summary="Get all messages in a session")
 async def get_messages(
     session_id: str,
     current_user: User = Depends(get_current_user),
@@ -274,7 +274,7 @@ async def get_messages(
     return session.messages
 
 
-@router.delete("/sessions/{session_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/sessions/{session_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete a session")
 async def delete_session(
     session_id: str,
     current_user: User = Depends(get_current_user),
@@ -298,7 +298,7 @@ async def delete_session(
     setup_chatbot_service.delete_session(session_id)
 
 
-@router.post("/sessions/{session_id}/cancel")
+@router.post("/sessions/{session_id}/cancel", summary="Cancel the current flow in a session")
 async def cancel_session(
     session_id: str,
     current_user: User = Depends(get_current_user),
@@ -324,7 +324,7 @@ async def cancel_session(
     return response
 
 
-@router.get("/plugins", response_model=PluginListResponse)
+@router.get("/plugins", response_model=PluginListResponse, summary="List all available plugins for data source connections")
 async def list_plugins(
     current_user: User = Depends(get_current_user),
 ) -> PluginListResponse:
@@ -353,7 +353,7 @@ async def list_plugins(
     return PluginListResponse(plugins=plugins)
 
 
-@router.post("/quick-setup/{plugin}")
+@router.post("/quick-setup/{plugin}", summary="Quick start a connection setup for a specific plugin")
 async def quick_setup_connection(
     plugin: str,
     current_user: User = Depends(get_current_user),
@@ -392,7 +392,7 @@ async def quick_setup_connection(
     }
 
 
-@router.post("/onboarding")
+@router.post("/onboarding", summary="Start the onboarding flow for new users")
 async def start_onboarding(
     current_user: User = Depends(get_current_user),
     tenant_id: str = Depends(get_current_tenant),

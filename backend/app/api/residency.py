@@ -135,7 +135,7 @@ class CheckComplianceRequest(BaseModel):
 
 # --- Region Endpoints ---
 
-@router.get("/regions")
+@router.get("/regions", summary="List available data regions")
 async def list_regions(
     status: RegionStatus | None = None,
     country_code: str | None = None,
@@ -296,7 +296,7 @@ async def register_storage_location(request: RegisterStorageRequest, _current_us
         raise HTTPException(status_code=400, detail="Invalid storage location configuration. Please check the input parameters.")
 
 
-@router.get("/storage")
+@router.get("/storage", summary="List storage locations")
 async def list_storage_locations(
     organization_id: str | None = None,
     region_id: str | None = None,
@@ -350,7 +350,7 @@ async def create_transfer_request(request: CreateTransferRequest, _current_user:
     return {"transfer": transfer.model_dump()}
 
 
-@router.get("/transfers")
+@router.get("/transfers", summary="List transfer requests")
 async def list_transfers(
     organization_id: str | None = None,
     status: TransferStatus | None = None,
@@ -423,7 +423,7 @@ async def complete_transfer(request_id: str, request: CompleteTransferRequest, _
 
 # --- Violation Endpoints ---
 
-@router.get("/violations")
+@router.get("/violations", summary="List residency violations")
 async def list_violations(
     organization_id: str | None = None,
     severity: ViolationSeverity | None = None,
@@ -478,7 +478,7 @@ async def check_compliance(request: CheckComplianceRequest, _current_user: User 
     return {"result": result}
 
 
-@router.get("/compliance/allowed-regions/{organization_id}")
+@router.get("/compliance/allowed-regions/{organization_id}", summary="Get allowed regions for a data classification")
 async def get_allowed_regions(
     organization_id: str,
     data_classification: DataClassification,

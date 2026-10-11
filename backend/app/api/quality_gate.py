@@ -85,7 +85,7 @@ async def get_ext_service() -> ExtensionService:
 
 
 # Endpoints
-@router.post("/evaluate", response_model=GateResultResponse)
+@router.post("/evaluate", response_model=GateResultResponse, summary="Evaluate quality gate for a single file")
 async def evaluate_quality_gate(
     request: EvaluateRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -140,7 +140,7 @@ async def evaluate_quality_gate(
         )
 
 
-@router.post("/evaluate/batch", response_model=GateResultResponse)
+@router.post("/evaluate/batch", response_model=GateResultResponse, summary="Evaluate quality gate for multiple files")
 async def evaluate_batch(
     request: BatchEvaluateRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -224,7 +224,7 @@ async def evaluate_batch(
         )
 
 
-@router.post("/evaluate/pr", response_model=GateResultResponse)
+@router.post("/evaluate/pr", response_model=GateResultResponse, summary="Evaluate quality gate for a GitHub/GitLab PR")
 async def evaluate_pr(
     request: EvaluatePRRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -267,7 +267,7 @@ async def evaluate_pr(
         )
 
 
-@router.get("/config/{name}", response_model=QualityGateConfig)
+@router.get("/config/{name}", response_model=QualityGateConfig, summary="Get a quality gate configuration by name")
 async def get_config(
     name: str,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -277,7 +277,7 @@ async def get_config(
     return service.get_config(name)
 
 
-@router.put("/config", response_model=QualityGateConfig)
+@router.put("/config", response_model=QualityGateConfig, summary="Create or update a quality gate configuration")
 async def update_config(
     config: QualityGateConfig,
     current_user: Annotated[User, Depends(get_current_user)],

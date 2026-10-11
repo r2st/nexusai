@@ -101,7 +101,7 @@ class ApprovalActionRequest(BaseModel):
 # ======================
 
 
-@router.get("/logs", response_model=list[AuditLogResponse])
+@router.get("/logs", response_model=list[AuditLogResponse], summary="Query audit logs with filters")
 async def get_audit_logs(
     user_id: str | None = None,
     organization_id: str | None = None,
@@ -178,7 +178,7 @@ async def get_audit_logs(
     ]
 
 
-@router.get("/logs/{log_id}", response_model=AuditLogResponse)
+@router.get("/logs/{log_id}", response_model=AuditLogResponse, summary="Get a specific audit log entry")
 async def get_audit_log(
     log_id: str,
     current_user: User = Depends(get_current_user),
@@ -224,7 +224,7 @@ async def get_audit_log(
     )
 
 
-@router.get("/stats", response_model=AuditStatsResponse)
+@router.get("/stats", response_model=AuditStatsResponse, summary="Get audit statistics")
 async def get_audit_stats(
     user_id: str | None = None,
     organization_id: str | None = None,
@@ -249,7 +249,7 @@ async def get_audit_stats(
     return AuditStatsResponse(**stats)
 
 
-@router.get("/timeline", response_model=list[TimelinePoint])
+@router.get("/timeline", response_model=list[TimelinePoint], summary="Get tool usage timeline data")
 async def get_usage_timeline(
     tool_name: str | None = None,
     organization_id: str | None = None,
@@ -278,7 +278,7 @@ async def get_usage_timeline(
 # ======================
 
 
-@router.get("/approvals/pending", response_model=list[ApprovalResponse])
+@router.get("/approvals/pending", response_model=list[ApprovalResponse], summary="Get pending approval requests")
 async def get_pending_approvals(
     organization_id: str | None = None,
     limit: int = Query(50, le=100),
@@ -317,7 +317,7 @@ async def get_pending_approvals(
     ]
 
 
-@router.post("/approvals/{approval_id}/approve", response_model=ApprovalResponse)
+@router.post("/approvals/{approval_id}/approve", response_model=ApprovalResponse, summary="Approve a pending request")
 async def approve_request(
     approval_id: str,
     request: ApprovalActionRequest,
@@ -362,7 +362,7 @@ async def approve_request(
     )
 
 
-@router.post("/approvals/{approval_id}/deny", response_model=ApprovalResponse)
+@router.post("/approvals/{approval_id}/deny", response_model=ApprovalResponse, summary="Deny a pending request")
 async def deny_request(
     approval_id: str,
     request: ApprovalActionRequest,

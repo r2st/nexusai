@@ -69,7 +69,7 @@ async def get_notif_service() -> NotificationService:
 
 
 # Endpoints
-@router.post("/send", response_model=NotificationResultResponse)
+@router.post("/send", response_model=NotificationResultResponse, summary="Send a notification to configured channels")
 async def send_notification(
     request: SendNotificationRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -115,7 +115,7 @@ async def send_notification(
         )
 
 
-@router.post("/test")
+@router.post("/test", summary="Send a test notification to verify configuration")
 async def test_notification(
     request: TestNotificationRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -145,7 +145,7 @@ async def test_notification(
     }
 
 
-@router.get("/channels")
+@router.get("/channels", summary="Get list of available notification channels")
 async def get_available_channels(
     current_user: Annotated[User, Depends(get_current_user)],
     service: Annotated[NotificationService, Depends(get_notif_service)],
@@ -159,7 +159,7 @@ async def get_available_channels(
     }
 
 
-@router.get("/preferences")
+@router.get("/preferences", summary="Get notification preferences for the current user")
 async def get_preferences(
     current_user: Annotated[User, Depends(get_current_user)],
     service: Annotated[NotificationService, Depends(get_notif_service)],
@@ -174,7 +174,7 @@ async def get_preferences(
     return prefs
 
 
-@router.put("/preferences")
+@router.put("/preferences", summary="Update notification preferences for the current user")
 async def update_preferences(
     request: PreferencesRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -223,7 +223,7 @@ async def get_priorities() -> dict[str, Any]:
     }
 
 
-@router.get("/health")
+@router.get("/health", summary="Check notification service health and configured channels")
 async def health_check(
     service: Annotated[NotificationService, Depends(get_notif_service)],
 ) -> dict[str, Any]:

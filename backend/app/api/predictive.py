@@ -114,7 +114,7 @@ async def get_analytics_service() -> PredictiveAnalyticsService:
 
 
 # Endpoints
-@router.post("/trends/predict", response_model=TrendResponse)
+@router.post("/trends/predict", response_model=TrendResponse, summary="Predict future trend for a metric")
 async def predict_trend(
     request: TrendRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -157,7 +157,7 @@ async def predict_trend(
         )
 
 
-@router.post("/bottlenecks/detect", response_model=list[BottleneckResponse])
+@router.post("/bottlenecks/detect", response_model=list[BottleneckResponse], summary="Detect process bottlenecks")
 async def detect_bottlenecks(
     request: BottleneckRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -192,7 +192,7 @@ async def detect_bottlenecks(
         )
 
 
-@router.post("/risk/deployment", response_model=RiskResponse)
+@router.post("/risk/deployment", response_model=RiskResponse, summary="Assess deployment risk")
 async def assess_deployment_risk(
     request: RiskAssessmentRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -231,7 +231,7 @@ async def assess_deployment_risk(
         )
 
 
-@router.post("/risk/pr", response_model=RiskResponse)
+@router.post("/risk/pr", response_model=RiskResponse, summary="Assess pull request risk")
 async def assess_pr_risk(
     request: RiskAssessmentRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -269,7 +269,7 @@ async def assess_pr_risk(
         )
 
 
-@router.post("/insights", response_model=InsightsResponse)
+@router.post("/insights", response_model=InsightsResponse, summary="Get comprehensive predictive insights")
 async def get_insights(
     request: InsightsRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -327,7 +327,7 @@ async def get_insights(
         )
 
 
-@router.post("/anomalies/detect")
+@router.post("/anomalies/detect", summary="Detect anomalies in metric data")
 async def detect_anomalies(
     request: TrendRequest,
     current_user: Annotated[User, Depends(get_current_user)],

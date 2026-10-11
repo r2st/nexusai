@@ -185,7 +185,7 @@ async def get_dsr(dsr_id: str, _current_user: User = Depends(get_current_user)) 
     return {"dsr": dsr.model_dump()}
 
 
-@router.get("/gdpr/dsr")
+@router.get("/gdpr/dsr", summary="List Data Subject Requests with optional filters")
 async def list_dsrs(
     user_id: str | None = None,
     status: DataSubjectRequestStatus | None = None,
@@ -283,7 +283,7 @@ async def revoke_consent(request: RevokeConsentRequest, _current_user: User = De
     return {"consent": record.model_dump()}
 
 
-@router.get("/gdpr/consent/{user_id}")
+@router.get("/gdpr/consent/{user_id}", summary="Get consent records for a user")
 async def get_user_consents(
     user_id: str,
     _current_user: User = Depends(get_current_user),
@@ -372,7 +372,7 @@ async def get_gdpr_compliance_report(_current_user: User = Depends(get_current_u
     return {"report": report.model_dump()}
 
 
-@router.get("/gdpr/audit-log")
+@router.get("/gdpr/audit-log", summary="Get GDPR audit log entries")
 async def get_gdpr_audit_log(
     resource_type: str | None = None,
     resource_id: str | None = None,
@@ -393,7 +393,7 @@ async def get_gdpr_audit_log(
 
 # --- SOC 2 Endpoints ---
 
-@router.get("/soc2/controls")
+@router.get("/soc2/controls", summary="List SOC 2 controls")
 async def list_controls(
     category: SOC2ControlCategory | None = None,
     status: SOC2ControlStatus | None = None,
@@ -557,7 +557,7 @@ async def approve_change(change_id: str, approver: str, _current_user: User = De
     return {"change": change.model_dump()}
 
 
-@router.post("/soc2/change/{change_id}/implement")
+@router.post("/soc2/change/{change_id}/implement", summary="Record change implementation")
 async def implement_change(
     change_id: str,
     implementer: str,
@@ -576,7 +576,7 @@ async def implement_change(
     return {"change": change.model_dump()}
 
 
-@router.get("/soc2/change")
+@router.get("/soc2/change", summary="List change records")
 async def list_changes(
     status: str | None = None,
     change_type: str | None = None,
@@ -588,7 +588,7 @@ async def list_changes(
     return {"changes": [c.model_dump() for c in changes]}
 
 
-@router.get("/soc2/report")
+@router.get("/soc2/report", summary="Generate SOC 2 compliance report")
 async def get_soc2_compliance_report(
     _current_user: User = Depends(get_current_user),
     report_period: str = Query(default="Q1 2024"),
@@ -599,7 +599,7 @@ async def get_soc2_compliance_report(
     return {"report": report.model_dump()}
 
 
-@router.get("/soc2/audit-log")
+@router.get("/soc2/audit-log", summary="Get SOC 2 audit log entries")
 async def get_soc2_audit_log(
     resource_type: str | None = None,
     _current_user: User = Depends(get_current_user),

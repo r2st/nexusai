@@ -68,7 +68,7 @@ async def langserve_info() -> dict:
     }
 
 
-@router.post("/chat/invoke")
+@router.post("/chat/invoke", summary="LangServe-compatible invoke endpoint")
 async def langserve_invoke(
     request: InvokeRequest,
     user: User = Depends(get_current_user),
@@ -97,7 +97,7 @@ async def langserve_invoke(
         )
 
 
-@router.post("/chat/stream")
+@router.post("/chat/stream", summary="LangServe-compatible stream endpoint")
 async def langserve_stream(
     request: StreamRequest,
     user: User = Depends(get_current_user),
@@ -140,7 +140,7 @@ async def langserve_stream(
     )
 
 
-@router.post("/chat/batch")
+@router.post("/chat/batch", summary="LangServe-compatible batch endpoint")
 async def langserve_batch(
     request: BatchRequest,
     user: User = Depends(get_current_user),

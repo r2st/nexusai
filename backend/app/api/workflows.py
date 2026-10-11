@@ -95,7 +95,7 @@ async def list_templates(_current_user: User = Depends(get_current_user)) -> dic
     return {"templates": templates}
 
 
-@router.get("")
+@router.get("", summary="List workflows with optional filters")
 async def list_workflows(
     organization_id: str | None = None,
     status: WorkflowStatus | None = None,
@@ -208,7 +208,7 @@ async def handle_trigger(request: HandleTriggerRequest, _current_user: User = De
     }
 
 
-@router.get("/executions")
+@router.get("/executions", summary="List workflow executions")
 async def list_executions(
     workflow_id: str | None = None,
     status: WorkflowExecutionStatus | None = None,

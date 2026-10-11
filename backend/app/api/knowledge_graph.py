@@ -134,7 +134,7 @@ async def health_check() -> dict:
         }
 
 
-@router.get("/schema", response_model=SchemaResponse)
+@router.get("/schema", response_model=SchemaResponse, summary="Get the knowledge graph schema")
 async def get_schema(
     current_user: User = Depends(get_current_user),
 ) -> SchemaResponse:
@@ -147,7 +147,7 @@ async def get_schema(
         await client.close()
 
 
-@router.get("/stats", response_model=StatsResponse)
+@router.get("/stats", response_model=StatsResponse, summary="Get knowledge graph statistics")
 async def get_stats(
     current_user: User = Depends(get_current_user),
 ) -> StatsResponse:
@@ -160,7 +160,7 @@ async def get_stats(
         await client.close()
 
 
-@router.post("/nodes", status_code=status.HTTP_201_CREATED)
+@router.post("/nodes", status_code=status.HTTP_201_CREATED, summary="Create a new node in the knowledge graph")
 async def create_node(
     request: NodeCreate,
     current_user: User = Depends(get_current_user),
@@ -188,7 +188,7 @@ async def create_node(
         await client.close()
 
 
-@router.get("/nodes")
+@router.get("/nodes", summary="List nodes in the knowledge graph")
 async def list_nodes(
     label: str | None = Query(None, description="Filter by node label"),
     limit: int = Query(100, ge=1, le=1000),
@@ -221,7 +221,7 @@ async def list_nodes(
         await client.close()
 
 
-@router.post("/relationships", status_code=status.HTTP_201_CREATED)
+@router.post("/relationships", status_code=status.HTTP_201_CREATED, summary="Create a relationship between nodes")
 async def create_relationship(
     request: RelationshipCreate,
     current_user: User = Depends(get_current_user),
@@ -256,7 +256,7 @@ async def create_relationship(
         await client.close()
 
 
-@router.get("/relationships")
+@router.get("/relationships", summary="List relationships in the knowledge graph")
 async def list_relationships(
     relationship_type: str | None = Query(None),
     limit: int = Query(100, ge=1, le=1000),
@@ -299,7 +299,7 @@ async def list_relationships(
         await client.close()
 
 
-@router.post("/discover")
+@router.post("/discover", summary="Run agent discovery workflow for a query")
 async def discover(
     request: DiscoveryRequest,
     current_user: User = Depends(get_current_user),
@@ -331,7 +331,7 @@ async def discover(
         await client.close()
 
 
-@router.get("/tables")
+@router.get("/tables", summary="Discover available tables in the knowledge graph")
 async def discover_tables(
     project_id: str | None = None,
     schema_name: str | None = None,
@@ -371,7 +371,7 @@ async def discover_tables(
         await client.close()
 
 
-@router.get("/metrics")
+@router.get("/metrics", summary="Discover available metrics in the knowledge graph")
 async def discover_metrics(
     category: str | None = None,
     project_id: str | None = None,
@@ -394,7 +394,7 @@ async def discover_metrics(
         await client.close()
 
 
-@router.get("/dora-entities")
+@router.get("/dora-entities", summary="Discover DORA metrics-related entities")
 async def discover_dora_entities(
     current_user: User = Depends(get_current_user),
 ) -> entities:
@@ -409,7 +409,7 @@ async def discover_dora_entities(
         await client.close()
 
 
-@router.get("/search")
+@router.get("/search", summary="Search for entities in the knowledge graph")
 async def search_entities(
     q: str = Query(..., description="Search term"),
     entity_types: list[str] | None = Query(None),
@@ -438,7 +438,7 @@ async def search_entities(
         await client.close()
 
 
-@router.get("/lineage/{entity_name}")
+@router.get("/lineage/{entity_name}", summary="Get data lineage for an entity")
 async def get_data_lineage(
     entity_name: str,
     entity_type: str = "Table",
@@ -469,7 +469,7 @@ async def get_data_lineage(
         await client.close()
 
 
-@router.post("/sync")
+@router.post("/sync", summary="Sync PostgreSQL schema into the knowledge graph")
 async def sync_from_postgresql(
     request: SyncRequest,
     current_user: User = Depends(get_current_user),
@@ -497,7 +497,7 @@ async def sync_from_postgresql(
         await client.close()
 
 
-@router.delete("/nodes/{label}/{name}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/nodes/{label}/{name}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete a node from the knowledge graph")
 async def delete_node(
     label: str,
     name: str,

@@ -107,7 +107,7 @@ async def health_check() -> dict:
     }
 
 
-@router.post("/register", response_model=ActionResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=ActionResponse, status_code=status.HTTP_201_CREATED, summary="Register a new OpenAPI action")
 async def register_action(
     request: ActionRegisterRequest,
     current_user: User = Depends(get_current_user),
@@ -192,7 +192,7 @@ async def register_action(
     )
 
 
-@router.post("/register/openapi-spec", status_code=status.HTTP_201_CREATED)
+@router.post("/register/openapi-spec", status_code=status.HTTP_201_CREATED, summary="Register an action from an OpenAPI specification file")
 async def register_from_spec(
     action_id: str,
     action_name: str,
@@ -254,7 +254,7 @@ async def register_from_spec(
     }
 
 
-@router.get("", response_model=list[ActionResponse])
+@router.get("", response_model=list[ActionResponse], summary="List all registered OpenAPI actions")
 async def list_actions(
     current_user: User = Depends(get_current_user),
 ) -> list[ActionResponse]:
@@ -277,7 +277,7 @@ async def list_actions(
     ]
 
 
-@router.get("/{action_id}")
+@router.get("/{action_id}", summary="Get details of a specific action")
 async def get_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
@@ -323,7 +323,7 @@ async def get_action(
     }
 
 
-@router.get("/{action_id}/operations", response_model=list[OperationResponse])
+@router.get("/{action_id}/operations", response_model=list[OperationResponse], summary="List operations for an action")
 async def list_operations(
     action_id: str,
     current_user: User = Depends(get_current_user),
@@ -350,7 +350,7 @@ async def list_operations(
     ]
 
 
-@router.post("/{action_id}/execute", response_model=ExecutionResponse)
+@router.post("/{action_id}/execute", response_model=ExecutionResponse, summary="Execute an OpenAPI action operation")
 async def execute_action(
     action_id: str,
     request: ActionExecuteRequest,
@@ -403,7 +403,7 @@ async def execute_action(
     )
 
 
-@router.delete("/{action_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{action_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Unregister an OpenAPI action")
 async def delete_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
@@ -418,7 +418,7 @@ async def delete_action(
     _registry.unregister(action_id)
 
 
-@router.post("/{action_id}/enable")
+@router.post("/{action_id}/enable", summary="Enable an action")
 async def enable_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
@@ -435,7 +435,7 @@ async def enable_action(
     return {"status": "enabled", "action_id": action_id}
 
 
-@router.post("/{action_id}/disable")
+@router.post("/{action_id}/disable", summary="Disable an action")
 async def disable_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
@@ -452,7 +452,7 @@ async def disable_action(
     return {"status": "disabled", "action_id": action_id}
 
 
-@router.get("/{action_id}/tools-schema")
+@router.get("/{action_id}/tools-schema", summary="Get OpenAI-compatible tool schemas for an action")
 async def get_tools_schema(
     action_id: str,
     current_user: User = Depends(get_current_user),
@@ -468,7 +468,7 @@ async def get_tools_schema(
     return {"tools": tools}
 
 
-@router.post("/{action_id}/validate")
+@router.post("/{action_id}/validate", summary="Validate an action configuration")
 async def validate_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
@@ -515,7 +515,7 @@ async def validate_action(
 # Pre-built Actions
 # ======================
 
-@router.post("/prebuilt/github", status_code=status.HTTP_201_CREATED)
+@router.post("/prebuilt/github", status_code=status.HTTP_201_CREATED, summary="Register pre-built GitHub API action")
 async def register_github_action(
     token: str,
     current_user: User = Depends(get_current_user),
@@ -533,7 +533,7 @@ async def register_github_action(
     }
 
 
-@router.post("/prebuilt/jira", status_code=status.HTTP_201_CREATED)
+@router.post("/prebuilt/jira", status_code=status.HTTP_201_CREATED, summary="Register pre-built Jira API action")
 async def register_jira_action(
     base_url: str,
     email: str,

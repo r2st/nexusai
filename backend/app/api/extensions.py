@@ -77,7 +77,7 @@ async def get_ext_service() -> ExtensionService:
 
 
 # Endpoints
-@router.get("/capabilities", response_model=ExtensionCapabilities)
+@router.get("/capabilities", response_model=ExtensionCapabilities, summary="Get extension API capabilities")
 async def get_capabilities(
     service: Annotated[ExtensionService, Depends(get_ext_service)],
 ) -> ExtensionCapabilities:
@@ -89,7 +89,7 @@ async def get_capabilities(
     return service.get_capabilities()
 
 
-@router.post("/analyze", response_model=AnalyzeResponse)
+@router.post("/analyze", response_model=AnalyzeResponse, summary="Analyze a file for issues and suggestions")
 async def analyze_file(
     request: AnalysisRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -128,7 +128,7 @@ async def analyze_file(
         )
 
 
-@router.post("/diagnostics", response_model=DiagnosticResult)
+@router.post("/diagnostics", response_model=DiagnosticResult, summary="Get quick diagnostics for a file")
 async def get_diagnostics(
     request: DiagnosticRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -149,7 +149,7 @@ async def get_diagnostics(
         )
 
 
-@router.post("/completions", response_model=list[CompletionItem])
+@router.post("/completions", response_model=list[CompletionItem], summary="Get AI-powered code completions")
 async def get_completions(
     request: CompletionRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -170,7 +170,7 @@ async def get_completions(
         )
 
 
-@router.post("/hover", response_model=HoverInfo | None)
+@router.post("/hover", response_model=HoverInfo | None, summary="Get hover information at a position")
 async def get_hover(
     request: HoverRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -195,7 +195,7 @@ async def get_hover(
         )
 
 
-@router.post("/quick-fixes", response_model=list[QuickFix])
+@router.post("/quick-fixes", response_model=list[QuickFix], summary="Get quick fix actions for an issue")
 async def get_quick_fixes(
     request: QuickFixRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -220,7 +220,7 @@ async def get_quick_fixes(
         )
 
 
-@router.post("/chat", response_model=ChatResponse)
+@router.post("/chat", response_model=ChatResponse, summary="Chat with the AI assistant")
 async def chat(
     request: ChatRequest,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -242,7 +242,7 @@ async def chat(
         )
 
 
-@router.get("/config", response_model=ExtensionConfig)
+@router.get("/config", response_model=ExtensionConfig, summary="Get current extension configuration")
 async def get_config(
     current_user: Annotated[User, Depends(get_current_user)],
     service: Annotated[ExtensionService, Depends(get_ext_service)],
@@ -251,7 +251,7 @@ async def get_config(
     return service.config
 
 
-@router.put("/config", response_model=ExtensionConfig)
+@router.put("/config", response_model=ExtensionConfig, summary="Update extension configuration")
 async def update_config(
     request: ConfigUpdateRequest,
     current_user: Annotated[User, Depends(get_current_user)],

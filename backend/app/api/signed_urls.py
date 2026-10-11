@@ -83,7 +83,7 @@ class UploadSignedURLResponse(SignedURLResponse):
     )
 
 
-@router.post("/generate", response_model=SignedURLResponse)
+@router.post("/generate", response_model=SignedURLResponse, summary="Generate a signed URL for file access")
 async def generate_signed_url(
     request: SignedURLRequest,
     user: User = Depends(get_current_user),
@@ -187,7 +187,7 @@ async def _generate_upload_url(
     return await backend.get_url(key=key, expires_in=expires_in)
 
 
-@router.post("/upload", response_model=UploadSignedURLResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/upload", response_model=UploadSignedURLResponse, status_code=status.HTTP_201_CREATED, summary="Generate a pre-signed URL for file upload")
 async def generate_upload_url(
     filename: str = Query(..., description="Filename for upload"),
     category: str = Query(
@@ -274,7 +274,7 @@ async def _get_upload_fields(
     return {}
 
 
-@router.get("/download/{file_key:path}")
+@router.get("/download/{file_key:path}", summary="Generate a pre-signed URL for file download")
 async def generate_download_url(
     file_key: str,
     expires_in: int = Query(

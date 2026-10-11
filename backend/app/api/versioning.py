@@ -311,7 +311,7 @@ v1_router = create_versioned_router("v1", tags=["API v1 (Deprecated)"])
 v2_router = create_versioned_router("v2", tags=["API v2"])
 
 
-@v1_router.get("/status")
+@v1_router.get("/status", summary="[DEPRECATED] Get API status")
 async def v1_status() -> dict:
     """[DEPRECATED] Get API status."""
     return {
@@ -321,7 +321,7 @@ async def v1_status() -> dict:
     }
 
 
-@v2_router.get("/status")
+@v2_router.get("/status", summary="Get API status")
 async def v2_status() -> dict:
     """Get API status."""
     return {

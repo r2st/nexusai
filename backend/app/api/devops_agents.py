@@ -128,7 +128,7 @@ async def health_check() -> dict:
     }
 
 
-@router.post("/dora/analyze", response_model=DORAAnalysisResponse)
+@router.post("/dora/analyze", response_model=DORAAnalysisResponse, summary="Run DORA metrics analysis for a project")
 async def analyze_dora_metrics(
     request: DORAAnalysisRequest,
     current_user: User = Depends(get_current_user),
@@ -171,7 +171,7 @@ async def analyze_dora_metrics(
     )
 
 
-@router.post("/adoption/analyze")
+@router.post("/adoption/analyze", summary="Run AI SDLC adoption analysis")
 async def analyze_adoption(
     request: AdoptionAnalysisRequest,
     current_user: User = Depends(get_current_user),
@@ -214,7 +214,7 @@ async def analyze_adoption(
     }
 
 
-@router.post("/dashboard/create", status_code=status.HTTP_201_CREATED)
+@router.post("/dashboard/create", status_code=status.HTTP_201_CREATED, summary="Create a visualization dashboard")
 async def create_dashboard(
     request: DashboardCreateRequest,
     current_user: User = Depends(get_current_user),
@@ -248,7 +248,7 @@ async def create_dashboard(
     }
 
 
-@router.post("/summary/create", status_code=status.HTTP_201_CREATED)
+@router.post("/summary/create", status_code=status.HTTP_201_CREATED, summary="Create an executive summary")
 async def create_summary(
     request: SummaryCreateRequest,
     current_user: User = Depends(get_current_user),
@@ -301,7 +301,7 @@ async def create_summary(
     }
 
 
-@router.post("/workflows", response_model=WorkflowResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/workflows", response_model=WorkflowResponse, status_code=status.HTTP_201_CREATED, summary="Create and execute a DevOps agent workflow")
 async def create_workflow(
     request: WorkflowCreateRequest,
     background_tasks: BackgroundTasks,
@@ -396,7 +396,7 @@ async def create_workflow(
     )
 
 
-@router.get("/workflows/{workflow_id}", response_model=WorkflowResponse)
+@router.get("/workflows/{workflow_id}", response_model=WorkflowResponse, summary="Get workflow execution status")
 async def get_workflow(
     workflow_id: str,
     current_user: User = Depends(get_current_user),
@@ -433,7 +433,7 @@ async def get_workflow(
     )
 
 
-@router.get("/workflows")
+@router.get("/workflows", summary="List workflow executions")
 async def list_workflows(
     workflow_type: str | None = None,
     status: str | None = None,
@@ -485,7 +485,7 @@ async def list_workflows(
     }
 
 
-@router.post("/workflows/{workflow_id}/cancel")
+@router.post("/workflows/{workflow_id}/cancel", summary="Cancel a running workflow")
 async def cancel_workflow(
     workflow_id: str,
     current_user: User = Depends(get_current_user),
