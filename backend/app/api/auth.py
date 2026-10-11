@@ -84,7 +84,13 @@ class AuthResponse(BaseModel):
     tokens: Token
 
 
-@router.post("/register", response_model=AuthResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=AuthResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Register a new user",
+    description="Create a new user account with email, username, and password. Returns user details and JWT tokens.",
+)
 async def register(
     request: RegisterRequest,
     db: AsyncSession = Depends(get_db),
@@ -126,7 +132,12 @@ async def register(
     )
 
 
-@router.post("/login", response_model=AuthResponse)
+@router.post(
+    "/login",
+    response_model=AuthResponse,
+    summary="Authenticate user",
+    description="Authenticate with email and password. Returns user details and JWT access/refresh tokens.",
+)
 async def login(
     request: LoginRequest,
     db: AsyncSession = Depends(get_db),
@@ -178,7 +189,12 @@ async def login(
     )
 
 
-@router.post("/refresh", response_model=Token)
+@router.post(
+    "/refresh",
+    response_model=Token,
+    summary="Refresh access token",
+    description="Exchange a valid refresh token for a new access/refresh token pair.",
+)
 async def refresh_tokens(
     request: RefreshRequest,
     db: AsyncSession = Depends(get_db),

@@ -171,7 +171,13 @@ def _parse_tool_payloads(content: str) -> tuple[list[dict], list[dict]]:
     return tool_calls, tool_results
 
 
-@router.post("/conversations", response_model=ConversationResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/conversations",
+    response_model=ConversationResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create a conversation",
+    description="Start a new AI conversation with optional model and system prompt configuration.",
+)
 async def create_conversation(
     request: CreateConversationRequest,
     user: User = Depends(get_current_user),
@@ -203,7 +209,12 @@ async def create_conversation(
     )
 
 
-@router.get("/conversations", response_model=ConversationListResponse)
+@router.get(
+    "/conversations",
+    response_model=ConversationListResponse,
+    summary="List conversations",
+    description="Retrieve the authenticated user's conversations with pagination.",
+)
 async def list_conversations(
     limit: int = 50,
     offset: int = 0,
@@ -237,7 +248,11 @@ async def list_conversations(
     )
 
 
-@router.get("/conversations/{conversation_id}", response_model=ConversationResponse)
+@router.get(
+    "/conversations/{conversation_id}",
+    response_model=ConversationResponse,
+    summary="Get conversation details",
+)
 async def get_conversation(
     conversation_id: str,
     user: User = Depends(get_current_user),
@@ -265,7 +280,12 @@ async def get_conversation(
     )
 
 
-@router.get("/conversations/{conversation_id}/messages", response_model=list[MessageResponse])
+@router.get(
+    "/conversations/{conversation_id}/messages",
+    response_model=list[MessageResponse],
+    summary="Get conversation messages",
+    description="Retrieve all messages in a conversation, including tool calls and results.",
+)
 async def get_messages(
     conversation_id: str,
     user: User = Depends(get_current_user),
@@ -301,7 +321,11 @@ async def get_messages(
     return response_messages
 
 
-@router.post("/conversations/{conversation_id}/chat")
+@router.post(
+    "/conversations/{conversation_id}/chat",
+    summary="Send a chat message",
+    description="Send a message and receive an AI response. Supports streaming, MCP tool usage, and file attachments.",
+)
 async def chat(
     conversation_id: str,
     request: ChatRequest,
@@ -420,7 +444,11 @@ async def chat(
             await chat_service.cleanup_mcp()
 
 
-@router.delete("/conversations/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/conversations/{conversation_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete a conversation",
+)
 async def delete_conversation(
     conversation_id: str,
     user: User = Depends(get_current_user),
@@ -439,7 +467,7 @@ async def delete_conversation(
     await chat_service.delete_conversation(conversation)
 
 
-@router.get("/tools")
+@router.get("/tools", summary="List available tools")
 async def list_available_tools(
     user: User = Depends(get_current_user),
 ):
