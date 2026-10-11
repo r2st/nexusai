@@ -222,15 +222,17 @@ export default function ApiKeysPage() {
                     size="sm"
                     variant="outline"
                     onClick={() => setShowKey(!showKey)}
+                    aria-label={showKey ? 'Hide API key' : 'Show API key'}
                   >
-                    {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showKey ? <EyeOff className="h-4 w-4" aria-hidden="true" /> : <Eye className="h-4 w-4" aria-hidden="true" />}
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => copyToClipboard(newlyCreatedKey.key)}
+                    aria-label="Copy API key"
                   >
-                    <Copy className="h-4 w-4" />
+                    <Copy className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </div>
                 <Button
@@ -292,8 +294,9 @@ export default function ApiKeysPage() {
                     variant="ghost"
                     className="text-destructive hover:text-destructive"
                     onClick={() => handleDeleteKey(key.id, key.name)}
+                    aria-label={`Delete API key ${key.name}`}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </div>
 
@@ -348,25 +351,28 @@ export default function ApiKeysPage() {
       {showCreateModal && (
         <div
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowCreateModal(false); }}
           onKeyDown={(e) => { if (e.key === 'Escape') setShowCreateModal(false); }}
         >
-          <div className="bg-background rounded-lg border shadow-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+          <div role="dialog" aria-modal="true" aria-labelledby="create-api-key-title" className="bg-background rounded-lg border shadow-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Create API Key</h2>
+              <h2 id="create-api-key-title" className="text-lg font-semibold">Create API Key</h2>
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={() => setShowCreateModal(false)}
+                aria-label="Close"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
 
             <div className="space-y-6">
               {/* Name */}
               <div>
-                <label className="text-sm font-medium">Name</label>
+                <label htmlFor="api-key-name" className="text-sm font-medium">Name</label>
                 <Input
+                  id="api-key-name"
                   value={newKeyName}
                   onChange={(e) => setNewKeyName(e.target.value)}
                   placeholder="e.g., Production API, Development"
@@ -379,8 +385,8 @@ export default function ApiKeysPage() {
 
               {/* Scopes */}
               <div>
-                <label className="text-sm font-medium">Permissions</label>
-                <div className="mt-2 space-y-2">
+                <span className="text-sm font-medium" id="api-key-permissions-label">Permissions</span>
+                <div className="mt-2 space-y-2" role="group" aria-labelledby="api-key-permissions-label">
                   {availableScopes.map((scope) => (
                     <label
                       key={scope.id}
@@ -410,8 +416,9 @@ export default function ApiKeysPage() {
 
               {/* Expiration */}
               <div>
-                <label className="text-sm font-medium">Expiration</label>
+                <label htmlFor="api-key-expiration" className="text-sm font-medium">Expiration</label>
                 <select
+                  id="api-key-expiration"
                   value={expiresIn}
                   onChange={(e) => setExpiresIn(e.target.value)}
                   className="mt-1 w-full rounded-md border bg-background px-3 py-2 text-sm"
