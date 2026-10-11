@@ -117,8 +117,9 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name */}
           <div>
-            <label className="text-sm font-medium">Agent Name *</label>
+            <label htmlFor="agent-name" className="text-sm font-medium">Agent Name *</label>
             <Input
+              id="agent-name"
               value={formData.name}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, name: e.target.value }))
@@ -131,8 +132,9 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
 
           {/* Description */}
           <div>
-            <label className="text-sm font-medium">Description</label>
+            <label htmlFor="agent-description" className="text-sm font-medium">Description</label>
             <Textarea
+              id="agent-description"
               value={formData.description}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, description: e.target.value }))
@@ -145,8 +147,9 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
 
           {/* System Prompt */}
           <div>
-            <label className="text-sm font-medium">System Prompt</label>
+            <label htmlFor="agent-system-prompt" className="text-sm font-medium">System Prompt</label>
             <Textarea
+              id="agent-system-prompt"
               value={formData.system_prompt}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, system_prompt: e.target.value }))
@@ -159,8 +162,9 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
 
           {/* Model Selection */}
           <div>
-            <label className="text-sm font-medium">Model</label>
+            <label htmlFor="agent-model" className="text-sm font-medium">Model</label>
             <select
+              id="agent-model"
               value={`${formData.selectedModel.provider}:${formData.selectedModel.model}`}
               onChange={(e) => {
                 const [provider, model] = e.target.value.split(':');
@@ -184,10 +188,11 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
           {/* Temperature & Max Tokens */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium">
+              <label htmlFor="agent-temperature" className="text-sm font-medium">
                 Temperature: {formData.temperature}
               </label>
               <input
+                id="agent-temperature"
                 type="range"
                 min="0"
                 max="2"
@@ -199,12 +204,14 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
                     temperature: parseFloat(e.target.value),
                   }))
                 }
+                aria-label={`Temperature: ${formData.temperature}`}
                 className="mt-2 w-full"
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Max Tokens</label>
+              <label htmlFor="agent-max-tokens" className="text-sm font-medium">Max Tokens</label>
               <Input
+                id="agent-max-tokens"
                 type="number"
                 value={formData.max_tokens}
                 onChange={(e) =>
@@ -236,7 +243,7 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
                       : 'bg-muted text-muted-foreground hover:bg-muted/80'
                   }`}
                 >
-                  {cap.replace('_', ' ')}
+                  {cap.replaceAll('_', ' ')}
                 </button>
               ))}
             </div>
