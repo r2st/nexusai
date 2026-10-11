@@ -4,7 +4,7 @@ uvicorn[standard]>=0.32.0
 python-multipart>=0.0.20
 pyjwt[crypto]>=2.10.0
 passlib[bcrypt]>=1.7.4
-bcrypt>=4.0.0,<4.1.0  # Pin to 4.0.x for passlib compatibility (4.1+ breaks passlib)
+bcrypt>=4.2.0,<5.0.0  # passlib compat: 4.1.0 was yanked, 4.1.1 fixed it, 5.0 breaks it
 
 # Database
 sqlalchemy[asyncio]>=2.0.35
@@ -28,7 +28,7 @@ google-generativeai>=0.8.0  # Native Google Gemini SDK
 langchain-community>=0.3.15
 langchain-text-splitters>=0.3.6
 langserve>=0.2.0
-openai>=1.59.0,<2.0.0  # Pinned to 1.x: langchain 0.2.x requires openai<2
+openai>=1.59.0,<2.0.0  # Pinned to 1.x: langchain-openai 0.3.x requires openai<2
 anthropic>=0.102.0,<1.0.0  # Pinned to 0.x: langchain-anthropic 0.3.x requires anthropic<1
 tiktoken>=0.14.0
 sentence-transformers>=3.4.0
