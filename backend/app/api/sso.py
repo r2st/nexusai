@@ -223,9 +223,10 @@ async def oidc_callback(
     Exchanges authorization code for tokens.
     """
     if error:
+        logger.warning("OIDC authentication failed", error=error, error_description=error_description)
         raise HTTPException(
             status_code=400,
-            detail=f"Authentication failed: {error} - {error_description}",
+            detail="Authentication failed. Please try again.",
         )
     
     # sso_service = get_sso_service()

@@ -15,7 +15,7 @@ import structlog
 
 from app.core.database import get_db_context
 from app.core.config import settings
-from app.core.security import decode_token
+from app.core.security import verify_token
 from app.models.conversation import ModelProvider
 from app.models.user import User
 from app.services.chat import ChatService
@@ -141,18 +141,21 @@ manager = ConnectionManager()
 
 
 async def get_user_from_token(token: str, db: AsyncSession) -> User | None:
-    """Validate token and get user."""
+    """Validate token (must be access type) and get user."""
     try:
-        token_data = decode_token(token)
+        token_data = verify_token(token, token_type="access")
         if not token_data:
             return None
-        
+
         user_id = token_data.user_id
         if not user_id:
             return None
-        
+
         result = await db.execute(select(User).where(User.id == user_id))
-        return result.scalar_one_or_none()
+        user = result.scalar_one_or_none()
+        if user and not user.is_active:
+            return None
+        return user
     except Exception as e:
         logger.error("Token validation failed", error=str(e))
         return None
