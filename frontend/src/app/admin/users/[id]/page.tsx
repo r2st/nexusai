@@ -623,9 +623,9 @@ export default function AdminUserDetailPage() {
       {/* Delete Modal */}
       {showDeleteModal && (
         <>
-          <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setShowDeleteModal(false)} />
-          <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md bg-background rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-semibold mb-2">Delete User</h3>
+          <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setShowDeleteModal(false)} aria-hidden="true" />
+          <div role="dialog" aria-modal="true" aria-labelledby="delete-user-detail-title" className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md bg-background rounded-lg shadow-lg p-6">
+            <h3 id="delete-user-detail-title" className="text-lg font-semibold mb-2">Delete User</h3>
             <p className="text-muted-foreground mb-4">
               Are you sure you want to delete <strong>{user?.full_name || user?.username}</strong>?
               This will also remove them from all organizations. This action cannot be undone.
@@ -651,9 +651,9 @@ export default function AdminUserDetailPage() {
       {/* Password Reset Modal */}
       {showPasswordResetModal && (
         <>
-          <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setShowPasswordResetModal(false)} />
-          <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md bg-background rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-semibold mb-2">Send Password Reset</h3>
+          <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setShowPasswordResetModal(false)} aria-hidden="true" />
+          <div role="dialog" aria-modal="true" aria-labelledby="password-reset-title" className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md bg-background rounded-lg shadow-lg p-6">
+            <h3 id="password-reset-title" className="text-lg font-semibold mb-2">Send Password Reset</h3>
             <p className="text-muted-foreground mb-4">
               Send a password reset email to <strong>{user?.email}</strong>?
             </p>

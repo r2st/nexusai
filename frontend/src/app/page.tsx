@@ -332,8 +332,12 @@ function CommandPalette({
     <div
       className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-start justify-center pt-[20vh]"
       onClick={onClose}
+      aria-hidden="true"
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
         className="w-full max-w-lg rounded-lg border bg-card shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >

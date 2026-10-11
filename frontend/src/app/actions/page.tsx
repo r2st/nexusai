@@ -426,9 +426,9 @@ function RegisterActionModal({ onClose, onRegister }: RegisterActionModalProps) 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-lg rounded-lg bg-background p-6 shadow-lg">
-        <h2 className="text-xl font-semibold mb-6">Register OpenAPI Action</h2>
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
+      <div role="dialog" aria-modal="true" aria-labelledby="register-action-title" className="relative z-10 w-full max-w-lg rounded-lg bg-background p-6 shadow-lg">
+        <h2 id="register-action-title" className="text-xl font-semibold mb-6">Register OpenAPI Action</h2>
 
         {/* Tab Selection */}
         <div className="flex gap-2 mb-6">
