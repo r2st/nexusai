@@ -390,7 +390,8 @@ def create_app() -> FastAPI:
                 status["prometheus"]["enabled"] = _observability_service.metrics._enabled
                 status["metrics"] = _observability_service.langfuse.get_metrics()
         except Exception as e:
-            status["error"] = str(e)
+            logger.error("Observability status check failed", error=str(e))
+            status["error"] = "Observability service unavailable"
 
         return status
 

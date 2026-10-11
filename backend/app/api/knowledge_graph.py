@@ -126,13 +126,12 @@ async def health_check():
 
         return {
             "status": "healthy" if connected else "unhealthy",
-            "uri": settings.NEO4J_URI,
-            "database": settings.NEO4J_DATABASE,
         }
     except Exception as e:
+        logger.error("Knowledge graph health check failed", error=str(e))
         return {
             "status": "error",
-            "message": str(e),
+            "message": "Knowledge graph connection failed",
         }
 
 
