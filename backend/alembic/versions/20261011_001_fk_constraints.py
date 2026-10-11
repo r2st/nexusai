@@ -11,6 +11,10 @@ conversations, and budgets but were missing database-level enforcement:
 - cost_alerts: tenant_id -> organizations, budget_id -> cost_budgets
 - hallucination_logs: tenant_id -> organizations
 - hallucination_metrics: tenant_id -> organizations
+- entity_relations: from_entity_id -> entities, to_entity_id -> entities
+- pr_issue_correlations: project_id -> projects
+
+Also adds missing FK column indexes for query performance.
 """
 
 from alembic import op
@@ -88,8 +92,69 @@ def upgrade() -> None:
         ondelete="CASCADE",
     )
 
+    # entity_relations FK constraints (from/to entity references)
+    op.create_foreign_key(
+        "fk_entity_relations_from_entity_id_entities",
+        "entity_relations",
+        "entities",
+        ["from_entity_id"],
+        ["id"],
+        ondelete="CASCADE",
+    )
+    op.create_foreign_key(
+        "fk_entity_relations_to_entity_id_entities",
+        "entity_relations",
+        "entities",
+        ["to_entity_id"],
+        ["id"],
+        ondelete="CASCADE",
+    )
+
+    # pr_issue_correlations FK constraint (project_id -> projects)
+    op.create_foreign_key(
+        "fk_pr_issue_correlations_project_id_projects",
+        "pr_issue_correlations",
+        "projects",
+        ["project_id"],
+        ["id"],
+        ondelete="CASCADE",
+    )
+
+    # Missing FK column indexes for query performance
+    op.create_index(
+        "ix_cost_alerts_budget_id_idx",
+        "cost_alerts",
+        ["budget_id"],
+    )
+    op.create_index(
+        "ix_ragas_samples_tenant_run",
+        "ragas_evaluation_samples",
+        ["tenant_id", "run_id"],
+    )
+
 
 def downgrade() -> None:
+    # Drop new indexes
+    op.drop_index("ix_ragas_samples_tenant_run", table_name="ragas_evaluation_samples")
+    op.drop_index("ix_cost_alerts_budget_id_idx", table_name="cost_alerts")
+
+    # Drop new FK constraints
+    op.drop_constraint(
+        "fk_pr_issue_correlations_project_id_projects",
+        "pr_issue_correlations",
+        type_="foreignkey",
+    )
+    op.drop_constraint(
+        "fk_entity_relations_to_entity_id_entities",
+        "entity_relations",
+        type_="foreignkey",
+    )
+    op.drop_constraint(
+        "fk_entity_relations_from_entity_id_entities",
+        "entity_relations",
+        type_="foreignkey",
+    )
+
     op.drop_constraint(
         "fk_hallucination_metrics_tenant_id_organizations",
         "hallucination_metrics",
