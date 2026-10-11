@@ -39,6 +39,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-nexusai}"
+LOCK_FILE="/tmp/nexusai-deploy.lock"
 
 # Colors for output
 RED='\033[0;31m'
@@ -54,6 +55,37 @@ INCLUDE_AUTH=false
 INCLUDE_MANAGEMENT=false
 INCLUDE_MONGODB=false
 VERBOSE=false
+
+# -----------------------------------------------------------------------------
+# Cleanup and error handling
+# -----------------------------------------------------------------------------
+cleanup() {
+    rm -f "$LOCK_FILE"
+}
+
+on_error() {
+    local exit_code=$?
+    log_error "Deployment failed with exit code $exit_code at line $1"
+    cleanup
+    exit "$exit_code"
+}
+
+trap 'on_error $LINENO' ERR
+trap cleanup EXIT
+
+acquire_lock() {
+    if [ -f "$LOCK_FILE" ]; then
+        local lock_pid
+        lock_pid=$(cat "$LOCK_FILE" 2>/dev/null || echo "")
+        if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
+            log_error "Another deployment is running (PID: $lock_pid). Aborting."
+            exit 1
+        fi
+        log_warn "Stale lock file found. Removing."
+        rm -f "$LOCK_FILE"
+    fi
+    echo $$ > "$LOCK_FILE"
+}
 
 # -----------------------------------------------------------------------------
 # Helper Functions
@@ -129,6 +161,16 @@ check_env_file() {
             exit 1
         fi
     done
+
+    # Reject insecure default SECRET_KEY in non-dev environments
+    if [[ "$ENVIRONMENT" != "dev" ]]; then
+        local secret_key
+        secret_key=$(grep -E '^SECRET_KEY=' "$env_file" | cut -d= -f2- || echo "")
+        if [[ "$secret_key" == *"dev-secret-key"* ]] || [[ "$secret_key" == *"change-in-production"* ]]; then
+            log_error "SECRET_KEY contains an insecure default value. Generate a proper secret: openssl rand -base64 32"
+            exit 1
+        fi
+    fi
 }
 
 get_compose_files() {
@@ -173,6 +215,7 @@ get_container_id() {
 # Command Functions
 # -----------------------------------------------------------------------------
 cmd_up() {
+    acquire_lock
     log_info "Starting NexusAI services..."
 
     local compose_files
@@ -300,9 +343,11 @@ cmd_backup() {
 
     mkdir -p "$backup_dir"
 
-    # Get database credentials from .env
-    # shellcheck disable=SC1091
-    source "${PROJECT_ROOT}/.env"
+    local pg_user pg_db
+    pg_user=$(grep -E '^POSTGRES_USER=' "${PROJECT_ROOT}/.env" | cut -d= -f2- | tr -d '"' || echo "nexusai")
+    pg_db=$(grep -E '^POSTGRES_DB=' "${PROJECT_ROOT}/.env" | cut -d= -f2- | tr -d '"' || echo "nexusai")
+    pg_user="${pg_user:-nexusai}"
+    pg_db="${pg_db:-nexusai}"
 
     local container_id
     container_id=$(get_container_id "postgres")
@@ -313,8 +358,8 @@ cmd_backup() {
     fi
 
     docker exec "$container_id" pg_dump \
-        -U "${POSTGRES_USER:-nexusai}" \
-        "${POSTGRES_DB:-nexusai}" | gzip > "$backup_file"
+        -U "$pg_user" \
+        "$pg_db" | gzip > "$backup_file"
 
     log_success "Backup created: $backup_file"
 
@@ -348,8 +393,11 @@ cmd_restore() {
 
     log_info "Restoring database from: $backup_file"
 
-    # shellcheck disable=SC1091
-    source "${PROJECT_ROOT}/.env"
+    local pg_user pg_db
+    pg_user=$(grep -E '^POSTGRES_USER=' "${PROJECT_ROOT}/.env" | cut -d= -f2- | tr -d '"' || echo "nexusai")
+    pg_db=$(grep -E '^POSTGRES_DB=' "${PROJECT_ROOT}/.env" | cut -d= -f2- | tr -d '"' || echo "nexusai")
+    pg_user="${pg_user:-nexusai}"
+    pg_db="${pg_db:-nexusai}"
 
     local container_id
     container_id=$(get_container_id "postgres")
@@ -360,8 +408,8 @@ cmd_restore() {
     fi
 
     gunzip -c "$backup_file" | docker exec -i "$container_id" psql \
-        -U "${POSTGRES_USER:-nexusai}" \
-        "${POSTGRES_DB:-nexusai}"
+        -U "$pg_user" \
+        "$pg_db"
 
     log_success "Database restored successfully!"
 }

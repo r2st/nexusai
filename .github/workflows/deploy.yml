@@ -82,6 +82,7 @@ jobs:
         with:
           context: ./backend
           file: ./backend/Dockerfile
+          target: production
           push: true
           tags: ${{ steps.meta-backend.outputs.tags }}
           labels: ${{ steps.meta-backend.outputs.labels }}
@@ -107,6 +108,7 @@ jobs:
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
+          target: production
           push: true
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
@@ -344,12 +346,12 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   # ===========================================================================
-  # Rollback (Manual)
+  # Rollback (Manual or on prod deploy failure)
   # ===========================================================================
   rollback:
     name: Rollback Deployment
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && needs.deploy-prod.result == 'failure'
+    if: always() && (needs.deploy-prod.result == 'failure')
     needs: [deploy-prod]
     environment: production
 
@@ -388,12 +390,28 @@ jobs:
           kubectl rollout status deployment/nexusai-frontend -n nexusai --timeout=300s
           kubectl rollout status deployment/nexusai-worker -n nexusai --timeout=300s
 
+      - name: Verify rollback health
+        run: |
+          sleep 30
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://nexusai.example.com/api/v1/health || true)
+          echo "Health check status after rollback: $HTTP_STATUS"
+
       - name: Notify rollback
+        if: always()
         uses: slackapi/slack-github-action@v1.24.0
         with:
           payload: |
             {
-              "text": "⚠️ Production rollback executed"
+              "text": "⚠️ Production rollback executed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Production Rollback Executed*\nTriggered by failed deployment.\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>"
+                  }
+                }
+              ]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

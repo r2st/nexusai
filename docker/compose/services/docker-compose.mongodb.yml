@@ -1,5 +1,3 @@
-version: "3.9"
-
 # =============================================================================
 # MongoDB Services (Optional)
 # Use when document-based storage is preferred over PostgreSQL

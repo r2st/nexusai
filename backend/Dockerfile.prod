@@ -2,7 +2,7 @@
 # Multi-stage build for smaller image size
 
 # Build stage
-FROM python:3.12-slim AS builder
+FROM python:3.12-slim-bookworm AS builder
 
 WORKDIR /app
 
@@ -19,15 +19,22 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir gunicorn uvloop httptools
 
 # Production stage
-FROM python:3.12-slim AS production
+FROM python:3.12-slim-bookworm AS production
+
+LABEL org.opencontainers.image.title="NexusAI Backend" \
+      org.opencontainers.image.description="NexusAI Backend API Service (Production)" \
+      org.opencontainers.image.vendor="NexusAI"
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
+    PYTHONFAULTHANDLER=1 \
     PYTHONPATH=/app \
+    PIP_NO_CACHE_DIR=1 \
     PATH="/opt/venv/bin:$PATH"
 
 WORKDIR /app
@@ -37,6 +44,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     curl \
     && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
     && useradd --create-home --shell /bin/bash appuser
 
 # Copy virtual environment from builder
@@ -59,11 +67,14 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 # Expose port
 EXPOSE 8000
 
-# Run with gunicorn for production
-CMD ["python", "-m", "uvicorn", "app.main:app", \
-     "--host", "0.0.0.0", \
-     "--port", "8000", \
+# Run with gunicorn + uvicorn workers for production
+CMD ["gunicorn", "app.main:app", \
+     "--bind", "0.0.0.0:8000", \
      "--workers", "4", \
-     "--loop", "uvloop", \
-     "--http", "httptools", \
-     "--no-access-log"]
+     "--worker-class", "uvicorn.workers.UvicornWorker", \
+     "--max-requests", "1000", \
+     "--max-requests-jitter", "50", \
+     "--timeout", "120", \
+     "--keep-alive", "5", \
+     "--access-logfile", "-", \
+     "--error-logfile", "-"]

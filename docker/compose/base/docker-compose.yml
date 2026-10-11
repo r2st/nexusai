@@ -79,7 +79,7 @@ services:
       - REDIS_URL=redis://:${REDIS_PASSWORD:-}@redis:6379/0
       - MEILISEARCH_URL=http://meilisearch:7700
       - MEILISEARCH_API_KEY=${MEILISEARCH_API_KEY:-}
-      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
+      - SECRET_KEY=${SECRET_KEY:?SECRET_KEY must be set}
       - CORS_ORIGINS=${CORS_ORIGINS:-["http://localhost:3000","http://localhost:8000"]}
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - WORKERS=${BACKEND_WORKERS:-4}
@@ -140,7 +140,7 @@ services:
       - REDIS_URL=redis://:${REDIS_PASSWORD:-}@redis:6379/0
       - MEILISEARCH_URL=http://meilisearch:7700
       - MEILISEARCH_API_KEY=${MEILISEARCH_API_KEY:-}
-      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
+      - SECRET_KEY=${SECRET_KEY:?SECRET_KEY must be set}
       - LOG_LEVEL=${LOG_LEVEL:-info}
     depends_on:
       postgres:

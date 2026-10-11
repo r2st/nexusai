@@ -1,5 +1,3 @@
-version: "3.8"
-
 # Local LLM support using Ollama
 # Supports: Llama 3, Mistral, CodeLlama, Phi, Gemma, and more
 #

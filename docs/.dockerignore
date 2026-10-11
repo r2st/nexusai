@@ -1,0 +1,14 @@
+.git
+.github
+node_modules
+build
+.docusaurus
+*.log
+.env
+.env.*
+Dockerfile*
+docker-compose*
+.dockerignore
+.DS_Store
+.idea
+.vscode
