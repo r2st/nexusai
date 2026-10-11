@@ -107,13 +107,16 @@ export function OrgSwitcher({ className, compact = false }: OrgSwitcherProps) {
     <div className={cn('relative', className)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        aria-label={currentOrg ? `Organization: ${currentOrg.name}` : 'Select organization'}
         className={cn(
           'flex items-center gap-2 rounded-lg border bg-background px-3 py-2 text-sm font-medium transition-colors hover:bg-muted',
           compact ? 'w-auto' : 'w-full'
         )}
       >
         <div className="flex h-6 w-6 items-center justify-center rounded bg-primary/10">
-          <Building2 className="h-3.5 w-3.5 text-primary" />
+          <Building2 className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
         </div>
         {!compact && (
           <>
@@ -137,10 +140,11 @@ export function OrgSwitcher({ className, compact = false }: OrgSwitcherProps) {
           <div
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
+            aria-hidden="true"
           />
 
           {/* Menu */}
-          <div className="absolute left-0 top-full mt-2 z-50 w-72 rounded-lg border bg-popover shadow-lg">
+          <div role="listbox" aria-label="Organizations" className="absolute left-0 top-full mt-2 z-50 w-72 rounded-lg border bg-popover shadow-lg">
             <div className="p-2">
               <p className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
                 Organizations
@@ -150,6 +154,8 @@ export function OrgSwitcher({ className, compact = false }: OrgSwitcherProps) {
                 {organizations.map((org) => (
                   <button
                     key={org.id}
+                    role="option"
+                    aria-selected={currentOrg?.id === org.id}
                     onClick={() => handleSelectOrg(org)}
                     className={cn(
                       'w-full flex items-center gap-3 rounded-md px-2 py-2 text-sm transition-colors',

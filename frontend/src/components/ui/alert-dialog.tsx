@@ -43,13 +43,15 @@ AlertDialogTrigger.displayName = 'AlertDialogTrigger';
 
 const AlertDialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => {
-    const { open, onOpenChange } = React.useContext(AlertDialogContext);
+    const { open } = React.useContext(AlertDialogContext);
     if (!open) return null;
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <div className="fixed inset-0 bg-black/50" onClick={() => onOpenChange(false)} />
+        <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
         <div
           ref={ref}
+          role="alertdialog"
+          aria-modal="true"
           className={cn(
             'fixed z-50 grid w-full max-w-lg gap-4 border bg-background p-6 shadow-lg sm:rounded-lg',
             className

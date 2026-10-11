@@ -96,6 +96,9 @@ export function MobileNav() {
 
       {/* Mobile Menu */}
       <div
+        role="dialog"
+        aria-modal={isOpen}
+        aria-label="Navigation menu"
         className={cn(
           'fixed inset-y-0 left-0 z-50 w-72 bg-background border-r transform transition-transform duration-300 ease-in-out md:hidden',
           isOpen ? 'translate-x-0' : '-translate-x-full'
@@ -104,13 +107,13 @@ export function MobileNav() {
         {/* Header */}
         <div className="flex h-16 items-center justify-between border-b px-4">
           <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
-            <Sparkles className="h-6 w-6 text-primary" />
+            <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
             <span className="text-xl font-bold">NexusAI</span>
           </Link>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
-              <X className="h-5 w-5" />
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} aria-label="Close menu">
+              <X className="h-5 w-5" aria-hidden="true" />
             </Button>
           </div>
         </div>
@@ -143,6 +146,7 @@ export function MobileNav() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
+                  aria-current={isActive ? 'page' : undefined}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                     isActive
@@ -150,7 +154,7 @@ export function MobileNav() {
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   )}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-4 w-4" aria-hidden="true" />
                   {item.label}
                 </Link>
               );
@@ -170,6 +174,7 @@ export function MobileNav() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
+                  aria-current={isActive ? 'page' : undefined}
                   className={cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                     isActive
@@ -177,7 +182,7 @@ export function MobileNav() {
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   )}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-4 w-4" aria-hidden="true" />
                   {item.label}
                 </Link>
               );
@@ -261,8 +266,8 @@ export function Header({ showNav = true, className }: HeaderProps) {
           {isAuthenticated ? (
             <>
               <Link href="/settings" className="hidden sm:block">
-                <Button variant="ghost" size="icon">
-                  <User className="h-4 w-4" />
+                <Button variant="ghost" size="icon" aria-label="Settings">
+                  <User className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </Link>
             </>

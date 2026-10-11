@@ -64,8 +64,8 @@ export function ThemeToggle({ className }: { className?: string }) {
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" className={className}>
-        <Sun className="h-4 w-4" />
+      <Button variant="ghost" size="icon" className={className} aria-label="Toggle theme">
+        <Sun className="h-4 w-4" aria-hidden="true" />
       </Button>
     );
   }
@@ -127,21 +127,25 @@ export function ThemeSelect({ className }: { className?: string }) {
   ];
 
   return (
-    <div className={cn('flex gap-1 p-1 rounded-lg bg-muted', className)}>
+    <div className={cn('flex gap-1 p-1 rounded-lg bg-muted', className)} role="radiogroup" aria-label="Theme">
       {options.map((option) => {
         const Icon = option.icon;
+        const isSelected = theme === option.value;
         return (
           <button
             key={option.value}
+            type="button"
+            role="radio"
+            aria-checked={isSelected}
             onClick={() => setTheme(option.value)}
             className={cn(
               'flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
-              theme === option.value
+              isSelected
                 ? 'bg-background shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
             )}
           >
-            <Icon className="h-4 w-4" />
+            <Icon className="h-4 w-4" aria-hidden="true" />
             {option.label}
           </button>
         );

@@ -149,28 +149,28 @@ you can use one of these codes to sign in.
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="2fa-setup-title">
       <div className="bg-background rounded-lg border shadow-lg w-full max-w-lg p-6 mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <Shield className="h-5 w-5 text-primary" />
+              <Shield className="h-5 w-5 text-primary" aria-hidden="true" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold">Set Up Two-Factor Authentication</h2>
+              <h2 id="2fa-setup-title" className="text-lg font-semibold">Set Up Two-Factor Authentication</h2>
               <p className="text-sm text-muted-foreground">
                 Step {['intro', 'scan', 'verify', 'backup', 'complete'].indexOf(step) + 1} of 5
               </p>
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onCancel}>
-            <X className="h-4 w-4" />
+          <Button variant="ghost" size="icon" onClick={onCancel} aria-label="Cancel setup">
+            <X className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
 
         {/* Progress */}
-        <div className="h-1 bg-muted rounded-full mb-6 overflow-hidden">
+        <div className="h-1 bg-muted rounded-full mb-6 overflow-hidden" role="progressbar" aria-valuenow={(['intro', 'scan', 'verify', 'backup', 'complete'].indexOf(step) + 1) * 20} aria-valuemin={0} aria-valuemax={100} aria-label="Setup progress">
           <div
             className="h-full bg-primary transition-all"
             style={{
@@ -181,8 +181,8 @@ you can use one of these codes to sign in.
 
         {/* Error */}
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-4 w-4 shrink-0" />
+          <div role="alert" className="mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center gap-2 text-destructive">
+            <AlertTriangle className="h-4 w-4 shrink-0" aria-hidden="true" />
             <span className="text-sm">{error}</span>
           </div>
         )}
@@ -242,7 +242,7 @@ you can use one of these codes to sign in.
               <div className="p-4 bg-white rounded-lg">
                 <img
                   src={setupData.qr_code_url}
-                  alt="2FA QR Code"
+                  alt="Scan this QR code with your authenticator app to set up two-factor authentication"
                   className="w-48 h-48"
                 />
               </div>
@@ -257,11 +257,11 @@ you can use one of these codes to sign in.
                 <code className="flex-1 p-3 bg-muted rounded-lg font-mono text-sm break-all">
                   {setupData.secret}
                 </code>
-                <Button variant="outline" size="icon" onClick={copySecret}>
+                <Button variant="outline" size="icon" onClick={copySecret} aria-label={copiedSecret ? 'Copied' : 'Copy secret key'}>
                   {copiedSecret ? (
-                    <Check className="h-4 w-4 text-green-500" />
+                    <Check className="h-4 w-4 text-green-500" aria-hidden="true" />
                   ) : (
-                    <Copy className="h-4 w-4" />
+                    <Copy className="h-4 w-4" aria-hidden="true" />
                   )}
                 </Button>
               </div>
@@ -448,7 +448,7 @@ export function OTPInput({
   };
 
   return (
-    <div className="flex justify-center gap-2">
+    <div className="flex justify-center gap-2" role="group" aria-label="Verification code">
       {Array.from({ length }).map((_, index) => (
         <input
           key={index}
@@ -463,6 +463,8 @@ export function OTPInput({
           onKeyDown={(e) => handleKeyDown(index, e)}
           onPaste={handlePaste}
           disabled={disabled}
+          aria-label={`Digit ${index + 1} of ${length}`}
+          autoComplete="one-time-code"
           className={cn(
             'w-12 h-14 text-center text-2xl font-mono rounded-lg border bg-background',
             'focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary',
@@ -507,21 +509,21 @@ export function TwoFactorVerify({ onVerify, onCancel, onUseBackupCode }: TwoFact
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="2fa-verify-title">
       <div className="bg-background rounded-lg border shadow-lg w-full max-w-md p-6 mx-4">
         <div className="text-center mb-6">
           <div className="h-12 w-12 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Shield className="h-6 w-6 text-primary" />
+            <Shield className="h-6 w-6 text-primary" aria-hidden="true" />
           </div>
-          <h2 className="text-xl font-semibold">Two-Factor Authentication</h2>
+          <h2 id="2fa-verify-title" className="text-xl font-semibold">Two-Factor Authentication</h2>
           <p className="text-sm text-muted-foreground mt-1">
             Enter the code from your authenticator app
           </p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-4 w-4 shrink-0" />
+          <div role="alert" className="mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center gap-2 text-destructive">
+            <AlertTriangle className="h-4 w-4 shrink-0" aria-hidden="true" />
             <span className="text-sm">{error}</span>
           </div>
         )}
@@ -584,21 +586,21 @@ export function BackupCodeInput({ onVerify, onCancel, onBack }: BackupCodeInputP
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="backup-code-title">
       <div className="bg-background rounded-lg border shadow-lg w-full max-w-md p-6 mx-4">
         <div className="text-center mb-6">
           <div className="h-12 w-12 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Key className="h-6 w-6 text-primary" />
+            <Key className="h-6 w-6 text-primary" aria-hidden="true" />
           </div>
-          <h2 className="text-xl font-semibold">Use Backup Code</h2>
+          <h2 id="backup-code-title" className="text-xl font-semibold">Use Backup Code</h2>
           <p className="text-sm text-muted-foreground mt-1">
             Enter one of your backup codes
           </p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-4 w-4 shrink-0" />
+          <div role="alert" className="mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center gap-2 text-destructive">
+            <AlertTriangle className="h-4 w-4 shrink-0" aria-hidden="true" />
             <span className="text-sm">{error}</span>
           </div>
         )}
@@ -607,6 +609,7 @@ export function BackupCodeInput({ onVerify, onCancel, onBack }: BackupCodeInputP
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}
           placeholder="XXXX-XXXX"
+          aria-label="Backup code"
           className="text-center font-mono text-lg"
         />
 

@@ -77,6 +77,8 @@ export function AgentCard({ agent, onExecute, onDelete, isPublic }: AgentCardPro
           className={`h-2 w-2 rounded-full ${
             agent.is_active ? 'bg-green-500' : 'bg-gray-300'
           }`}
+          role="status"
+          aria-label={agent.is_active ? 'Active' : 'Inactive'}
           title={agent.is_active ? 'Active' : 'Inactive'}
         />
       </div>
@@ -124,8 +126,9 @@ export function AgentCard({ agent, onExecute, onDelete, isPublic }: AgentCardPro
               size="sm"
               onClick={onDelete}
               className="text-destructive hover:text-destructive"
+              aria-label={`Delete ${agent.name}`}
             >
-              <Trash2 className="h-3 w-3" />
+              <Trash2 className="h-3 w-3" aria-hidden="true" />
             </Button>
           )}
         </div>

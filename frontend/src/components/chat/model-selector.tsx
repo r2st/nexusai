@@ -521,10 +521,11 @@ export function ModelSelector({
           <div
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
+            aria-hidden="true"
           />
 
           {/* Dropdown */}
-          <div className="absolute left-0 top-full mt-2 z-50 w-96 rounded-lg border bg-popover shadow-lg">
+          <div role="listbox" aria-label="Available models" className="absolute left-0 top-full mt-2 z-50 w-96 rounded-lg border bg-popover shadow-lg">
             <div className="p-2">
               <div className="flex items-center justify-between px-2 py-1.5">
                 <p className="text-xs font-medium text-muted-foreground">
@@ -560,6 +561,8 @@ export function ModelSelector({
                           return (
                             <button
                               key={model.id}
+                              role="option"
+                              aria-selected={isSelected}
                               onClick={() => {
                                 onSelectModel(model);
                                 setIsOpen(false);

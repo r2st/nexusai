@@ -382,14 +382,15 @@ function ContextSection({ icon, title, children, onRemove }: ContextSectionProps
       <div className="flex items-center justify-between mb-2">
         <button
           onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
           className="flex items-center gap-2 text-sm font-medium hover:text-foreground/80"
         >
           {icon}
           {title}
           {expanded ? (
-            <ChevronUp className="h-3 w-3" />
+            <ChevronUp className="h-3 w-3" aria-hidden="true" />
           ) : (
-            <ChevronDown className="h-3 w-3" />
+            <ChevronDown className="h-3 w-3" aria-hidden="true" />
           )}
         </button>
         {onRemove && (

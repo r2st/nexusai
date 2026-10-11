@@ -204,11 +204,12 @@ export function ConversationSearch({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" role="dialog" aria-modal="true" aria-label="Search conversations">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Search Modal */}
@@ -227,8 +228,8 @@ export function ConversationSearch({
           {isSearching && (
             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
           )}
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            <X className="h-4 w-4" />
+          <Button variant="ghost" size="sm" onClick={onClose} aria-label="Close search">
+            <X className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
 

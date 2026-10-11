@@ -104,7 +104,7 @@ export function ConsentBanner() {
 
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-background border-t shadow-lg animate-in slide-in-from-bottom">
+    <div role="region" aria-label="Cookie consent" className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-background border-t shadow-lg animate-in slide-in-from-bottom">
       <div className="max-w-4xl mx-auto">
         {!showDetails ? (
           // Simple banner view
@@ -154,8 +154,9 @@ export function ConsentBanner() {
               <button
                 onClick={() => setShowDetails(false)}
                 className="p-1 hover:bg-muted rounded"
+                aria-label="Close preferences"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" aria-hidden="true" />
               </button>
             </div>
 
