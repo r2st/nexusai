@@ -12,7 +12,6 @@ import asyncio
 import functools
 import hashlib
 import json
-import pickle
 from datetime import timedelta
 from typing import Any, Callable, TypeVar, ParamSpec
 from contextlib import asynccontextmanager
@@ -110,7 +109,7 @@ class RedisCache:
         try:
             data = await self.client.get(key)
             if data:
-                return pickle.loads(data)
+                return json.loads(data)
             return None
         except Exception as e:
             logger.warning("Cache get failed", key=key, error=str(e))
@@ -126,7 +125,7 @@ class RedisCache:
         try:
             if isinstance(ttl, timedelta):
                 ttl = int(ttl.total_seconds())
-            data = pickle.dumps(value)
+            data = json.dumps(value, default=str)
             await self.client.setex(key, ttl, data)
             return True
         except Exception as e:

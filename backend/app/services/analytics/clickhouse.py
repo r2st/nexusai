@@ -7,6 +7,7 @@ ClickHouse provides high-performance OLAP queries for:
 - Historical trend analysis
 """
 
+import json
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -289,21 +290,27 @@ class ClickHouseService:
         if not metrics:
             return
 
-        values = []
         for m in metrics:
             dimensions = m.get("dimensions", {})
-            dim_str = ", ".join(f"'{k}': '{v}'" for k, v in dimensions.items())
-            values.append(
-                f"('{tenant_id}', '{project_id}', '{m['name']}', "
-                f"{m['value']}, map({dim_str}), now64())"
-            )
-
-        query = f"""
-            INSERT INTO {self.config.database}.metrics
-            (tenant_id, project_id, metric_name, metric_value, dimensions, timestamp)
-            VALUES {', '.join(values)}
-        """
-        await self.execute(query)
+            dim_keys = list(dimensions.keys())
+            dim_vals = list(dimensions.values())
+            query = f"""
+                INSERT INTO {self.config.database}.metrics
+                (tenant_id, project_id, metric_name, metric_value, dimensions, timestamp)
+                VALUES (
+                    {{tenant_id:UUID}}, {{project_id:UUID}}, {{metric_name:String}},
+                    {{metric_value:Float64}}, map({{dim_keys:Array(String)}}, {{dim_vals:Array(String)}}), now64()
+                )
+            """
+            params = {
+                "param_tenant_id": tenant_id,
+                "param_project_id": project_id,
+                "param_metric_name": m["name"],
+                "param_metric_value": str(m["value"]),
+                "param_dim_keys": json.dumps(dim_keys),
+                "param_dim_vals": json.dumps(dim_vals),
+            }
+            await self.execute(query, params)
 
     async def insert_api_request(
         self,
@@ -332,19 +339,33 @@ class ClickHouseService:
             user_agent: Client user agent
             ip_address: Client IP
         """
-        user_id_val = f"'{user_id}'" if user_id else "generateUUIDv4()"
+        user_id_expr = "{user_id:UUID}" if user_id else "generateUUIDv4()"
 
         query = f"""
             INSERT INTO {self.config.database}.api_requests
             (request_id, tenant_id, user_id, endpoint, method, status_code,
              response_time_ms, request_size, response_size, user_agent, ip_address, timestamp)
             VALUES (
-                generateUUIDv4(), '{tenant_id}', {user_id_val}, '{endpoint}',
-                '{method}', {status_code}, {response_time_ms}, {request_size},
-                {response_size}, '{user_agent}', '{ip_address}', now64()
+                generateUUIDv4(), {{tenant_id:UUID}}, {user_id_expr}, {{endpoint:String}},
+                {{method:String}}, {{status_code:UInt16}}, {{response_time_ms:UInt32}},
+                {{request_size:UInt32}}, {{response_size:UInt32}}, {{user_agent:String}},
+                {{ip_address:String}}, now64()
             )
         """
-        await self.execute(query)
+        params: dict[str, str] = {
+            "param_tenant_id": tenant_id,
+            "param_endpoint": endpoint,
+            "param_method": method,
+            "param_status_code": str(status_code),
+            "param_response_time_ms": str(response_time_ms),
+            "param_request_size": str(request_size),
+            "param_response_size": str(response_size),
+            "param_user_agent": user_agent,
+            "param_ip_address": ip_address,
+        }
+        if user_id:
+            params["param_user_id"] = user_id
+        await self.execute(query, params)
 
     async def insert_ai_usage(
         self,
@@ -373,21 +394,32 @@ class ClickHouseService:
             model: Model used
             metadata: Additional metadata
         """
-        import json
-
-        meta_str = json.dumps(metadata or {}).replace("'", "\\'")
+        meta_str = json.dumps(metadata or {})
 
         query = f"""
             INSERT INTO {self.config.database}.ai_usage
             (event_id, tenant_id, user_id, tool, event_type, tokens_input,
              tokens_output, cost_usd, duration_ms, model, metadata, timestamp)
             VALUES (
-                generateUUIDv4(), '{tenant_id}', '{user_id}', '{tool}',
-                '{event_type}', {tokens_input}, {tokens_output}, {cost_usd},
-                {duration_ms}, '{model}', '{meta_str}', now64()
+                generateUUIDv4(), {{tenant_id:UUID}}, {{user_id:UUID}}, {{tool:String}},
+                {{event_type:String}}, {{tokens_input:UInt32}}, {{tokens_output:UInt32}},
+                {{cost_usd:Float64}}, {{duration_ms:UInt32}}, {{model:String}},
+                {{metadata:String}}, now64()
             )
         """
-        await self.execute(query)
+        params = {
+            "param_tenant_id": tenant_id,
+            "param_user_id": user_id,
+            "param_tool": tool,
+            "param_event_type": event_type,
+            "param_tokens_input": str(tokens_input),
+            "param_tokens_output": str(tokens_output),
+            "param_cost_usd": str(cost_usd),
+            "param_duration_ms": str(duration_ms),
+            "param_model": model,
+            "param_metadata": meta_str,
+        }
+        await self.execute(query, params)
 
     async def get_api_stats(
         self,
@@ -410,11 +442,8 @@ class ClickHouseService:
         period_end = period_end or datetime.utcnow()
         period_start = period_start or (period_end - timedelta(days=7))
 
-        time_func = {
-            "hour": "toStartOfHour",
-            "day": "toDate",
-            "week": "toStartOfWeek",
-        }.get(granularity, "toStartOfHour")
+        allowed_funcs = {"hour": "toStartOfHour", "day": "toDate", "week": "toStartOfWeek"}
+        time_func = allowed_funcs.get(granularity, "toStartOfHour")
 
         query = f"""
             SELECT
@@ -425,14 +454,19 @@ class ClickHouseService:
                 countIf(status_code >= 400) AS errors,
                 countIf(status_code >= 400) / count() * 100 AS error_rate
             FROM {self.config.database}.api_requests
-            WHERE tenant_id = '{tenant_id}'
-                AND timestamp >= '{period_start.isoformat()}'
-                AND timestamp <= '{period_end.isoformat()}'
+            WHERE tenant_id = {{tenant_id:UUID}}
+                AND timestamp >= {{period_start:DateTime64(3)}}
+                AND timestamp <= {{period_end:DateTime64(3)}}
             GROUP BY period, endpoint
             ORDER BY period DESC
         """
 
-        result = await self.execute(query)
+        params = {
+            "param_tenant_id": tenant_id,
+            "param_period_start": period_start.isoformat(),
+            "param_period_end": period_end.isoformat(),
+        }
+        result = await self.execute(query, params)
         return result.data
 
     async def get_ai_usage_stats(
@@ -464,14 +498,19 @@ class ClickHouseService:
                 avg(duration_ms) AS avg_duration_ms,
                 uniq(user_id) AS unique_users
             FROM {self.config.database}.ai_usage
-            WHERE tenant_id = '{tenant_id}'
-                AND timestamp >= '{period_start.isoformat()}'
-                AND timestamp <= '{period_end.isoformat()}'
+            WHERE tenant_id = {{tenant_id:UUID}}
+                AND timestamp >= {{period_start:DateTime64(3)}}
+                AND timestamp <= {{period_end:DateTime64(3)}}
             GROUP BY tool
             ORDER BY total_cost DESC
         """
 
-        result = await self.execute(query)
+        params = {
+            "param_tenant_id": tenant_id,
+            "param_period_start": period_start.isoformat(),
+            "param_period_end": period_end.isoformat(),
+        }
+        result = await self.execute(query, params)
 
         return {
             "by_tool": result.data,
@@ -505,13 +544,18 @@ class ClickHouseService:
                 change_failure_rate,
                 overall_level
             FROM {self.config.database}.dora_metrics
-            WHERE tenant_id = '{tenant_id}'
-                AND project_id = '{project_id}'
+            WHERE tenant_id = {{tenant_id:UUID}}
+                AND project_id = {{project_id:UUID}}
             ORDER BY period_end DESC
-            LIMIT {periods}
+            LIMIT {{periods:UInt32}}
         """
 
-        result = await self.execute(query)
+        params = {
+            "param_tenant_id": tenant_id,
+            "param_project_id": project_id,
+            "param_periods": str(periods),
+        }
+        result = await self.execute(query, params)
         return list(reversed(result.data))
 
     async def get_pipeline_stats(
@@ -541,13 +585,18 @@ class ClickHouseService:
                 sum(completed_tasks) AS total_completed,
                 sum(failed_tasks) AS total_failed
             FROM {self.config.database}.pipeline_runs
-            WHERE tenant_id = '{tenant_id}'
-                AND started_at >= '{period_start.isoformat()}'
-                AND started_at <= '{period_end.isoformat()}'
+            WHERE tenant_id = {{tenant_id:UUID}}
+                AND started_at >= {{period_start:DateTime64(3)}}
+                AND started_at <= {{period_end:DateTime64(3)}}
             GROUP BY status
         """
 
-        result = await self.execute(query)
+        params = {
+            "param_tenant_id": tenant_id,
+            "param_period_start": period_start.isoformat(),
+            "param_period_end": period_end.isoformat(),
+        }
+        result = await self.execute(query, params)
 
         return {
             "by_status": result.data,

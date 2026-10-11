@@ -33,8 +33,11 @@ class LocalStorageBackend(StorageBackend):
         self.public_base_url = config.extra.get("public_base_url", "/files")
 
     def _get_full_path(self, key: str) -> Path:
-        """Get the full filesystem path for a key."""
-        return self.base_path / key
+        """Get the full filesystem path for a key, rejecting traversal."""
+        full = (self.base_path / key).resolve()
+        if not full.is_relative_to(self.base_path.resolve()):
+            raise ValueError(f"Path traversal denied: {key}")
+        return full
 
     async def upload(
         self,
