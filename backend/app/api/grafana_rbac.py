@@ -178,6 +178,5 @@ async def grafana_rbac_health(
     
     return {
         "available": is_available,
-        "grafana_url": service.base_url,
         "enabled": service._enabled,
     }

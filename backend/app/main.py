@@ -373,14 +373,13 @@ def create_app() -> FastAPI:
             "devops_enabled": settings.FEATURE_DEVOPS_AGENTS,
         }
 
-    # Observability status endpoint
     @app.get("/observability/status")
     async def observability_status():
         """Get observability services status (Langfuse, Prometheus)."""
         status = {
             "langfuse": {"enabled": False, "connected": False},
             "prometheus": {"enabled": False},
-            "devlake": {"enabled": settings.DEVLAKE_ENABLED, "url": settings.DEVLAKE_API_URL},
+            "devlake": {"enabled": settings.DEVLAKE_ENABLED},
         }
 
         try:
