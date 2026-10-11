@@ -244,8 +244,10 @@ async def update_organization(
     if not org:
         raise HTTPException(status_code=404, detail="Organization not found")
 
-    # Update fields
+    _ALLOWED_UPDATE_FIELDS = {"name", "description", "website", "logo_url", "settings"}
     for field, value in request.model_dump(exclude_unset=True).items():
+        if field not in _ALLOWED_UPDATE_FIELDS:
+            continue
         setattr(org, field, value)
 
     await db.commit()
