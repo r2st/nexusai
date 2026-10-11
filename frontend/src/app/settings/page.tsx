@@ -112,13 +112,14 @@ export default function SettingsPage() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar */}
           <aside className="w-full md:w-64 shrink-0">
-            <nav className="space-y-1">
+            <nav className="space-y-1" aria-label="Settings sections">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
+                    aria-current={activeTab === tab.id ? 'page' : undefined}
                     className={cn(
                       'w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors',
                       activeTab === tab.id
@@ -126,7 +127,7 @@ export default function SettingsPage() {
                         : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                     )}
                   >
-                    <Icon className="h-4 w-4" />
+                    <Icon className="h-4 w-4" aria-hidden="true" />
                     {tab.label}
                   </button>
                 );
@@ -155,8 +156,11 @@ export default function SettingsPage() {
                     <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary">
                       {fullName?.charAt(0) || email?.charAt(0) || 'U'}
                     </div>
-                    <button className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-md hover:bg-primary/90 transition-colors">
-                      <Camera className="h-4 w-4" />
+                    <button
+                      className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-md hover:bg-primary/90 transition-colors"
+                      aria-label="Change profile photo"
+                    >
+                      <Camera className="h-4 w-4" aria-hidden="true" />
                     </button>
                   </div>
                   <div>
