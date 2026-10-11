@@ -16,7 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
 from app.core.database import get_db
-from app.api.deps import get_current_user
+from app.api.deps import get_current_user, get_current_admin_user
 from app.models.user import User
 from app.services.grafana.rbac import get_grafana_rbac_service
 
@@ -98,13 +98,13 @@ async def sync_user_to_grafana(
 @router.post("/assign-role")
 async def assign_grafana_role(
     request: AssignRoleRequest,
-    _: User = Depends(get_current_user),
+    _: User = Depends(get_current_admin_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict[str, Any]:
     """
     Assign role to Grafana user.
-    
-    Updates user's role in Grafana organization.
+
+    Requires admin privileges.
     """
     service = get_grafana_rbac_service()
     
