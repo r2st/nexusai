@@ -195,8 +195,8 @@ export function TeamChat({
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <Settings className="h-4 w-4" />
+                <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Team settings">
+                  <Settings className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -234,8 +234,9 @@ export function TeamChat({
                 size="icon"
                 className="h-5 w-5"
                 onClick={() => setShowCreateChannel(true)}
+                aria-label="Create channel"
               >
-                <Plus className="h-3 w-3" />
+                <Plus className="h-3 w-3" aria-hidden="true" />
               </Button>
             </div>
             <nav className="space-y-1">
@@ -305,11 +306,11 @@ export function TeamChat({
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <Search className="h-4 w-4" />
+                <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Search messages">
+                  <Search className="h-4 w-4" aria-hidden="true" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <Pin className="h-4 w-4" />
+                <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Pinned messages">
+                  <Pin className="h-4 w-4" aria-hidden="true" />
                 </Button>
                 <AvatarGroup users={selectedChannel.members} max={3} size="xs" />
               </div>
@@ -479,8 +480,8 @@ function TeamMessageItem({
       <div className="opacity-0 group-hover:opacity-100 transition-opacity">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-7 w-7">
-              <MoreVertical className="h-4 w-4" />
+            <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Message actions">
+              <MoreVertical className="h-4 w-4" aria-hidden="true" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

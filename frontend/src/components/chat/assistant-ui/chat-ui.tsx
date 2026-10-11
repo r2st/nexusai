@@ -149,8 +149,9 @@ export function ChatUI({
           size="icon"
           className="absolute bottom-24 right-8 z-10 rounded-full shadow-md"
           onClick={scrollToBottom}
+          aria-label="Scroll to bottom"
         >
-          <ArrowDown className="h-4 w-4" />
+          <ArrowDown className="h-4 w-4" aria-hidden="true" />
         </Button>
       )}
 
@@ -304,13 +305,14 @@ const MessageBubble = memo(function MessageBubble({
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="h-6 w-6 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
               onClick={handleCopy}
+              aria-label={copied ? 'Copied' : 'Copy message'}
             >
               {copied ? (
-                <Check className="h-3 w-3 text-green-500" />
+                <Check className="h-3 w-3 text-green-500" aria-hidden="true" />
               ) : (
-                <Copy className="h-3 w-3" />
+                <Copy className="h-3 w-3" aria-hidden="true" />
               )}
             </Button>
           )}
@@ -564,11 +566,12 @@ const ChatComposer = memo(function ChatComposer({
           onClick={handleSubmit}
           disabled={!value.trim() || isLoading || isDisabled}
           className="h-9 w-9 shrink-0"
+          aria-label={isLoading ? 'Sending' : 'Send message'}
         >
           {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
           ) : (
-            <Send className="h-4 w-4" />
+            <Send className="h-4 w-4" aria-hidden="true" />
           )}
         </Button>
       </div>

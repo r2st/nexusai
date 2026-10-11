@@ -97,8 +97,9 @@ export function ImageMessage({
               size="icon"
               variant="secondary"
               onClick={() => setIsOpen(true)}
+              aria-label="View fullscreen"
             >
-              <Maximize2 className="h-4 w-4" />
+              <Maximize2 className="h-4 w-4" aria-hidden="true" />
             </Button>
           </div>
         </div>
@@ -121,8 +122,9 @@ export function ImageMessage({
                 variant="secondary"
                 className="h-8 w-8"
                 onClick={() => setZoom((z) => Math.max(0.5, z - 0.25))}
+                aria-label="Zoom out"
               >
-                <ZoomOut className="h-4 w-4" />
+                <ZoomOut className="h-4 w-4" aria-hidden="true" />
               </Button>
               <span className="px-2 text-sm">{Math.round(zoom * 100)}%</span>
               <Button
@@ -130,16 +132,18 @@ export function ImageMessage({
                 variant="secondary"
                 className="h-8 w-8"
                 onClick={() => setZoom((z) => Math.min(3, z + 0.25))}
+                aria-label="Zoom in"
               >
-                <ZoomIn className="h-4 w-4" />
+                <ZoomIn className="h-4 w-4" aria-hidden="true" />
               </Button>
               <Button
                 size="icon"
                 variant="secondary"
                 className="h-8 w-8"
                 onClick={handleDownload}
+                aria-label="Download image"
               >
-                <Download className="h-4 w-4" />
+                <Download className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
 
@@ -218,16 +222,18 @@ export function ImageGallery({ images, className }: ImageGalleryProps) {
                   variant="secondary"
                   className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
                   onClick={() => setCurrentIndex((i) => (i - 1 + images.length) % images.length)}
+                  aria-label="Previous image"
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                 </Button>
                 <Button
                   size="icon"
                   variant="secondary"
                   className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
                   onClick={() => setCurrentIndex((i) => (i + 1) % images.length)}
+                  aria-label="Next image"
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </>
             )}

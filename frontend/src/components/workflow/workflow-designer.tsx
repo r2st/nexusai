@@ -203,8 +203,8 @@ function CanvasNode({
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-6 w-6">
-              <MoreVertical className="h-4 w-4" />
+            <Button variant="ghost" size="icon" className="h-6 w-6" aria-label="Node actions">
+              <MoreVertical className="h-4 w-4" aria-hidden="true" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -306,8 +306,8 @@ function TriggerConfig({
                 readOnly
                 value={`https://api.nexusai.dev/webhooks/${trigger.config.id || "..."}`}
               />
-              <Button variant="outline" size="icon">
-                <Copy className="h-4 w-4" />
+              <Button variant="outline" size="icon" aria-label="Copy webhook URL">
+                <Copy className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           </div>
@@ -755,16 +755,17 @@ export function WorkflowDesigner({
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" onClick={undo} disabled={historyIndex <= 0}>
-            <Undo className="h-4 w-4" />
+          <Button variant="outline" size="icon" onClick={undo} disabled={historyIndex <= 0} aria-label="Undo">
+            <Undo className="h-4 w-4" aria-hidden="true" />
           </Button>
           <Button
             variant="outline"
             size="icon"
             onClick={redo}
             disabled={historyIndex >= history.length - 1}
+            aria-label="Redo"
           >
-            <Redo className="h-4 w-4" />
+            <Redo className="h-4 w-4" aria-hidden="true" />
           </Button>
           <div className="w-px h-6 bg-border mx-2" />
           <Button variant="outline" size="sm" onClick={exportWorkflow}>
