@@ -234,6 +234,7 @@ class DevLakeCreateProjectHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Create a new DevLake project with scope configuration."""
         import httpx
 
         name = arguments["name"]
@@ -322,6 +323,7 @@ class DevLakeListConnectionsHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """List all DevLake data source connections with health status."""
         import httpx
         
         try:
@@ -505,6 +507,7 @@ class DevLakeCreateConnectionHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Create and validate a new DevLake data source connection."""
         logger.info(f"devlake_create_connection called with arguments: {list(arguments.keys())}")
         logger.debug(f"devlake_create_connection full arguments: {arguments}")
 
@@ -992,6 +995,7 @@ class DevLakeCreateBlueprintHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Create a data collection blueprint with scope, schedule, and transformation rules."""
         import httpx
 
         name = arguments["name"]
@@ -1457,6 +1461,7 @@ class DevLakeListScopesHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """List available scopes (repos, boards) for a DevLake connection."""
         import httpx
 
         plugin = arguments["plugin"]
@@ -1554,6 +1559,7 @@ class DevLakeSearchScopesHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Search for scopes by name across a DevLake connection."""
         import httpx
 
         plugin = arguments["plugin"]
@@ -1661,6 +1667,7 @@ class DevLakeAddScopeHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Add data collection scopes to an existing DevLake connection."""
         import httpx
 
         plugin = arguments["plugin"]
@@ -1811,6 +1818,7 @@ class DevLakeGetPipelineHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Retrieve pipeline run details including stage-level progress."""
         import json
 
         pipeline_id = arguments["pipeline_id"]
@@ -1942,6 +1950,7 @@ class DevLakeGetDORAMetricsHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Calculate DORA metrics from DevLake data with time-range filtering."""
         project_name = arguments["project_name"]
         time_range = arguments.get("time_range", "past_6_months")
 
@@ -2530,6 +2539,7 @@ class DevLakeAnalyzePRIssueReferenceHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Analyze pull request descriptions for linked issue references."""
         import re
 
         pr_title = arguments.get("pr_title", "")
@@ -2616,6 +2626,7 @@ class DevLakeGetCorrelationExplanationHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Generate a natural-language explanation of PR-issue correlations."""
         correlation_type = arguments.get("correlation_type")
 
         explanations = {
@@ -2730,6 +2741,7 @@ class DevLakeSetupGitHubHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """End-to-end GitHub connection setup: create connection, discover repos, create project and blueprint."""
         logger.info("DevLakeSetupGitHubHandler starting", argument_keys=list(arguments.keys()))
         logger.debug("DevLakeSetupGitHubHandler arguments", repo=arguments.get("repo"), project_name=arguments.get("project_name"), endpoint=arguments.get("endpoint"))
 
@@ -3120,6 +3132,7 @@ class DevLakeGetSetupStatusHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Check setup status across connections, blueprints, pipelines, and collected data."""
         status = {
             "devlake_healthy": False,
             "connections": [],
@@ -3273,6 +3286,7 @@ class DevLakeQuickStartHandler(MCPToolHandler):
         arguments: Dict[str, Any],
         context: Dict[str, Any],
     ) -> Any:
+        """Guided quick-start: validate token, connect GitHub, discover repos, and trigger initial collection."""
         intended_action = arguments.get("intended_action", "").lower()
         result = {
             "devlake_status": "unknown",

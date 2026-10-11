@@ -52,6 +52,7 @@ class IntentClassifier:
 
     def __init__(self):
         # Pattern definitions for each intent
+        """Initialize intent classifier with keyword patterns and response templates."""
         self._patterns = {
             Intent.CONNECT: [
                 r'\b(connect|setup|configure|add)\b.*(github|gitlab|jira|jenkins|source|connection)',

@@ -28,6 +28,7 @@ class JiraSearchTool(Tool):
     
     @classmethod
     def get_metadata(cls) -> ToolMetadata:
+        """Return tool metadata schema for Jira issue search parameters."""
         return ToolMetadata(
             name="jira_search",
             description="Search for Jira issues using JQL or filters. Returns matching tickets with details.",
@@ -156,6 +157,7 @@ class JiraCreateTicketTool(Tool):
     
     @classmethod
     def get_metadata(cls) -> ToolMetadata:
+        """Return tool metadata schema for Jira ticket creation parameters."""
         return ToolMetadata(
             name="jira_create_ticket",
             description="Create a new Jira ticket/issue with specified details.",
@@ -295,6 +297,7 @@ class JiraUpdateTicketTool(Tool):
     
     @classmethod
     def get_metadata(cls) -> ToolMetadata:
+        """Return tool metadata schema for Jira ticket update parameters."""
         return ToolMetadata(
             name="jira_update_ticket",
             description="Update an existing Jira ticket - change status, add comments, update fields.",

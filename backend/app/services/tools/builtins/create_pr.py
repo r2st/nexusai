@@ -29,6 +29,7 @@ class CreatePRTool(Tool):
     
     @classmethod
     def get_metadata(cls) -> ToolMetadata:
+        """Return tool metadata schema with parameter definitions for PR creation."""
         return ToolMetadata(
             name="create_pr",
             description="Create a pull request with code changes. Can apply patches, set reviewers, and link to issues.",

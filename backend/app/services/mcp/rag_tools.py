@@ -85,6 +85,7 @@ class RAGSemanticSearchHandler(MCPToolHandler):
         )
 
     async def execute(self, arguments: dict, context: dict) -> dict:
+        """Execute a vector similarity search across ingested document chunks."""
         async def _execute():
             from app.services.rag import VectorStore, SearchResult
 
@@ -205,6 +206,7 @@ class RAGHybridSearchHandler(MCPToolHandler):
         )
 
     async def execute(self, arguments: dict, context: dict) -> dict:
+        """Execute a hybrid search combining vector similarity and keyword matching."""
         async def _execute():
             from app.services.rag import HybridRetriever, RetrievalConfig
 
@@ -326,6 +328,7 @@ class RAGCodeSearchHandler(MCPToolHandler):
         )
 
     async def execute(self, arguments: dict, context: dict) -> dict:
+        """Execute a code-aware search with language and symbol filtering."""
         async def _execute():
             from app.services.rag import VectorStore
 
@@ -548,6 +551,7 @@ class RAGIndexDocumentHandler(MCPToolHandler):
         )
 
     async def execute(self, arguments: dict, context: dict) -> dict:
+        """Index a document by chunking, embedding, and storing in the vector store."""
         async def _execute():
             from app.services.rag import DocumentIndexer
 
