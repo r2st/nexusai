@@ -252,8 +252,9 @@ export default function TeamPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => setIsEditingOrg(!isEditingOrg)}
+                      aria-label="Edit organization settings"
                     >
-                      <Settings className="h-4 w-4" />
+                      <Settings className="h-4 w-4" aria-hidden="true" />
                     </Button>
                   )}
                 </div>
@@ -261,16 +262,18 @@ export default function TeamPage() {
                 {isEditingOrg ? (
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium">Name</label>
+                      <label htmlFor="org-name" className="text-sm font-medium">Name</label>
                       <Input
+                        id="org-name"
                         value={orgName}
                         onChange={(e) => setOrgName(e.target.value)}
                         className="mt-1"
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium">Description</label>
+                      <label htmlFor="org-description" className="text-sm font-medium">Description</label>
                       <Input
+                        id="org-description"
                         value={orgDescription}
                         onChange={(e) => setOrgDescription(e.target.value)}
                         className="mt-1"
@@ -393,6 +396,7 @@ export default function TeamPage() {
                             <select
                               className="text-sm border rounded px-2 py-1"
                               defaultValue={member.role}
+                              aria-label={`Role for ${member.user?.full_name || member.user?.email || 'member'}`}
                               onChange={(e) =>
                                 handleRoleChange(
                                   member.id,
@@ -408,8 +412,9 @@ export default function TeamPage() {
                               size="sm"
                               variant="ghost"
                               onClick={() => setEditingMember(null)}
+                              aria-label="Cancel role change"
                             >
-                              <X className="h-4 w-4" />
+                              <X className="h-4 w-4" aria-hidden="true" />
                             </Button>
                           </div>
                         ) : (
@@ -429,8 +434,9 @@ export default function TeamPage() {
                                     size="sm"
                                     variant="ghost"
                                     onClick={() => setEditingMember(member.id)}
+                                    aria-label={`Change role for ${member.user?.full_name || member.user?.email || 'member'}`}
                                   >
-                                    <Settings className="h-4 w-4" />
+                                    <Settings className="h-4 w-4" aria-hidden="true" />
                                   </Button>
                                   <Button
                                     size="sm"
@@ -442,8 +448,9 @@ export default function TeamPage() {
                                         member.user?.full_name || member.user?.email || 'this member'
                                       )
                                     }
+                                    aria-label={`Remove ${member.user?.full_name || member.user?.email || 'member'}`}
                                   >
-                                    <Trash2 className="h-4 w-4" />
+                                    <Trash2 className="h-4 w-4" aria-hidden="true" />
                                   </Button>
                                 </div>
                               )}
@@ -463,24 +470,29 @@ export default function TeamPage() {
       {showInviteModal && (
         <div
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="invite-modal-title"
           onKeyDown={(e) => { if (e.key === 'Escape') setShowInviteModal(false); }}
         >
           <div className="bg-background rounded-lg border shadow-lg w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Invite Team Member</h2>
+              <h2 id="invite-modal-title" className="text-lg font-semibold">Invite Team Member</h2>
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={() => setShowInviteModal(false)}
+                aria-label="Close"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium">Email Address</label>
+                <label htmlFor="invite-email" className="text-sm font-medium">Email Address</label>
                 <Input
+                  id="invite-email"
                   type="email"
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
@@ -490,7 +502,7 @@ export default function TeamPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium">Role</label>
+                <label className="text-sm font-medium" id="invite-role-label">Role</label>
                 <div className="flex gap-2 mt-1">
                   <button
                     className={cn(
