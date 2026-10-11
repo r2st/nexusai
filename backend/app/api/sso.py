@@ -170,6 +170,12 @@ async def start_authentication(
     if parsed.scheme not in ("http", "https") or not parsed.netloc:
         raise HTTPException(status_code=400, detail="Invalid redirect_uri")
 
+    from app.core.config import settings
+    allowed_origins = settings.CORS_ORIGINS
+    origin = f"{parsed.scheme}://{parsed.netloc}"
+    if allowed_origins and origin not in allowed_origins:
+        raise HTTPException(status_code=400, detail="redirect_uri not in allowed origins")
+
     # For now, return mock URL
     from urllib.parse import urlencode as _urlencode
     params = _urlencode({
@@ -281,19 +287,23 @@ async def get_sp_metadata(provider_id: str):
     return Response(content=metadata, media_type="application/xml")
 
 
+class SSORefreshRequest(BaseModel):
+    """SSO token refresh request — token in body, not query string."""
+
+    refresh_token: str
+    session_id: Optional[str] = None
+
+
 @router.post("/token/refresh", response_model=TokenResponse)
 async def refresh_token(
-    refresh_token: str = Query(...),
-    session_id: Optional[str] = Query(None),
+    request: SSORefreshRequest,
+    _current_user: User = Depends(get_current_admin_user),
 ):
     """
     Refresh access token.
-    
+
     Uses refresh token to obtain new access token.
     """
-    # sso_service = get_sso_service()
-    # session = await sso_service.refresh_session(session_id)
-    
     return TokenResponse(
         access_token="new_access_token",
         token_type="Bearer",
@@ -306,11 +316,9 @@ async def refresh_token(
 @router.get("/session", response_model=SessionResponse)
 async def get_session(
     session_id: str = Query(...),
+    _current_user: User = Depends(get_current_admin_user),
 ):
     """Get current session information."""
-    # sso_service = get_sso_service()
-    # session = sso_service.get_session(session_id)
-    
     return SessionResponse(
         session_id=session_id,
         user_id="user-123",
@@ -324,19 +332,13 @@ async def get_session(
 async def logout(
     session_id: str = Query(...),
     post_logout_uri: str = Query("/"),
+    _current_user: User = Depends(get_current_admin_user),
 ):
     """
     Logout from SSO.
-    
+
     Terminates session and optionally redirects to IdP logout.
     """
-    # sso_service = get_sso_service()
-    # logout_url = await sso_service.logout(session_id, post_logout_uri)
-    
-    # If IdP supports SLO, redirect
-    # if logout_url:
-    #     return RedirectResponse(url=logout_url)
-    
     return {"status": "logged_out", "redirect_uri": post_logout_uri}
 
 
