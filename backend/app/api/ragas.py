@@ -387,7 +387,7 @@ async def create_dataset(
     name: str,
     samples: list[EvaluationSampleRequest],
     description: str | None = None,
-    current_user: Annotated[User, Depends(get_current_user)] = None,
+    current_user: Annotated[User, Depends(get_current_user)],
 ) -> dict[str, Any]:
     """Create an evaluation dataset."""
     try:
