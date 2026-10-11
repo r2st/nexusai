@@ -129,12 +129,12 @@ export function IDEChatPanel({
             size="icon"
             className="h-6 w-6"
             onClick={() => setIsExpanded(!isExpanded)}
-            title={isExpanded ? 'Minimize' : 'Expand'}
+            aria-label={isExpanded ? 'Minimize' : 'Expand'}
           >
             {isExpanded ? (
-              <Minimize2 className="h-3.5 w-3.5" />
+              <Minimize2 className="h-3.5 w-3.5" aria-hidden="true" />
             ) : (
-              <Maximize2 className="h-3.5 w-3.5" />
+              <Maximize2 className="h-3.5 w-3.5" aria-hidden="true" />
             )}
           </Button>
           {onClose && (
@@ -143,9 +143,9 @@ export function IDEChatPanel({
               size="icon"
               className="h-6 w-6"
               onClick={onClose}
-              title="Close"
+              aria-label="Close"
             >
-              <X className="h-3.5 w-3.5" />
+              <X className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
           )}
         </div>
@@ -245,8 +245,9 @@ export function IDEChatPanel({
                 onClick={handleSend}
                 disabled={!inputValue.trim() || isLoading}
                 className="h-8 w-8 shrink-0"
+                aria-label="Send message"
               >
-                <Send className="h-3.5 w-3.5" />
+                <Send className="h-3.5 w-3.5" aria-hidden="true" />
               </Button>
             </div>
             <div className="flex items-center justify-between mt-1 text-[10px] text-muted-foreground">
