@@ -110,8 +110,6 @@ class CodeSearchTool(Tool):
         max_results = params.get("max_results", 10)
         
         try:
-            # TODO: Implement actual search using RAG service
-            # For now, return mock results
             results = await self._search(
                 query=query,
                 repo=repo,

@@ -104,7 +104,6 @@ class DiffViewerTool(Tool):
             )
         
         try:
-            # TODO: Implement actual diff retrieval via GitHub/GitLab API
             diff_data = await self._get_diff(
                 repo=repo,
                 pr_number=pr_number,
