@@ -94,7 +94,11 @@ class AIUsageLog(Base):
     tool_version: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
     # User info (anonymized)
-    user_id: Mapped[str | None] = mapped_column(UUID(as_uuid=False), nullable=True)
+    user_id: Mapped[str | None] = mapped_column(
+        UUID(as_uuid=False),
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+    )
     user_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)  # SHA256 for privacy
 
     # Event details

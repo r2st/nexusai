@@ -61,6 +61,7 @@ class Organization(Base):
     )
     tenant_id: Mapped[str] = mapped_column(
         UUID(as_uuid=False),
+        unique=True,
         default=lambda: str(uuid4()),
     )
 
@@ -124,7 +125,7 @@ class Organization(Base):
     idp_last_sync: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     # Status
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
 
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(

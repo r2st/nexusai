@@ -60,9 +60,9 @@ class User(Base):
     provider_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     # Status
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
-    is_superuser: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    is_verified: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    is_superuser: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
 
     # Preferences
     preferences: Mapped[dict] = mapped_column(JSONB, default=dict)
