@@ -12,7 +12,7 @@ from enum import Enum
 from functools import wraps
 from typing import Any, Callable
 import html
-import bleach
+import nh3
 import logging
 
 logger = logging.getLogger(__name__)
@@ -234,7 +234,7 @@ class InputSanitizer:
         text = text[:max_length]
 
         # Strip HTML
-        text = bleach.clean(text, tags=[], strip=True)
+        text = nh3.clean(text, tags=set())
 
         # Escape HTML entities
         text = html.escape(text, quote=True)
@@ -254,11 +254,10 @@ class InputSanitizer:
 
         text = text[:max_length]
 
-        return bleach.clean(
+        return nh3.clean(
             text,
-            tags=self.ALLOWED_TAGS,
+            tags=set(self.ALLOWED_TAGS),
             attributes=self.ALLOWED_ATTRIBUTES,
-            strip=True,
         )
 
     def validate_field(self, field_type: str, value: str) -> tuple[bool, str | None]:

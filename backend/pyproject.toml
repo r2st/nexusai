@@ -26,13 +26,13 @@ dependencies = [
     "fastapi>=0.115.14",
     "uvicorn[standard]>=0.32.0",
     "python-multipart>=0.0.20",
-    "python-jose[cryptography]>=3.4.0",
+    "pyjwt[crypto]>=2.10.0",
     "passlib[bcrypt]>=1.7.4",
 
     # Database
     "sqlalchemy[asyncio]>=2.0.35",
     "asyncpg>=0.30.0",
-    "alembic>=1.14.0",
+    "alembic>=1.20.0",
     "pgvector>=0.3.5",
 
     # Redis & Caching
@@ -47,9 +47,9 @@ dependencies = [
     "langchain-google-genai>=2.0.4",
     "langchain-community>=0.3.15",
     "langchain-text-splitters>=0.3.6",
-    "openai>=1.55.0",
-    "anthropic>=0.39.0",
-    "tiktoken>=0.8.0",
+    "openai>=1.59.0,<2.0.0",
+    "anthropic>=0.102.0,<1.0.0",
+    "tiktoken>=0.14.0",
     "sentence-transformers>=3.4.0",
 
     # Document Processing
@@ -60,14 +60,14 @@ dependencies = [
     "beautifulsoup4>=4.12.3",
 
     # Utilities
-    "pydantic[email]>=2.10.0",
-    "pydantic-settings>=2.6.0",
+    "pydantic[email]>=2.14.0",
+    "pydantic-settings>=2.15.0",
     "httpx>=0.28.0",
     "aiofiles>=24.1.0",
     "python-dotenv>=1.1.0",
-    "structlog>=24.4.0",
+    "structlog>=26.0.0",
     "tenacity>=9.0.0",
-    "orjson>=3.11.6",
+    "orjson>=3.13.0",
 ]
 
 [project.optional-dependencies]

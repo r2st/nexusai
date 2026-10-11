@@ -3,7 +3,8 @@
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-from jose import JWTError, jwt
+import jwt
+from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 import structlog
@@ -106,7 +107,7 @@ def decode_token(token: str) -> TokenData | None:
             scopes=payload.get("scopes", []),
             exp=datetime.fromtimestamp(payload.get("exp", 0), tz=UTC),
         )
-    except JWTError as e:
+    except InvalidTokenError as e:
         logger.debug("Token decode failed", error=str(e))
         return None
 
@@ -133,6 +134,6 @@ def verify_token(token: str, token_type: str = "access") -> TokenData | None:
             scopes=payload.get("scopes", []),
             exp=datetime.fromtimestamp(payload.get("exp", 0), tz=UTC),
         )
-    except JWTError as e:
+    except InvalidTokenError as e:
         logger.debug("Token verification failed", token_type=token_type, error=str(e))
         return None

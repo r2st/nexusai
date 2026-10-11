@@ -2,7 +2,7 @@
 fastapi>=0.115.14
 uvicorn[standard]>=0.32.0
 python-multipart>=0.0.20
-python-jose[cryptography]>=3.5.0
+pyjwt[crypto]>=2.10.0
 passlib[bcrypt]>=1.7.4
 bcrypt>=4.0.0,<4.1.0  # Pin to 4.0.x for passlib compatibility (4.1+ breaks passlib)
 
@@ -68,11 +68,11 @@ httpx>=0.28.0
 aiofiles>=24.1.0
 python-dotenv>=1.1.0
 structlog>=26.0.0
-tenacity>=8.5.0,<9.0.0  # Pinned to 8.x: langchain 0.2.x requires tenacity<9
+tenacity>=9.0.0
 orjson>=3.13.0
 clickhouse-connect>=0.7.0
 websockets>=12.0  # For MCP WebSocket transport
-bleach>=6.2.0  # HTML sanitization for security
+nh3>=0.2.20  # HTML sanitization (bleach replacement)
 
 # Observability
 langfuse>=3.15.0

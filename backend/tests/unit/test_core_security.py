@@ -274,7 +274,7 @@ class TestDecodeToken:
 
     def test_decode_token_without_sub(self):
         """Test that token without 'sub' claim returns None."""
-        from jose import jwt
+        import jwt
         from app.core.config import settings
 
         # Create token without sub
@@ -455,7 +455,7 @@ class TestTokenSecurityProperties:
 
     def test_token_contains_no_sensitive_data_in_header(self):
         """Test that sensitive data is not exposed in JWT header."""
-        from jose import jwt
+        import jwt
 
         data = {"sub": "user123", "email": "test@example.com"}
         token = create_access_token(data)
@@ -469,7 +469,7 @@ class TestTokenSecurityProperties:
 
     def test_different_secrets_produce_different_tokens(self):
         """Test that different secrets produce invalid tokens."""
-        from jose import jwt
+        import jwt
         from app.core.config import settings
 
         data = {"sub": "user123"}

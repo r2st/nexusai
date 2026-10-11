@@ -15,7 +15,8 @@ from typing import Any
 from urllib.parse import urlencode
 
 import httpx
-from jose import JWTError, jwt
+import jwt
+from jwt.exceptions import InvalidTokenError
 from pydantic import BaseModel
 
 from app.core.config import settings
@@ -449,7 +450,7 @@ class OAuthService:
 
             return claims
 
-        except JWTError as e:
+        except InvalidTokenError as e:
             raise ValueError(f"Invalid ID token: {e}")
 
     def list_providers(self) -> list[str]:
