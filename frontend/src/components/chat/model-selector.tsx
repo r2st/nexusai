@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   ChevronDown,
   Sparkles,
@@ -470,6 +470,41 @@ export function ModelSelector({
     return grouped;
   }, [availableModels]);
 
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (!isOpen) return;
+
+    switch (e.key) {
+      case 'Escape':
+        e.preventDefault();
+        setIsOpen(false);
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        setFocusedIndex((prev) => Math.min(prev + 1, availableModels.length - 1));
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setFocusedIndex((prev) => Math.max(prev - 1, 0));
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (focusedIndex >= 0 && focusedIndex < availableModels.length) {
+          onSelectModel(availableModels[focusedIndex]);
+          setIsOpen(false);
+        }
+        break;
+    }
+  }, [isOpen, focusedIndex, availableModels, onSelectModel]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setFocusedIndex(-1);
+    }
+  }, [isOpen]);
+
   if (isLoading) {
     return (
       <div className={cn('flex items-center gap-2 rounded-lg border bg-background px-3 py-2', compact ? 'h-8' : 'h-10', className)}>
@@ -489,7 +524,7 @@ export function ModelSelector({
   }
 
   return (
-    <div className={cn('relative', className)}>
+    <div className={cn('relative', className)} onKeyDown={handleKeyDown}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-label={`Model: ${currentModel?.displayName || 'Select Model'}`}
@@ -556,7 +591,8 @@ export function ModelSelector({
                         {models.map((model) => {
                           const ModelIcon = providerLogos[model.provider] || Sparkles;
                           const isSelected = model.id === selectedModel || model.name === selectedModel;
-                          const isHovered = model.id === hoveredModel;
+                          const flatIndex = availableModels.indexOf(model);
+                          const isFocused = flatIndex === focusedIndex;
 
                           return (
                             <button
@@ -567,13 +603,18 @@ export function ModelSelector({
                                 onSelectModel(model);
                                 setIsOpen(false);
                               }}
-                              onMouseEnter={() => setHoveredModel(model.id)}
+                              onMouseEnter={() => {
+                                setHoveredModel(model.id);
+                                setFocusedIndex(flatIndex);
+                              }}
                               onMouseLeave={() => setHoveredModel(null)}
                               className={cn(
                                 'w-full flex items-start gap-3 rounded-md px-2 py-2 text-left transition-colors',
                                 isSelected
                                   ? 'bg-primary/10'
-                                  : 'hover:bg-muted'
+                                  : isFocused
+                                    ? 'bg-muted'
+                                    : 'hover:bg-muted'
                               )}
                             >
                               <div
