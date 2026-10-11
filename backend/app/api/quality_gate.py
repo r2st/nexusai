@@ -288,7 +288,7 @@ async def update_config(
     return config
 
 
-@router.get("/health")
+@router.get("/health", summary="Check quality gate service health")
 async def health_check() -> dict[str, str]:
     """Check quality gate service health."""
     return {"status": "healthy", "service": "quality-gate"}

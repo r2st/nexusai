@@ -154,7 +154,7 @@ async def list_regions(
     return {"regions": [r.model_dump() for r in regions]}
 
 
-@router.get("/regions/{region_id}")
+@router.get("/regions/{region_id}", summary="Get a region by ID")
 async def get_region(region_id: str, _current_user: User = Depends(get_current_user)):
     """Get a region by ID."""
     service = get_data_residency_service()
@@ -164,7 +164,7 @@ async def get_region(region_id: str, _current_user: User = Depends(get_current_u
     return {"region": region.model_dump()}
 
 
-@router.put("/regions/{region_id}/status")
+@router.put("/regions/{region_id}/status", summary="Update region status")
 async def update_region_status(region_id: str, status: RegionStatus, _current_user: User = Depends(get_current_admin_user)):
     """Update region status."""
     service = get_data_residency_service()
@@ -176,7 +176,7 @@ async def update_region_status(region_id: str, status: RegionStatus, _current_us
 
 # --- Policy Endpoints ---
 
-@router.post("/policies", status_code=status.HTTP_201_CREATED)
+@router.post("/policies", status_code=status.HTTP_201_CREATED, summary="Create a data residency policy")
 async def create_policy(request: CreatePolicyRequest, _current_user: User = Depends(get_current_admin_user)):
     """Create a data residency policy."""
     service = get_data_residency_service()
@@ -194,7 +194,7 @@ async def create_policy(request: CreatePolicyRequest, _current_user: User = Depe
     return {"policy": policy.model_dump()}
 
 
-@router.get("/policies/{policy_id}")
+@router.get("/policies/{policy_id}", summary="Get a policy by ID")
 async def get_policy(policy_id: str, _current_user: User = Depends(get_current_user)):
     """Get a policy by ID."""
     service = get_data_residency_service()
@@ -204,7 +204,7 @@ async def get_policy(policy_id: str, _current_user: User = Depends(get_current_u
     return {"policy": policy.model_dump()}
 
 
-@router.get("/policies/organization/{organization_id}")
+@router.get("/policies/organization/{organization_id}", summary="Get the policy for an organization")
 async def get_organization_policy(organization_id: str, _current_user: User = Depends(get_current_user)):
     """Get the policy for an organization."""
     service = get_data_residency_service()
@@ -214,7 +214,7 @@ async def get_organization_policy(organization_id: str, _current_user: User = De
     return {"policy": policy.model_dump()}
 
 
-@router.put("/policies/{policy_id}")
+@router.put("/policies/{policy_id}", summary="Update a policy")
 async def update_policy(policy_id: str, request: UpdatePolicyRequest, _current_user: User = Depends(get_current_admin_user)):
     """Update a policy."""
     service = get_data_residency_service()
@@ -234,7 +234,7 @@ async def update_policy(policy_id: str, request: UpdatePolicyRequest, _current_u
     return {"policy": policy.model_dump()}
 
 
-@router.post("/policies/{policy_id}/requirements", status_code=status.HTTP_201_CREATED)
+@router.post("/policies/{policy_id}/requirements", status_code=status.HTTP_201_CREATED, summary="Add a requirement to a policy")
 async def add_requirement(policy_id: str, request: AddRequirementRequest, _current_user: User = Depends(get_current_admin_user)):
     """Add a requirement to a policy."""
     service = get_data_residency_service()
@@ -259,7 +259,7 @@ async def add_requirement(policy_id: str, request: AddRequirementRequest, _curre
     return {"requirement": requirement.model_dump()}
 
 
-@router.post("/policies/{policy_id}/requirements/gdpr", status_code=status.HTTP_201_CREATED)
+@router.post("/policies/{policy_id}/requirements/gdpr", status_code=status.HTTP_201_CREATED, summary="Add default GDPR requirement to a policy")
 async def add_gdpr_requirement(policy_id: str, _current_user: User = Depends(get_current_admin_user)):
     """Add default GDPR requirement to a policy."""
     service = get_data_residency_service()
@@ -271,7 +271,7 @@ async def add_gdpr_requirement(policy_id: str, _current_user: User = Depends(get
 
 # --- Storage Location Endpoints ---
 
-@router.post("/storage", status_code=status.HTTP_201_CREATED)
+@router.post("/storage", status_code=status.HTTP_201_CREATED, summary="Register a storage location")
 async def register_storage_location(request: RegisterStorageRequest, _current_user: User = Depends(get_current_admin_user)):
     """Register a storage location."""
     service = get_data_residency_service()
@@ -315,7 +315,7 @@ async def list_storage_locations(
     return {"locations": [l.model_dump() for l in locations]}
 
 
-@router.get("/storage/{location_id}")
+@router.get("/storage/{location_id}", summary="Get a storage location")
 async def get_storage_location(location_id: str, _current_user: User = Depends(get_current_user)):
     """Get a storage location."""
     service = get_data_residency_service()
@@ -327,7 +327,7 @@ async def get_storage_location(location_id: str, _current_user: User = Depends(g
 
 # --- Transfer Endpoints ---
 
-@router.post("/transfers", status_code=status.HTTP_201_CREATED)
+@router.post("/transfers", status_code=status.HTTP_201_CREATED, summary="Create a data transfer request")
 async def create_transfer_request(request: CreateTransferRequest, _current_user: User = Depends(get_current_user)):
     """Create a data transfer request."""
     service = get_data_residency_service()
@@ -369,7 +369,7 @@ async def list_transfers(
     return {"transfers": [t.model_dump() for t in transfers]}
 
 
-@router.get("/transfers/{request_id}")
+@router.get("/transfers/{request_id}", summary="Get a transfer request")
 async def get_transfer(request_id: str, _current_user: User = Depends(get_current_user)):
     """Get a transfer request."""
     service = get_data_residency_service()
@@ -379,7 +379,7 @@ async def get_transfer(request_id: str, _current_user: User = Depends(get_curren
     return {"transfer": transfer.model_dump()}
 
 
-@router.post("/transfers/{request_id}/approve")
+@router.post("/transfers/{request_id}/approve", summary="Approve a transfer request")
 async def approve_transfer(request_id: str, request: ApproveTransferRequest, _current_user: User = Depends(get_current_admin_user)):
     """Approve a transfer request."""
     service = get_data_residency_service()
@@ -389,7 +389,7 @@ async def approve_transfer(request_id: str, request: ApproveTransferRequest, _cu
     return {"transfer": transfer.model_dump()}
 
 
-@router.post("/transfers/{request_id}/reject")
+@router.post("/transfers/{request_id}/reject", summary="Reject a transfer request")
 async def reject_transfer(request_id: str, request: RejectTransferRequest, _current_user: User = Depends(get_current_admin_user)):
     """Reject a transfer request."""
     service = get_data_residency_service()
@@ -401,7 +401,7 @@ async def reject_transfer(request_id: str, request: RejectTransferRequest, _curr
     return {"transfer": transfer.model_dump()}
 
 
-@router.post("/transfers/{request_id}/start")
+@router.post("/transfers/{request_id}/start", summary="Start an approved transfer")
 async def start_transfer(request_id: str, request: StartTransferRequest, _current_user: User = Depends(get_current_admin_user)):
     """Start an approved transfer."""
     service = get_data_residency_service()
@@ -411,7 +411,7 @@ async def start_transfer(request_id: str, request: StartTransferRequest, _curren
     return {"transfer": transfer.model_dump()}
 
 
-@router.post("/transfers/{request_id}/complete")
+@router.post("/transfers/{request_id}/complete", summary="Mark a transfer as complete")
 async def complete_transfer(request_id: str, request: CompleteTransferRequest, _current_user: User = Depends(get_current_admin_user)):
     """Mark a transfer as complete."""
     service = get_data_residency_service()
@@ -442,7 +442,7 @@ async def list_violations(
     return {"violations": [v.model_dump() for v in violations]}
 
 
-@router.get("/violations/{violation_id}")
+@router.get("/violations/{violation_id}", summary="Get a violation")
 async def get_violation(violation_id: str, _current_user: User = Depends(get_current_user)):
     """Get a violation."""
     service = get_data_residency_service()
@@ -452,7 +452,7 @@ async def get_violation(violation_id: str, _current_user: User = Depends(get_cur
     return {"violation": violation.model_dump()}
 
 
-@router.post("/violations/{violation_id}/resolve")
+@router.post("/violations/{violation_id}/resolve", summary="Resolve a violation")
 async def resolve_violation(violation_id: str, request: ResolveViolationRequest, _current_user: User = Depends(get_current_admin_user)):
     """Resolve a violation."""
     service = get_data_residency_service()
@@ -466,7 +466,7 @@ async def resolve_violation(violation_id: str, request: ResolveViolationRequest,
 
 # --- Compliance Endpoints ---
 
-@router.post("/compliance/check")
+@router.post("/compliance/check", summary="Check if a region is compliant for a data classification")
 async def check_compliance(request: CheckComplianceRequest, _current_user: User = Depends(get_current_user)):
     """Check if a region is compliant for a data classification."""
     service = get_data_residency_service()
@@ -492,7 +492,7 @@ async def get_allowed_regions(
 
 # --- Dashboard Endpoint ---
 
-@router.get("/dashboard/{organization_id}")
+@router.get("/dashboard/{organization_id}", summary="Get residency dashboard data")
 async def get_residency_dashboard(organization_id: str, _current_user: User = Depends(get_current_user)):
     """Get residency dashboard data."""
     service = get_data_residency_service()

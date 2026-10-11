@@ -114,7 +114,7 @@ class WorkflowResponse(BaseModel):
 # Endpoints
 # ======================
 
-@router.get("/health")
+@router.get("/health", summary="Check DevOps agents service health")
 async def health_check():
     """Check DevOps agents service health."""
     return {
@@ -513,7 +513,7 @@ async def cancel_workflow(
     return {"status": "cancelled", "workflow_id": workflow_id}
 
 
-@router.get("/benchmarks")
+@router.get("/benchmarks", summary="Get DORA performance benchmarks")
 async def get_dora_benchmarks():
     """Get DORA performance benchmarks."""
     return {

@@ -112,7 +112,7 @@ def get_neo4j_client() -> Neo4jClient:
 # Endpoints
 # ======================
 
-@router.get("/health")
+@router.get("/health", summary="Check knowledge graph connectivity")
 async def health_check():
     """Check knowledge graph connectivity."""
     if not settings.NEO4J_ENABLED:

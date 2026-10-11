@@ -262,7 +262,7 @@ async def update_config(
     return service.config
 
 
-@router.get("/health")
+@router.get("/health", summary="Check extension service health")
 async def health_check() -> dict[str, str]:
     """Check extension service health."""
     return {"status": "healthy", "service": "extensions"}

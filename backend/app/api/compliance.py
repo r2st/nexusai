@@ -162,7 +162,7 @@ class CreateChangeRecordRequest(BaseModel):
 
 # --- GDPR Endpoints ---
 
-@router.post("/gdpr/dsr", status_code=status.HTTP_201_CREATED)
+@router.post("/gdpr/dsr", status_code=status.HTTP_201_CREATED, summary="Create a new Data Subject Request")
 async def create_dsr(request: CreateDSRRequest, _current_user: User = Depends(get_current_user)):
     """Create a new Data Subject Request."""
     service = get_gdpr_service()
@@ -175,7 +175,7 @@ async def create_dsr(request: CreateDSRRequest, _current_user: User = Depends(ge
     return {"dsr": dsr.model_dump()}
 
 
-@router.get("/gdpr/dsr/{dsr_id}")
+@router.get("/gdpr/dsr/{dsr_id}", summary="Get a Data Subject Request by ID")
 async def get_dsr(dsr_id: str, _current_user: User = Depends(get_current_user)):
     """Get a Data Subject Request by ID."""
     service = get_gdpr_service()
@@ -202,7 +202,7 @@ async def list_dsrs(
     return {"dsrs": [d.model_dump() for d in dsrs]}
 
 
-@router.post("/gdpr/dsr/{dsr_id}/process")
+@router.post("/gdpr/dsr/{dsr_id}/process", summary="Mark a DSR as in progress")
 async def process_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: User = Depends(get_current_user)):
     """Mark a DSR as in progress."""
     service = get_gdpr_service()
@@ -216,7 +216,7 @@ async def process_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: Us
     return {"dsr": dsr.model_dump()}
 
 
-@router.post("/gdpr/dsr/{dsr_id}/complete")
+@router.post("/gdpr/dsr/{dsr_id}/complete", summary="Complete a Data Subject Request")
 async def complete_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: User = Depends(get_current_user)):
     """Complete a Data Subject Request."""
     service = get_gdpr_service()
@@ -230,7 +230,7 @@ async def complete_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: U
     return {"dsr": dsr.model_dump()}
 
 
-@router.post("/gdpr/dsr/{dsr_id}/reject")
+@router.post("/gdpr/dsr/{dsr_id}/reject", summary="Reject a Data Subject Request")
 async def reject_dsr(dsr_id: str, request: RejectDSRRequest, _current_user: User = Depends(get_current_user)):
     """Reject a Data Subject Request."""
     service = get_gdpr_service()
@@ -244,7 +244,7 @@ async def reject_dsr(dsr_id: str, request: RejectDSRRequest, _current_user: User
     return {"dsr": dsr.model_dump()}
 
 
-@router.get("/gdpr/dsr/overdue")
+@router.get("/gdpr/dsr/overdue", summary="Get overdue Data Subject Requests")
 async def get_overdue_dsrs(_current_user: User = Depends(get_current_user)):
     """Get overdue Data Subject Requests."""
     service = get_gdpr_service()
@@ -252,7 +252,7 @@ async def get_overdue_dsrs(_current_user: User = Depends(get_current_user)):
     return {"dsrs": [d.model_dump() for d in dsrs]}
 
 
-@router.post("/gdpr/consent")
+@router.post("/gdpr/consent", summary="Record a consent decision")
 async def record_consent(request: RecordConsentRequest, _current_user: User = Depends(get_current_user)):
     """Record a consent decision."""
     service = get_gdpr_service()
@@ -270,7 +270,7 @@ async def record_consent(request: RecordConsentRequest, _current_user: User = De
     return {"consent": record.model_dump()}
 
 
-@router.post("/gdpr/consent/revoke")
+@router.post("/gdpr/consent/revoke", summary="Revoke consent")
 async def revoke_consent(request: RevokeConsentRequest, _current_user: User = Depends(get_current_user)):
     """Revoke consent."""
     service = get_gdpr_service()
@@ -295,7 +295,7 @@ async def get_user_consents(
     return {"consents": [r.model_dump() for r in records]}
 
 
-@router.get("/gdpr/consent/{user_id}/check/{consent_type}")
+@router.get("/gdpr/consent/{user_id}/check/{consent_type}", summary="Check if user has active consent for a type")
 async def check_consent(user_id: str, consent_type: ConsentType, _current_user: User = Depends(get_current_user)):
     """Check if user has active consent for a type."""
     service = get_gdpr_service()
@@ -303,7 +303,7 @@ async def check_consent(user_id: str, consent_type: ConsentType, _current_user: 
     return {"has_consent": has_consent}
 
 
-@router.post("/gdpr/retention-policy", status_code=status.HTTP_201_CREATED)
+@router.post("/gdpr/retention-policy", status_code=status.HTTP_201_CREATED, summary="Create a data retention policy")
 async def create_retention_policy(request: CreateRetentionPolicyRequest, _current_user: User = Depends(get_current_user)):
     """Create a data retention policy."""
     service = get_gdpr_service()
@@ -320,7 +320,7 @@ async def create_retention_policy(request: CreateRetentionPolicyRequest, _curren
     return {"policy": policy.model_dump()}
 
 
-@router.get("/gdpr/retention-policy")
+@router.get("/gdpr/retention-policy", summary="List data retention policies")
 async def list_retention_policies(enabled_only: bool = Query(default=True), _current_user: User = Depends(get_current_user)):
     """List data retention policies."""
     service = get_gdpr_service()
@@ -328,7 +328,7 @@ async def list_retention_policies(enabled_only: bool = Query(default=True), _cur
     return {"policies": [p.model_dump() for p in policies]}
 
 
-@router.post("/gdpr/retention-policy/{policy_id}/execute")
+@router.post("/gdpr/retention-policy/{policy_id}/execute", summary="Execute a data retention policy")
 async def execute_retention_policy(policy_id: str, _current_user: User = Depends(get_current_user)):
     """Execute a data retention policy."""
     service = get_gdpr_service()
@@ -336,7 +336,7 @@ async def execute_retention_policy(policy_id: str, _current_user: User = Depends
     return result
 
 
-@router.post("/gdpr/data-inventory", status_code=status.HTTP_201_CREATED)
+@router.post("/gdpr/data-inventory", status_code=status.HTTP_201_CREATED, summary="Add an item to the personal data inventory")
 async def add_data_inventory(request: AddDataInventoryRequest, _current_user: User = Depends(get_current_user)):
     """Add an item to the personal data inventory."""
     service = get_gdpr_service()
@@ -356,7 +356,7 @@ async def add_data_inventory(request: AddDataInventoryRequest, _current_user: Us
     return {"item": item.model_dump()}
 
 
-@router.get("/gdpr/data-inventory")
+@router.get("/gdpr/data-inventory", summary="Get the personal data inventory")
 async def get_data_inventory(category: DataCategory | None = None, _current_user: User = Depends(get_current_user)):
     """Get the personal data inventory."""
     service = get_gdpr_service()
@@ -364,7 +364,7 @@ async def get_data_inventory(category: DataCategory | None = None, _current_user
     return {"items": [i.model_dump() for i in items]}
 
 
-@router.get("/gdpr/report")
+@router.get("/gdpr/report", summary="Generate GDPR compliance report")
 async def get_gdpr_compliance_report(_current_user: User = Depends(get_current_user)):
     """Generate GDPR compliance report."""
     service = get_gdpr_service()
@@ -405,7 +405,7 @@ async def list_controls(
     return {"controls": [c.model_dump() for c in controls]}
 
 
-@router.get("/soc2/controls/{control_id}")
+@router.get("/soc2/controls/{control_id}", summary="Get a SOC 2 control by ID")
 async def get_control(control_id: str, _current_user: User = Depends(get_current_user)):
     """Get a SOC 2 control by ID."""
     service = get_soc2_service()
@@ -415,7 +415,7 @@ async def get_control(control_id: str, _current_user: User = Depends(get_current
     return {"control": control.model_dump()}
 
 
-@router.put("/soc2/controls/{control_id}/status")
+@router.put("/soc2/controls/{control_id}/status", summary="Update a control's status")
 async def update_control_status(control_id: str, request: UpdateControlStatusRequest, _current_user: User = Depends(get_current_user)):
     """Update a control's status."""
     service = get_soc2_service()
@@ -430,7 +430,7 @@ async def update_control_status(control_id: str, request: UpdateControlStatusReq
     return {"control": control.model_dump()}
 
 
-@router.post("/soc2/controls/{control_id}/test")
+@router.post("/soc2/controls/{control_id}/test", summary="Record a control test result")
 async def record_control_test(control_id: str, request: RecordControlTestRequest, _current_user: User = Depends(get_current_user)):
     """Record a control test result."""
     service = get_soc2_service()
@@ -445,7 +445,7 @@ async def record_control_test(control_id: str, request: RecordControlTestRequest
     return {"control": control.model_dump()}
 
 
-@router.post("/soc2/evidence", status_code=status.HTTP_201_CREATED)
+@router.post("/soc2/evidence", status_code=status.HTTP_201_CREATED, summary="Add evidence for a control")
 async def add_evidence(request: AddEvidenceRequest, _current_user: User = Depends(get_current_user)):
     """Add evidence for a control."""
     service = get_soc2_service()
@@ -463,7 +463,7 @@ async def add_evidence(request: AddEvidenceRequest, _current_user: User = Depend
     return {"evidence": evidence.model_dump()}
 
 
-@router.get("/soc2/evidence/{control_id}")
+@router.get("/soc2/evidence/{control_id}", summary="Get evidence for a control")
 async def get_evidence(control_id: str, valid_only: bool = Query(default=True), _current_user: User = Depends(get_current_user)):
     """Get evidence for a control."""
     service = get_soc2_service()
@@ -471,7 +471,7 @@ async def get_evidence(control_id: str, valid_only: bool = Query(default=True), 
     return {"evidence": [e.model_dump() for e in evidence]}
 
 
-@router.post("/soc2/evidence/{evidence_id}/verify")
+@router.post("/soc2/evidence/{evidence_id}/verify", summary="Verify evidence")
 async def verify_evidence(evidence_id: str, verifier: str, _current_user: User = Depends(get_current_user)):
     """Verify evidence."""
     service = get_soc2_service()
@@ -481,7 +481,7 @@ async def verify_evidence(evidence_id: str, verifier: str, _current_user: User =
     return {"evidence": evidence.model_dump()}
 
 
-@router.post("/soc2/access-review", status_code=status.HTTP_201_CREATED)
+@router.post("/soc2/access-review", status_code=status.HTTP_201_CREATED, summary="Create a new access review")
 async def create_access_review(request: CreateAccessReviewRequest, _current_user: User = Depends(get_current_user)):
     """Create a new access review."""
     service = get_soc2_service()
@@ -493,7 +493,7 @@ async def create_access_review(request: CreateAccessReviewRequest, _current_user
     return {"review": review.model_dump()}
 
 
-@router.post("/soc2/access-review/{review_id}/complete")
+@router.post("/soc2/access-review/{review_id}/complete", summary="Complete an access review")
 async def complete_access_review(review_id: str, request: CompleteAccessReviewRequest, _current_user: User = Depends(get_current_user)):
     """Complete an access review."""
     service = get_soc2_service()
@@ -512,7 +512,7 @@ async def complete_access_review(review_id: str, request: CompleteAccessReviewRe
     return {"review": review.model_dump()}
 
 
-@router.post("/soc2/access-review/{review_id}/approve")
+@router.post("/soc2/access-review/{review_id}/approve", summary="Approve an access review")
 async def approve_access_review(review_id: str, approver: str, _current_user: User = Depends(get_current_user)):
     """Approve an access review."""
     service = get_soc2_service()
@@ -522,7 +522,7 @@ async def approve_access_review(review_id: str, approver: str, _current_user: Us
     return {"review": review.model_dump()}
 
 
-@router.get("/soc2/access-review")
+@router.get("/soc2/access-review", summary="List access reviews")
 async def list_access_reviews(status: str | None = None, _current_user: User = Depends(get_current_user)):
     """List access reviews."""
     service = get_soc2_service()
@@ -530,7 +530,7 @@ async def list_access_reviews(status: str | None = None, _current_user: User = D
     return {"reviews": [r.model_dump() for r in reviews]}
 
 
-@router.post("/soc2/change", status_code=status.HTTP_201_CREATED)
+@router.post("/soc2/change", status_code=status.HTTP_201_CREATED, summary="Create a change management record")
 async def create_change_record(request: CreateChangeRecordRequest, _current_user: User = Depends(get_current_user)):
     """Create a change management record."""
     service = get_soc2_service()
@@ -547,7 +547,7 @@ async def create_change_record(request: CreateChangeRecordRequest, _current_user
     return {"change": change.model_dump()}
 
 
-@router.post("/soc2/change/{change_id}/approve")
+@router.post("/soc2/change/{change_id}/approve", summary="Approve a change request")
 async def approve_change(change_id: str, approver: str, _current_user: User = Depends(get_current_user)):
     """Approve a change request."""
     service = get_soc2_service()
@@ -613,7 +613,7 @@ async def get_soc2_audit_log(
 
 # --- Combined Dashboard Endpoint ---
 
-@router.get("/dashboard")
+@router.get("/dashboard", summary="Get combined compliance dashboard data")
 async def get_compliance_dashboard(_current_user: User = Depends(get_current_user)):
     """Get combined compliance dashboard data."""
     gdpr_service = get_gdpr_service()

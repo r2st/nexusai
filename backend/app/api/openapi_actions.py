@@ -98,7 +98,7 @@ class ExecutionResponse(BaseModel):
 # Endpoints
 # ======================
 
-@router.get("/health")
+@router.get("/health", summary="Check OpenAPI actions service health")
 async def health_check():
     """Check OpenAPI actions service health."""
     return {

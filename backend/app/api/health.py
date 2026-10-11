@@ -45,7 +45,7 @@ class DetailedHealthResponse(BaseModel):
     checks: dict[str, Any]
 
 
-@router.get("", response_model=HealthResponse)
+@router.get("", response_model=HealthResponse, summary="Health check endpoint")
 async def health_check() -> HealthResponse:
     """Health check endpoint."""
     return HealthResponse(
@@ -55,7 +55,7 @@ async def health_check() -> HealthResponse:
     )
 
 
-@router.get("/detailed", response_model=DetailedHealthResponse)
+@router.get("/detailed", response_model=DetailedHealthResponse, summary="Detailed health check with all dependencies")
 async def detailed_health_check() -> DetailedHealthResponse:
     """Detailed health check with all dependencies."""
     checks: dict[str, Any] = {}
@@ -178,7 +178,7 @@ async def detailed_health_check() -> DetailedHealthResponse:
     )
 
 
-@router.get("/ready")
+@router.get("/ready", summary="Readiness check for Kubernetes")
 async def readiness_check() -> dict:
     """Readiness check for Kubernetes.
 
@@ -216,7 +216,7 @@ async def readiness_check() -> dict:
     }
 
 
-@router.get("/live")
+@router.get("/live", summary="Liveness check for Kubernetes")
 async def liveness_check() -> dict:
     """Liveness check for Kubernetes.
 
@@ -225,7 +225,7 @@ async def liveness_check() -> dict:
     return {"status": "alive"}
 
 
-@router.get("/metrics")
+@router.get("/metrics", summary="Prometheus metrics endpoint")
 async def prometheus_metrics() -> Response:
     """Prometheus metrics endpoint.
 

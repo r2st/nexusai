@@ -228,7 +228,7 @@ async def gitlab_webhook(
         raise HTTPException(status_code=500, detail="Webhook processing failed")
 
 
-@router.get("/health")
+@router.get("/health", summary="Check code review service health")
 async def health_check() -> dict[str, str]:
     """Check code review service health."""
     return {"status": "healthy", "service": "code-review"}

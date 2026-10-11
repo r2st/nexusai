@@ -171,7 +171,7 @@ class VersionsResponse(BaseModel):
     versions: List[VersionInfo]
 
 
-@router.get("/versions", response_model=VersionsResponse)
+@router.get("/versions", response_model=VersionsResponse, summary="List all available API versions")
 async def list_api_versions():
     """
     List all available API versions.
@@ -199,7 +199,7 @@ async def list_api_versions():
     )
 
 
-@router.get("/versions/{version}", response_model=VersionInfo)
+@router.get("/versions/{version}", response_model=VersionInfo, summary="Get information about a specific API version")
 async def get_api_version(version: str):
     """Get information about a specific API version."""
     if version not in API_VERSIONS:
@@ -278,7 +278,7 @@ class MigrationGuide(BaseModel):
     breaking_changes: Dict[str, str]
 
 
-@router.get("/versions/migrate/{from_version}/{to_version}", response_model=MigrationGuide)
+@router.get("/versions/migrate/{from_version}/{to_version}", response_model=MigrationGuide, summary="Get migration guide between versions")
 async def get_migration_guide(from_version: str, to_version: str):
     """
     Get migration guide between versions.

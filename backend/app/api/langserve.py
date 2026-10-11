@@ -41,13 +41,13 @@ class BatchRequest(BaseModel):
     config: dict[str, Any] | None = None
 
 
-@router.get("/health")
+@router.get("/health", summary="Health check for LangServe endpoints")
 async def langserve_health():
     """Health check for LangServe endpoints."""
     return {"status": "healthy", "service": "langserve"}
 
 
-@router.get("/info")
+@router.get("/info", summary="Get information about the LangServe deployment")
 async def langserve_info():
     """Get information about the LangServe deployment."""
     return {
@@ -188,7 +188,7 @@ async def langserve_batch(
         )
 
 
-@router.get("/chat/playground")
+@router.get("/chat/playground", summary="LangServe playground UI endpoint")
 async def langserve_playground(_current_user: User = Depends(get_current_user)):
     """
     LangServe playground UI endpoint.

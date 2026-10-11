@@ -571,7 +571,7 @@ async def chat_about_metrics(
 
 # ============= Health Check =============
 
-@router.get("/health")
+@router.get("/health", summary="Check metrics service health")
 async def metrics_health_check() -> dict[str, str]:
     """Check metrics service health."""
     return {

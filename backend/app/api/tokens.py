@@ -32,7 +32,7 @@ logger = structlog.get_logger()
 router = APIRouter()
 
 
-@router.get("/scopes")
+@router.get("/scopes", summary="List all available token scopes with descriptions")
 async def list_available_scopes() -> list[dict[str, str]]:
     """List all available token scopes with descriptions."""
     scope_descriptions = {

@@ -52,7 +52,7 @@ class SearchResult(BaseModel):
     similarity: float
 
 
-@router.post("/upload", response_model=DocumentResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/upload", response_model=DocumentResponse, status_code=status.HTTP_201_CREATED, summary="Upload a document")
 async def upload_document(
     file: UploadFile = File(...),
     user: User = Depends(get_current_user),
@@ -96,7 +96,7 @@ async def upload_document(
     )
 
 
-@router.post("/{document_id}/process", response_model=DocumentResponse)
+@router.post("/{document_id}/process", response_model=DocumentResponse, summary="Process a document")
 async def process_document(
     document_id: str,
     user: User = Depends(get_current_user),
@@ -133,7 +133,7 @@ async def process_document(
     )
 
 
-@router.get("", response_model=list[DocumentResponse])
+@router.get("", response_model=list[DocumentResponse], summary="List documents")
 async def list_documents(
     limit: int = 50,
     offset: int = 0,
@@ -159,7 +159,7 @@ async def list_documents(
     ]
 
 
-@router.get("/{document_id}", response_model=DocumentResponse)
+@router.get("/{document_id}", response_model=DocumentResponse, summary="Get document details")
 async def get_document(
     document_id: str,
     user: User = Depends(get_current_user),
@@ -187,7 +187,7 @@ async def get_document(
     )
 
 
-@router.post("/search", response_model=list[SearchResult])
+@router.post("/search", response_model=list[SearchResult], summary="Search documents")
 async def search_documents(
     request: SearchRequest,
     user: User = Depends(get_current_user),
@@ -206,7 +206,7 @@ async def search_documents(
     return [SearchResult(**r) for r in results]
 
 
-@router.delete("/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{document_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Delete a document")
 async def delete_document(
     document_id: str,
     user: User = Depends(get_current_user),

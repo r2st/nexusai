@@ -143,7 +143,7 @@ class DenyAccessRequest(BaseModel):
 
 # --- PHI Detection Endpoints ---
 
-@router.post("/phi/detect")
+@router.post("/phi/detect", summary="Detect PHI in content")
 async def detect_phi(request: DetectPHIRequest, _current_user: User = Depends(get_current_user)):
     """Detect PHI in content."""
     detector = get_phi_detector()
@@ -155,7 +155,7 @@ async def detect_phi(request: DetectPHIRequest, _current_user: User = Depends(ge
     return {"result": result.model_dump()}
 
 
-@router.post("/phi/detect-in-code")
+@router.post("/phi/detect-in-code", summary="Detect PHI in source code")
 async def detect_phi_in_code(request: DetectPHIInCodeRequest, _current_user: User = Depends(get_current_user)):
     """Detect PHI in source code."""
     detector = get_phi_detector()
@@ -166,7 +166,7 @@ async def detect_phi_in_code(request: DetectPHIInCodeRequest, _current_user: Use
     return {"result": result.model_dump()}
 
 
-@router.get("/phi/patterns")
+@router.get("/phi/patterns", summary="Get configured PHI detection patterns")
 async def get_phi_patterns(category: PHICategory | None = None, _current_user: User = Depends(get_current_user)):
     """Get configured PHI detection patterns."""
     detector = get_phi_detector()
@@ -176,7 +176,7 @@ async def get_phi_patterns(category: PHICategory | None = None, _current_user: U
 
 # --- BAA Management Endpoints ---
 
-@router.post("/baa", status_code=status.HTTP_201_CREATED)
+@router.post("/baa", status_code=status.HTTP_201_CREATED, summary="Create a new Business Associate Agreement")
 async def create_baa(request: CreateBAARequest, _current_user: User = Depends(get_current_user)):
     """Create a new Business Associate Agreement."""
     manager = get_baa_manager()
@@ -216,7 +216,7 @@ async def list_baas(
     return {"baas": [b.model_dump() for b in baas]}
 
 
-@router.get("/baa/{baa_id}")
+@router.get("/baa/{baa_id}", summary="Get a BAA by ID")
 async def get_baa(baa_id: str, _current_user: User = Depends(get_current_user)):
     """Get a BAA by ID."""
     manager = get_baa_manager()
@@ -226,7 +226,7 @@ async def get_baa(baa_id: str, _current_user: User = Depends(get_current_user)):
     return {"baa": baa.model_dump()}
 
 
-@router.post("/baa/{baa_id}/submit-for-review")
+@router.post("/baa/{baa_id}/submit-for-review", summary="Submit BAA for review")
 async def submit_baa_for_review(baa_id: str, submitted_by: str, _current_user: User = Depends(get_current_user)):
     """Submit BAA for review."""
     manager = get_baa_manager()
@@ -236,7 +236,7 @@ async def submit_baa_for_review(baa_id: str, submitted_by: str, _current_user: U
     return {"baa": baa.model_dump()}
 
 
-@router.post("/baa/{baa_id}/approve")
+@router.post("/baa/{baa_id}/approve", summary="Approve a BAA")
 async def approve_baa(baa_id: str, approved_by: str, _current_user: User = Depends(get_current_user)):
     """Approve a BAA."""
     manager = get_baa_manager()
@@ -246,7 +246,7 @@ async def approve_baa(baa_id: str, approved_by: str, _current_user: User = Depen
     return {"baa": baa.model_dump()}
 
 
-@router.post("/baa/{baa_id}/activate")
+@router.post("/baa/{baa_id}/activate", summary="Activate a signed BAA")
 async def activate_baa(baa_id: str, request: ActivateBAARequest, _current_user: User = Depends(get_current_user)):
     """Activate a signed BAA."""
     manager = get_baa_manager()
@@ -262,7 +262,7 @@ async def activate_baa(baa_id: str, request: ActivateBAARequest, _current_user: 
     return {"baa": baa.model_dump()}
 
 
-@router.post("/baa/{baa_id}/renew")
+@router.post("/baa/{baa_id}/renew", summary="Renew a BAA")
 async def renew_baa(baa_id: str, request: RenewBAARequest, _current_user: User = Depends(get_current_user)):
     """Renew a BAA."""
     manager = get_baa_manager()
@@ -277,7 +277,7 @@ async def renew_baa(baa_id: str, request: RenewBAARequest, _current_user: User =
     return {"baa": baa.model_dump()}
 
 
-@router.post("/baa/{baa_id}/terminate")
+@router.post("/baa/{baa_id}/terminate", summary="Terminate a BAA")
 async def terminate_baa(baa_id: str, request: TerminateBAARequest, _current_user: User = Depends(get_current_user)):
     """Terminate a BAA."""
     manager = get_baa_manager()
@@ -291,7 +291,7 @@ async def terminate_baa(baa_id: str, request: TerminateBAARequest, _current_user
     return {"baa": baa.model_dump()}
 
 
-@router.get("/baa/summary/{organization_id}")
+@router.get("/baa/summary/{organization_id}", summary="Get BAA summary for organization")
 async def get_baa_summary(organization_id: str, _current_user: User = Depends(get_current_user)):
     """Get BAA summary for organization."""
     manager = get_baa_manager()
@@ -301,7 +301,7 @@ async def get_baa_summary(organization_id: str, _current_user: User = Depends(ge
 
 # --- Encryption Audit Endpoints ---
 
-@router.post("/encryption/audit")
+@router.post("/encryption/audit", summary="Run encryption compliance audit")
 async def run_encryption_audit(auditor: str | None = None, _current_user: User = Depends(get_current_user)):
     """Run encryption compliance audit."""
     auditor_service = get_encryption_auditor()
@@ -309,7 +309,7 @@ async def run_encryption_audit(auditor: str | None = None, _current_user: User =
     return {"result": result.model_dump()}
 
 
-@router.get("/encryption/audit/{audit_id}")
+@router.get("/encryption/audit/{audit_id}", summary="Get encryption audit result")
 async def get_encryption_audit(audit_id: str, _current_user: User = Depends(get_current_user)):
     """Get encryption audit result."""
     auditor = get_encryption_auditor()
@@ -319,7 +319,7 @@ async def get_encryption_audit(audit_id: str, _current_user: User = Depends(get_
     return {"result": result.model_dump()}
 
 
-@router.get("/encryption/audits")
+@router.get("/encryption/audits", summary="List encryption audit results")
 async def list_encryption_audits(limit: int = Query(default=100, le=500), _current_user: User = Depends(get_current_user)):
     """List encryption audit results."""
     auditor = get_encryption_auditor()
@@ -327,7 +327,7 @@ async def list_encryption_audits(limit: int = Query(default=100, le=500), _curre
     return {"audits": [r.model_dump() for r in results]}
 
 
-@router.post("/encryption/register-storage", status_code=status.HTTP_201_CREATED)
+@router.post("/encryption/register-storage", status_code=status.HTTP_201_CREATED, summary="Register a storage location for encryption audit")
 async def register_storage_location(request: RegisterStorageRequest, _current_user: User = Depends(get_current_user)):
     """Register a storage location for encryption audit."""
     auditor = get_encryption_auditor()
@@ -340,7 +340,7 @@ async def register_storage_location(request: RegisterStorageRequest, _current_us
     return {"registered": True, "location_id": request.location_id}
 
 
-@router.post("/encryption/register-endpoint", status_code=status.HTTP_201_CREATED)
+@router.post("/encryption/register-endpoint", status_code=status.HTTP_201_CREATED, summary="Register an endpoint for encryption audit")
 async def register_endpoint(request: RegisterEndpointRequest, _current_user: User = Depends(get_current_user)):
     """Register an endpoint for encryption audit."""
     auditor = get_encryption_auditor()
@@ -353,7 +353,7 @@ async def register_endpoint(request: RegisterEndpointRequest, _current_user: Use
     return {"registered": True, "endpoint_id": request.endpoint_id}
 
 
-@router.get("/encryption/algorithms")
+@router.get("/encryption/algorithms", summary="Get approved and weak encryption algorithms")
 async def get_encryption_algorithms(_current_user: User = Depends(get_current_user)):
     """Get approved and weak encryption algorithms."""
     auditor = get_encryption_auditor()
@@ -378,7 +378,7 @@ async def list_controls(
     return {"controls": [c.model_dump() for c in controls]}
 
 
-@router.get("/controls/{control_id}")
+@router.get("/controls/{control_id}", summary="Get a HIPAA control")
 async def get_control(control_id: str, _current_user: User = Depends(get_current_user)):
     """Get a HIPAA control."""
     service = get_hipaa_service()
@@ -388,7 +388,7 @@ async def get_control(control_id: str, _current_user: User = Depends(get_current
     return {"control": control.model_dump()}
 
 
-@router.put("/controls/{control_id}/status")
+@router.put("/controls/{control_id}/status", summary="Update a control's status")
 async def update_control_status(control_id: str, request: UpdateControlStatusRequest, _current_user: User = Depends(get_current_user)):
     """Update a control's status."""
     service = get_hipaa_service()
@@ -403,7 +403,7 @@ async def update_control_status(control_id: str, request: UpdateControlStatusReq
     return {"control": control.model_dump()}
 
 
-@router.post("/controls/{control_id}/evidence", status_code=status.HTTP_201_CREATED)
+@router.post("/controls/{control_id}/evidence", status_code=status.HTTP_201_CREATED, summary="Add evidence to a control")
 async def add_control_evidence(control_id: str, evidence_id: str, added_by: str, _current_user: User = Depends(get_current_user)):
     """Add evidence to a control."""
     service = get_hipaa_service()
@@ -415,7 +415,7 @@ async def add_control_evidence(control_id: str, evidence_id: str, added_by: str,
 
 # --- Minimum Necessary Policy Endpoints ---
 
-@router.post("/policies/minimum-necessary", status_code=status.HTTP_201_CREATED)
+@router.post("/policies/minimum-necessary", status_code=status.HTTP_201_CREATED, summary="Create a minimum necessary access policy")
 async def create_minimum_necessary_policy(request: CreatePolicyRequest, _current_user: User = Depends(get_current_user)):
     """Create a minimum necessary access policy."""
     service = get_hipaa_service()
@@ -432,7 +432,7 @@ async def create_minimum_necessary_policy(request: CreatePolicyRequest, _current
     return {"policy": policy.model_dump()}
 
 
-@router.get("/policies/minimum-necessary")
+@router.get("/policies/minimum-necessary", summary="List minimum necessary policies")
 async def list_minimum_necessary_policies(enabled_only: bool = True, _current_user: User = Depends(get_current_user)):
     """List minimum necessary policies."""
     service = get_hipaa_service()
@@ -440,7 +440,7 @@ async def list_minimum_necessary_policies(enabled_only: bool = True, _current_us
     return {"policies": [p.model_dump() for p in policies]}
 
 
-@router.post("/access/request")
+@router.post("/access/request", summary="Request access with justification")
 async def request_access(request: RequestAccessRequest, _current_user: User = Depends(get_current_user)):
     """Request access with justification."""
     service = get_hipaa_service()
@@ -454,7 +454,7 @@ async def request_access(request: RequestAccessRequest, _current_user: User = De
     return {"justification": justification.model_dump()}
 
 
-@router.post("/access/{justification_id}/approve")
+@router.post("/access/{justification_id}/approve", summary="Approve access justification")
 async def approve_access(justification_id: str, request: ApproveAccessRequest, _current_user: User = Depends(get_current_user)):
     """Approve access justification."""
     service = get_hipaa_service()
@@ -469,7 +469,7 @@ async def approve_access(justification_id: str, request: ApproveAccessRequest, _
     return {"justification": justification.model_dump()}
 
 
-@router.post("/access/{justification_id}/deny")
+@router.post("/access/{justification_id}/deny", summary="Deny access justification")
 async def deny_access(justification_id: str, request: DenyAccessRequest, _current_user: User = Depends(get_current_user)):
     """Deny access justification."""
     service = get_hipaa_service()

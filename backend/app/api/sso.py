@@ -99,13 +99,13 @@ async def list_providers(
     _raise_not_configured()
 
 
-@router.get("/providers/{provider_id}", response_model=ProviderResponse)
+@router.get("/providers/{provider_id}", response_model=ProviderResponse, summary="Get SSO provider details")
 async def get_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)):
     """Get SSO provider details."""
     _raise_not_configured()
 
 
-@router.post("/providers", response_model=ProviderResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/providers", response_model=ProviderResponse, status_code=status.HTTP_201_CREATED, summary="Create a new SSO provider")
 async def create_provider(request: ProviderCreateRequest, _current_user: User = Depends(get_current_admin_user)):
     """
     Create a new SSO provider.
@@ -115,7 +115,7 @@ async def create_provider(request: ProviderCreateRequest, _current_user: User = 
     _raise_not_configured()
 
 
-@router.delete("/providers/{provider_id}", status_code=204)
+@router.delete("/providers/{provider_id}", status_code=204, summary="Delete an SSO provider")
 async def delete_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)):
     """Delete an SSO provider."""
     _raise_not_configured()
@@ -171,7 +171,7 @@ async def oidc_callback(
     _raise_not_configured()
 
 
-@router.post("/callback/saml")
+@router.post("/callback/saml", summary="Handle SAML callback (ACS endpoint)")
 async def saml_callback(
     request: Request,
 ):
@@ -189,7 +189,7 @@ async def saml_callback(
     _raise_not_configured()
 
 
-@router.get("/saml/{provider_id}/metadata")
+@router.get("/saml/{provider_id}/metadata", summary="Get SP metadata for SAML configuration")
 async def get_sp_metadata(provider_id: str):
     """
     Get SP metadata for SAML configuration.
@@ -235,7 +235,7 @@ async def logout(
     _raise_not_configured()
 
 
-@router.get("/well-known/openid-configuration")
+@router.get("/well-known/openid-configuration", summary="OpenID Connect discovery document")
 async def openid_configuration():
     """
     OpenID Connect discovery document.

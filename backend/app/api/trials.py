@@ -155,7 +155,7 @@ def require_admin(current_user: User) -> None:
 
 
 # Public endpoints
-@router.get("/{org_id}/trial", response_model=TrialStatusResponse)
+@router.get("/{org_id}/trial", response_model=TrialStatusResponse, summary="Get trial status")
 async def get_trial_status(
     org_id: str,
     db: AsyncSession = Depends(get_db),
@@ -168,7 +168,7 @@ async def get_trial_status(
     return await trial_service.get_organization_trial_status(org)
 
 
-@router.post("/{org_id}/trial/start", response_model=TrialStatusResponse)
+@router.post("/{org_id}/trial/start", response_model=TrialStatusResponse, summary="Start a trial")
 async def start_trial(
     org_id: str,
     db: AsyncSession = Depends(get_db),
@@ -190,7 +190,7 @@ async def start_trial(
 
 
 # Admin endpoints
-@router.get("/admin/trials", response_model=list[OrganizationTrialResponse])
+@router.get("/admin/trials", response_model=list[OrganizationTrialResponse], summary="List all trials (admin)")
 async def list_all_trials(
     status: str | None = Query(None, description="Filter by trial status"),
     limit: int = Query(100, le=500),
@@ -228,7 +228,7 @@ async def list_all_trials(
     return result
 
 
-@router.get("/admin/trials/statistics", response_model=TrialStatisticsResponse)
+@router.get("/admin/trials/statistics", response_model=TrialStatisticsResponse, summary="Get trial statistics (admin)")
 async def get_trial_statistics(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -242,7 +242,7 @@ async def get_trial_statistics(
     return await subscription_service.get_trial_statistics()
 
 
-@router.post("/admin/trials/{org_id}/extend", response_model=ExtendTrialResponse)
+@router.post("/admin/trials/{org_id}/extend", response_model=ExtendTrialResponse, summary="Extend a trial (admin)")
 async def extend_trial(
     org_id: str,
     request: ExtendTrialRequest,
@@ -283,7 +283,7 @@ async def extend_trial(
         raise HTTPException(status_code=400, detail="Unable to extend trial. Please check the organization's trial status.")
 
 
-@router.post("/admin/trials/{org_id}/expire")
+@router.post("/admin/trials/{org_id}/expire", summary="Force-expire a trial (admin)")
 async def force_expire_trial(
     org_id: str,
     db: AsyncSession = Depends(get_db),

@@ -367,7 +367,7 @@ async def detect_anomalies(
         )
 
 
-@router.get("/health")
+@router.get("/health", summary="Check predictive analytics service health")
 async def health_check() -> dict[str, str]:
     """Check predictive analytics service health."""
     return {"status": "healthy", "service": "predictive-analytics"}

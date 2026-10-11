@@ -71,7 +71,7 @@ class PipelineStatusResponse(BaseModel):
     finishedAt: str | None = None
 
 
-@router.get("/pipelines/{pipeline_id}", response_model=PipelineStatusResponse)
+@router.get("/pipelines/{pipeline_id}", response_model=PipelineStatusResponse, summary="Get pipeline status for progress tracking")
 async def get_pipeline_status(pipeline_id: int, _current_user: User = Depends(get_current_user))-> dict[str, Any]:
     """Get pipeline status for progress tracking.
 
@@ -118,7 +118,7 @@ async def get_pipeline_status(pipeline_id: int, _current_user: User = Depends(ge
         )
 
 
-@router.get("/pipelines/{pipeline_id}/tasks")
+@router.get("/pipelines/{pipeline_id}/tasks", summary="Get pipeline tasks for detailed progress information")
 async def get_pipeline_tasks(pipeline_id: int, _current_user: User = Depends(get_current_user))-> dict[str, Any]:
     """Get pipeline tasks for detailed progress information."""
     try:
@@ -139,7 +139,7 @@ async def get_pipeline_tasks(pipeline_id: int, _current_user: User = Depends(get
         )
 
 
-@router.get("/health")
+@router.get("/health", summary="Check DevLake service health")
 async def devlake_health() -> dict[str, Any]:
     """Check DevLake service health."""
     try:

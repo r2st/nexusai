@@ -134,7 +134,7 @@ def require_admin(current_user: User) -> None:
 
 
 # Public endpoints
-@router.get("/{org_id}/usage", response_model=UsageSummaryResponse)
+@router.get("/{org_id}/usage", response_model=UsageSummaryResponse, summary="Get usage summary")
 async def get_usage_summary(
     org_id: str,
     db: AsyncSession = Depends(get_db),
@@ -151,7 +151,7 @@ async def get_usage_summary(
     return await subscription_service.get_usage_summary(org)
 
 
-@router.post("/{org_id}/subscription/cancel")
+@router.post("/{org_id}/subscription/cancel", summary="Cancel subscription")
 async def cancel_subscription(
     org_id: str,
     request: CancelSubscriptionRequest,
@@ -186,7 +186,7 @@ async def cancel_subscription(
         raise HTTPException(status_code=400, detail="Unable to cancel subscription. Please check the subscription status.")
 
 
-@router.post("/{org_id}/subscription/resume")
+@router.post("/{org_id}/subscription/resume", summary="Resume subscription")
 async def resume_subscription(
     org_id: str,
     db: AsyncSession = Depends(get_db),
@@ -214,7 +214,7 @@ async def resume_subscription(
 
 
 # Admin endpoints
-@router.post("/admin/{org_id}/tier", response_model=ChangeTierResponse)
+@router.post("/admin/{org_id}/tier", response_model=ChangeTierResponse, summary="Change organization tier")
 async def change_organization_tier(
     org_id: str,
     request: ChangeTierRequest,
@@ -256,7 +256,7 @@ async def change_organization_tier(
     }
 
 
-@router.post("/admin/{org_id}/refresh-usage")
+@router.post("/admin/{org_id}/refresh-usage", summary="Refresh usage counters")
 async def refresh_usage_counts(
     org_id: str,
     db: AsyncSession = Depends(get_db),

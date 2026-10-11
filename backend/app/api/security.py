@@ -451,7 +451,7 @@ async def rotate_all_due(
     ]
 
 
-@router.get("/health")
+@router.get("/health", summary="Check security service health")
 async def health_check() -> dict[str, str]:
     """Check security service health."""
     return {"status": "healthy", "service": "security-scanner"}

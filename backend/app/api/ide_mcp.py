@@ -551,7 +551,7 @@ async def list_available_tools(
     }
 
 
-@router.get("/health")
+@router.get("/health", summary="Check IDE MCP service health")
 async def health_check() -> dict[str, str]:
     """Check IDE MCP service health."""
     return {"status": "healthy", "service": "ide-mcp"}

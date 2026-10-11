@@ -195,7 +195,7 @@ async def update_preferences(
     return prefs
 
 
-@router.get("/types")
+@router.get("/types", summary="Get all available notification types")
 async def get_notification_types() -> dict[str, Any]:
     """Get all available notification types."""
     return {
@@ -209,7 +209,7 @@ async def get_notification_types() -> dict[str, Any]:
     }
 
 
-@router.get("/priorities")
+@router.get("/priorities", summary="Get all notification priorities")
 async def get_priorities() -> dict[str, Any]:
     """Get all notification priorities."""
     return {

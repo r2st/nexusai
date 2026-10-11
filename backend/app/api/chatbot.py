@@ -98,7 +98,7 @@ class SendTeamsMessageRequest(BaseModel):
 
 # --- Configuration Endpoints ---
 
-@router.post("/configure/slack")
+@router.post("/configure/slack", summary="Configure Slack bot")
 async def configure_slack(request: ConfigureSlackRequest, _current_user: User = Depends(get_current_user)):
     """Configure Slack bot."""
     service = get_chatbot_service()
@@ -110,7 +110,7 @@ async def configure_slack(request: ConfigureSlackRequest, _current_user: User = 
     return {"configured": True, "platform": "slack"}
 
 
-@router.post("/configure/teams")
+@router.post("/configure/teams", summary="Configure Teams bot")
 async def configure_teams(request: ConfigureTeamsRequest, _current_user: User = Depends(get_current_user)):
     """Configure Teams bot."""
     service = get_chatbot_service()
@@ -229,7 +229,7 @@ async def slack_interactions(
 
 # --- Teams Webhook Endpoints ---
 
-@router.post("/teams/messages")
+@router.post("/teams/messages", summary="Handle Teams bot messages")
 async def teams_messages(request: Request):
     """Handle Teams bot messages."""
     service = get_chatbot_service()
@@ -250,7 +250,7 @@ async def teams_messages(request: Request):
 
 # --- User Linking Endpoints ---
 
-@router.post("/users/link")
+@router.post("/users/link", summary="Link a platform user to NexusAI")
 async def link_user(request: LinkUserRequest, _current_user: User = Depends(get_current_user)):
     """Link a platform user to NexusAI."""
     service = get_chatbot_service()
@@ -267,7 +267,7 @@ async def link_user(request: LinkUserRequest, _current_user: User = Depends(get_
     return {"linked": True}
 
 
-@router.post("/users/unlink")
+@router.post("/users/unlink", summary="Unlink a platform user from NexusAI")
 async def unlink_user(request: UnlinkUserRequest, _current_user: User = Depends(get_current_user)):
     """Unlink a platform user from NexusAI."""
     service = get_chatbot_service()
@@ -279,7 +279,7 @@ async def unlink_user(request: UnlinkUserRequest, _current_user: User = Depends(
     return {"unlinked": success}
 
 
-@router.get("/users/{platform}/{platform_user_id}")
+@router.get("/users/{platform}/{platform_user_id}", summary="Get linked user info")
 async def get_linked_user(platform: ChatPlatform, platform_user_id: str, _current_user: User = Depends(get_current_user)):
     """Get linked user info."""
     service = get_chatbot_service()
@@ -293,7 +293,7 @@ async def get_linked_user(platform: ChatPlatform, platform_user_id: str, _curren
 
 # --- Notification Endpoints ---
 
-@router.post("/notifications/send")
+@router.post("/notifications/send", summary="Send notification to subscribed channels")
 async def send_notification(request: SendNotificationRequest, _current_user: User = Depends(get_current_user)):
     """Send notification to subscribed channels."""
     service = get_chatbot_service()
@@ -308,7 +308,7 @@ async def send_notification(request: SendNotificationRequest, _current_user: Use
     return {"sent_to": sent_to}
 
 
-@router.post("/notifications/broadcast")
+@router.post("/notifications/broadcast", summary="Broadcast notification to all platforms")
 async def broadcast_notification(request: BroadcastNotificationRequest, _current_user: User = Depends(get_current_user)):
     """Broadcast notification to all platforms."""
     service = get_chatbot_service()
@@ -323,7 +323,7 @@ async def broadcast_notification(request: BroadcastNotificationRequest, _current
 
 # --- Subscription Endpoints ---
 
-@router.post("/subscriptions", status_code=status.HTTP_201_CREATED)
+@router.post("/subscriptions", status_code=status.HTTP_201_CREATED, summary="Subscribe a channel to event types")
 async def subscribe_channel(request: SubscribeRequest, _current_user: User = Depends(get_current_user)):
     """Subscribe a channel to event types."""
     service = get_chatbot_service()
@@ -335,7 +335,7 @@ async def subscribe_channel(request: SubscribeRequest, _current_user: User = Dep
     return {"subscribed": success}
 
 
-@router.delete("/subscriptions", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/subscriptions", status_code=status.HTTP_204_NO_CONTENT, summary="Unsubscribe a channel from event types")
 async def unsubscribe_channel(request: UnsubscribeRequest, _current_user: User = Depends(get_current_user))-> None:
     """Unsubscribe a channel from event types."""
     service = get_chatbot_service()
@@ -346,7 +346,7 @@ async def unsubscribe_channel(request: UnsubscribeRequest, _current_user: User =
     )
 
 
-@router.get("/subscriptions/{platform}/{channel_id}")
+@router.get("/subscriptions/{platform}/{channel_id}", summary="Get subscriptions for a channel")
 async def get_subscriptions(platform: ChatPlatform, channel_id: str, _current_user: User = Depends(get_current_user)):
     """Get subscriptions for a channel."""
     service = get_chatbot_service()
@@ -356,7 +356,7 @@ async def get_subscriptions(platform: ChatPlatform, channel_id: str, _current_us
 
 # --- Message Endpoints ---
 
-@router.post("/messages/slack")
+@router.post("/messages/slack", summary="Send a message to Slack")
 async def send_slack_message(request: SendSlackMessageRequest, _current_user: User = Depends(get_current_user)):
     """Send a message to Slack."""
     service = get_chatbot_service()
@@ -369,7 +369,7 @@ async def send_slack_message(request: SendSlackMessageRequest, _current_user: Us
     return {"result": result}
 
 
-@router.post("/messages/teams")
+@router.post("/messages/teams", summary="Send a message to Teams")
 async def send_teams_message(request: SendTeamsMessageRequest, _current_user: User = Depends(get_current_user)):
     """Send a message to Teams."""
     service = get_chatbot_service()
@@ -383,7 +383,7 @@ async def send_teams_message(request: SendTeamsMessageRequest, _current_user: Us
 
 # --- Info Endpoints ---
 
-@router.get("/commands")
+@router.get("/commands", summary="Get available bot commands")
 async def get_commands(platform: ChatPlatform | None = None, _current_user: User = Depends(get_current_user)):
     """Get available bot commands."""
     service = get_chatbot_service()
@@ -396,7 +396,7 @@ async def get_commands(platform: ChatPlatform | None = None, _current_user: User
     return {"commands": [c.model_dump() for c in commands]}
 
 
-@router.get("/dashboard")
+@router.get("/dashboard", summary="Get chatbot dashboard data")
 async def get_chatbot_dashboard(_current_user: User = Depends(get_current_user)):
     """Get chatbot dashboard data."""
     service = get_chatbot_service()
