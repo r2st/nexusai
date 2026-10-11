@@ -7,7 +7,7 @@ Provides endpoints for:
 - Settings and configuration
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
@@ -150,7 +150,7 @@ async def create_organization(
         user_id=current_user.id,
         role=MemberRole.OWNER.value,
         is_active=True,
-        accepted_at=datetime.utcnow(),
+        accepted_at=datetime.now(UTC),
     )
     db.add(member)
 
@@ -385,7 +385,7 @@ async def invite_member(
         role=request.role,
         invited_by=current_user.id,
         token=token,
-        expires_at=datetime.utcnow() + timedelta(days=7),
+        expires_at=datetime.now(UTC) + timedelta(days=7),
     )
 
     db.add(invite)

@@ -10,7 +10,7 @@ Supports multiple identity providers:
 """
 
 import secrets
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 from urllib.parse import urlencode
 
@@ -203,7 +203,7 @@ class OAuthService:
                 "provider": provider_name,
                 "redirect_uri": redirect_uri,
                 "nonce": nonce,
-                "created_at": datetime.utcnow().isoformat(),
+                "created_at": datetime.now(UTC).isoformat(),
             }
         }
 

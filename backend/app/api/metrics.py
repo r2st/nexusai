@@ -9,7 +9,7 @@ Provides endpoints for:
 - Unified metrics with AI insights
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, Query
@@ -295,7 +295,7 @@ async def get_metrics_dashboard(
 
     return {
         "project_name": project_name,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "dora": dora.model_dump(),
         "space": space.model_dump(),
         "business": business.model_dump(),
@@ -524,7 +524,7 @@ async def get_ai_insights(
             "change_failure_rate": dora.change_failure_rate,
             "mttr_hours": dora.mean_time_to_recovery,
         },
-        "generated_at": datetime.utcnow().isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
     }
 
 
@@ -565,7 +565,7 @@ async def chat_about_metrics(
         "question": question,
         "answer": answer,
         "project_name": project_name,
-        "generated_at": datetime.utcnow().isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
     }
 
 
@@ -577,5 +577,5 @@ async def metrics_health_check() -> dict[str, str]:
     return {
         "status": "healthy",
         "service": "metrics",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
     }

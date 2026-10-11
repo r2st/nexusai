@@ -1,6 +1,6 @@
 """API endpoints for the Query Gateway."""
 
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
@@ -166,7 +166,7 @@ async def get_metrics_summary(
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
     delta = TIME_RANGE_DELTAS.get(time_range, timedelta(days=30))
-    end_time = datetime.utcnow()
+    end_time = datetime.now(UTC)
     start_time = end_time - delta
 
     query_request = QueryRequest(
@@ -231,7 +231,7 @@ async def get_entity_summary(
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
     delta = TIME_RANGE_DELTAS.get(time_range, timedelta(days=7))
-    end_time = datetime.utcnow()
+    end_time = datetime.now(UTC)
     start_time = end_time - delta
 
     query_request = QueryRequest(

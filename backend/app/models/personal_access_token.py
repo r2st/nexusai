@@ -8,7 +8,7 @@ Personal Access Tokens provide API access for:
 """
 
 import secrets
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from enum import Enum
 from uuid import uuid4
 
@@ -82,8 +82,8 @@ class PersonalAccessToken(Base):
     token_metadata = Column(JSON, default=dict)
 
     # Timestamps
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    updated_at = Column(DateTime, default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC))
 
     # Relationships
     user = relationship("User", back_populates="personal_access_tokens")
@@ -160,7 +160,7 @@ class PersonalAccessTokenService:
         # Calculate expiration
         expires_at = None
         if request.expires_in_days:
-            expires_at = datetime.utcnow() + timedelta(days=request.expires_in_days)
+            expires_at = datetime.now(UTC) + timedelta(days=request.expires_in_days)
 
         # Validate scopes
         valid_scopes = [s.value for s in TokenScope]
@@ -236,7 +236,7 @@ class PersonalAccessTokenService:
             return None, "Invalid token"
 
         # Check expiration
-        if valid_token.expires_at and valid_token.expires_at < datetime.utcnow():
+        if valid_token.expires_at and valid_token.expires_at < datetime.now(UTC):
             return None, "Token expired"
 
         # Check scopes
@@ -272,7 +272,7 @@ class PersonalAccessTokenService:
         token = result.scalar_one_or_none()
 
         if token:
-            token.last_used_at = datetime.utcnow()
+            token.last_used_at = datetime.now(UTC)
             token.last_used_ip = ip_address
             token.use_count = PersonalAccessToken.use_count + 1
             await session.commit()
@@ -309,7 +309,7 @@ class PersonalAccessTokenService:
             return False
 
         token.is_active = False
-        token.revoked_at = datetime.utcnow()
+        token.revoked_at = datetime.now(UTC)
         token.revoked_reason = reason
 
         await session.commit()
@@ -408,7 +408,7 @@ class PersonalAccessTokenService:
 
         # Calculate remaining days if old token had expiration
         if old_token.expires_at:
-            remaining = old_token.expires_at - datetime.utcnow()
+            remaining = old_token.expires_at - datetime.now(UTC)
             request.expires_in_days = max(1, remaining.days)
 
         # Create new token
@@ -445,7 +445,7 @@ class PersonalAccessTokenService:
         """
         from sqlalchemy import delete
 
-        cutoff = datetime.utcnow() - timedelta(days=days_after_expiry)
+        cutoff = datetime.now(UTC) - timedelta(days=days_after_expiry)
 
         result = await session.execute(
             delete(PersonalAccessToken).where(

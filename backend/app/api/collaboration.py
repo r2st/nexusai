@@ -1,6 +1,6 @@
 """Real-time Collaboration API endpoints."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket, WebSocketDisconnect, status
@@ -703,7 +703,7 @@ async def websocket_endpoint(
                         "type": "chat_message",
                         "user_id": user_id,
                         "message": data.get("message"),
-                        "timestamp": datetime.utcnow().isoformat(),
+                        "timestamp": datetime.now(UTC).isoformat(),
                     },
                 )
 

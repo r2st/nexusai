@@ -6,7 +6,7 @@ Provides endpoints for:
 - Monitoring pipeline status
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from pydantic import BaseModel
@@ -239,7 +239,7 @@ async def update_blueprint_status(
         raise HTTPException(status_code=404, detail="Blueprint not found")
 
     blueprint.status = BlueprintStatus(new_status)
-    blueprint.updated_at = datetime.utcnow()
+    blueprint.updated_at = datetime.now(UTC)
     await session.commit()
 
     return BlueprintStatusUpdate(status="updated", new_status=new_status)

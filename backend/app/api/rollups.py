@@ -1,6 +1,6 @@
 """API endpoints for precomputed metric rollups."""
 
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -70,7 +70,7 @@ async def get_dora_rollups(
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
     # Default to last 30 days
-    end_date = end_date or datetime.utcnow()
+    end_date = end_date or datetime.now(UTC)
     start_date = start_date or (end_date - timedelta(days=30))
 
     query = RollupQuery(
@@ -117,7 +117,7 @@ async def get_space_rollups(
     """
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
-    end_date = end_date or datetime.utcnow()
+    end_date = end_date or datetime.now(UTC)
     start_date = start_date or (end_date - timedelta(days=30))
 
     query = RollupQuery(
@@ -261,7 +261,7 @@ async def get_latest_rollups(
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
     service = get_rollup_service()
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
 
     # Get latest daily rollups
     dora_query = RollupQuery(
