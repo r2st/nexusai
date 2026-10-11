@@ -11,7 +11,6 @@ This replaces AES encryption with proper secret management.
 
 import base64
 import hashlib
-import os
 from typing import Any
 
 import httpx

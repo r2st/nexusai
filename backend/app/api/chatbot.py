@@ -4,7 +4,7 @@ import json
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Header, Response, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 import structlog
 
 from app.api.deps import get_current_user

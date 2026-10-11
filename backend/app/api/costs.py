@@ -8,7 +8,7 @@ Provides endpoints for:
 """
 
 from datetime import datetime, timedelta, UTC
-from typing import Annotated, Any
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field

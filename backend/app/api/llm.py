@@ -23,8 +23,6 @@ from app.services.llm_gateway.service import get_gateway, LLMGateway
 from app.services.llm_gateway.models import (
     GatewayStatus,
     LLMRequest,
-    LLMResponse,
-    LLMStreamChunk,
     Message,
     MessageRole,
     ProviderStatus,

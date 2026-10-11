@@ -1,16 +1,13 @@
 """API endpoints for OpenAPI Actions management and execution."""
 
-from datetime import datetime, UTC
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from pydantic import BaseModel, Field
-from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
 from app.core.config import settings
 
-from app.core.database import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
 from app.services.agents.openapi_actions import (
@@ -20,7 +17,7 @@ from app.services.agents.openapi_actions import (
     OpenAPIOperation,
     AuthType,
 )
-from app.services.agents.security import AgentSecurityContext, ActionType
+from app.services.agents.security import AgentSecurityContext
 
 
 logger = structlog.get_logger()

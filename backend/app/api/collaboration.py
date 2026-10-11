@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response, WebSocket, WebSocketDisconnect, status
+from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket, WebSocketDisconnect, status
 import structlog
 from pydantic import BaseModel, Field
 
@@ -11,10 +11,7 @@ from app.api.deps import get_current_user
 from app.models.user import User
 from app.services.collaboration import (
     get_collaboration_service,
-    get_presence_service,
-    get_session_manager,
     get_annotation_service,
-    get_activity_feed,
     PresenceStatus,
     SessionType,
     AnnotationType,

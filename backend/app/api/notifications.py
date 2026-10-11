@@ -16,10 +16,6 @@ from app.services.notifications import (
     NotificationType,
     NotificationPriority,
     NotificationPreferences,
-    NotificationConfig,
-    SlackConfig,
-    TeamsConfig,
-    DiscordConfig,
 )
 
 logger = structlog.get_logger()

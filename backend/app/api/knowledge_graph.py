@@ -1,6 +1,5 @@
 """API endpoints for knowledge graph operations."""
 
-from datetime import datetime, UTC
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query

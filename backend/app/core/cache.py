@@ -8,7 +8,6 @@ Provides:
 - Serialization for complex objects
 """
 
-import asyncio
 import functools
 import hashlib
 import json

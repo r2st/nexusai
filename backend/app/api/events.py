@@ -21,9 +21,7 @@ from app.models.user import User
 from app.services.events import (
     EventQuery,
     EventSource,
-    EventStats,
     EventType,
-    RawEvent,
     WebhookPayload,
     get_event_store,
     get_webhook_handler,

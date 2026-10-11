@@ -16,7 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import structlog
 
 from app.api.deps import get_current_user, get_db
-from app.core.multitenancy import get_current_tenant_id, set_tenant_context
+from app.core.multitenancy import get_current_tenant_id
 from app.models.user import User
 from app.services.ai_analytics import (
     CursorPlugin,

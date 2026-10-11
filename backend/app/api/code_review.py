@@ -10,8 +10,6 @@ from app.api.deps import get_current_user
 from app.models.user import User
 from app.services.code_review import (
     CodeReviewService,
-    CodeReview,
-    PRInfo,
     get_code_review_service,
 )
 

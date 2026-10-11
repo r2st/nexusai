@@ -2,7 +2,6 @@
 
 from datetime import datetime, UTC
 from typing import Any
-from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from pydantic import BaseModel, Field
