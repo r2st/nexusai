@@ -348,8 +348,8 @@ def cached(
                 cached_value = await cache.get(cache_key)
                 if cached_value is not None:
                     return cached_value
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Cache read failed", key=cache_key, error=str(e))
 
             # Execute function
             result = await func(*args, **kwargs)
@@ -357,8 +357,8 @@ def cached(
             # Store in cache
             try:
                 await cache.set(cache_key, result, ttl)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Cache write failed", key=cache_key, error=str(e))
 
             return result
 
@@ -385,8 +385,8 @@ def cache_invalidate(pattern: str):
             # Invalidate cache
             try:
                 await cache.delete_pattern(f"{CacheConfig.PREFIX}{pattern}")
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Cache invalidation failed", pattern=pattern, error=str(e))
 
             return result
 
@@ -451,8 +451,8 @@ def tenant_cached(
                 cached_value = await cache.get(cache_key)
                 if cached_value is not None:
                     return cached_value
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Cache read failed", key=cache_key, error=str(e))
 
             # Execute function
             result = await func(*args, **kwargs)
@@ -460,8 +460,8 @@ def tenant_cached(
             # Store in cache
             try:
                 await cache.set(cache_key, result, ttl)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug("Cache write failed", key=cache_key, error=str(e))
 
             return result
 
@@ -502,8 +502,8 @@ def tenant_cache_invalidate(pattern: str, tenant_arg: str = "tenant_id"):
             if tenant_id:
                 try:
                     await cache.delete_tenant_pattern(tenant_id, pattern)
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("Tenant cache invalidation failed", tenant_id=tenant_id, pattern=pattern, error=str(e))
 
             return result
 
@@ -552,8 +552,8 @@ class RateLimiter:
 
             return current <= self.max_requests, info
 
-        except Exception:
-            # Fail open if Redis is unavailable
+        except Exception as e:
+            logger.debug("Rate limiter Redis unavailable, failing open", error=str(e))
             return True, {"limit": self.max_requests, "remaining": self.max_requests, "reset_in": 0}
 
     async def reset(self, identifier: str) -> bool:
@@ -662,8 +662,8 @@ class TenantRateLimiter:
 
             return True, info
 
-        except Exception:
-            # Fail open if Redis is unavailable
+        except Exception as e:
+            logger.debug("Tenant rate limiter Redis unavailable, failing open", error=str(e))
             return True, {
                 "tenant_limit": self.tenant_limit,
                 "user_limit": self.user_limit,

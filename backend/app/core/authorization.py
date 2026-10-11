@@ -13,9 +13,12 @@ from enum import Enum
 from typing import Any
 
 import httpx
+import structlog
 from pydantic import BaseModel
 
 from app.core.config import settings
+
+logger = structlog.get_logger()
 
 
 class Relation(str, Enum):
@@ -81,7 +84,8 @@ class OpenFGAClient:
                 )
                 self._available = response.status_code == 200
                 return self._available
-        except Exception:
+        except Exception as e:
+            logger.warning("OpenFGA health check failed", error=str(e))
             self._available = False
             return False
 

@@ -223,7 +223,8 @@ async def register_from_spec(
             spec = json.loads(content)
         else:
             spec = yaml.safe_load(content)
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to parse OpenAPI spec", filename=file.filename, error=str(e))
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Failed to parse OpenAPI spec. Please provide a valid JSON or YAML file.",
