@@ -331,7 +331,7 @@ async def chat(
     request: ChatRequest,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> StreamingResponse | ChatResponse:
     """Send a message and get AI response with optional MCP tool support."""
     chat_start = time.perf_counter()
     # Parse external MCP server configs
@@ -453,7 +453,7 @@ async def delete_conversation(
     conversation_id: str,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> None:
     """Delete a conversation."""
     chat_service = ChatService(db)
 
@@ -470,7 +470,7 @@ async def delete_conversation(
 @router.get("/tools", summary="List available tools")
 async def list_available_tools(
     user: User = Depends(get_current_user),
-):
+) -> dict:
     """List all available chat tools (all MCP tools across all services)."""
     from app.services.mcp import get_all_tools_summary, list_available_tools
 
