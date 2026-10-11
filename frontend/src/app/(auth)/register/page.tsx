@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Sparkles, Loader2, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const { login } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -104,6 +105,7 @@ export default function RegisterPage() {
               value={formData.fullName}
               onChange={handleChange}
               disabled={isLoading}
+              autoComplete="name"
             />
           </div>
 
@@ -120,6 +122,7 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               disabled={isLoading}
+              autoComplete="username"
             />
           </div>
 
@@ -136,6 +139,7 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               disabled={isLoading}
+              autoComplete="email"
             />
           </div>
 
@@ -143,16 +147,37 @@ export default function RegisterPage() {
             <label htmlFor="password" className="text-sm font-medium">
               Password
             </label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              disabled={isLoading}
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+                autoComplete="new-password"
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <Eye className="h-4 w-4" aria-hidden="true" />
+                )}
+              </button>
+            </div>
+            {formData.password && formData.password.length < 8 && (
+              <p className="text-xs text-destructive" role="alert">
+                Password must be at least 8 characters
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -162,13 +187,19 @@ export default function RegisterPage() {
             <Input
               id="confirmPassword"
               name="confirmPassword"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="••••••••"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
               disabled={isLoading}
+              autoComplete="new-password"
             />
+            {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+              <p className="text-xs text-destructive" role="alert">
+                Passwords do not match
+              </p>
+            )}
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
