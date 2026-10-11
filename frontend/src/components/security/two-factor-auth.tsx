@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, getApiErrorMessage } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -71,8 +71,8 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
       const response = await api.post('/auth/2fa/setup');
       setSetupData(response.data);
       setStep('scan');
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to initialize 2FA setup');
+    } catch (err: unknown) {
+      setError(getApiErrorMessage(err, 'Failed to initialize 2FA setup'));
     } finally {
       setIsLoading(false);
     }
@@ -90,8 +90,8 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
     try {
       await api.post('/auth/2fa/verify', { code: verificationCode });
       setStep('backup');
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Invalid verification code');
+    } catch (err: unknown) {
+      setError(getApiErrorMessage(err, 'Invalid verification code'));
     } finally {
       setIsLoading(false);
     }
@@ -104,8 +104,8 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
       await api.post('/auth/2fa/enable');
       setStep('complete');
       toast.success('Two-factor authentication enabled');
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to enable 2FA');
+    } catch (err: unknown) {
+      setError(getApiErrorMessage(err, 'Failed to enable 2FA'));
     } finally {
       setIsLoading(false);
     }
@@ -501,8 +501,8 @@ export function TwoFactorVerify({ onVerify, onCancel, onUseBackupCode }: TwoFact
     setError(null);
     try {
       await onVerify(code);
-    } catch (err: any) {
-      setError(err.message || 'Invalid code');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Invalid code');
     } finally {
       setIsLoading(false);
     }
@@ -578,8 +578,8 @@ export function BackupCodeInput({ onVerify, onCancel, onBack }: BackupCodeInputP
     setError(null);
     try {
       await onVerify(code.replace(/\s/g, ''));
-    } catch (err: any) {
-      setError(err.message || 'Invalid backup code');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Invalid backup code');
     } finally {
       setIsLoading(false);
     }

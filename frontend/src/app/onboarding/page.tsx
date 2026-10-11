@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { organizationsApi, TenantContext } from '@/lib/api';
+import { organizationsApi, TenantContext, getApiErrorMessage } from '@/lib/api';
 import { useAuthStore } from '@/store/auth';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -139,9 +139,9 @@ function OnboardingContent() {
       
       toast.success('Organization created!');
       setStep('invite-team');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to create organization:', error);
-      toast.error(error.response?.data?.detail || 'Failed to create organization');
+      toast.error(getApiErrorMessage(error, 'Failed to create organization'));
     } finally {
       setIsLoading(false);
     }

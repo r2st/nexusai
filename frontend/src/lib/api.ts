@@ -1,4 +1,4 @@
-import axios, { type AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
+import axios, { type AxiosError, type AxiosInstance, type InternalAxiosRequestConfig, isAxiosError } from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
 
@@ -125,6 +125,18 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+/** Extract a user-facing message from an API error (axios or generic). */
+export function getApiErrorMessage(error: unknown, fallback: string): string {
+  if (isAxiosError(error)) {
+    const detail = (error.response?.data as Record<string, unknown> | undefined)?.detail;
+    if (typeof detail === 'string') return detail;
+    const message = (error.response?.data as Record<string, unknown> | undefined)?.message;
+    if (typeof message === 'string') return message;
+  }
+  if (error instanceof Error) return error.message;
+  return fallback;
+}
 
 // API types
 export interface User {

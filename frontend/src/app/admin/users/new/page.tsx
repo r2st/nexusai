@@ -99,10 +99,10 @@ export default function CreateUserPage() {
 
       // Redirect to users list
       router.push('/admin/users');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to create user:', error);
       setGeneralError(
-        error.response?.data?.message || 'Failed to create user. Please try again.'
+        error instanceof Error ? error.message : 'Failed to create user. Please try again.'
       );
     } finally {
       setIsSaving(false);

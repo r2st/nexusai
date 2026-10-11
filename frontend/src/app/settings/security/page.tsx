@@ -38,7 +38,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuthStore } from '@/store/auth';
-import { api } from '@/lib/api';
+import { api, getApiErrorMessage } from '@/lib/api';
 import { cn, formatRelativeTime } from '@/lib/utils';
 import { toast } from 'sonner';
 import { TwoFactorSetup, TwoFactorStatus } from '@/components/security/two-factor-auth';
@@ -255,8 +255,8 @@ export default function SecuritySettingsPage() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-    } catch (error: any) {
-      toast.error(error.response?.data?.detail || 'Failed to change password');
+    } catch (error: unknown) {
+      toast.error(getApiErrorMessage(error, 'Failed to change password'));
     } finally {
       setIsChangingPassword(false);
     }

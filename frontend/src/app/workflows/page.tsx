@@ -68,6 +68,16 @@ interface ExecutionRecord {
   duration_ms: number | null;
 }
 
+interface WorkflowApiResponse {
+  id: string;
+  name: string;
+  description?: string;
+  status: string;
+  triggers?: Array<{ trigger_type: string }>;
+  steps?: unknown[];
+  organization_id?: string;
+}
+
 export default function WorkflowsPage() {
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [executions, setExecutions] = useState<ExecutionRecord[]>([]);
@@ -75,7 +85,7 @@ export default function WorkflowsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("my-workflows");
   const [showDesigner, setShowDesigner] = useState(false);
-  const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(null);
 
   const loadWorkflows = useCallback(async () => {
     setIsLoading(true);
@@ -91,7 +101,7 @@ export default function WorkflowsPage() {
 
       if (wfRes.ok) {
         const wfData = await wfRes.json();
-        const mapped = (wfData.workflows || []).map((w: any) => ({
+        const mapped = (wfData.workflows || []).map((w: WorkflowApiResponse) => ({
           id: w.id,
           name: w.name,
           description: w.description || "",
@@ -152,12 +162,12 @@ export default function WorkflowsPage() {
     setShowDesigner(true);
   };
 
-  const handleEditWorkflow = (workflow: any) => {
+  const handleEditWorkflow = (workflow: Workflow) => {
     setSelectedWorkflow(workflow);
     setShowDesigner(true);
   };
 
-  const handleSaveWorkflow = async (workflow: any) => {
+  const handleSaveWorkflow = async (workflow: WorkflowApiResponse) => {
     try {
       const token = localStorage.getItem("access_token");
       const headers: Record<string, string> = {
