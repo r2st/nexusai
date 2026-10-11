@@ -105,16 +105,40 @@ def upgrade() -> None:
             sa.Column("position", sa.Integer(), server_default="0", nullable=False),
         )
     
-    # Drop columns that are not in the model
+    # Preserve dropped column data in message_metadata before removing them
     if column_exists("messages", "latency_ms"):
+        op.execute("""
+            UPDATE messages
+            SET message_metadata = COALESCE(message_metadata, '{}'::jsonb)
+                || jsonb_build_object('_migrated_latency_ms', latency_ms)
+            WHERE latency_ms IS NOT NULL
+              AND EXISTS (SELECT 1 FROM information_schema.columns
+                          WHERE table_name='messages' AND column_name='message_metadata')
+        """)
         op.drop_column("messages", "latency_ms")
-    
+
     if column_exists("messages", "feedback_rating"):
+        op.execute("""
+            UPDATE messages
+            SET message_metadata = COALESCE(message_metadata, '{}'::jsonb)
+                || jsonb_build_object('_migrated_feedback_rating', feedback_rating)
+            WHERE feedback_rating IS NOT NULL
+              AND EXISTS (SELECT 1 FROM information_schema.columns
+                          WHERE table_name='messages' AND column_name='message_metadata')
+        """)
         op.drop_column("messages", "feedback_rating")
-    
+
     if column_exists("messages", "feedback_text"):
+        op.execute("""
+            UPDATE messages
+            SET message_metadata = COALESCE(message_metadata, '{}'::jsonb)
+                || jsonb_build_object('_migrated_feedback_text', feedback_text)
+            WHERE feedback_text IS NOT NULL
+              AND EXISTS (SELECT 1 FROM information_schema.columns
+                          WHERE table_name='messages' AND column_name='message_metadata')
+        """)
         op.drop_column("messages", "feedback_text")
-    
+
     # Drop the old metadata column if it still exists after renaming
     if column_exists("messages", "metadata"):
         op.drop_column("messages", "metadata")

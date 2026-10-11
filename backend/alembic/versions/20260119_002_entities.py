@@ -45,12 +45,12 @@ def upgrade() -> None:
         sa.Column("source_updated_at", sa.DateTime(timezone=True), nullable=True),
 
         # Raw event references
-        sa.Column("raw_event_ids", postgresql.ARRAY(sa.String(36)), default=[]),
+        sa.Column("raw_event_ids", postgresql.ARRAY(sa.String(36)), server_default="{}"),
 
         # Flexible data storage
-        sa.Column("data", postgresql.JSONB(), default=dict),
-        sa.Column("metadata", postgresql.JSONB(), default=dict),
-        sa.Column("tags", postgresql.ARRAY(sa.String(100)), default=[]),
+        sa.Column("data", postgresql.JSONB(), server_default="{}"),
+        sa.Column("metadata", postgresql.JSONB(), server_default="{}"),
+        sa.Column("tags", postgresql.ARRAY(sa.String(100)), server_default="{}"),
 
         # Timestamps
         sa.Column(
@@ -123,7 +123,7 @@ def upgrade() -> None:
 
         # Relation
         sa.Column("relation_type", sa.String(50), nullable=False),
-        sa.Column("properties", postgresql.JSONB(), default=dict),
+        sa.Column("properties", postgresql.JSONB(), server_default="{}"),
 
         # Validity period
         sa.Column("valid_from", sa.DateTime(timezone=True), nullable=True),
@@ -185,8 +185,8 @@ def upgrade() -> None:
         sa.Column("source_email", sa.String(255), nullable=True),
 
         # Confidence
-        sa.Column("confidence", sa.Float(), default=1.0),
-        sa.Column("verified", sa.Boolean(), default=False),
+        sa.Column("confidence", sa.Float(), server_default="1.0"),
+        sa.Column("verified", sa.Boolean(), server_default="false"),
         sa.Column("verified_by", sa.String(36), nullable=True),
         sa.Column("verified_at", sa.DateTime(timezone=True), nullable=True),
 

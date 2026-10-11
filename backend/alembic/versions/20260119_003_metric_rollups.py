@@ -50,11 +50,11 @@ def upgrade() -> None:
             server_default=sa.func.now(),
             nullable=False,
         ),
-        sa.Column("data_points", sa.Integer(), default=0),
-        sa.Column("is_partial", sa.Boolean(), default=False),
+        sa.Column("data_points", sa.Integer(), server_default="0"),
+        sa.Column("is_partial", sa.Boolean(), server_default="false"),
 
         # Flexible data storage
-        sa.Column("data", postgresql.JSONB(), default=dict),
+        sa.Column("data", postgresql.JSONB(), server_default="{}"),
 
         # Timestamps
         sa.Column(

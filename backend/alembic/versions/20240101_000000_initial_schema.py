@@ -134,7 +134,7 @@ def upgrade() -> None:
         sa.Column('expires_at', sa.DateTime(timezone=True), nullable=True),
         sa.Column('last_used_at', sa.DateTime(timezone=True), nullable=True),
         sa.Column('last_used_ip', sa.String(45), nullable=True),
-        sa.Column('use_count', sa.String(20), nullable=True, server_default='0'),
+        sa.Column('use_count', sa.Integer, nullable=True, server_default='0'),
         sa.Column('is_active', sa.Boolean, nullable=False, server_default='true'),
         sa.Column('revoked_at', sa.DateTime(timezone=True), nullable=True),
         sa.Column('revoked_reason', sa.String(255), nullable=True),
@@ -181,7 +181,7 @@ def upgrade() -> None:
         sa.Column('mode', sa.String(50), nullable=False, server_default='NORMAL'),
         sa.Column('status', sa.String(50), nullable=False, server_default='ACTIVE'),
         sa.Column('cron_config', sa.String(100), nullable=True),
-        sa.Column('is_manual', sa.String(10), nullable=False, server_default='false'),
+        sa.Column('is_manual', sa.Boolean, nullable=False, server_default='false'),
         sa.Column('settings', postgresql.JSONB, nullable=True, server_default='{}'),
         sa.Column('plan', postgresql.JSONB, nullable=True, server_default='[]'),
         sa.Column('labels', postgresql.JSONB, nullable=True, server_default='[]'),
@@ -201,11 +201,11 @@ def upgrade() -> None:
         sa.Column('status', sa.String(50), nullable=False, server_default='PENDING'),
         sa.Column('plan', postgresql.JSONB, nullable=True, server_default='[]'),
         sa.Column('stages', postgresql.JSONB, nullable=True, server_default='[]'),
-        sa.Column('stage_index', sa.String(10), nullable=True, server_default='0'),
-        sa.Column('finished_tasks', sa.String(10), nullable=True, server_default='0'),
-        sa.Column('total_tasks', sa.String(10), nullable=True, server_default='0'),
+        sa.Column('stage_index', sa.Integer, nullable=True, server_default='0'),
+        sa.Column('finished_tasks', sa.Integer, nullable=True, server_default='0'),
+        sa.Column('total_tasks', sa.Integer, nullable=True, server_default='0'),
         sa.Column('error_message', sa.Text, nullable=True),
-        sa.Column('skip_on_fail', sa.String(10), nullable=True, server_default='false'),
+        sa.Column('skip_on_fail', sa.Boolean, nullable=True, server_default='false'),
         sa.Column('started_at', sa.DateTime(timezone=True), nullable=True),
         sa.Column('finished_at', sa.DateTime(timezone=True), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('NOW()')),
@@ -294,6 +294,36 @@ def downgrade() -> None:
     # Drop RLS functions
     op.execute('DROP FUNCTION IF EXISTS rls_enabled()')
     op.execute('DROP FUNCTION IF EXISTS current_tenant_id()')
+
+    # Drop indexes before tables
+    op.drop_index('ix_code_snippets_project_id', table_name='code_snippets')
+    op.drop_index('ix_code_snippets_tenant_id', table_name='code_snippets')
+    op.drop_index('ix_pr_issue_corr_issue_id', table_name='pr_issue_correlations')
+    op.drop_index('ix_pr_issue_corr_pr_id', table_name='pr_issue_correlations')
+    op.drop_index('ix_pr_issue_corr_project_id', table_name='pr_issue_correlations')
+    op.drop_index('ix_pr_issue_corr_tenant_id', table_name='pr_issue_correlations')
+    op.drop_index('ix_pipeline_runs_status', table_name='pipeline_runs')
+    op.drop_index('ix_pipeline_runs_blueprint_id', table_name='pipeline_runs')
+    op.drop_index('ix_pipeline_runs_tenant_id', table_name='pipeline_runs')
+    op.drop_index('ix_blueprints_project_id', table_name='blueprints')
+    op.drop_index('ix_blueprints_tenant_id', table_name='blueprints')
+    op.drop_index('ix_ai_usage_created_at', table_name='ai_usage_logs')
+    op.drop_index('ix_ai_usage_tool_type', table_name='ai_usage_logs')
+    op.drop_index('ix_ai_usage_project_id', table_name='ai_usage_logs')
+    op.drop_index('ix_ai_usage_tenant_id', table_name='ai_usage_logs')
+    op.drop_index('ix_pat_token_prefix', table_name='personal_access_tokens')
+    op.drop_index('ix_pat_user_id', table_name='personal_access_tokens')
+    op.drop_index('ix_pat_tenant_id', table_name='personal_access_tokens')
+    op.drop_index('ix_connections_plugin', table_name='connections')
+    op.drop_index('ix_connections_project_id', table_name='connections')
+    op.drop_index('ix_connections_tenant_id', table_name='connections')
+    op.drop_index('ix_projects_org_id', table_name='projects')
+    op.drop_index('ix_projects_tenant_id', table_name='projects')
+    op.drop_index('ix_org_members_user_id', table_name='organization_members')
+    op.drop_index('ix_org_members_org_id', table_name='organization_members')
+    op.drop_index('ix_organizations_slug', table_name='organizations')
+    op.drop_index('ix_users_username', table_name='users')
+    op.drop_index('ix_users_email', table_name='users')
 
     # Drop tables in reverse order
     op.drop_table('code_snippets')

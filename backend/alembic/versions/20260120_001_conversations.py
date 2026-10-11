@@ -33,18 +33,18 @@ def upgrade() -> None:
             index=True,
         ),
         # Metadata
-        sa.Column("title", sa.String(500), default="New Conversation"),
+        sa.Column("title", sa.String(500), server_default="New Conversation"),
         sa.Column("summary", sa.Text(), nullable=True),
         # Model configuration
-        sa.Column("model_provider", sa.String(50), default="openai"),
-        sa.Column("model_name", sa.String(100), default="gpt-4o"),
-        sa.Column("model_config", postgresql.JSONB(), default=dict),
+        sa.Column("model_provider", sa.String(50), server_default="openai"),
+        sa.Column("model_name", sa.String(100), server_default="gpt-4o"),
+        sa.Column("model_config", postgresql.JSONB(), server_default="{}"),
         sa.Column("system_prompt", sa.Text(), nullable=True),
         # Settings
-        sa.Column("settings", postgresql.JSONB(), default=dict),
+        sa.Column("settings", postgresql.JSONB(), server_default="{}"),
         # Statistics
-        sa.Column("message_count", sa.Integer(), default=0),
-        sa.Column("total_tokens", sa.Integer(), default=0),
+        sa.Column("message_count", sa.Integer(), server_default="0"),
+        sa.Column("total_tokens", sa.Integer(), server_default="0"),
         # Timestamps
         sa.Column(
             "created_at",
@@ -82,14 +82,14 @@ def upgrade() -> None:
         sa.Column("content", sa.Text(), nullable=False),
         # For assistant messages
         sa.Column("model_name", sa.String(100), nullable=True),
-        sa.Column("tokens_prompt", sa.Integer(), default=0),
-        sa.Column("tokens_completion", sa.Integer(), default=0),
+        sa.Column("tokens_prompt", sa.Integer(), server_default="0"),
+        sa.Column("tokens_completion", sa.Integer(), server_default="0"),
         sa.Column("latency_ms", sa.Integer(), nullable=True),
         # Tool calls (if any)
         sa.Column("tool_calls", postgresql.JSONB(), nullable=True),
         sa.Column("tool_call_id", sa.String(100), nullable=True),
         # Metadata
-        sa.Column("metadata", postgresql.JSONB(), default=dict),
+        sa.Column("metadata", postgresql.JSONB(), server_default="{}"),
         # User feedback
         sa.Column("feedback_rating", sa.Integer(), nullable=True),
         sa.Column("feedback_text", sa.Text(), nullable=True),

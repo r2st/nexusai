@@ -175,11 +175,12 @@ def upgrade() -> None:
         )
         # Update tenant_id from organization
         op.execute("""
-            UPDATE organization_members om 
-            SET tenant_id = o.tenant_id 
-            FROM organizations o 
+            UPDATE organization_members om
+            SET tenant_id = o.tenant_id
+            FROM organizations o
             WHERE om.organization_id = o.id AND om.tenant_id IS NULL
         """)
+        op.alter_column("organization_members", "tenant_id", nullable=False)
     
     # Add is_active column with default true
     if not column_exists("organization_members", "is_active"):

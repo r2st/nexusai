@@ -43,10 +43,10 @@ def upgrade() -> None:
 
         # Storage
         sa.Column("storage_path", sa.Text(), nullable=False),
-        sa.Column("schema_version", sa.String(10), default="1.0"),
+        sa.Column("schema_version", sa.String(10), server_default="1.0"),
 
         # Processing state
-        sa.Column("processed", sa.Boolean(), default=False, nullable=False),
+        sa.Column("processed", sa.Boolean(), server_default="false", nullable=False),
         sa.Column("processed_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("processing_error", sa.Text(), nullable=True),
 
