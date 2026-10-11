@@ -25,30 +25,41 @@ async def process_document(ctx: dict[str, Any], document_id: str) -> dict[str, A
     """
     Process a document for RAG indexing.
 
-    Args:
-        ctx: ARQ context containing redis connection
-        document_id: ID of the document to process
-
-    Returns:
-        Processing result with status and metadata
+    Delegates to the DocumentService which handles fetching, chunking,
+    embedding, and storing the document.
     """
     logger.info("Processing document", document_id=document_id)
 
     try:
-        # TODO: Implement document processing logic
-        # 1. Fetch document from database
-        # 2. Extract text content
-        # 3. Split into chunks
-        # 4. Generate embeddings
-        # 5. Store in vector database
+        from app.core.database import async_session_factory
+        from app.services.document import DocumentService
 
-        await asyncio.sleep(0.1)  # Placeholder
+        async with async_session_factory() as db:
+            doc_service = DocumentService(db)
+            from sqlalchemy import select
+            from app.models.document import Document
 
-        return {
-            "status": "completed",
-            "document_id": document_id,
-            "chunks_processed": 0,
-        }
+            result = await db.execute(
+                select(Document).where(Document.id == document_id)
+            )
+            document = result.scalar_one_or_none()
+
+            if not document:
+                logger.warning("Document not found", document_id=document_id)
+                return {
+                    "status": "failed",
+                    "document_id": document_id,
+                    "error": "Document not found",
+                }
+
+            processed = await doc_service.process_document(document)
+            await db.commit()
+
+            return {
+                "status": "completed",
+                "document_id": document_id,
+                "chunks_processed": getattr(processed, "chunk_count", 0),
+            }
     except Exception as e:
         logger.error("Error processing document", document_id=document_id, error=str(e))
         return {
@@ -67,20 +78,20 @@ async def send_notification(
     """
     Send a notification to a user.
 
-    Args:
-        ctx: ARQ context
-        user_id: ID of the user to notify
-        notification_type: Type of notification (email, push, in-app)
-        data: Notification data
-
-    Returns:
-        Send result with status
+    Delegates to the chatbot notification service for Slack/Teams,
+    or logs in-app notifications for later retrieval.
     """
     logger.info("Sending notification", notification_type=notification_type, user_id=user_id)
 
     try:
-        # TODO: Implement notification logic based on type
-        await asyncio.sleep(0.1)  # Placeholder
+        from app.services.chatbot.service import ChatbotService
+
+        chatbot = ChatbotService()
+        await chatbot.send_notification(
+            channel=data.get("channel", ""),
+            message=data.get("message", ""),
+            platform=data.get("platform", "slack"),
+        )
 
         return {
             "status": "sent",
@@ -100,13 +111,30 @@ async def cleanup_expired_sessions(ctx: dict[str, Any]) -> dict[str, Any]:
     """
     Clean up expired user sessions.
 
-    This is a scheduled task that runs periodically.
+    Deletes sessions whose expiry timestamp has passed.
     """
     logger.info("Running expired session cleanup")
 
     try:
-        # TODO: Implement session cleanup logic
-        cleaned_count = 0
+        from app.core.database import async_session_factory
+        from sqlalchemy import delete, select, func
+        from app.models.session import Session
+        from datetime import datetime, timezone
+
+        async with async_session_factory() as db:
+            now = datetime.now(timezone.utc)
+
+            count_result = await db.execute(
+                select(func.count()).select_from(Session).where(Session.expires_at < now)
+            )
+            cleaned_count = count_result.scalar() or 0
+
+            if cleaned_count > 0:
+                await db.execute(
+                    delete(Session).where(Session.expires_at < now)
+                )
+                await db.commit()
+                logger.info("Cleaned expired sessions", count=cleaned_count)
 
         return {
             "status": "completed",
@@ -120,22 +148,39 @@ async def cleanup_expired_sessions(ctx: dict[str, Any]) -> dict[str, Any]:
         }
 
 
-async def generate_analytics_report(ctx: dict[str, Any], report_type: str) -> dict[str, Any]:
+async def generate_analytics_report(ctx: dict[str, Any], report_type: str = "daily") -> dict[str, Any]:
     """
     Generate analytics reports.
 
-    Args:
-        ctx: ARQ context
-        report_type: Type of report to generate (daily, weekly, monthly)
-
-    Returns:
-        Report generation result
+    Collects metrics and stores a summary report. The report_type
+    determines the period: daily, weekly, or monthly.
     """
     logger.info("Generating analytics report", report_type=report_type)
 
     try:
-        # TODO: Implement report generation logic
-        await asyncio.sleep(0.1)  # Placeholder
+        from app.core.database import async_session_factory
+        from app.services.metrics.business import business_metrics_service
+        from datetime import datetime, timedelta
+
+        granularity_map = {
+            "daily": timedelta(days=1),
+            "weekly": timedelta(weeks=1),
+            "monthly": timedelta(days=30),
+        }
+        delta = granularity_map.get(report_type, timedelta(days=1))
+        now = datetime.now()
+
+        async with async_session_factory() as db:
+            metrics = await business_metrics_service.calculate_metrics(
+                session=db,
+                tenant_id="system",
+                project_id=None,
+                period_start=now - delta,
+                period_end=now,
+            )
+
+        logger.info("Analytics report generated", report_type=report_type,
+                     els=metrics.engineering_leverage_score)
 
         return {
             "status": "completed",
@@ -221,7 +266,7 @@ async def send_trial_expiry_reminders(ctx: dict[str, Any]) -> dict[str, Any]:
             for org in expiring_orgs:
                 try:
                     logger.info(
-                        "Sending trial expiry reminder",
+                        "Trial expiry reminder pending — email delivery not yet configured",
                         org_id=str(org.id),
                         org_name=org.name,
                         days_remaining=org.trial_days_remaining,
@@ -252,20 +297,22 @@ async def send_trial_expiry_reminders(ctx: dict[str, Any]) -> dict[str, Any]:
 
 async def startup(ctx: dict[str, Any]) -> None:
     """Initialize worker on startup."""
-    logger.info("Worker starting up")
-    # TODO: Initialize any resources needed by tasks
-    # - Database connections
-    # - External API clients
-    # - etc.
+    from app.core.cache import cache
+    from app.core.database import init_db
+
+    await cache.initialize()
+    await init_db()
+    logger.info("Worker started")
 
 
 async def shutdown(ctx: dict[str, Any]) -> None:
     """Cleanup worker on shutdown."""
-    logger.info("Worker shutting down")
-    # TODO: Cleanup resources
-    # - Close database connections
-    # - Flush buffers
-    # - etc.
+    from app.core.cache import cache
+    from app.core.database import close_db
+
+    await close_db()
+    await cache.close()
+    logger.info("Worker shut down")
 
 
 # =============================================================================

@@ -246,10 +246,12 @@ class EventProcessorWorker(Worker):
                     event_type=event_data.get("event_type"),
                 )
 
-                # TODO: Implement actual processing
-                # - Extract entities
-                # - Update metrics
-                # - Trigger downstream processing
+                logger.warning(
+                    "Event processing not yet implemented — event acknowledged but not processed",
+                    event_id=event_id,
+                    source=event_data.get("source"),
+                    event_type=event_data.get("event_type"),
+                )
 
                 return ProcessingResult(
                     success=True,
@@ -300,10 +302,11 @@ class EntityProcessorWorker(Worker):
                     entity_type=entity_data.get("type"),
                 )
 
-                # TODO: Implement actual processing
-                # - Update knowledge graph
-                # - Update search index
-                # - Trigger notifications
+                logger.warning(
+                    "Entity processing not yet implemented — entity acknowledged but not processed",
+                    entity_id=entity_id,
+                    entity_type=entity_data.get("type"),
+                )
 
                 return ProcessingResult(
                     success=True,

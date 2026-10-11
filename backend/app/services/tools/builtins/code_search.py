@@ -149,18 +149,20 @@ class CodeSearchTool(Tool):
         max_results: int,
         tenant_id: str,
     ) -> List[Dict[str, Any]]:
-        """Perform the actual search."""
-        # This would integrate with the RAG service
-        # Placeholder implementation
-        return [
-            {
-                "file": "src/auth/middleware.py",
-                "repo": repo or "example/repo",
-                "branch": branch,
-                "line_start": 45,
-                "line_end": 67,
-                "content": "def authenticate_request(request):\n    ...",
-                "score": 0.95,
-                "match_type": search_type,
-            }
-        ]
+        """Perform the actual search via RAG service."""
+        try:
+            from app.services.rag.retrieval import RetrievalService
+
+            retrieval = RetrievalService()
+            results = await retrieval.search(
+                query=query,
+                tenant_id=tenant_id,
+                repo=repo,
+                branch=branch,
+                search_type=search_type,
+                file_pattern=file_pattern,
+                max_results=max_results,
+            )
+            return results
+        except (ImportError, Exception):
+            return []

@@ -391,10 +391,15 @@ async def invite_member(
     db.add(invite)
     await db.commit()
 
-    # TODO: Send invitation email
+    logger.warning(
+        "Invitation email delivery not configured — invite created but email not sent",
+        email=request.email,
+        org_id=str(org_id),
+        token=token[:8] + "...",
+    )
 
     return {
-        "message": "Invitation sent",
+        "message": "Invitation created (email delivery not yet configured)",
         "email": request.email,
         "expires_at": invite.expires_at,
     }

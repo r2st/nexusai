@@ -9,8 +9,11 @@ from enum import Enum
 from typing import Any
 from uuid import uuid4
 
+import structlog
 from pydantic import BaseModel
 from sqlalchemy import Column, DateTime, Enum as SQLEnum, ForeignKey, JSON, String, Text
+
+logger = structlog.get_logger()
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship
@@ -475,8 +478,20 @@ class BlueprintService:
         await session.commit()
         await session.refresh(pipeline_run)
 
-        # TODO: Trigger actual DevLake pipeline execution
-        # This would call the DevLake API to start the pipeline
+        try:
+            from app.services.devlake.client import DevLakeClient
+
+            client = DevLakeClient()
+            await client.trigger_pipeline(
+                pipeline_id=str(pipeline_run.id),
+                plan=blueprint.plan,
+            )
+        except (ImportError, Exception) as e:
+            logger.warning(
+                "DevLake pipeline trigger failed — run created but not started",
+                pipeline_id=str(pipeline_run.id),
+                error=str(e),
+            )
 
         return pipeline_run
 

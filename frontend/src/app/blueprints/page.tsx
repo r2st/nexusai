@@ -84,9 +84,6 @@ export default function BlueprintsPage() {
   const loadBlueprints = async () => {
     setIsLoading(true);
     try {
-      // TODO: Replace with actual API call
-      // const data = await blueprintsApi.list();
-      // For now, using mock data structure
       const response = await fetch('/api/v1/blueprints', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`,

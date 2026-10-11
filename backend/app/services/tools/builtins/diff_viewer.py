@@ -135,22 +135,30 @@ class DiffViewerTool(Tool):
         context_lines: int,
         tenant_id: str,
     ) -> Dict[str, Any]:
-        """Retrieve the diff."""
-        # Placeholder - would use GitHub/GitLab connector
-        return {
-            "repo": repo,
-            "pr_number": pr_number,
-            "commit_sha": commit_sha,
-            "files_changed": 5,
-            "additions": 120,
-            "deletions": 45,
-            "files": [
-                {
-                    "path": "src/api/users.py",
-                    "status": "modified",
-                    "additions": 30,
-                    "deletions": 10,
-                    "patch": "@@ -1,5 +1,8 @@\n...",
-                }
-            ],
-        }
+        """Retrieve the diff via the appropriate VCS connector."""
+        try:
+            from app.services.connectors.github import GitHubConnector
+
+            connector = GitHubConnector(tenant_id=tenant_id)
+            if pr_number:
+                return await connector.get_pr_diff(
+                    repo=repo,
+                    pr_number=pr_number,
+                    file_path=file_path,
+                    context_lines=context_lines,
+                )
+            elif commit_sha:
+                return await connector.get_commit_diff(
+                    repo=repo,
+                    commit_sha=commit_sha,
+                    file_path=file_path,
+                    context_lines=context_lines,
+                )
+            else:
+                return {"error": "Either pr_number or commit_sha is required", "files": []}
+        except (ImportError, Exception) as e:
+            return {
+                "repo": repo,
+                "error": f"VCS connector unavailable: {e}",
+                "files": [],
+            }

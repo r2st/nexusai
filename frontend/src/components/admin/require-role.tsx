@@ -79,11 +79,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const hasPermission = (permission: string | string[]): boolean => {
     if (!user) return false;
-    // In a real implementation, this would check against user's permissions
-    // For now, admins have all permissions
     if (user.role === 'admin' || user.role === 'superadmin') return true;
-    // TODO: Implement permission checking from user metadata or API
-    return false;
+    const permissions = Array.isArray(permission) ? permission : [permission];
+    const userPermissions: string[] = (user as Record<string, unknown>).permissions as string[] || [];
+    return permissions.every(p => userPermissions.includes(p));
   };
 
   return (

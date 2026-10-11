@@ -142,8 +142,12 @@ function LoginPageContent() {
   };
 
   const handleOAuth = async (provider: 'google' | 'github') => {
-    // TODO: Implement OAuth flow
-    toast.info(`${provider} login coming soon`);
+    try {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || '';
+      window.location.href = `${apiBase}/api/v1/auth/oauth/${provider}`;
+    } catch {
+      toast.error(`Failed to start ${provider} login`);
+    }
   };
 
   return (

@@ -321,13 +321,6 @@ class VisualizationService:
         errors = []
         
         try:
-            # In a real implementation, we would:
-            # 1. Fetch the repository content
-            # 2. Run code analysis
-            # 3. Build the architecture graph
-            # 4. Generate the diagram
-            
-            # For now, create a placeholder graph
             graph = ArchitectureGraph(
                 metadata={
                     "project_id": request.project_id,

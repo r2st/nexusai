@@ -314,7 +314,13 @@ async def clear_cache(
     current_user: Annotated[User, Depends(get_current_user)],
 ) -> dict[str, str]:
     """Clear cache for current user."""
-    # TODO: Implement when semantic cache is integrated
+    try:
+        await gateway.clear_cache(user_id=str(current_user.id))
+    except AttributeError:
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail="Semantic cache is not configured",
+        )
     return {"status": "ok", "message": "Cache cleared"}
 
 

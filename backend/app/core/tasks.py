@@ -549,8 +549,15 @@ async def bulk_import_task(
     file_path: str,
 ) -> dict:
     """Bulk import data from file."""
-    # Placeholder for bulk import logic
-    return {"status": "completed", "import_type": import_type}
+    logger.warning(
+        "Bulk import not yet implemented",
+        tenant_id=tenant_id,
+        import_type=import_type,
+        file_path=file_path,
+    )
+    raise NotImplementedError(
+        f"Bulk import for type '{import_type}' is not yet implemented"
+    )
 
 
 # ============= Worker Configuration =============

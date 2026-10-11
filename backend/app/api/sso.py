@@ -2,13 +2,16 @@
 SSO API Endpoints
 
 REST endpoints for Single Sign-On authentication.
+
+NOTE: SSO is not yet integrated with a real identity provider backend.
+All endpoints that require a configured SSOService will return 501 until
+the service is wired up.  The URL-validation and redirect-safety logic is
+production-ready and tested so it can be kept as-is once the service exists.
 """
 
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
-from fastapi.responses import RedirectResponse
-from pydantic import BaseModel, Field, field_validator
-from urllib.parse import urlparse as _urlparse
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from pydantic import BaseModel, Field
 import structlog
 
 from app.api.deps import get_current_admin_user
@@ -17,6 +20,15 @@ from app.models.user import User
 logger = structlog.get_logger()
 
 router = APIRouter(prefix="/sso", tags=["SSO"])
+
+_SSO_NOT_CONFIGURED = "SSO is not configured. Contact your administrator to enable SSO."
+
+
+def _raise_not_configured() -> None:
+    raise HTTPException(
+        status_code=status.HTTP_501_NOT_IMPLEMENTED,
+        detail=_SSO_NOT_CONFIGURED,
+    )
 
 
 # Request/Response Models
@@ -28,7 +40,7 @@ class ProviderResponse(BaseModel):
     display_name: str
     type: str
     status: str
-    
+
     class Config:
         from_attributes = True
 
@@ -81,45 +93,16 @@ async def list_providers(
 ):
     """
     List available SSO providers.
-    
+
     Returns all active SSO providers configured for the tenant.
     """
-    # In production, inject SSOService
-    # sso_service = get_sso_service()
-    # providers = sso_service.list_providers(tenant_id)
-    
-    # Mock response
-    return [
-        ProviderResponse(
-            id="google-workspace",
-            name="google",
-            display_name="Google Workspace",
-            type="oidc",
-            status="active",
-        ),
-        ProviderResponse(
-            id="azure-ad",
-            name="microsoft",
-            display_name="Microsoft Entra ID",
-            type="oidc",
-            status="active",
-        ),
-    ]
+    _raise_not_configured()
 
 
 @router.get("/providers/{provider_id}", response_model=ProviderResponse)
 async def get_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)):
     """Get SSO provider details."""
-    # sso_service = get_sso_service()
-    # provider = sso_service.get_provider(provider_id)
-    
-    return ProviderResponse(
-        id=provider_id,
-        name="google",
-        display_name="Google Workspace",
-        type="oidc",
-        status="active",
-    )
+    _raise_not_configured()
 
 
 @router.post("/providers", response_model=ProviderResponse, status_code=status.HTTP_201_CREATED)
@@ -129,25 +112,13 @@ async def create_provider(request: ProviderCreateRequest, _current_user: User = 
 
     Requires admin permissions.
     """
-    # sso_service = get_sso_service()
-    # provider = await sso_service.create_provider(request)
-    
-    return ProviderResponse(
-        id="new-provider-id",
-        name=request.name,
-        display_name=request.display_name,
-        type=request.type,
-        status="pending",
-    )
+    _raise_not_configured()
 
 
 @router.delete("/providers/{provider_id}", status_code=204)
 async def delete_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)):
     """Delete an SSO provider."""
-    # sso_service = get_sso_service()
-    # await sso_service.delete_provider(provider_id)
-
-    return Response(status_code=204)
+    _raise_not_configured()
 
 
 @router.get("/auth/{provider_id}")
@@ -158,36 +129,10 @@ async def start_authentication(
 ):
     """
     Start SSO authentication flow.
-    
+
     Redirects user to the identity provider's login page.
     """
-    # sso_service = get_sso_service()
-    # auth_url = await sso_service.start_authentication(
-    #     provider_id, redirect_uri, tenant_id
-    # )
-    
-    parsed = _urlparse(redirect_uri)
-    if parsed.scheme not in ("http", "https") or not parsed.netloc:
-        raise HTTPException(status_code=400, detail="Invalid redirect_uri")
-
-    from app.core.config import settings
-    allowed_origins = settings.CORS_ORIGINS
-    origin = f"{parsed.scheme}://{parsed.netloc}"
-    if allowed_origins and origin not in allowed_origins:
-        raise HTTPException(status_code=400, detail="redirect_uri not in allowed origins")
-
-    # For now, return mock URL
-    from urllib.parse import urlencode as _urlencode
-    params = _urlencode({
-        "response_type": "code",
-        "client_id": "xxx",
-        "redirect_uri": redirect_uri,
-        "scope": "openid email profile",
-        "state": "mock_state",
-    })
-    auth_url = f"https://accounts.google.com/o/oauth2/auth?{params}"
-
-    return RedirectResponse(url=auth_url)
+    _raise_not_configured()
 
 
 @router.get("/auth/{provider_id}/url", response_model=AuthStartResponse)
@@ -201,19 +146,7 @@ async def get_authorization_url(
 
     Useful for SPAs that handle redirect themselves.
     """
-    from app.core.config import settings
-
-    parsed = _urlparse(redirect_uri)
-    if parsed.scheme not in ("http", "https") or not parsed.netloc:
-        raise HTTPException(status_code=400, detail="Invalid redirect_uri")
-    origin = f"{parsed.scheme}://{parsed.netloc}"
-    if settings.CORS_ORIGINS and origin not in settings.CORS_ORIGINS:
-        raise HTTPException(status_code=400, detail="redirect_uri not in allowed origins")
-
-    return AuthStartResponse(
-        authorization_url=f"https://accounts.google.com/o/oauth2/auth?...",
-        state="mock_state",
-    )
+    _raise_not_configured()
 
 
 @router.get("/callback/oidc")
@@ -225,7 +158,7 @@ async def oidc_callback(
 ):
     """
     Handle OIDC callback from identity provider.
-    
+
     Exchanges authorization code for tokens.
     """
     if error:
@@ -234,17 +167,8 @@ async def oidc_callback(
             status_code=400,
             detail="Authentication failed. Please try again.",
         )
-    
-    # sso_service = get_sso_service()
-    # user, session = await sso_service.handle_oidc_callback(code, state)
-    
-    # In production, set session cookie and redirect
-    # return RedirectResponse(url="/dashboard")
-    
-    return {
-        "status": "authenticated",
-        "message": "OIDC callback processed successfully",
-    }
+
+    _raise_not_configured()
 
 
 @router.post("/callback/saml")
@@ -253,57 +177,31 @@ async def saml_callback(
 ):
     """
     Handle SAML callback (ACS endpoint).
-    
+
     Processes SAML response and assertion.
     """
     form_data = await request.form()
     saml_response = form_data.get("SAMLResponse")
-    relay_state = form_data.get("RelayState")
-    
+
     if not saml_response:
         raise HTTPException(status_code=400, detail="Missing SAMLResponse")
-    
-    # sso_service = get_sso_service()
-    # user, session = await sso_service.handle_saml_callback(
-    #     saml_response, relay_state
-    # )
-    
-    return {
-        "status": "authenticated",
-        "message": "SAML callback processed successfully",
-    }
+
+    _raise_not_configured()
 
 
 @router.get("/saml/{provider_id}/metadata")
 async def get_sp_metadata(provider_id: str):
     """
     Get SP metadata for SAML configuration.
-    
+
     Returns XML metadata for configuring the identity provider.
     """
-    # sso_service = get_sso_service()
-    # metadata = sso_service.get_sp_metadata(provider_id)
-    
-    metadata = """<?xml version="1.0" encoding="UTF-8"?>
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://nexusai.example.com/saml/metadata">
-    <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-        <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://nexusai.example.com/api/sso/callback/saml" index="0"/>
-    </md:SPSSODescriptor>
-</md:EntityDescriptor>"""
-    
-    return Response(content=metadata, media_type="application/xml")
-
-
-class SSORefreshRequest(BaseModel):
-    """SSO token refresh request — token in body, not query string."""
-
-    refresh_token: str
-    session_id: Optional[str] = None
+    _raise_not_configured()
 
 
 @router.post("/token/refresh", response_model=TokenResponse)
 async def refresh_token(
-    request: SSORefreshRequest,
+    request: "SSORefreshRequest",
     _current_user: User = Depends(get_current_admin_user),
 ):
     """
@@ -311,13 +209,7 @@ async def refresh_token(
 
     Uses refresh token to obtain new access token.
     """
-    return TokenResponse(
-        access_token="new_access_token",
-        token_type="Bearer",
-        expires_in=3600,
-        refresh_token="new_refresh_token",
-        user={"id": "user-123", "email": "user@example.com"},
-    )
+    _raise_not_configured()
 
 
 @router.get("/session", response_model=SessionResponse)
@@ -326,13 +218,7 @@ async def get_session(
     _current_user: User = Depends(get_current_admin_user),
 ):
     """Get current session information."""
-    return SessionResponse(
-        session_id=session_id,
-        user_id="user-123",
-        provider_id="google-workspace",
-        expires_at="2026-01-20T12:00:00Z",
-        is_active=True,
-    )
+    _raise_not_configured()
 
 
 @router.post("/logout")
@@ -346,40 +232,21 @@ async def logout(
 
     Terminates session and optionally redirects to IdP logout.
     """
-    if post_logout_uri.startswith("/") and not post_logout_uri.startswith("//"):
-        safe_uri = post_logout_uri
-    else:
-        from app.core.config import settings
-        parsed = _urlparse(post_logout_uri)
-        origin = f"{parsed.scheme}://{parsed.netloc}"
-        if parsed.scheme not in ("http", "https") or origin not in (settings.CORS_ORIGINS or []):
-            safe_uri = "/"
-        else:
-            safe_uri = post_logout_uri
-
-    return {"status": "logged_out", "redirect_uri": safe_uri}
+    _raise_not_configured()
 
 
 @router.get("/well-known/openid-configuration")
 async def openid_configuration():
     """
     OpenID Connect discovery document.
-    
+
     Returns configuration for OIDC clients.
     """
-    base_url = "https://nexusai.example.com"
-    
-    return {
-        "issuer": base_url,
-        "authorization_endpoint": f"{base_url}/api/sso/auth",
-        "token_endpoint": f"{base_url}/api/sso/token",
-        "userinfo_endpoint": f"{base_url}/api/sso/userinfo",
-        "jwks_uri": f"{base_url}/.well-known/jwks.json",
-        "end_session_endpoint": f"{base_url}/api/sso/logout",
-        "response_types_supported": ["code"],
-        "grant_types_supported": ["authorization_code", "refresh_token"],
-        "subject_types_supported": ["public"],
-        "id_token_signing_alg_values_supported": ["RS256"],
-        "scopes_supported": ["openid", "profile", "email"],
-        "token_endpoint_auth_methods_supported": ["client_secret_basic", "client_secret_post"],
-    }
+    _raise_not_configured()
+
+
+class SSORefreshRequest(BaseModel):
+    """SSO token refresh request — token in body, not query string."""
+
+    refresh_token: str
+    session_id: Optional[str] = None

@@ -281,11 +281,21 @@ class ConsentManager {
   }
 
   /**
-   * Get consent history (client-side only - returns empty for now)
+   * Get consent history from the backend API.
+   * Returns empty array if the endpoint is unavailable.
    */
   async getConsentHistory(): Promise<ConsentRecord[]> {
-    // TODO: Implement backend API for consent history
-    return [];
+    try {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || '';
+      const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+      const res = await fetch(`${apiBase}/api/v1/compliance/consent/history`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!res.ok) return [];
+      return await res.json();
+    } catch {
+      return [];
+    }
   }
 }
 
