@@ -91,23 +91,12 @@ class EncryptionAuditor:
             finding = await self._check_storage_encryption(location_id, config)
             findings.append(finding)
 
-        # If no configs registered, add default checks
         if not self._storage_configs:
-            # Check common storage patterns
-            default_checks = [
-                {"id": "database", "type": "postgresql", "encryption": "aes-256-gcm", "enabled": True},
-                {"id": "file_storage", "type": "s3", "encryption": "aes-256-gcm", "enabled": True},
-                {"id": "redis_cache", "type": "redis", "encryption": "tls", "enabled": True},
-            ]
-            for check in default_checks:
-                findings.append({
-                    "location": check["id"],
-                    "type": check["type"],
-                    "encryption_enabled": check["enabled"],
-                    "algorithm": check["encryption"],
-                    "compliant": check["encryption"] in APPROVED_ALGORITHMS or check["encryption"] == "tls",
-                    "status": "assumed_compliant" if check["enabled"] else "needs_verification",
-                })
+            result.data_at_rest_status = EncryptionStatus.UNKNOWN
+            result.data_at_rest_findings = []
+            result.storage_locations_audited = 0
+            result.storage_locations_compliant = 0
+            return
 
         result.data_at_rest_findings = findings
         result.storage_locations_audited = len(findings)
@@ -130,24 +119,12 @@ class EncryptionAuditor:
             finding = await self._check_endpoint_encryption(endpoint_id, config)
             findings.append(finding)
 
-        # If no configs registered, add default checks
         if not self._endpoint_configs:
-            default_checks = [
-                {"id": "api_gateway", "protocol": "https", "tls_version": "1.3", "cipher_suite": "aes-256-gcm"},
-                {"id": "internal_services", "protocol": "https", "tls_version": "1.2", "cipher_suite": "aes-256-gcm"},
-                {"id": "database_connection", "protocol": "tls", "tls_version": "1.2", "cipher_suite": "aes-256-cbc"},
-            ]
-            for check in default_checks:
-                tls_compliant = check["tls_version"] in ("1.2", "1.3")
-                cipher_compliant = check["cipher_suite"] in APPROVED_ALGORITHMS
-                findings.append({
-                    "endpoint": check["id"],
-                    "protocol": check["protocol"],
-                    "tls_version": check["tls_version"],
-                    "cipher_suite": check["cipher_suite"],
-                    "compliant": tls_compliant and cipher_compliant,
-                    "issues": [] if (tls_compliant and cipher_compliant) else ["Verify TLS configuration"],
-                })
+            result.data_in_transit_status = EncryptionStatus.UNKNOWN
+            result.data_in_transit_findings = []
+            result.endpoints_audited = 0
+            result.endpoints_compliant = 0
+            return
 
         result.data_in_transit_findings = findings
         result.endpoints_audited = len(findings)

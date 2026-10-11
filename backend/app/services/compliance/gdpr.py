@@ -451,12 +451,15 @@ class GDPRService:
 
         avg_completion_days = 0.0
         if completed_dsrs:
-            total_days = sum(
-                (d.processed_at - d.created_at).days
-                for d in completed_dsrs
-                if d.processed_at
-            )
-            avg_completion_days = total_days / len(completed_dsrs)
+            dsrs_with_dates = [
+                d for d in completed_dsrs if d.processed_at
+            ]
+            if dsrs_with_dates:
+                total_days = sum(
+                    (d.processed_at - d.created_at).days
+                    for d in dsrs_with_dates
+                )
+                avg_completion_days = round(total_days / len(dsrs_with_dates), 2)
 
         # Count users with consent
         users_with_consent = len([

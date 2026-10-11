@@ -529,7 +529,10 @@ class SOC2Service:
         partially = len([c for c in controls if c.status == SOC2ControlStatus.PARTIALLY_IMPLEMENTED])
         not_implemented = len([c for c in controls if c.status == SOC2ControlStatus.NOT_IMPLEMENTED])
 
-        implementation_rate = (implemented / len(controls) * 100) if controls else 0.0
+        implementation_rate = round(
+            ((implemented + partially * 0.5) / len(controls) * 100) if controls else 0.0,
+            2,
+        )
 
         # Category status
         def get_category_status(cat: SOC2ControlCategory) -> ComplianceStatus:

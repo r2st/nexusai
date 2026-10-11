@@ -2,7 +2,7 @@
 
 import logging
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 from app.services.compliance.hipaa.models import (
@@ -306,13 +306,12 @@ class HIPAAService:
         if not justification:
             return None
 
+        now = datetime.utcnow()
         justification.approved = True
         justification.approved_by = approved_by
-        justification.approved_at = datetime.utcnow()
-        justification.valid_from = datetime.utcnow()
-        justification.valid_until = datetime.utcnow().replace(
-            hour=datetime.utcnow().hour + valid_hours
-        )
+        justification.approved_at = now
+        justification.valid_from = now
+        justification.valid_until = now + timedelta(hours=valid_hours)
         justification.max_access_count = max_access_count
 
         await self._log_action(
@@ -421,7 +420,7 @@ class HIPAAService:
             (1 if report.active_baas > 0 or report.total_baas == 0 else 0) * 10 +
             (1 if report.access_policies_count > 0 else 0) * 10
         )
-        report.compliance_score = compliance_score
+        report.compliance_score = round(compliance_score, 2)
         report.overall_compliant = compliance_score >= 80
 
         # Generate findings and recommendations
