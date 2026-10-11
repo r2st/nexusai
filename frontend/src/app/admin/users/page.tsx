@@ -286,11 +286,12 @@ function AdminUsersContent() {
           <button
             onClick={fetchUsers}
             className="inline-flex items-center gap-2 px-3 py-2 border rounded-lg hover:bg-muted transition-colors"
+            aria-label="Refresh users"
           >
-            <RefreshCw className={cn('h-4 w-4', isLoading && 'animate-spin')} />
+            <RefreshCw className={cn('h-4 w-4', isLoading && 'animate-spin')} aria-hidden="true" />
           </button>
           <button className="inline-flex items-center gap-2 px-3 py-2 border rounded-lg hover:bg-muted transition-colors">
-            <Download className="h-4 w-4" />
+            <Download className="h-4 w-4" aria-hidden="true" />
             Export
           </button>
           <Link
@@ -306,13 +307,14 @@ function AdminUsersContent() {
       {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
           <input
             type="text"
             placeholder="Search by name, email, or username..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+            aria-label="Search users"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -321,6 +323,7 @@ function AdminUsersContent() {
             value={filter}
             onChange={(e) => setFilter(e.target.value as UserFilter)}
             className="px-3 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+            aria-label="Filter users"
           >
             {filterOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -353,6 +356,7 @@ function AdminUsersContent() {
                     checked={selectedUsers.size === users.length && users.length > 0}
                     onChange={handleSelectAll}
                     className="rounded border-gray-300"
+                    aria-label="Select all users"
                   />
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-medium">User</th>
@@ -389,6 +393,7 @@ function AdminUsersContent() {
                         checked={selectedUsers.has(user.id)}
                         onChange={() => handleSelectUser(user.id)}
                         className="rounded border-gray-300"
+                        aria-label={`Select ${user.full_name || user.username || user.email}`}
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -465,8 +470,9 @@ function AdminUsersContent() {
                             setIsActionMenuOpen(isActionMenuOpen === user.id ? null : user.id)
                           }
                           className="p-1 hover:bg-muted rounded transition-colors"
+                          aria-label={`Actions for ${user.full_name || user.username || user.email}`}
                         >
-                          <MoreVertical className="h-4 w-4" />
+                          <MoreVertical className="h-4 w-4" aria-hidden="true" />
                         </button>
                         {isActionMenuOpen === user.id && (
                           <>
@@ -540,8 +546,9 @@ function AdminUsersContent() {
                 onClick={() => setPagination((p) => ({ ...p, page: p.page - 1 }))}
                 disabled={pagination.page === 1}
                 className="p-2 border rounded hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Previous page"
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
               </button>
               <span className="text-sm">
                 Page {pagination.page} of {pagination.totalPages}
@@ -550,8 +557,9 @@ function AdminUsersContent() {
                 onClick={() => setPagination((p) => ({ ...p, page: p.page + 1 }))}
                 disabled={pagination.page === pagination.totalPages}
                 className="p-2 border rounded hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Next page"
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -560,13 +568,14 @@ function AdminUsersContent() {
 
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && userToDelete && (
-        <>
+        <div role="dialog" aria-modal="true" aria-labelledby="delete-user-title">
           <div
             className="fixed inset-0 bg-black/50 z-40"
             onClick={() => setIsDeleteModalOpen(false)}
+            aria-hidden="true"
           />
           <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md bg-background rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-semibold mb-2">Delete User</h3>
+            <h3 id="delete-user-title" className="text-lg font-semibold mb-2">Delete User</h3>
             <p className="text-muted-foreground mb-4">
               Are you sure you want to delete{' '}
               <strong>{userToDelete.full_name || userToDelete.username}</strong>? This action cannot
@@ -587,7 +596,7 @@ function AdminUsersContent() {
               </button>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

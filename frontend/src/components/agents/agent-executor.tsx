@@ -67,9 +67,14 @@ export function AgentExecutor({ agent, onClose }: AgentExecutorProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="agent-executor-title"
+    >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
 
       {/* Modal */}
       <div className="relative z-10 w-full max-w-3xl h-[80vh] flex flex-col rounded-lg bg-background shadow-lg">
@@ -77,17 +82,17 @@ export function AgentExecutor({ agent, onClose }: AgentExecutorProps) {
         <div className="flex items-center justify-between p-4 border-b">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Bot className="h-5 w-5 text-primary" />
+              <Bot className="h-5 w-5 text-primary" aria-hidden="true" />
             </div>
             <div>
-              <h2 className="font-semibold">{agent.name}</h2>
+              <h2 id="agent-executor-title" className="font-semibold">{agent.name}</h2>
               <p className="text-xs text-muted-foreground">
                 {agent.model_provider} / {agent.model_name}
               </p>
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-4 w-4" />
+          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close">
+            <X className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
 
