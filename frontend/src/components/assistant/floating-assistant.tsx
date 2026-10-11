@@ -305,13 +305,15 @@ export function FloatingAssistant({
           )}
           aria-label="Open AI Assistant"
         >
-          <MessageSquare className="h-6 w-6" />
+          <MessageSquare className="h-6 w-6" aria-hidden="true" />
         </button>
       )}
 
       {/* Chat Panel */}
       {isOpen && (
         <div
+          role="dialog"
+          aria-label={config.title}
           className={cn(
             'fixed z-50 flex flex-col bg-background border rounded-lg shadow-xl',
             'transition-all duration-200',
@@ -322,7 +324,7 @@ export function FloatingAssistant({
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/30 rounded-t-lg">
             <div className="flex items-center gap-2">
-              <Icon className="h-5 w-5 text-primary" />
+              <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
               <span className="font-medium text-sm">{config.title}</span>
             </div>
             <div className="flex items-center gap-1">
@@ -331,20 +333,21 @@ export function FloatingAssistant({
                 size="icon"
                 className="h-7 w-7"
                 onClick={handleReset}
-                title="Reset conversation"
+                aria-label="Reset conversation"
               >
-                <RotateCcw className="h-4 w-4" />
+                <RotateCcw className="h-4 w-4" aria-hidden="true" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-7 w-7"
                 onClick={() => setIsMinimized(!isMinimized)}
+                aria-label={isMinimized ? 'Expand assistant' : 'Minimize assistant'}
               >
                 {isMinimized ? (
-                  <Maximize2 className="h-4 w-4" />
+                  <Maximize2 className="h-4 w-4" aria-hidden="true" />
                 ) : (
-                  <Minimize2 className="h-4 w-4" />
+                  <Minimize2 className="h-4 w-4" aria-hidden="true" />
                 )}
               </Button>
               <Button
@@ -352,8 +355,9 @@ export function FloatingAssistant({
                 size="icon"
                 className="h-7 w-7"
                 onClick={() => setIsOpen(false)}
+                aria-label="Close assistant"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           </div>
@@ -385,8 +389,8 @@ export function FloatingAssistant({
 
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-muted rounded-lg px-3 py-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div className="bg-muted rounded-lg px-3 py-2" role="status" aria-label="Loading response">
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                     </div>
                   </div>
                 )}
@@ -435,8 +439,9 @@ export function FloatingAssistant({
                     className="h-9 w-9"
                     onClick={() => handleSend()}
                     disabled={!inputValue.trim() || isLoading}
+                    aria-label="Send message"
                   >
-                    <Send className="h-4 w-4" />
+                    <Send className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </div>
                 <p className="text-[10px] text-muted-foreground mt-1.5 text-center">

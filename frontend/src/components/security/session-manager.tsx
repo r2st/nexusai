@@ -242,14 +242,14 @@ function SessionWarningModal({ timeRemaining, onExtend, onLogout }: SessionWarni
   const seconds = Math.floor((timeRemaining % 60000) / 1000);
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
+    <div role="alertdialog" aria-modal="true" aria-labelledby="session-warning-title" className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
       <div className="bg-background rounded-lg border shadow-lg w-full max-w-md p-6 mx-4">
         <div className="flex items-center gap-4 mb-4">
           <div className="h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
-            <Clock className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+            <Clock className="h-6 w-6 text-yellow-600 dark:text-yellow-400" aria-hidden="true" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold">Session Expiring</h2>
+            <h2 id="session-warning-title" className="text-lg font-semibold">Session Expiring</h2>
             <p className="text-sm text-muted-foreground">
               Your session will expire due to inactivity
             </p>
@@ -257,7 +257,7 @@ function SessionWarningModal({ timeRemaining, onExtend, onLogout }: SessionWarni
         </div>
 
         <div className="text-center py-6">
-          <div className="text-4xl font-mono font-bold text-yellow-600 dark:text-yellow-400">
+          <div role="timer" aria-live="polite" className="text-4xl font-mono font-bold text-yellow-600 dark:text-yellow-400">
             {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
           </div>
           <p className="text-sm text-muted-foreground mt-2">
@@ -267,7 +267,7 @@ function SessionWarningModal({ timeRemaining, onExtend, onLogout }: SessionWarni
 
         <div className="flex gap-3">
           <Button onClick={onExtend} className="flex-1">
-            <RefreshCw className="mr-2 h-4 w-4" />
+            <RefreshCw className="mr-2 h-4 w-4" aria-hidden="true" />
             Stay Logged In
           </Button>
           <Button variant="outline" onClick={onLogout}>

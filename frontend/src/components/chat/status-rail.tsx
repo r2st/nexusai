@@ -19,7 +19,7 @@ export function StatusRail({ status, detail }: StatusRailProps) {
   const config = STATUS_MAP[status];
 
   return (
-    <div className="mx-auto mt-3 flex max-w-3xl items-center justify-between rounded-full border border-border bg-muted/40 px-3 py-1 text-xs">
+    <div role="status" aria-live="polite" className="mx-auto mt-3 flex max-w-3xl items-center justify-between rounded-full border border-border bg-muted/40 px-3 py-1 text-xs">
       <div className={cn('font-medium', config.tone)}>{config.label}</div>
       {detail && <div className="text-muted-foreground">{detail}</div>}
     </div>

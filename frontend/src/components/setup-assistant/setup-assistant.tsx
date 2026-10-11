@@ -167,9 +167,9 @@ export function SetupAssistant({
               onClick={handleGoBack}
               disabled={isLoading}
               className="p-1 hover:bg-muted rounded-md transition-colors disabled:opacity-50"
-              title="Go back"
+              aria-label="Go back"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="h-5 w-5" aria-hidden="true" />
             </button>
           )}
           <div className="flex items-center gap-2">
@@ -190,9 +190,9 @@ export function SetupAssistant({
           <button
             onClick={onClose}
             className="p-1 hover:bg-muted rounded-md transition-colors"
-            title="Close"
+            aria-label="Close setup assistant"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         )}
       </div>
@@ -207,7 +207,7 @@ export function SetupAssistant({
             </span>
             <span>{Math.round(messages[messages.length - 1].progress_percent || 0)}%</span>
           </div>
-          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+          <div className="h-1.5 bg-muted rounded-full overflow-hidden" role="progressbar" aria-valuenow={Math.round(messages[messages.length - 1].progress_percent || 0)} aria-valuemin={0} aria-valuemax={100} aria-label="Setup progress">
             <div
               className="h-full bg-primary transition-all duration-300 ease-out rounded-full"
               style={{ width: `${messages[messages.length - 1].progress_percent || 0}%` }}
@@ -246,7 +246,7 @@ export function SetupAssistant({
 
       {/* Error message */}
       {error && (
-        <div className="px-4 py-2 bg-destructive/10 border-t border-destructive/20">
+        <div role="alert" className="px-4 py-2 bg-destructive/10 border-t border-destructive/20">
           <p className="text-sm text-destructive">{error}</p>
         </div>
       )}
@@ -268,8 +268,9 @@ export function SetupAssistant({
               type="submit"
               disabled={!inputValue.trim() || isLoading}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              aria-label="Send message"
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
         </form>

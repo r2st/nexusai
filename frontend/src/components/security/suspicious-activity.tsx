@@ -283,16 +283,16 @@ function CriticalAlertModal({ alert, onDismiss, onVerify }: CriticalAlertModalPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
+    <div role="alertdialog" aria-modal="true" aria-labelledby="critical-alert-title" className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
       <div className="bg-background rounded-lg border border-red-200 dark:border-red-800 shadow-lg w-full max-w-lg p-6 mx-4">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
-          <div className="h-14 w-14 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400">
+          <div className="h-14 w-14 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400" aria-hidden="true">
             {getAlertIcon()}
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-semibold">Security Alert</h2>
+              <h2 id="critical-alert-title" className="text-xl font-semibold">Security Alert</h2>
               <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
                 Critical
               </span>
@@ -456,8 +456,8 @@ export function ActivityAlertCard({
             </Button>
           </div>
         </div>
-        <Button variant="ghost" size="icon" className="shrink-0" onClick={onDismiss}>
-          <X className="h-4 w-4" />
+        <Button variant="ghost" size="icon" className="shrink-0" onClick={onDismiss} aria-label="Dismiss alert">
+          <X className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
     </div>

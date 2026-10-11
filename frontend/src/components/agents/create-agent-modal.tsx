@@ -95,20 +95,21 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
       <div
         className="absolute inset-0 bg-black/50"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Modal */}
-      <div className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-auto rounded-lg bg-background p-6 shadow-lg">
+      <div role="dialog" aria-modal="true" aria-labelledby="create-agent-title" className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-auto rounded-lg bg-background p-6 shadow-lg">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Bot className="h-5 w-5 text-primary" />
+              <Bot className="h-5 w-5 text-primary" aria-hidden="true" />
             </div>
-            <h2 className="text-xl font-semibold">Create New Agent</h2>
+            <h2 id="create-agent-title" className="text-xl font-semibold">Create New Agent</h2>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-4 w-4" />
+          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close">
+            <X className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
 
@@ -228,6 +229,7 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
                   key={cap}
                   type="button"
                   onClick={() => toggleCapability(cap)}
+                  aria-pressed={formData.capabilities.includes(cap)}
                   className={`px-3 py-1 rounded-full text-sm transition-colors ${
                     formData.capabilities.includes(cap)
                       ? 'bg-primary text-primary-foreground'
@@ -258,7 +260,7 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
 
           {/* Error */}
           {error && (
-            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+            <div role="alert" className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
               {error}
             </div>
           )}
@@ -271,7 +273,7 @@ export function CreateAgentModal({ onClose, onCreate }: CreateAgentModalProps) {
             <Button type="submit" disabled={isSubmitting || !formData.name}>
               {isSubmitting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
                   Creating...
                 </>
               ) : (
