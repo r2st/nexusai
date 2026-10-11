@@ -4,7 +4,7 @@ uvicorn[standard]>=0.32.0
 python-multipart>=0.0.20
 pyjwt[crypto]>=2.10.0
 passlib[bcrypt]>=1.7.4
-bcrypt>=4.2.0,<5.0.0  # passlib compat: 4.1.0 was yanked, 4.1.1 fixed it, 5.0 breaks it
+bcrypt>=4.2.0,<5.0.0  # passlib 1.7.4 compat: bcrypt 5.0 removed __about__ + changed API, breaks passlib
 
 # Database
 sqlalchemy[asyncio]>=2.0.35
@@ -19,14 +19,16 @@ hiredis>=3.0.0
 arq>=0.26.0
 
 # AI/ML - Core
-langchain>=0.3.15
+# SECURITY: langchain 0.3.x has unfixed CVEs (PYSEC-2026-2192, path traversal).
+# Fixes require langchain 1.x upgrade — see docs/DEPENDENCY_AUDIT.md.
+langchain>=0.3.15,<1.0.0
 nemoguardrails>=0.11.0
-langchain-openai>=0.3.0
-langchain-anthropic>=0.3.8
+langchain-openai>=0.3.0,<1.0.0  # CVE-2026-41488 (SSRF) fix requires 1.x
+langchain-anthropic>=0.3.8,<1.0.0  # CVE-2026-55443 (path traversal) fix requires 1.x
 langchain-google-genai>=2.0.4
 google-generativeai>=0.8.0  # Native Google Gemini SDK
-langchain-community>=0.3.15
-langchain-text-splitters>=0.3.6
+langchain-community>=0.3.15,<1.0.0
+langchain-text-splitters>=0.3.6,<1.0.0  # CVE-2026-41481 (SSRF) fix requires 1.x
 langserve>=0.2.0
 openai>=1.59.0,<2.0.0  # Pinned to 1.x: langchain-openai 0.3.x requires openai<2
 anthropic>=0.102.0,<1.0.0  # Pinned to 0.x: langchain-anthropic 0.3.x requires anthropic<1
