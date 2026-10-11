@@ -302,6 +302,7 @@ export default function PricingPage() {
                   onClick={() =>
                     setExpandedFaq(expandedFaq === index ? null : index)
                   }
+                  aria-expanded={expandedFaq === index}
                 >
                   <span className="font-medium">{faq.question}</span>
                   <HelpCircle

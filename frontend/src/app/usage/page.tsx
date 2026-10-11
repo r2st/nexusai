@@ -286,7 +286,13 @@ export default function UsagePage() {
 
                     {percentage !== null && (
                       <div className="mt-2">
-                        <div className="h-2 rounded-full bg-muted overflow-hidden">
+                        <div
+                          className="h-2 rounded-full bg-muted overflow-hidden"
+                          role="progressbar"
+                          aria-valuenow={metric.current}
+                          aria-valuemax={metric.limit || undefined}
+                          aria-label={`${metric.label} usage`}
+                        >
                           <div
                             className={cn(
                               'h-full rounded-full transition-all',
