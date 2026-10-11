@@ -13,6 +13,7 @@ conversations, and budgets but were missing database-level enforcement:
 - hallucination_metrics: tenant_id -> organizations
 - entity_relations: from_entity_id -> entities, to_entity_id -> entities
 - pr_issue_correlations: project_id -> projects
+- agent_executions: conversation_id -> conversations
 
 Also adds missing FK column indexes for query performance.
 """
@@ -120,6 +121,16 @@ def upgrade() -> None:
         ondelete="CASCADE",
     )
 
+    # agent_executions FK constraint (conversation_id -> conversations)
+    op.create_foreign_key(
+        "fk_agent_executions_conversation_id_conversations",
+        "agent_executions",
+        "conversations",
+        ["conversation_id"],
+        ["id"],
+        ondelete="SET NULL",
+    )
+
     # Missing FK column indexes for query performance
     op.create_index(
         "ix_cost_alerts_budget_id_idx",
@@ -139,6 +150,11 @@ def downgrade() -> None:
     op.drop_index("ix_cost_alerts_budget_id_idx", table_name="cost_alerts")
 
     # Drop new FK constraints
+    op.drop_constraint(
+        "fk_agent_executions_conversation_id_conversations",
+        "agent_executions",
+        type_="foreignkey",
+    )
     op.drop_constraint(
         "fk_pr_issue_correlations_project_id_projects",
         "pr_issue_correlations",
