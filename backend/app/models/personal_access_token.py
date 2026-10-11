@@ -13,7 +13,7 @@ from enum import Enum
 from uuid import uuid4
 
 from pydantic import BaseModel
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Text, JSON
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Text, JSON
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship
@@ -71,7 +71,7 @@ class PersonalAccessToken(Base):
     # Usage tracking
     last_used_at = Column(DateTime)
     last_used_ip = Column(String(45))
-    use_count = Column(String(20), default="0")
+    use_count = Column(Integer, default=0)
 
     # Status
     is_active = Column(Boolean, default=True)
@@ -274,11 +274,7 @@ class PersonalAccessTokenService:
         if token:
             token.last_used_at = datetime.utcnow()
             token.last_used_ip = ip_address
-            try:
-                count = int(token.use_count or "0")
-            except (ValueError, TypeError):
-                count = 0
-            token.use_count = str(count + 1)
+            token.use_count = PersonalAccessToken.use_count + 1
             await session.commit()
 
     async def revoke_token(

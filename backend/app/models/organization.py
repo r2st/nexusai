@@ -8,6 +8,7 @@ from uuid import uuid4
 
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     DateTime,
     ForeignKey,
     Index,
@@ -114,8 +115,8 @@ class Organization(Base):
     stripe_subscription_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     # Usage tracking (cached counts for quick limit checks)
-    current_member_count: Mapped[int] = mapped_column(Integer, default=1)
-    current_project_count: Mapped[int] = mapped_column(Integer, default=0)
+    current_member_count: Mapped[int] = mapped_column(Integer, default=1, server_default="1")
+    current_project_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
 
     # External identity provider sync
     idp_provider: Mapped[str | None] = mapped_column(String(50), nullable=True)  # okta, azure_ad, ldap
@@ -149,6 +150,26 @@ class Organization(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "tier IN ('free', 'starter', 'professional', 'enterprise')",
+            name="ck_organizations_tier",
+        ),
+        CheckConstraint(
+            "trial_status IN ('none', 'active', 'expired', 'converted')",
+            name="ck_organizations_trial_status",
+        ),
+        CheckConstraint(
+            "subscription_status IN ('none', 'active', 'past_due', 'canceled', 'paused')",
+            name="ck_organizations_subscription_status",
+        ),
+        CheckConstraint(
+            "current_member_count >= 0",
+            name="ck_organizations_member_count_non_negative",
+        ),
+        CheckConstraint(
+            "current_project_count >= 0",
+            name="ck_organizations_project_count_non_negative",
+        ),
         Index("ix_organizations_tenant_id", "tenant_id"),
         Index("ix_organizations_created_at", "created_at"),
     )
@@ -277,6 +298,10 @@ class OrganizationMember(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "role IN ('owner', 'admin', 'member', 'viewer')",
+            name="ck_org_members_role",
+        ),
         UniqueConstraint("organization_id", "user_id", name="uq_org_member"),
         Index("ix_org_members_tenant_id", "tenant_id"),
         Index("ix_org_members_user_id", "user_id"),
@@ -307,7 +332,7 @@ class OrganizationInvite(Base):
     )
     email: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[str] = mapped_column(String(50), default=MemberRole.MEMBER.value)
-    invited_by: Mapped[str] = mapped_column(UUID(as_uuid=False), ForeignKey("users.id"))
+    invited_by: Mapped[str] = mapped_column(UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"))
 
     # Token for accepting invite
     token: Mapped[str] = mapped_column(String(255), unique=True)

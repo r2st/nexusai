@@ -5,7 +5,7 @@ from enum import Enum
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
-from sqlalchemy import Boolean, DateTime, Index, String, Text
+from sqlalchemy import Boolean, CheckConstraint, DateTime, Index, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -110,6 +110,14 @@ class User(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "role IN ('admin', 'user', 'viewer')",
+            name="ck_users_role",
+        ),
+        CheckConstraint(
+            "auth_provider IN ('local', 'google', 'github', 'azure')",
+            name="ck_users_auth_provider",
+        ),
         Index("ix_users_email_lower", "email"),
         Index("ix_users_created_at", "created_at"),
     )

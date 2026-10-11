@@ -7,6 +7,7 @@ from uuid import uuid4
 
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     DateTime,
     ForeignKey,
     Index,
@@ -175,6 +176,10 @@ class ProjectMember(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "role IN ('admin', 'maintainer', 'developer', 'viewer')",
+            name="ck_project_members_role",
+        ),
         UniqueConstraint("project_id", "user_id", name="uq_project_member"),
         Index("ix_project_members_tenant_id", "tenant_id"),
         Index("ix_project_members_user_id", "user_id"),

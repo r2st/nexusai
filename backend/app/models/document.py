@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from uuid import uuid4
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -77,8 +77,8 @@ class Document(Base):
     content_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
     # Chunk statistics
-    chunk_count: Mapped[int] = mapped_column(Integer, default=0)
-    total_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    chunk_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    total_tokens: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
 
     # Document metadata (renamed from 'metadata' which is reserved in SQLAlchemy)
     doc_metadata: Mapped[dict] = mapped_column(JSONB, default=dict)
@@ -107,6 +107,12 @@ class Document(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "status IN ('pending', 'processing', 'completed', 'failed')",
+            name="ck_documents_status",
+        ),
+        CheckConstraint("chunk_count >= 0", name="ck_documents_chunk_count_non_negative"),
+        CheckConstraint("total_tokens >= 0", name="ck_documents_total_tokens_non_negative"),
         Index("ix_documents_user_status", "user_id", "status"),
         Index("ix_documents_content_hash", "content_hash"),
     )

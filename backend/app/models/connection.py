@@ -7,6 +7,7 @@ from uuid import uuid4
 
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     DateTime,
     ForeignKey,
     Index,
@@ -108,6 +109,10 @@ class Connection(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "status IN ('pending', 'testing', 'online', 'offline', 'error')",
+            name="ck_connections_status",
+        ),
         Index("ix_connections_tenant_id", "tenant_id"),
         Index("ix_connections_project_id", "project_id"),
         Index("ix_connections_plugin", "plugin"),

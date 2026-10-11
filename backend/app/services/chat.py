@@ -1373,9 +1373,9 @@ OUTPUT THE TOOL_CALL NOW - DO NOT DESCRIBE IT!
             message.prompt_tokens = token_usage.get("prompt_tokens")
             message.completion_tokens = token_usage.get("completion_tokens")
             message.total_tokens = token_usage.get("total_tokens")
-            conversation.total_tokens += token_usage.get("total_tokens", 0)
+            conversation.total_tokens = Conversation.total_tokens + token_usage.get("total_tokens", 0)
 
-        conversation.message_count += 1
+        conversation.message_count = Conversation.message_count + 1
         self.db.add(message)
         await self.db.flush()
 

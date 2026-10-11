@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from enum import Enum
 from uuid import uuid4
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Index, Integer, String, Text
+from sqlalchemy import Boolean, CheckConstraint, DateTime, Float, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -188,6 +188,14 @@ class HallucinationLog(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "check_type IN ('standard', 'rag', 'consistency', 'citation', 'semantic')",
+            name="ck_hallucination_logs_check_type",
+        ),
+        CheckConstraint(
+            "hallucination_score >= 0.0 AND hallucination_score <= 1.0",
+            name="ck_hallucination_logs_score_range",
+        ),
         # Primary lookup indexes
         Index("ix_hallucination_logs_tenant_id", "tenant_id"),
         Index("ix_hallucination_logs_trace_id", "trace_id"),

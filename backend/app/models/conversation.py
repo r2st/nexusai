@@ -5,7 +5,7 @@ from enum import Enum
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -86,8 +86,8 @@ class Conversation(Base):
     settings: Mapped[dict] = mapped_column(JSONB, default=dict)
 
     # Statistics
-    message_count: Mapped[int] = mapped_column(Integer, default=0)
-    total_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    message_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    total_tokens: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
 
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(
@@ -110,6 +110,8 @@ class Conversation(Base):
     )
 
     __table_args__ = (
+        CheckConstraint("message_count >= 0", name="ck_conversations_message_count_non_negative"),
+        CheckConstraint("total_tokens >= 0", name="ck_conversations_total_tokens_non_negative"),
         Index("ix_conversations_user_updated", "user_id", "updated_at"),
     )
 
@@ -183,6 +185,10 @@ class Message(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "role IN ('system', 'user', 'assistant', 'tool')",
+            name="ck_messages_role",
+        ),
         Index("ix_messages_conversation_position", "conversation_id", "position"),
         Index("ix_messages_created_at", "created_at"),
     )

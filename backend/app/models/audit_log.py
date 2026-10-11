@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 from enum import Enum
 from uuid import uuid4
 
-from sqlalchemy import Boolean, DateTime, Float, Index, Integer, String, Text
+from sqlalchemy import Boolean, CheckConstraint, DateTime, Float, Index, Integer, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -288,6 +288,10 @@ class ApprovalRecord(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "status IN ('pending', 'approved', 'denied', 'expired', 'cancelled')",
+            name="ck_approval_records_status",
+        ),
         Index("ix_approval_records_requester_status", "requester_user_id", "status"),
         Index("ix_approval_records_pending", "status", "expires_at"),
     )

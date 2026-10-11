@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from enum import Enum
 from uuid import uuid4
 
-from sqlalchemy import DateTime, Float, ForeignKey, Index, Integer, String
+from sqlalchemy import CheckConstraint, DateTime, Float, ForeignKey, Index, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -60,6 +60,7 @@ class CostEntry(Base):
     )
     conversation_id: Mapped[str | None] = mapped_column(
         UUID(as_uuid=False),
+        ForeignKey("conversations.id", ondelete="SET NULL"),
         nullable=True,
     )
 
@@ -134,6 +135,12 @@ class CostEntry(Base):
     )
 
     __table_args__ = (
+        CheckConstraint("cost_usd >= 0", name="ck_cost_entries_cost_non_negative"),
+        CheckConstraint("total_tokens >= 0", name="ck_cost_entries_tokens_non_negative"),
+        CheckConstraint(
+            "request_type IN ('chat', 'completion', 'embedding', 'image', 'audio', 'moderation')",
+            name="ck_cost_entries_request_type",
+        ),
         # Primary lookup indexes
         Index("ix_cost_entries_tenant_id", "tenant_id"),
         Index("ix_cost_entries_user_id", "user_id"),
@@ -237,6 +244,18 @@ class CostBudget(Base):
     )
 
     __table_args__ = (
+        CheckConstraint(
+            "scope IN ('tenant', 'user', 'project')",
+            name="ck_cost_budgets_scope",
+        ),
+        CheckConstraint(
+            "alert_threshold BETWEEN 0 AND 100",
+            name="ck_cost_budgets_alert_threshold_range",
+        ),
+        CheckConstraint(
+            "critical_threshold BETWEEN 0 AND 100",
+            name="ck_cost_budgets_critical_threshold_range",
+        ),
         Index("ix_cost_budgets_tenant_id", "tenant_id"),
         Index("ix_cost_budgets_scope", "scope", "scope_id"),
     )
