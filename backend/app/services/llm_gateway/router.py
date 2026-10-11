@@ -454,8 +454,11 @@ class ProviderRouter:
         if not self.config.enable_failover:
             return False
 
-        # Classify the error
-        classified = classify_error(provider, error)
+        # Use existing classification if error is already an LLMProviderError
+        if isinstance(error, LLMProviderError):
+            classified = error
+        else:
+            classified = classify_error(provider, error)
 
         # If not retryable, no point in failover
         if not classified.retryable:
