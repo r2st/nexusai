@@ -143,17 +143,13 @@ function ConversationItem({
   onNavigate,
   ...props
 }: ConversationItemProps) {
-  const [showMenu, setShowMenu] = useState(false);
-
   return (
     <div
       className={cn(
         'group relative flex items-center gap-2 rounded-md px-2 py-2 text-sm',
-        'hover:bg-muted cursor-pointer',
+        'hover:bg-muted',
         isActive && 'bg-muted'
       )}
-      onMouseEnter={() => setShowMenu(true)}
-      onMouseLeave={() => setShowMenu(false)}
       {...props}
     >
       <MessageSquare className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
@@ -165,24 +161,22 @@ function ConversationItem({
         {truncate(conversation.title, 25)}
       </Link>
 
-      {/* Actions */}
-      {showMenu && (
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-6 w-6"
-            onClick={(e) => {
-              e.preventDefault();
-              onDelete();
-            }}
-            aria-label="Delete conversation"
-            data-testid="delete-conversation"
-          >
-            <Trash2 className="h-3 w-3" aria-hidden="true" />
-          </Button>
-        </div>
-      )}
+      {/* Actions — visible on hover/focus-within for keyboard accessibility */}
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6"
+          onClick={(e) => {
+            e.preventDefault();
+            onDelete();
+          }}
+          aria-label={`Delete conversation: ${conversation.title}`}
+          data-testid="delete-conversation"
+        >
+          <Trash2 className="h-3 w-3" aria-hidden="true" />
+        </Button>
+      </div>
     </div>
   );
 }
