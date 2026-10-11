@@ -61,9 +61,9 @@ export function FloatingAssistant({
           !hasInteracted && 'animate-pulse',
           className
         )}
-        title="Open Setup Assistant"
+        aria-label="Open Setup Assistant"
       >
-        <Sparkles className="h-6 w-6" />
+        <Sparkles className="h-6 w-6" aria-hidden="true" />
       </button>
     );
   }
@@ -110,16 +110,16 @@ export function FloatingAssistant({
                 <button
                   onClick={handleMinimize}
                   className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                  title="Minimize"
+                  aria-label="Minimize"
                 >
-                  <Minimize2 className="h-4 w-4" />
+                  <Minimize2 className="h-4 w-4" aria-hidden="true" />
                 </button>
                 <button
                   onClick={handleClose}
                   className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                  title="Close"
+                  aria-label="Close"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-4 w-4" aria-hidden="true" />
                 </button>
               </div>
             </div>

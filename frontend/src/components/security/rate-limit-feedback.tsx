@@ -149,22 +149,22 @@ function RateLimitModal({ resetTime, endpoint, onDismiss }: RateLimitModalProps)
   const remainingSeconds = seconds % 60;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
+    <div role="alertdialog" aria-modal="true" aria-labelledby="rate-limit-title" className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
       <div className="bg-background rounded-lg border shadow-lg w-full max-w-md p-6 mx-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
-              <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+              <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" aria-hidden="true" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold">Too Many Requests</h2>
+              <h2 id="rate-limit-title" className="text-lg font-semibold">Too Many Requests</h2>
               <p className="text-sm text-muted-foreground">
                 Please wait before trying again
               </p>
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onDismiss}>
-            <X className="h-4 w-4" />
+          <Button variant="ghost" size="icon" onClick={onDismiss} aria-label="Dismiss">
+            <X className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
 
