@@ -212,6 +212,7 @@ export function VoiceInput({
         disabled
         className={cn('h-9 w-9', className)}
         title="Voice input not supported in this browser"
+        aria-label="Voice input not supported"
       >
         <MicOff className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
       </Button>
