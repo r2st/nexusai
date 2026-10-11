@@ -277,12 +277,13 @@ export default function IntegrationsPage() {
         {/* Search & Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input
               placeholder="Search integrations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
+              aria-label="Search integrations"
             />
           </div>
           <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
@@ -335,8 +336,9 @@ export default function IntegrationsPage() {
                             size="sm"
                             variant="ghost"
                             onClick={() => setShowConfigModal(integration.id)}
+                            aria-label={`Configure ${integration.name}`}
                           >
-                            <Settings className="h-4 w-4" />
+                            <Settings className="h-4 w-4" aria-hidden="true" />
                           </Button>
                           <Button
                             size="sm"
@@ -344,11 +346,12 @@ export default function IntegrationsPage() {
                             className="text-destructive hover:text-destructive"
                             onClick={() => handleConnect(integration)}
                             disabled={connectingId === integration.id}
+                            aria-label={`Disconnect ${integration.name}`}
                           >
                             {connectingId === integration.id ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
+                              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                             ) : (
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-4 w-4" aria-hidden="true" />
                             )}
                           </Button>
                         </div>

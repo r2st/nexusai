@@ -173,11 +173,11 @@ export default function KnowledgeGraphPage() {
                   placeholder="e.g., What metrics are related to deployment frequency?"
                   className="flex-1"
                 />
-                <Button type="submit" disabled={isSearching || !searchQuery.trim()}>
+                <Button type="submit" disabled={isSearching || !searchQuery.trim()} aria-label="Search knowledge graph">
                   {isSearching ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                   ) : (
-                    <Search className="h-4 w-4" />
+                    <Search className="h-4 w-4" aria-hidden="true" />
                   )}
                 </Button>
               </form>
