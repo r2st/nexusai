@@ -23,6 +23,7 @@ class DocumentService:
 
     @property
     def embeddings(self):
+        """Lazily initialized OpenAI embeddings client."""
         if self._embeddings is None:
             from langchain_openai import OpenAIEmbeddings
             self._embeddings = OpenAIEmbeddings(
@@ -34,6 +35,7 @@ class DocumentService:
 
     @property
     def text_splitter(self):
+        """Lazily initialized recursive character text splitter for chunking."""
         if self._text_splitter is None:
             from langchain_text_splitters import RecursiveCharacterTextSplitter
             self._text_splitter = RecursiveCharacterTextSplitter(

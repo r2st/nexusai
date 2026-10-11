@@ -34,6 +34,7 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
     """Add unique request ID to each request for tracing."""
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """Attach a unique request ID (from header or generated) to the request context."""
         request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
         request_id_var.set(request_id)
 
@@ -50,6 +51,7 @@ class ResponseTimeMiddleware(BaseHTTPMiddleware):
     """Track and log response times."""
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """Measure request duration and log slow requests (>500ms warning, >1s error)."""
         start_time = time.perf_counter()
 
         response = await call_next(request)
@@ -83,6 +85,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.requests_per_minute = requests_per_minute
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """Enforce per-client rate limits via Redis, fail open if unavailable."""
         # Skip rate limiting for health checks
         if request.url.path in ["/api/v1/health", "/health", "/healthz"]:
             return await call_next(request)
@@ -155,6 +158,7 @@ class TenantMiddleware(BaseHTTPMiddleware):
     """
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """Extract tenant ID from headers or JWT and bind it to the request context."""
         # Extract tenant ID from various sources
         tenant_id = self._extract_tenant_id(request)
 
@@ -220,6 +224,7 @@ class TenantRateLimitMiddleware(BaseHTTPMiddleware):
         self.user_limit = requests_per_minute_per_user
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """Apply per-tenant and per-user rate limits using the current tenant context."""
         # Skip for health checks
         if request.url.path in ["/api/v1/health", "/health", "/healthz"]:
             return await call_next(request)
@@ -368,6 +373,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Add security headers to all responses."""
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """Append CSP, HSTS, and other security headers to every response."""
         response = await call_next(request)
 
         # Security headers
@@ -404,6 +410,7 @@ class CompressionMiddleware(BaseHTTPMiddleware):
     MIN_SIZE = 1000  # Minimum size to compress (bytes)
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """Set Vary header for gzip-capable clients."""
         response = await call_next(request)
 
         # Check if client accepts gzip
@@ -429,6 +436,7 @@ class ErrorTrackingMiddleware(BaseHTTPMiddleware):
     _SKIP_PATHS = frozenset(("/", "/health", "/healthz", "/favicon.ico"))
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
+        """Catch unhandled exceptions, log with request context, and return 500."""
         if request.url.path in self._SKIP_PATHS:
             return await call_next(request)
 
