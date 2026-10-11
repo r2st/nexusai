@@ -4,8 +4,6 @@ import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
-  Sparkles,
-  Bot,
   MessageSquare,
   BarChart3,
   FileText,
@@ -13,7 +11,6 @@ import {
   ArrowRight,
   Zap,
   Shield,
-  Gauge,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChatInput } from '@/components/chat/input';
@@ -21,6 +18,9 @@ import { SuggestedActions, type QuickAction } from '@/components/chat/quick-acti
 import { useAuthStore, useAuthHydrated } from '@/store/auth';
 import { useGlobalKeyboard } from '@/hooks/use-keyboard-shortcuts';
 import { cn } from '@/lib/utils';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
+import { DoAideFooter } from '@/components/ui/doaide-footer';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 // -----------------------------------------------------------------------------
 // Chatbot-First Landing Page
@@ -69,23 +69,25 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted flex flex-col">
       {/* Header */}
       <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto flex h-14 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="text-lg font-bold">NexusAI</span>
-          </div>
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <Link href="/" className="flex items-center gap-2">
+            <DoAideLogo size={26} />
+            <span className="text-lg font-bold">DoAide</span>
+            <span className="text-muted-foreground">|</span>
+            <span className="text-base font-semibold">GSTIndia</span>
+          </Link>
           <nav className="hidden md:flex items-center gap-4">
+            <Link
+              href="/blog"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Blog
+            </Link>
             <Link
               href="/analytics"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               Analytics
-            </Link>
-            <Link
-              href="/documents"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Docs
             </Link>
             <Link
               href="/pricing"
@@ -95,6 +97,7 @@ export default function Home() {
             </Link>
           </nav>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             {showAuthenticatedUI ? (
               <>
                 <Button variant="ghost" size="sm" asChild>
@@ -128,13 +131,13 @@ export default function Home() {
           <div className="text-center space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
               <Zap className="h-4 w-4" />
-              Software Intelligence Platform
+              AI-Powered GST Compliance
             </div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
               What can I help you with?
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-              Analyze repos, review PRs, investigate incidents, and track DORA metrics.
+              File GST returns, calculate taxes, reconcile invoices, and track ITC.
               Start with a question or choose an action below.
             </p>
           </div>
@@ -235,33 +238,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-8 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="font-semibold">NexusAI</span>
-            </div>
-            <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-              <Link href="/terms" className="hover:text-foreground transition-colors">
-                Terms
-              </Link>
-              <Link href="/privacy" className="hover:text-foreground transition-colors">
-                Privacy
-              </Link>
-              <Link href="/docs" className="hover:text-foreground transition-colors">
-                Docs
-              </Link>
-              <Link href="/status" className="hover:text-foreground transition-colors">
-                Status
-              </Link>
-            </nav>
-            <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} NexusAI. Open Source under MIT License.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <DoAideFooter />
 
       {/* Command Palette Modal (placeholder) */}
       {showCommandPalette && (

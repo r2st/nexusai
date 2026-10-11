@@ -7,8 +7,8 @@ import { Toaster } from 'sonner';
 const inter = Inter({ subsets: ['latin'], variable: '--font-geist-sans' });
 
 export const metadata: Metadata = {
-  title: 'NexusAI',
-  description: 'Modern AI-powered chat and analytics platform',
+  title: 'GSTIndia by DoAide — AI-Powered GST Compliance',
+  description: 'AI-powered GST compliance tools for Indian businesses. File returns, calculate taxes, reconcile invoices, and track ITC.',
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },

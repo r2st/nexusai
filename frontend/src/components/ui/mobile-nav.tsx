@@ -12,7 +12,6 @@ import {
   Bot,
   Settings,
   LogOut,
-  Sparkles,
   User,
   Activity,
   Zap,
@@ -20,6 +19,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 import { useAuthStore } from '@/store/auth';
 import { cn } from '@/lib/utils';
 
@@ -107,8 +107,10 @@ export function MobileNav() {
         {/* Header */}
         <div className="flex h-16 items-center justify-between border-b px-4">
           <Link href="/" className="flex items-center gap-2" onClick={() => setIsOpen(false)}>
-            <Sparkles className="h-6 w-6 text-primary" aria-hidden="true" />
-            <span className="text-xl font-bold">NexusAI</span>
+            <DoAideLogo size={24} />
+            <span className="text-xl font-bold">DoAide</span>
+            <span className="text-muted-foreground">|</span>
+            <span className="text-base font-semibold">GSTIndia</span>
           </Link>
           <div className="flex items-center gap-2">
             <ThemeToggle />
@@ -239,8 +241,10 @@ export function Header({ showNav = true, className }: HeaderProps) {
         <div className="flex items-center gap-2">
           {showNav && <MobileNav />}
           <Link href="/" className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold hidden sm:inline">NexusAI</span>
+            <DoAideLogo size={24} />
+            <span className="text-xl font-bold hidden sm:inline">DoAide</span>
+            <span className="text-muted-foreground hidden sm:inline">|</span>
+            <span className="text-base font-semibold hidden sm:inline">GSTIndia</span>
           </Link>
         </div>
 
