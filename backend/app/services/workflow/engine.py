@@ -43,6 +43,7 @@ class WorkflowEngine:
         # Storage (replace with database in production)
         self._workflows: dict[str, Workflow] = {}
         self._executions: dict[str, WorkflowExecution] = {}
+        self._execution_tasks: dict[str, asyncio.Task] = {}
 
         # Step executors
         self._step_executors: dict[WorkflowStepType, Callable] = {}
@@ -177,11 +178,19 @@ class WorkflowEngine:
 
         return sorted(workflows, key=lambda w: w.created_at, reverse=True)
 
+    _ACTIVATABLE_STATUSES = frozenset({WorkflowStatus.DRAFT, WorkflowStatus.PAUSED})
+
     async def activate_workflow(self, workflow_id: str) -> Workflow | None:
-        """Activate a workflow."""
+        """Activate a workflow. Only DRAFT or PAUSED workflows can be activated."""
         workflow = self._workflows.get(workflow_id)
         if not workflow:
             return None
+
+        if workflow.status not in self._ACTIVATABLE_STATUSES:
+            raise ValueError(
+                f"Cannot activate workflow in '{workflow.status.value}' state "
+                f"(must be draft or paused)"
+            )
 
         workflow.status = WorkflowStatus.ACTIVE
         workflow.updated_at = datetime.utcnow()
@@ -190,10 +199,16 @@ class WorkflowEngine:
         return workflow
 
     async def pause_workflow(self, workflow_id: str) -> Workflow | None:
-        """Pause a workflow."""
+        """Pause a workflow. Only ACTIVE workflows can be paused."""
         workflow = self._workflows.get(workflow_id)
         if not workflow:
             return None
+
+        if workflow.status != WorkflowStatus.ACTIVE:
+            raise ValueError(
+                f"Cannot pause workflow in '{workflow.status.value}' state "
+                f"(must be active)"
+            )
 
         workflow.status = WorkflowStatus.PAUSED
         workflow.updated_at = datetime.utcnow()
@@ -301,6 +316,12 @@ class WorkflowEngine:
         if not workflow:
             raise ValueError(f"Workflow not found: {workflow_id}")
 
+        if workflow.status != WorkflowStatus.ACTIVE:
+            raise ValueError(
+                f"Cannot execute workflow in '{workflow.status.value}' state "
+                f"(must be active)"
+            )
+
         execution = WorkflowExecution(
             id=str(uuid.uuid4()),
             workflow_id=workflow_id,
@@ -315,8 +336,9 @@ class WorkflowEngine:
 
         self._executions[execution.id] = execution
 
-        # Start execution in background
-        asyncio.create_task(self._run_execution(execution, workflow))
+        # Start execution in background, track task for cancellation
+        task = asyncio.create_task(self._run_execution(execution, workflow))
+        self._execution_tasks[execution.id] = task
 
         return execution
 
@@ -371,11 +393,20 @@ class WorkflowEngine:
             execution.error = f"Workflow timed out after {workflow.timeout_seconds}s"
             execution.completed_at = datetime.utcnow()
 
+        except asyncio.CancelledError:
+            logger.info(f"Workflow execution cancelled: {execution.id}")
+            if execution.status != WorkflowExecutionStatus.CANCELLED:
+                execution.status = WorkflowExecutionStatus.CANCELLED
+                execution.completed_at = datetime.utcnow()
+
         except Exception as e:
             logger.error(f"Workflow execution failed: {execution.id} error={e}")
             execution.status = WorkflowExecutionStatus.FAILED
             execution.error = str(e)
             execution.completed_at = datetime.utcnow()
+
+        finally:
+            self._execution_tasks.pop(execution.id, None)
 
     async def _execute_step(
         self,
@@ -660,15 +691,29 @@ class WorkflowEngine:
 
         return sorted(executions, key=lambda e: e.created_at, reverse=True)[:limit]
 
+    _CANCELLABLE_EXECUTION_STATUSES = frozenset({
+        WorkflowExecutionStatus.RUNNING,
+        WorkflowExecutionStatus.PENDING,
+        WorkflowExecutionStatus.WAITING,
+    })
+
     async def cancel_execution(self, execution_id: str) -> WorkflowExecution | None:
         """Cancel a running execution."""
         execution = self._executions.get(execution_id)
         if not execution:
             return None
 
-        if execution.status in (WorkflowExecutionStatus.RUNNING, WorkflowExecutionStatus.PENDING):
-            execution.status = WorkflowExecutionStatus.CANCELLED
-            execution.completed_at = datetime.utcnow()
+        if execution.status not in self._CANCELLABLE_EXECUTION_STATUSES:
+            raise ValueError(
+                f"Cannot cancel execution in '{execution.status.value}' state"
+            )
+
+        execution.status = WorkflowExecutionStatus.CANCELLED
+        execution.completed_at = datetime.utcnow()
+
+        task = self._execution_tasks.pop(execution_id, None)
+        if task and not task.done():
+            task.cancel()
 
         return execution
 

@@ -133,6 +133,13 @@ class SubscriptionService:
             "subscription_active": organization.has_active_subscription,
         }
 
+    _VALID_TIERS = frozenset({
+        OrganizationTier.FREE.value,
+        OrganizationTier.STARTER.value,
+        OrganizationTier.PROFESSIONAL.value,
+        OrganizationTier.ENTERPRISE.value,
+    })
+
     async def change_tier(
         self,
         organization: Organization,
@@ -149,7 +156,16 @@ class SubscriptionService:
         Returns:
             Updated organization
         """
+        if new_tier not in self._VALID_TIERS:
+            raise ValueError(
+                f"Invalid tier '{new_tier}'. "
+                f"Must be one of: {', '.join(sorted(self._VALID_TIERS))}"
+            )
+
         previous_tier = organization.tier
+
+        if previous_tier == new_tier:
+            raise ValueError(f"Organization is already on the '{new_tier}' tier")
 
         # Update tier
         organization.tier = new_tier
@@ -332,6 +348,8 @@ class SubscriptionService:
             SubscriptionStatus.PAST_DUE.value,
         }
 
+        previous_status = organization.subscription_status
+
         if organization.subscription_cancel_at_period_end:
             organization.subscription_cancel_at_period_end = False
         elif organization.subscription_status in resumable_statuses:
@@ -346,9 +364,12 @@ class SubscriptionService:
         event = SubscriptionEvent(
             organization_id=organization.id,
             event_type=SubscriptionEventType.SUBSCRIPTION_RESUMED.value,
+            previous_status=previous_status,
+            new_status=organization.subscription_status,
             triggered_by=triggered_by,
             event_metadata={
                 "resumed_at": datetime.now(UTC).isoformat(),
+                "was_cancel_at_period_end": previous_status == SubscriptionStatus.ACTIVE.value,
             },
         )
         self.db.add(event)

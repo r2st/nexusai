@@ -236,11 +236,14 @@ async def change_organization_tier(
     previous_tier = org.tier
 
     subscription_service = SubscriptionService(db)
-    await subscription_service.change_tier(
-        org,
-        new_tier=request.tier,
-        triggered_by=current_user.id,
-    )
+    try:
+        await subscription_service.change_tier(
+            org,
+            new_tier=request.tier,
+            triggered_by=current_user.id,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     await db.commit()
     await db.refresh(org)
 

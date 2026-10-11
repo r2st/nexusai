@@ -129,7 +129,10 @@ async def get_workflow(workflow_id: str, _current_user: User = Depends(get_curre
 async def activate_workflow(workflow_id: str, _current_user: User = Depends(get_current_user)):
     """Activate a workflow."""
     engine = get_workflow_engine()
-    workflow = await engine.activate_workflow(workflow_id)
+    try:
+        workflow = await engine.activate_workflow(workflow_id)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     if not workflow:
         raise HTTPException(status_code=404, detail="Workflow not found")
     return {"workflow": workflow.model_dump()}
@@ -139,7 +142,10 @@ async def activate_workflow(workflow_id: str, _current_user: User = Depends(get_
 async def pause_workflow(workflow_id: str, _current_user: User = Depends(get_current_user)):
     """Pause a workflow."""
     engine = get_workflow_engine()
-    workflow = await engine.pause_workflow(workflow_id)
+    try:
+        workflow = await engine.pause_workflow(workflow_id)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     if not workflow:
         raise HTTPException(status_code=404, detail="Workflow not found")
     return {"workflow": workflow.model_dump()}
@@ -213,7 +219,10 @@ async def get_execution(execution_id: str, _current_user: User = Depends(get_cur
 async def cancel_execution(execution_id: str, _current_user: User = Depends(get_current_user)):
     """Cancel a running execution."""
     engine = get_workflow_engine()
-    execution = await engine.cancel_execution(execution_id)
+    try:
+        execution = await engine.cancel_execution(execution_id)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     if not execution:
         raise HTTPException(status_code=404, detail="Execution not found")
     return {"execution": execution.model_dump()}

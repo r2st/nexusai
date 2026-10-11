@@ -126,23 +126,18 @@ class DocumentService:
         return await self.process_document(document)
 
     async def process_document(self, document: Document) -> Document:
-        """Process a document: extract text, chunk, and embed."""
-        if document.status not in (
-            DocumentStatus.PENDING.value,
-            DocumentStatus.FAILED.value,
-        ):
+        """Process a document: extract text, chunk, and embed.
+
+        Only PENDING documents can be processed directly.
+        Use reprocess_document() for FAILED documents.
+        """
+        if document.status != DocumentStatus.PENDING.value:
             raise ValueError(
-                f"Document must be in pending or failed state to process, "
-                f"current status: {document.status}"
+                f"Document must be in pending state to process, "
+                f"current status: {document.status}. "
+                f"Use reprocess_document() for failed documents."
             )
         try:
-            if document.status == DocumentStatus.FAILED.value and document.chunk_count > 0:
-                from sqlalchemy import delete as sa_delete
-                await self.db.execute(
-                    sa_delete(DocumentChunk).where(DocumentChunk.document_id == document.id)
-                )
-                document.chunk_count = 0
-
             document.status = DocumentStatus.PROCESSING.value
             document.error_message = None
             await self.db.flush()
