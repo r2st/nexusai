@@ -12,8 +12,11 @@ from typing import Any
 
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+import structlog
 
 from app.services.devlake import devlake_service
+
+logger = structlog.get_logger()
 
 
 class IndividualProductivity(BaseModel):
@@ -377,7 +380,8 @@ class ProductivityMetricsService:
             else:
                 return "stable", change
 
-        except Exception:
+        except Exception as e:
+            logger.debug("Trend calculation failed, defaulting to stable", error=str(e))
             return "stable", 0.0
 
     async def get_productivity_leaderboard(
