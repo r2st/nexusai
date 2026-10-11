@@ -182,7 +182,13 @@ class WorkflowEngine:
         workflow = self._workflows.get(workflow_id)
         if not workflow:
             raise ValueError(f"Unknown workflow: {workflow_id}")
-        
+
+        if workflow.status != WorkflowStatus.ACTIVE:
+            raise ValueError(
+                f"Cannot run workflow in '{workflow.status.value}' state "
+                f"(must be active)"
+            )
+
         if not workflow.graph:
             raise ValueError(f"Workflow has no graph: {workflow_id}")
         
