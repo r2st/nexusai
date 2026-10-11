@@ -198,12 +198,18 @@ async def get_authorization_url(
 ):
     """
     Get authorization URL without redirecting.
-    
+
     Useful for SPAs that handle redirect themselves.
     """
-    # sso_service = get_sso_service()
-    # auth_url = await sso_service.start_authentication(...)
-    
+    from app.core.config import settings
+
+    parsed = _urlparse(redirect_uri)
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        raise HTTPException(status_code=400, detail="Invalid redirect_uri")
+    origin = f"{parsed.scheme}://{parsed.netloc}"
+    if settings.CORS_ORIGINS and origin not in settings.CORS_ORIGINS:
+        raise HTTPException(status_code=400, detail="redirect_uri not in allowed origins")
+
     return AuthStartResponse(
         authorization_url=f"https://accounts.google.com/o/oauth2/auth?...",
         state="mock_state",
@@ -340,7 +346,18 @@ async def logout(
 
     Terminates session and optionally redirects to IdP logout.
     """
-    return {"status": "logged_out", "redirect_uri": post_logout_uri}
+    if post_logout_uri.startswith("/") and not post_logout_uri.startswith("//"):
+        safe_uri = post_logout_uri
+    else:
+        from app.core.config import settings
+        parsed = _urlparse(post_logout_uri)
+        origin = f"{parsed.scheme}://{parsed.netloc}"
+        if parsed.scheme not in ("http", "https") or origin not in (settings.CORS_ORIGINS or []):
+            safe_uri = "/"
+        else:
+            safe_uri = post_logout_uri
+
+    return {"status": "logged_out", "redirect_uri": safe_uri}
 
 
 @router.get("/well-known/openid-configuration")

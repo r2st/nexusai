@@ -15,6 +15,8 @@ import structlog
 
 from app.core.database import get_db
 from app.core.multitenancy import get_current_tenant_id
+from app.api.deps import get_current_user
+from app.models.user import User
 from app.services.devlake.blueprints import (
     blueprint_service,
     Blueprint,
@@ -99,6 +101,7 @@ async def create_blueprint(
     request: BlueprintCreateRequest,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> BlueprintResponse:
     """Create a new blueprint for data collection.
 
@@ -140,6 +143,7 @@ async def list_blueprints(
     status: str | None = None,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> list[BlueprintResponse]:
     """List all blueprints for the tenant."""
     status_filter = None
@@ -180,6 +184,7 @@ async def get_blueprint(
     blueprint_id: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> BlueprintDetailResponse:
     """Get a blueprint by ID with full details including plan."""
     from sqlalchemy import select
@@ -217,6 +222,7 @@ async def update_blueprint_status(
     new_status: str = Query(..., alias="status", pattern="^(ACTIVE|PAUSED|DISABLED)$"),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> BlueprintStatusUpdate:
     """Update blueprint status (ACTIVE, PAUSED, DISABLED)."""
     from sqlalchemy import select
@@ -244,6 +250,7 @@ async def delete_blueprint(
     blueprint_id: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> Response:
     """Delete a blueprint."""
     from sqlalchemy import select
@@ -273,6 +280,7 @@ async def run_blueprint(
     full_sync: bool = Query(default=False),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> PipelineRunResponse:
     """Trigger a pipeline run from a blueprint.
 
@@ -309,6 +317,7 @@ async def get_pipeline_status(
     pipeline_id: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> PipelineRunResponse:
     """Get pipeline run status."""
     pipeline = await blueprint_service.get_pipeline_status(
@@ -339,6 +348,7 @@ async def cancel_pipeline(
     pipeline_id: str,
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> PipelineCancelResponse:
     """Cancel a running pipeline."""
     success = await blueprint_service.cancel_pipeline(
@@ -361,6 +371,7 @@ async def get_pipeline_history(
     limit: int = Query(default=10, ge=1, le=100),
     session: AsyncSession = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant_id),
+    _current_user: User = Depends(get_current_user),
 ) -> list[PipelineRunResponse]:
     """Get pipeline run history for a blueprint."""
     pipelines = await blueprint_service.get_pipeline_history(
