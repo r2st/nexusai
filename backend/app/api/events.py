@@ -91,7 +91,7 @@ async def receive_webhook(
     db: AsyncSession = Depends(get_db),
     x_tenant_id: str = Header(..., alias="X-Tenant-ID"),
     x_connection_id: str | None = Header(None, alias="X-Connection-ID"),
-):
+) -> dict:
     """Receive and process a webhook from any supported source.
 
     The source is specified in the path, and tenant ID must be provided
@@ -220,7 +220,7 @@ async def list_events(
     offset: int = 0,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> EventListResponse:
     """Query events for the current tenant.
 
     Results are filtered by the authenticated user's organization.
@@ -263,7 +263,7 @@ async def list_events(
 async def get_event_stats(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> EventStatsResponse:
     """Get event statistics for the current tenant."""
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
@@ -288,7 +288,7 @@ async def get_event(
     event_id: str,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> model_dump:
     """Get full details of a specific event."""
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
@@ -335,7 +335,7 @@ async def replay_events(
     request: ReplayRequest,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Replay events from the event store.
 
     This republishes events to the message queue for reprocessing.
@@ -388,7 +388,7 @@ async def replay_events(
 )
 async def get_publisher_stats(
     current_user: User = Depends(get_current_user),
-):
+) -> PublisherStatsResponse:
     """Get message queue publisher statistics.
 
     Requires admin role.
@@ -406,7 +406,7 @@ async def get_publisher_stats(
 )
 async def connect_publisher(
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Connect or reconnect to the message queue.
 
     Requires admin role.
@@ -426,7 +426,7 @@ async def mark_event_processed(
     error: str | None = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Mark an event as processed or failed.
 
     Used by event consumers to update processing state.

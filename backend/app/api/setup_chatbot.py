@@ -100,7 +100,7 @@ async def start_session(
     request: StartSessionRequest,
     current_user: User = Depends(get_current_user),
     tenant_id: str = Depends(get_current_tenant),
-):
+) -> StartSessionResponse:
     """Start a new setup assistant session.
 
     This creates a new conversational session for guiding users through:
@@ -180,7 +180,7 @@ async def send_message(
     request: SendMessageRequest,
     current_user: User = Depends(get_current_user),
     tenant_id: str = Depends(get_current_tenant),
-):
+) -> ChatResponse:
     """Send a message to the setup assistant.
 
     The assistant will process your message and respond with:
@@ -224,7 +224,7 @@ async def get_session(
     session_id: str,
     current_user: User = Depends(get_current_user),
     tenant_id: str = Depends(get_current_tenant),
-):
+) -> SessionInfoResponse:
     """Get information about a session."""
     session = setup_chatbot_service.get_session(session_id)
 
@@ -255,7 +255,7 @@ async def get_messages(
     session_id: str,
     current_user: User = Depends(get_current_user),
     tenant_id: str = Depends(get_current_tenant),
-):
+) -> list[ChatMessage]:
     """Get all messages in a session."""
     session = setup_chatbot_service.get_session(session_id)
 
@@ -303,7 +303,7 @@ async def cancel_session(
     session_id: str,
     current_user: User = Depends(get_current_user),
     tenant_id: str = Depends(get_current_tenant),
-):
+) -> response:
     """Cancel the current flow in a session."""
     session = setup_chatbot_service.get_session(session_id)
 
@@ -327,7 +327,7 @@ async def cancel_session(
 @router.get("/plugins", response_model=PluginListResponse)
 async def list_plugins(
     current_user: User = Depends(get_current_user),
-):
+) -> PluginListResponse:
     """List all available plugins for data source connections.
 
     Returns information about each plugin including:
@@ -358,7 +358,7 @@ async def quick_setup_connection(
     plugin: str,
     current_user: User = Depends(get_current_user),
     tenant_id: str = Depends(get_current_tenant),
-):
+) -> dict:
     """Quick start a connection setup for a specific plugin.
 
     This is a shortcut that creates a session and starts the connection
@@ -396,7 +396,7 @@ async def quick_setup_connection(
 async def start_onboarding(
     current_user: User = Depends(get_current_user),
     tenant_id: str = Depends(get_current_tenant),
-):
+) -> dict:
     """Start the onboarding flow for new users.
 
     This comprehensive flow guides users through:

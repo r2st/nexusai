@@ -120,7 +120,7 @@ class JoinRoomRequest(BaseModel):
 # --- Presence Endpoints ---
 
 @router.post("/presence", summary="Update user presence")
-async def update_presence(request: UpdatePresenceRequest, _current_user: User = Depends(get_current_user)):
+async def update_presence(request: UpdatePresenceRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Update user presence."""
     service = get_collaboration_service()
     presence = await service.update_user_presence(
@@ -139,7 +139,7 @@ async def update_presence(request: UpdatePresenceRequest, _current_user: User = 
 
 
 @router.get("/presence/{user_id}", summary="Get user presence")
-async def get_presence(user_id: str, _current_user: User = Depends(get_current_user)):
+async def get_presence(user_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get user presence."""
     service = get_collaboration_service()
     presence = await service.get_user_presence(user_id)
@@ -154,7 +154,7 @@ async def get_team_presence(
     status: PresenceStatus | None = None,
     user_ids: str | None = None,  # Comma-separated
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get team presence."""
     service = get_collaboration_service()
     user_id_list = user_ids.split(",") if user_ids else None
@@ -167,7 +167,7 @@ async def get_team_presence(
 
 
 @router.post("/presence/heartbeat", summary="Process heartbeat")
-async def heartbeat(request: HeartbeatRequest, _current_user: User = Depends(get_current_user)):
+async def heartbeat(request: HeartbeatRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Process heartbeat."""
     service = get_collaboration_service()
     presence = await service.heartbeat(request.user_id)
@@ -177,7 +177,7 @@ async def heartbeat(request: HeartbeatRequest, _current_user: User = Depends(get
 
 
 @router.post("/presence/{user_id}/offline", summary="Set user offline")
-async def set_offline(user_id: str, _current_user: User = Depends(get_current_user)):
+async def set_offline(user_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Set user offline."""
     service = get_collaboration_service()
     presence = await service.set_user_offline(user_id)
@@ -191,7 +191,7 @@ async def get_users_in_file(
     project_id: str,
     file_path: str,
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get users viewing a specific file."""
     service = get_collaboration_service()
     users = await service.get_users_in_file(project_id, file_path)
@@ -201,7 +201,7 @@ async def get_users_in_file(
 # --- Session Endpoints ---
 
 @router.post("/sessions", status_code=status.HTTP_201_CREATED, summary="Create a new collaborative session")
-async def create_session(request: CreateSessionRequest, _current_user: User = Depends(get_current_user)):
+async def create_session(request: CreateSessionRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Create a new collaborative session."""
     service = get_collaboration_service()
     session = await service.create_session(
@@ -228,7 +228,7 @@ async def list_sessions(
     user_id: str | None = None,
     is_active: bool = True,
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List collaborative sessions."""
     service = get_collaboration_service()
     sessions = await service.list_sessions(
@@ -242,7 +242,7 @@ async def list_sessions(
 
 
 @router.get("/sessions/{session_id}", summary="Get a session by ID")
-async def get_session(session_id: str, _current_user: User = Depends(get_current_user)):
+async def get_session(session_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get a session by ID."""
     service = get_collaboration_service()
     session = await service.get_session(session_id)
@@ -252,7 +252,7 @@ async def get_session(session_id: str, _current_user: User = Depends(get_current
 
 
 @router.post("/sessions/{session_id}/join", summary="Join a session")
-async def join_session(session_id: str, request: JoinSessionRequest, _current_user: User = Depends(get_current_user)):
+async def join_session(session_id: str, request: JoinSessionRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Join a session."""
     service = get_collaboration_service()
     session = await service.join_session(
@@ -267,7 +267,7 @@ async def join_session(session_id: str, request: JoinSessionRequest, _current_us
 
 
 @router.post("/sessions/{session_id}/leave", summary="Leave a session")
-async def leave_session(session_id: str, user_id: str, _current_user: User = Depends(get_current_user)):
+async def leave_session(session_id: str, user_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Leave a session."""
     service = get_collaboration_service()
     session = await service.leave_session(session_id, user_id)
@@ -277,7 +277,7 @@ async def leave_session(session_id: str, user_id: str, _current_user: User = Dep
 
 
 @router.post("/sessions/{session_id}/end", summary="End a session")
-async def end_session(session_id: str, ended_by: str, _current_user: User = Depends(get_current_user)):
+async def end_session(session_id: str, ended_by: str, _current_user: User = Depends(get_current_user)) -> dict:
     """End a session."""
     service = get_collaboration_service()
     session = await service.end_session(session_id, ended_by)
@@ -287,7 +287,7 @@ async def end_session(session_id: str, ended_by: str, _current_user: User = Depe
 
 
 @router.post("/sessions/{session_id}/messages", summary="Send a message in a session")
-async def send_session_message(session_id: str, request: SessionMessageRequest, _current_user: User = Depends(get_current_user)):
+async def send_session_message(session_id: str, request: SessionMessageRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Send a message in a session."""
     service = get_collaboration_service()
     message = await service.send_session_message(
@@ -305,7 +305,7 @@ async def send_session_message(session_id: str, request: SessionMessageRequest, 
 # --- Annotation Endpoints ---
 
 @router.post("/annotations", status_code=status.HTTP_201_CREATED, summary="Create a new annotation")
-async def create_annotation(request: CreateAnnotationRequest, _current_user: User = Depends(get_current_user)):
+async def create_annotation(request: CreateAnnotationRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Create a new annotation."""
     service = get_collaboration_service()
     annotation = await service.create_annotation(
@@ -336,7 +336,7 @@ async def list_annotations(
     resolved: bool | None = None,
     limit: int = Query(default=100, le=500),
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List annotations."""
     service = get_collaboration_service()
     annotations = await service.list_annotations(
@@ -351,7 +351,7 @@ async def list_annotations(
 
 
 @router.get("/annotations/{annotation_id}", summary="Get an annotation")
-async def get_annotation(annotation_id: str, _current_user: User = Depends(get_current_user)):
+async def get_annotation(annotation_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get an annotation."""
     service = get_collaboration_service()
     annotation = await service.get_annotation(annotation_id)
@@ -361,7 +361,7 @@ async def get_annotation(annotation_id: str, _current_user: User = Depends(get_c
 
 
 @router.put("/annotations/{annotation_id}", summary="Update an annotation")
-async def update_annotation(annotation_id: str, request: UpdateAnnotationRequest, _current_user: User = Depends(get_current_user)):
+async def update_annotation(annotation_id: str, request: UpdateAnnotationRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Update an annotation."""
     annotations = get_annotation_service()
     annotation = await annotations.update_annotation(
@@ -387,7 +387,7 @@ async def delete_annotation(annotation_id: str, user_id: str, _current_user: Use
 
 
 @router.post("/annotations/{annotation_id}/resolve", summary="Resolve an annotation")
-async def resolve_annotation(annotation_id: str, request: ResolveAnnotationRequest, _current_user: User = Depends(get_current_user)):
+async def resolve_annotation(annotation_id: str, request: ResolveAnnotationRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Resolve an annotation."""
     service = get_collaboration_service()
     annotation = await service.resolve_annotation(
@@ -401,7 +401,7 @@ async def resolve_annotation(annotation_id: str, request: ResolveAnnotationReque
 
 
 @router.post("/annotations/{annotation_id}/unresolve", summary="Unresolve an annotation")
-async def unresolve_annotation(annotation_id: str, _current_user: User = Depends(get_current_user)):
+async def unresolve_annotation(annotation_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Unresolve an annotation."""
     annotations = get_annotation_service()
     annotation = await annotations.unresolve_annotation(annotation_id)
@@ -411,7 +411,7 @@ async def unresolve_annotation(annotation_id: str, _current_user: User = Depends
 
 
 @router.get("/annotations/{annotation_id}/replies", summary="Get replies to an annotation")
-async def get_annotation_replies(annotation_id: str, _current_user: User = Depends(get_current_user)):
+async def get_annotation_replies(annotation_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get replies to an annotation."""
     annotations = get_annotation_service()
     replies = await annotations.get_replies(annotation_id)
@@ -419,7 +419,7 @@ async def get_annotation_replies(annotation_id: str, _current_user: User = Depen
 
 
 @router.get("/annotations/mentions/{user_id}", summary="Get annotations mentioning a user")
-async def get_user_mentions(user_id: str, unresolved_only: bool = True, _current_user: User = Depends(get_current_user)):
+async def get_user_mentions(user_id: str, unresolved_only: bool = True, _current_user: User = Depends(get_current_user)) -> dict:
     """Get annotations mentioning a user."""
     service = get_collaboration_service()
     mentions = await service.get_user_mentions(user_id, unresolved_only)
@@ -437,7 +437,7 @@ async def get_organization_activity(
     since: datetime | None = None,
     limit: int = Query(default=50, le=200),
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get organization activity feed."""
     service = get_collaboration_service()
 
@@ -464,7 +464,7 @@ async def get_project_activity(
     since: datetime | None = None,
     limit: int = Query(default=50, le=200),
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get project activity feed."""
     service = get_collaboration_service()
 
@@ -488,7 +488,7 @@ async def get_user_activity(
     viewer_user_id: str | None = None,
     _current_user: User = Depends(get_current_user),
     limit: int = Query(default=50, le=200),
-):
+) -> dict:
     """Get user activity feed."""
     service = get_collaboration_service()
     events = await service.get_user_activity(
@@ -505,7 +505,7 @@ async def get_activity_summary(
     project_id: str | None = None,
     _current_user: User = Depends(get_current_user),
     days: int = Query(default=7, le=30),
-):
+) -> dict:
     """Get activity summary."""
     service = get_collaboration_service()
     summary = await service.get_activity_summary(
@@ -519,7 +519,7 @@ async def get_activity_summary(
 # --- Room Endpoints ---
 
 @router.post("/rooms/join", summary="Join a collaboration room")
-async def join_room(request: JoinRoomRequest, _current_user: User = Depends(get_current_user)):
+async def join_room(request: JoinRoomRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Join a collaboration room."""
     service = get_collaboration_service()
     room = await service.join_room(
@@ -531,7 +531,7 @@ async def join_room(request: JoinRoomRequest, _current_user: User = Depends(get_
 
 
 @router.post("/rooms/leave", summary="Leave a collaboration room")
-async def leave_room(request: JoinRoomRequest, _current_user: User = Depends(get_current_user)):
+async def leave_room(request: JoinRoomRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Leave a collaboration room."""
     service = get_collaboration_service()
     room = await service.leave_room(
@@ -543,7 +543,7 @@ async def leave_room(request: JoinRoomRequest, _current_user: User = Depends(get
 
 
 @router.get("/rooms/{room_type}/{room_key}/members", summary="Get room members")
-async def get_room_members(room_type: str, room_key: str, _current_user: User = Depends(get_current_user)):
+async def get_room_members(room_type: str, room_key: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get room members."""
     service = get_collaboration_service()
     members = await service.get_room_members(room_type, room_key)
@@ -557,7 +557,7 @@ async def get_collaboration_dashboard(
     organization_id: str,
     project_id: str | None = None,
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get collaboration dashboard data."""
     service = get_collaboration_service()
     dashboard = await service.get_collaboration_dashboard(
@@ -629,7 +629,7 @@ async def websocket_endpoint(
     room_type: str,
     room_key: str,
     user_id: str,
-):
+) -> None:
     """WebSocket endpoint for real-time collaboration."""
     room_id = f"{room_type}:{room_key}"
     service = get_collaboration_service()

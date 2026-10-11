@@ -165,7 +165,7 @@ async def get_user_from_token(token: str, db: AsyncSession) -> User | None:
 async def websocket_chat(
     websocket: WebSocket,
     token: str = Query(...),
-):
+) -> None:
     """
     WebSocket endpoint for chat.
     

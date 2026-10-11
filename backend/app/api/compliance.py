@@ -163,7 +163,7 @@ class CreateChangeRecordRequest(BaseModel):
 # --- GDPR Endpoints ---
 
 @router.post("/gdpr/dsr", status_code=status.HTTP_201_CREATED, summary="Create a new Data Subject Request")
-async def create_dsr(request: CreateDSRRequest, _current_user: User = Depends(get_current_user)):
+async def create_dsr(request: CreateDSRRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Create a new Data Subject Request."""
     service = get_gdpr_service()
     dsr = await service.create_dsr(
@@ -176,7 +176,7 @@ async def create_dsr(request: CreateDSRRequest, _current_user: User = Depends(ge
 
 
 @router.get("/gdpr/dsr/{dsr_id}", summary="Get a Data Subject Request by ID")
-async def get_dsr(dsr_id: str, _current_user: User = Depends(get_current_user)):
+async def get_dsr(dsr_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get a Data Subject Request by ID."""
     service = get_gdpr_service()
     dsr = await service.get_dsr(dsr_id)
@@ -191,7 +191,7 @@ async def list_dsrs(
     status: DataSubjectRequestStatus | None = None,
     request_type: DataSubjectRequestType | None = None,
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List Data Subject Requests with optional filters."""
     service = get_gdpr_service()
     dsrs = await service.list_dsrs(
@@ -203,7 +203,7 @@ async def list_dsrs(
 
 
 @router.post("/gdpr/dsr/{dsr_id}/process", summary="Mark a DSR as in progress")
-async def process_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: User = Depends(get_current_user)):
+async def process_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Mark a DSR as in progress."""
     service = get_gdpr_service()
     dsr = await service.process_dsr(
@@ -217,7 +217,7 @@ async def process_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: Us
 
 
 @router.post("/gdpr/dsr/{dsr_id}/complete", summary="Complete a Data Subject Request")
-async def complete_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: User = Depends(get_current_user)):
+async def complete_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Complete a Data Subject Request."""
     service = get_gdpr_service()
     dsr = await service.complete_dsr(
@@ -231,7 +231,7 @@ async def complete_dsr(dsr_id: str, request: ProcessDSRRequest, _current_user: U
 
 
 @router.post("/gdpr/dsr/{dsr_id}/reject", summary="Reject a Data Subject Request")
-async def reject_dsr(dsr_id: str, request: RejectDSRRequest, _current_user: User = Depends(get_current_user)):
+async def reject_dsr(dsr_id: str, request: RejectDSRRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Reject a Data Subject Request."""
     service = get_gdpr_service()
     dsr = await service.reject_dsr(
@@ -245,7 +245,7 @@ async def reject_dsr(dsr_id: str, request: RejectDSRRequest, _current_user: User
 
 
 @router.get("/gdpr/dsr/overdue", summary="Get overdue Data Subject Requests")
-async def get_overdue_dsrs(_current_user: User = Depends(get_current_user)):
+async def get_overdue_dsrs(_current_user: User = Depends(get_current_user)) -> dict:
     """Get overdue Data Subject Requests."""
     service = get_gdpr_service()
     dsrs = await service.get_overdue_dsrs()
@@ -253,7 +253,7 @@ async def get_overdue_dsrs(_current_user: User = Depends(get_current_user)):
 
 
 @router.post("/gdpr/consent", summary="Record a consent decision")
-async def record_consent(request: RecordConsentRequest, _current_user: User = Depends(get_current_user)):
+async def record_consent(request: RecordConsentRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Record a consent decision."""
     service = get_gdpr_service()
     record = await service.record_consent(
@@ -271,7 +271,7 @@ async def record_consent(request: RecordConsentRequest, _current_user: User = De
 
 
 @router.post("/gdpr/consent/revoke", summary="Revoke consent")
-async def revoke_consent(request: RevokeConsentRequest, _current_user: User = Depends(get_current_user)):
+async def revoke_consent(request: RevokeConsentRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Revoke consent."""
     service = get_gdpr_service()
     record = await service.revoke_consent(
@@ -288,7 +288,7 @@ async def get_user_consents(
     user_id: str,
     _current_user: User = Depends(get_current_user),
     active_only: bool = Query(default=True),
-):
+) -> dict:
     """Get consent records for a user."""
     service = get_gdpr_service()
     records = await service.get_user_consents(user_id, active_only)
@@ -296,7 +296,7 @@ async def get_user_consents(
 
 
 @router.get("/gdpr/consent/{user_id}/check/{consent_type}", summary="Check if user has active consent for a type")
-async def check_consent(user_id: str, consent_type: ConsentType, _current_user: User = Depends(get_current_user)):
+async def check_consent(user_id: str, consent_type: ConsentType, _current_user: User = Depends(get_current_user)) -> dict:
     """Check if user has active consent for a type."""
     service = get_gdpr_service()
     has_consent = await service.check_consent(user_id, consent_type)
@@ -304,7 +304,7 @@ async def check_consent(user_id: str, consent_type: ConsentType, _current_user: 
 
 
 @router.post("/gdpr/retention-policy", status_code=status.HTTP_201_CREATED, summary="Create a data retention policy")
-async def create_retention_policy(request: CreateRetentionPolicyRequest, _current_user: User = Depends(get_current_user)):
+async def create_retention_policy(request: CreateRetentionPolicyRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Create a data retention policy."""
     service = get_gdpr_service()
     policy = await service.create_retention_policy(
@@ -321,7 +321,7 @@ async def create_retention_policy(request: CreateRetentionPolicyRequest, _curren
 
 
 @router.get("/gdpr/retention-policy", summary="List data retention policies")
-async def list_retention_policies(enabled_only: bool = Query(default=True), _current_user: User = Depends(get_current_user)):
+async def list_retention_policies(enabled_only: bool = Query(default=True), _current_user: User = Depends(get_current_user)) -> dict:
     """List data retention policies."""
     service = get_gdpr_service()
     policies = await service.list_retention_policies(enabled_only)
@@ -329,7 +329,7 @@ async def list_retention_policies(enabled_only: bool = Query(default=True), _cur
 
 
 @router.post("/gdpr/retention-policy/{policy_id}/execute", summary="Execute a data retention policy")
-async def execute_retention_policy(policy_id: str, _current_user: User = Depends(get_current_user)):
+async def execute_retention_policy(policy_id: str, _current_user: User = Depends(get_current_user)) -> result:
     """Execute a data retention policy."""
     service = get_gdpr_service()
     result = await service.execute_retention_policy(policy_id)
@@ -337,7 +337,7 @@ async def execute_retention_policy(policy_id: str, _current_user: User = Depends
 
 
 @router.post("/gdpr/data-inventory", status_code=status.HTTP_201_CREATED, summary="Add an item to the personal data inventory")
-async def add_data_inventory(request: AddDataInventoryRequest, _current_user: User = Depends(get_current_user)):
+async def add_data_inventory(request: AddDataInventoryRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Add an item to the personal data inventory."""
     service = get_gdpr_service()
     item = await service.add_data_inventory_item(
@@ -357,7 +357,7 @@ async def add_data_inventory(request: AddDataInventoryRequest, _current_user: Us
 
 
 @router.get("/gdpr/data-inventory", summary="Get the personal data inventory")
-async def get_data_inventory(category: DataCategory | None = None, _current_user: User = Depends(get_current_user)):
+async def get_data_inventory(category: DataCategory | None = None, _current_user: User = Depends(get_current_user)) -> dict:
     """Get the personal data inventory."""
     service = get_gdpr_service()
     items = await service.get_data_inventory(category)
@@ -365,7 +365,7 @@ async def get_data_inventory(category: DataCategory | None = None, _current_user
 
 
 @router.get("/gdpr/report", summary="Generate GDPR compliance report")
-async def get_gdpr_compliance_report(_current_user: User = Depends(get_current_user)):
+async def get_gdpr_compliance_report(_current_user: User = Depends(get_current_user)) -> dict:
     """Generate GDPR compliance report."""
     service = get_gdpr_service()
     report = await service.generate_compliance_report()
@@ -379,7 +379,7 @@ async def get_gdpr_audit_log(
     actor: str | None = None,
     _current_user: User = Depends(get_current_user),
     limit: int = Query(default=100, le=500),
-):
+) -> dict:
     """Get GDPR audit log entries."""
     service = get_gdpr_service()
     entries = await service.get_audit_log(
@@ -398,7 +398,7 @@ async def list_controls(
     category: SOC2ControlCategory | None = None,
     status: SOC2ControlStatus | None = None,
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List SOC 2 controls."""
     service = get_soc2_service()
     controls = await service.list_controls(category, status)
@@ -406,7 +406,7 @@ async def list_controls(
 
 
 @router.get("/soc2/controls/{control_id}", summary="Get a SOC 2 control by ID")
-async def get_control(control_id: str, _current_user: User = Depends(get_current_user)):
+async def get_control(control_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get a SOC 2 control by ID."""
     service = get_soc2_service()
     control = await service.get_control(control_id)
@@ -416,7 +416,7 @@ async def get_control(control_id: str, _current_user: User = Depends(get_current
 
 
 @router.put("/soc2/controls/{control_id}/status", summary="Update a control's status")
-async def update_control_status(control_id: str, request: UpdateControlStatusRequest, _current_user: User = Depends(get_current_user)):
+async def update_control_status(control_id: str, request: UpdateControlStatusRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Update a control's status."""
     service = get_soc2_service()
     control = await service.update_control_status(
@@ -431,7 +431,7 @@ async def update_control_status(control_id: str, request: UpdateControlStatusReq
 
 
 @router.post("/soc2/controls/{control_id}/test", summary="Record a control test result")
-async def record_control_test(control_id: str, request: RecordControlTestRequest, _current_user: User = Depends(get_current_user)):
+async def record_control_test(control_id: str, request: RecordControlTestRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Record a control test result."""
     service = get_soc2_service()
     control = await service.record_control_test(
@@ -446,7 +446,7 @@ async def record_control_test(control_id: str, request: RecordControlTestRequest
 
 
 @router.post("/soc2/evidence", status_code=status.HTTP_201_CREATED, summary="Add evidence for a control")
-async def add_evidence(request: AddEvidenceRequest, _current_user: User = Depends(get_current_user)):
+async def add_evidence(request: AddEvidenceRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Add evidence for a control."""
     service = get_soc2_service()
     evidence = await service.add_evidence(
@@ -464,7 +464,7 @@ async def add_evidence(request: AddEvidenceRequest, _current_user: User = Depend
 
 
 @router.get("/soc2/evidence/{control_id}", summary="Get evidence for a control")
-async def get_evidence(control_id: str, valid_only: bool = Query(default=True), _current_user: User = Depends(get_current_user)):
+async def get_evidence(control_id: str, valid_only: bool = Query(default=True), _current_user: User = Depends(get_current_user)) -> dict:
     """Get evidence for a control."""
     service = get_soc2_service()
     evidence = await service.get_evidence(control_id, valid_only)
@@ -472,7 +472,7 @@ async def get_evidence(control_id: str, valid_only: bool = Query(default=True), 
 
 
 @router.post("/soc2/evidence/{evidence_id}/verify", summary="Verify evidence")
-async def verify_evidence(evidence_id: str, verifier: str, _current_user: User = Depends(get_current_user)):
+async def verify_evidence(evidence_id: str, verifier: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Verify evidence."""
     service = get_soc2_service()
     evidence = await service.verify_evidence(evidence_id, verifier)
@@ -482,7 +482,7 @@ async def verify_evidence(evidence_id: str, verifier: str, _current_user: User =
 
 
 @router.post("/soc2/access-review", status_code=status.HTTP_201_CREATED, summary="Create a new access review")
-async def create_access_review(request: CreateAccessReviewRequest, _current_user: User = Depends(get_current_user)):
+async def create_access_review(request: CreateAccessReviewRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Create a new access review."""
     service = get_soc2_service()
     review = await service.create_access_review(
@@ -494,7 +494,7 @@ async def create_access_review(request: CreateAccessReviewRequest, _current_user
 
 
 @router.post("/soc2/access-review/{review_id}/complete", summary="Complete an access review")
-async def complete_access_review(review_id: str, request: CompleteAccessReviewRequest, _current_user: User = Depends(get_current_user)):
+async def complete_access_review(review_id: str, request: CompleteAccessReviewRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Complete an access review."""
     service = get_soc2_service()
     review = await service.complete_access_review(
@@ -513,7 +513,7 @@ async def complete_access_review(review_id: str, request: CompleteAccessReviewRe
 
 
 @router.post("/soc2/access-review/{review_id}/approve", summary="Approve an access review")
-async def approve_access_review(review_id: str, approver: str, _current_user: User = Depends(get_current_user)):
+async def approve_access_review(review_id: str, approver: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Approve an access review."""
     service = get_soc2_service()
     review = await service.approve_access_review(review_id, approver)
@@ -523,7 +523,7 @@ async def approve_access_review(review_id: str, approver: str, _current_user: Us
 
 
 @router.get("/soc2/access-review", summary="List access reviews")
-async def list_access_reviews(status: str | None = None, _current_user: User = Depends(get_current_user)):
+async def list_access_reviews(status: str | None = None, _current_user: User = Depends(get_current_user)) -> dict:
     """List access reviews."""
     service = get_soc2_service()
     reviews = await service.list_access_reviews(status)
@@ -531,7 +531,7 @@ async def list_access_reviews(status: str | None = None, _current_user: User = D
 
 
 @router.post("/soc2/change", status_code=status.HTTP_201_CREATED, summary="Create a change management record")
-async def create_change_record(request: CreateChangeRecordRequest, _current_user: User = Depends(get_current_user)):
+async def create_change_record(request: CreateChangeRecordRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Create a change management record."""
     service = get_soc2_service()
     change = await service.create_change_record(
@@ -548,7 +548,7 @@ async def create_change_record(request: CreateChangeRecordRequest, _current_user
 
 
 @router.post("/soc2/change/{change_id}/approve", summary="Approve a change request")
-async def approve_change(change_id: str, approver: str, _current_user: User = Depends(get_current_user)):
+async def approve_change(change_id: str, approver: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Approve a change request."""
     service = get_soc2_service()
     change = await service.approve_change(change_id, approver)
@@ -563,7 +563,7 @@ async def implement_change(
     implementer: str,
     test_results: str | None = None,
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Record change implementation."""
     service = get_soc2_service()
     change = await service.implement_change(
@@ -581,7 +581,7 @@ async def list_changes(
     status: str | None = None,
     change_type: str | None = None,
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List change records."""
     service = get_soc2_service()
     changes = await service.list_changes(status, change_type)
@@ -592,7 +592,7 @@ async def list_changes(
 async def get_soc2_compliance_report(
     _current_user: User = Depends(get_current_user),
     report_period: str = Query(default="Q1 2024"),
-):
+) -> dict:
     """Generate SOC 2 compliance report."""
     service = get_soc2_service()
     report = await service.generate_compliance_report(report_period)
@@ -604,7 +604,7 @@ async def get_soc2_audit_log(
     resource_type: str | None = None,
     _current_user: User = Depends(get_current_user),
     limit: int = Query(default=100, le=500),
-):
+) -> dict:
     """Get SOC 2 audit log entries."""
     service = get_soc2_service()
     entries = await service.get_audit_log(resource_type, limit)
@@ -614,7 +614,7 @@ async def get_soc2_audit_log(
 # --- Combined Dashboard Endpoint ---
 
 @router.get("/dashboard", summary="Get combined compliance dashboard data")
-async def get_compliance_dashboard(_current_user: User = Depends(get_current_user)):
+async def get_compliance_dashboard(_current_user: User = Depends(get_current_user)) -> dict:
     """Get combined compliance dashboard data."""
     gdpr_service = get_gdpr_service()
     soc2_service = get_soc2_service()

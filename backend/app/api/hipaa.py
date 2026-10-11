@@ -144,7 +144,7 @@ class DenyAccessRequest(BaseModel):
 # --- PHI Detection Endpoints ---
 
 @router.post("/phi/detect", summary="Detect PHI in content")
-async def detect_phi(request: DetectPHIRequest, _current_user: User = Depends(get_current_user)):
+async def detect_phi(request: DetectPHIRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Detect PHI in content."""
     detector = get_phi_detector()
     result = await detector.detect(
@@ -156,7 +156,7 @@ async def detect_phi(request: DetectPHIRequest, _current_user: User = Depends(ge
 
 
 @router.post("/phi/detect-in-code", summary="Detect PHI in source code")
-async def detect_phi_in_code(request: DetectPHIInCodeRequest, _current_user: User = Depends(get_current_user)):
+async def detect_phi_in_code(request: DetectPHIInCodeRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Detect PHI in source code."""
     detector = get_phi_detector()
     result = await detector.detect_in_code(
@@ -167,7 +167,7 @@ async def detect_phi_in_code(request: DetectPHIInCodeRequest, _current_user: Use
 
 
 @router.get("/phi/patterns", summary="Get configured PHI detection patterns")
-async def get_phi_patterns(category: PHICategory | None = None, _current_user: User = Depends(get_current_user)):
+async def get_phi_patterns(category: PHICategory | None = None, _current_user: User = Depends(get_current_user)) -> dict:
     """Get configured PHI detection patterns."""
     detector = get_phi_detector()
     patterns = detector.get_patterns(category)
@@ -177,7 +177,7 @@ async def get_phi_patterns(category: PHICategory | None = None, _current_user: U
 # --- BAA Management Endpoints ---
 
 @router.post("/baa", status_code=status.HTTP_201_CREATED, summary="Create a new Business Associate Agreement")
-async def create_baa(request: CreateBAARequest, _current_user: User = Depends(get_current_user)):
+async def create_baa(request: CreateBAARequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Create a new Business Associate Agreement."""
     manager = get_baa_manager()
     baa = await manager.create_baa(
@@ -204,7 +204,7 @@ async def list_baas(
     baa_type: BAAType | None = None,
     expiring_within_days: int | None = None,
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List Business Associate Agreements."""
     manager = get_baa_manager()
     baas = await manager.list_baas(
@@ -217,7 +217,7 @@ async def list_baas(
 
 
 @router.get("/baa/{baa_id}", summary="Get a BAA by ID")
-async def get_baa(baa_id: str, _current_user: User = Depends(get_current_user)):
+async def get_baa(baa_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get a BAA by ID."""
     manager = get_baa_manager()
     baa = await manager.get_baa(baa_id)
@@ -227,7 +227,7 @@ async def get_baa(baa_id: str, _current_user: User = Depends(get_current_user)):
 
 
 @router.post("/baa/{baa_id}/submit-for-review", summary="Submit BAA for review")
-async def submit_baa_for_review(baa_id: str, submitted_by: str, _current_user: User = Depends(get_current_user)):
+async def submit_baa_for_review(baa_id: str, submitted_by: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Submit BAA for review."""
     manager = get_baa_manager()
     baa = await manager.submit_for_review(baa_id, submitted_by)
@@ -237,7 +237,7 @@ async def submit_baa_for_review(baa_id: str, submitted_by: str, _current_user: U
 
 
 @router.post("/baa/{baa_id}/approve", summary="Approve a BAA")
-async def approve_baa(baa_id: str, approved_by: str, _current_user: User = Depends(get_current_user)):
+async def approve_baa(baa_id: str, approved_by: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Approve a BAA."""
     manager = get_baa_manager()
     baa = await manager.approve_baa(baa_id, approved_by)
@@ -247,7 +247,7 @@ async def approve_baa(baa_id: str, approved_by: str, _current_user: User = Depen
 
 
 @router.post("/baa/{baa_id}/activate", summary="Activate a signed BAA")
-async def activate_baa(baa_id: str, request: ActivateBAARequest, _current_user: User = Depends(get_current_user)):
+async def activate_baa(baa_id: str, request: ActivateBAARequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Activate a signed BAA."""
     manager = get_baa_manager()
     baa = await manager.activate_baa(
@@ -263,7 +263,7 @@ async def activate_baa(baa_id: str, request: ActivateBAARequest, _current_user: 
 
 
 @router.post("/baa/{baa_id}/renew", summary="Renew a BAA")
-async def renew_baa(baa_id: str, request: RenewBAARequest, _current_user: User = Depends(get_current_user)):
+async def renew_baa(baa_id: str, request: RenewBAARequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Renew a BAA."""
     manager = get_baa_manager()
     baa = await manager.renew_baa(
@@ -278,7 +278,7 @@ async def renew_baa(baa_id: str, request: RenewBAARequest, _current_user: User =
 
 
 @router.post("/baa/{baa_id}/terminate", summary="Terminate a BAA")
-async def terminate_baa(baa_id: str, request: TerminateBAARequest, _current_user: User = Depends(get_current_user)):
+async def terminate_baa(baa_id: str, request: TerminateBAARequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Terminate a BAA."""
     manager = get_baa_manager()
     baa = await manager.terminate_baa(
@@ -292,7 +292,7 @@ async def terminate_baa(baa_id: str, request: TerminateBAARequest, _current_user
 
 
 @router.get("/baa/summary/{organization_id}", summary="Get BAA summary for organization")
-async def get_baa_summary(organization_id: str, _current_user: User = Depends(get_current_user)):
+async def get_baa_summary(organization_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get BAA summary for organization."""
     manager = get_baa_manager()
     summary = await manager.get_baa_summary(organization_id)
@@ -302,7 +302,7 @@ async def get_baa_summary(organization_id: str, _current_user: User = Depends(ge
 # --- Encryption Audit Endpoints ---
 
 @router.post("/encryption/audit", summary="Run encryption compliance audit")
-async def run_encryption_audit(auditor: str | None = None, _current_user: User = Depends(get_current_user)):
+async def run_encryption_audit(auditor: str | None = None, _current_user: User = Depends(get_current_user)) -> dict:
     """Run encryption compliance audit."""
     auditor_service = get_encryption_auditor()
     result = await auditor_service.audit_encryption(auditor)
@@ -310,7 +310,7 @@ async def run_encryption_audit(auditor: str | None = None, _current_user: User =
 
 
 @router.get("/encryption/audit/{audit_id}", summary="Get encryption audit result")
-async def get_encryption_audit(audit_id: str, _current_user: User = Depends(get_current_user)):
+async def get_encryption_audit(audit_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get encryption audit result."""
     auditor = get_encryption_auditor()
     result = await auditor.get_audit_result(audit_id)
@@ -320,7 +320,7 @@ async def get_encryption_audit(audit_id: str, _current_user: User = Depends(get_
 
 
 @router.get("/encryption/audits", summary="List encryption audit results")
-async def list_encryption_audits(limit: int = Query(default=100, le=500), _current_user: User = Depends(get_current_user)):
+async def list_encryption_audits(limit: int = Query(default=100, le=500), _current_user: User = Depends(get_current_user)) -> dict:
     """List encryption audit results."""
     auditor = get_encryption_auditor()
     results = await auditor.list_audits(limit)
@@ -328,7 +328,7 @@ async def list_encryption_audits(limit: int = Query(default=100, le=500), _curre
 
 
 @router.post("/encryption/register-storage", status_code=status.HTTP_201_CREATED, summary="Register a storage location for encryption audit")
-async def register_storage_location(request: RegisterStorageRequest, _current_user: User = Depends(get_current_user)):
+async def register_storage_location(request: RegisterStorageRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Register a storage location for encryption audit."""
     auditor = get_encryption_auditor()
     await auditor.register_storage_location(
@@ -341,7 +341,7 @@ async def register_storage_location(request: RegisterStorageRequest, _current_us
 
 
 @router.post("/encryption/register-endpoint", status_code=status.HTTP_201_CREATED, summary="Register an endpoint for encryption audit")
-async def register_endpoint(request: RegisterEndpointRequest, _current_user: User = Depends(get_current_user)):
+async def register_endpoint(request: RegisterEndpointRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Register an endpoint for encryption audit."""
     auditor = get_encryption_auditor()
     await auditor.register_endpoint(
@@ -354,7 +354,7 @@ async def register_endpoint(request: RegisterEndpointRequest, _current_user: Use
 
 
 @router.get("/encryption/algorithms", summary="Get approved and weak encryption algorithms")
-async def get_encryption_algorithms(_current_user: User = Depends(get_current_user)):
+async def get_encryption_algorithms(_current_user: User = Depends(get_current_user)) -> dict:
     """Get approved and weak encryption algorithms."""
     auditor = get_encryption_auditor()
     return {
@@ -371,7 +371,7 @@ async def list_controls(
     status: HIPAAControlStatus | None = None,
     required_only: bool = False,
     _current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List HIPAA controls."""
     service = get_hipaa_service()
     controls = await service.list_controls(category, status, required_only)
@@ -379,7 +379,7 @@ async def list_controls(
 
 
 @router.get("/controls/{control_id}", summary="Get a HIPAA control")
-async def get_control(control_id: str, _current_user: User = Depends(get_current_user)):
+async def get_control(control_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get a HIPAA control."""
     service = get_hipaa_service()
     control = await service.get_control(control_id)
@@ -389,7 +389,7 @@ async def get_control(control_id: str, _current_user: User = Depends(get_current
 
 
 @router.put("/controls/{control_id}/status", summary="Update a control's status")
-async def update_control_status(control_id: str, request: UpdateControlStatusRequest, _current_user: User = Depends(get_current_user)):
+async def update_control_status(control_id: str, request: UpdateControlStatusRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Update a control's status."""
     service = get_hipaa_service()
     control = await service.update_control_status(
@@ -404,7 +404,7 @@ async def update_control_status(control_id: str, request: UpdateControlStatusReq
 
 
 @router.post("/controls/{control_id}/evidence", status_code=status.HTTP_201_CREATED, summary="Add evidence to a control")
-async def add_control_evidence(control_id: str, evidence_id: str, added_by: str, _current_user: User = Depends(get_current_user)):
+async def add_control_evidence(control_id: str, evidence_id: str, added_by: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Add evidence to a control."""
     service = get_hipaa_service()
     control = await service.add_control_evidence(control_id, evidence_id, added_by)
@@ -416,7 +416,7 @@ async def add_control_evidence(control_id: str, evidence_id: str, added_by: str,
 # --- Minimum Necessary Policy Endpoints ---
 
 @router.post("/policies/minimum-necessary", status_code=status.HTTP_201_CREATED, summary="Create a minimum necessary access policy")
-async def create_minimum_necessary_policy(request: CreatePolicyRequest, _current_user: User = Depends(get_current_user)):
+async def create_minimum_necessary_policy(request: CreatePolicyRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Create a minimum necessary access policy."""
     service = get_hipaa_service()
     policy = await service.create_minimum_necessary_policy(
@@ -433,7 +433,7 @@ async def create_minimum_necessary_policy(request: CreatePolicyRequest, _current
 
 
 @router.get("/policies/minimum-necessary", summary="List minimum necessary policies")
-async def list_minimum_necessary_policies(enabled_only: bool = True, _current_user: User = Depends(get_current_user)):
+async def list_minimum_necessary_policies(enabled_only: bool = True, _current_user: User = Depends(get_current_user)) -> dict:
     """List minimum necessary policies."""
     service = get_hipaa_service()
     policies = await service.list_minimum_necessary_policies(enabled_only)
@@ -441,7 +441,7 @@ async def list_minimum_necessary_policies(enabled_only: bool = True, _current_us
 
 
 @router.post("/access/request", summary="Request access with justification")
-async def request_access(request: RequestAccessRequest, _current_user: User = Depends(get_current_user)):
+async def request_access(request: RequestAccessRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Request access with justification."""
     service = get_hipaa_service()
     justification = await service.request_access_justification(
@@ -455,7 +455,7 @@ async def request_access(request: RequestAccessRequest, _current_user: User = De
 
 
 @router.post("/access/{justification_id}/approve", summary="Approve access justification")
-async def approve_access(justification_id: str, request: ApproveAccessRequest, _current_user: User = Depends(get_current_user)):
+async def approve_access(justification_id: str, request: ApproveAccessRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Approve access justification."""
     service = get_hipaa_service()
     justification = await service.approve_access_justification(
@@ -470,7 +470,7 @@ async def approve_access(justification_id: str, request: ApproveAccessRequest, _
 
 
 @router.post("/access/{justification_id}/deny", summary="Deny access justification")
-async def deny_access(justification_id: str, request: DenyAccessRequest, _current_user: User = Depends(get_current_user)):
+async def deny_access(justification_id: str, request: DenyAccessRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Deny access justification."""
     service = get_hipaa_service()
     justification = await service.deny_access_justification(
@@ -490,7 +490,7 @@ async def get_hipaa_compliance_report(
     _current_user: User = Depends(get_current_user),
     report_period: str = Query(default="Q1 2024"),
     organization_id: str | None = None,
-):
+) -> dict:
     """Generate HIPAA compliance report."""
     service = get_hipaa_service()
     report = await service.generate_compliance_report(report_period, organization_id)
@@ -502,7 +502,7 @@ async def get_hipaa_audit_log(
     resource_type: str | None = None,
     _current_user: User = Depends(get_current_user),
     limit: int = Query(default=100, le=500),
-):
+) -> dict:
     """Get HIPAA audit log entries."""
     service = get_hipaa_service()
     entries = await service.get_audit_log(resource_type, limit)

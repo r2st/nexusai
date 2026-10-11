@@ -306,7 +306,7 @@ async def websocket_endpoint(
     websocket: WebSocket,
     token: str,
     service: Annotated[ExtensionService, Depends(get_ext_service)],
-):
+) -> None:
     """WebSocket endpoint for real-time sync.
 
     Provides real-time updates for:

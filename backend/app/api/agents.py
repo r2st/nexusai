@@ -196,7 +196,7 @@ async def create_agent(
     request: AgentCreate,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> AgentResponse:
     """Create a new agent."""
     if not settings.AGENTS_ENABLED:
         raise HTTPException(
@@ -265,7 +265,7 @@ async def list_agents(
     include_public: bool = True,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> AgentListResponse:
     """List agents accessible to the current user."""
     service = AgentService(db)
 
@@ -315,7 +315,7 @@ async def get_agent(
     agent_id: str,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> AgentResponse:
     """Get agent by ID."""
     service = AgentService(db)
 
@@ -362,7 +362,7 @@ async def update_agent(
     request: AgentUpdate,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> AgentResponse:
     """Update an agent."""
     service = AgentService(db)
 
@@ -412,7 +412,7 @@ async def delete_agent(
     agent_id: str,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> None:
     """Delete an agent."""
     service = AgentService(db)
 
@@ -439,7 +439,7 @@ async def execute_agent(
     background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> AgentExecutionResponse:
     """Execute an agent with the given message."""
     service = AgentService(db)
 

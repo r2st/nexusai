@@ -61,7 +61,7 @@ async def get_dora_rollups(
     team_id: str | None = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get precomputed DORA metric rollups.
 
     Returns deployment frequency, lead time, MTTR, and change failure rate
@@ -109,7 +109,7 @@ async def get_space_rollups(
     team_id: str | None = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get precomputed SPACE framework metric rollups.
 
     Returns satisfaction, performance, activity, communication, and
@@ -152,7 +152,7 @@ async def compute_rollups(
     request: ComputeRollupRequest,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> result:
     """Compute rollups for the current period on demand.
 
     Useful for getting fresh metrics without waiting for the scheduled
@@ -181,7 +181,7 @@ async def backfill_rollups(
     request: BackfillRequest,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> result:
     """Backfill rollups for a historical time range.
 
     Use this to compute rollups for past periods after initial setup
@@ -225,7 +225,7 @@ async def get_rollup_stats(
     metric_type: str = "dora",
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get statistics about available rollups.
 
     Returns counts and date ranges for stored rollups.
@@ -253,7 +253,7 @@ async def get_latest_rollups(
     project_id: str | None = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get the most recent DORA and SPACE rollup values.
 
     Useful for dashboard summary cards.

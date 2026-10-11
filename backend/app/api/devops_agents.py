@@ -115,7 +115,7 @@ class WorkflowResponse(BaseModel):
 # ======================
 
 @router.get("/health", summary="Check DevOps agents service health")
-async def health_check():
+async def health_check() -> dict:
     """Check DevOps agents service health."""
     return {
         "status": "healthy" if settings.DEVOPS_AGENTS_ENABLED else "disabled",
@@ -133,7 +133,7 @@ async def analyze_dora_metrics(
     request: DORAAnalysisRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> DORAAnalysisResponse:
     """Run DORA metrics analysis for a project."""
     if not settings.DEVOPS_AGENTS_ENABLED:
         raise HTTPException(
@@ -176,7 +176,7 @@ async def analyze_adoption(
     request: AdoptionAnalysisRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> dict:
     """Run AI SDLC adoption analysis."""
     if not settings.DEVOPS_AGENTS_ENABLED:
         raise HTTPException(
@@ -218,7 +218,7 @@ async def analyze_adoption(
 async def create_dashboard(
     request: DashboardCreateRequest,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Create a visualization dashboard."""
     agent = DashboardVisualizationAgent()
 
@@ -252,7 +252,7 @@ async def create_dashboard(
 async def create_summary(
     request: SummaryCreateRequest,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Create an executive summary."""
     agent = ExecutiveSummaryAgent()
 
@@ -307,7 +307,7 @@ async def create_workflow(
     background_tasks: BackgroundTasks,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> WorkflowResponse:
     """Create and execute a DevOps agent workflow."""
     if not settings.DEVOPS_AGENTS_ENABLED:
         raise HTTPException(
@@ -400,7 +400,7 @@ async def create_workflow(
 async def get_workflow(
     workflow_id: str,
     current_user: User = Depends(get_current_user),
-):
+) -> WorkflowResponse:
     """Get workflow execution status."""
     workflow = DevOpsAgentWorkflow()
     execution = workflow.get_execution(workflow_id)
@@ -439,7 +439,7 @@ async def list_workflows(
     status: str | None = None,
     limit: int = 100,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List workflow executions."""
     workflow = DevOpsAgentWorkflow()
 
@@ -489,7 +489,7 @@ async def list_workflows(
 async def cancel_workflow(
     workflow_id: str,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Cancel a running workflow."""
     workflow = DevOpsAgentWorkflow()
     execution = workflow.get_execution(workflow_id)
@@ -514,7 +514,7 @@ async def cancel_workflow(
 
 
 @router.get("/benchmarks", summary="Get DORA performance benchmarks")
-async def get_dora_benchmarks():
+async def get_dora_benchmarks() -> dict:
     """Get DORA performance benchmarks."""
     return {
         "deployment_frequency": {

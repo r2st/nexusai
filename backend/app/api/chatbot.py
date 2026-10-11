@@ -99,7 +99,7 @@ class SendTeamsMessageRequest(BaseModel):
 # --- Configuration Endpoints ---
 
 @router.post("/configure/slack", summary="Configure Slack bot")
-async def configure_slack(request: ConfigureSlackRequest, _current_user: User = Depends(get_current_user)):
+async def configure_slack(request: ConfigureSlackRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Configure Slack bot."""
     service = get_chatbot_service()
     service.configure_slack(
@@ -111,7 +111,7 @@ async def configure_slack(request: ConfigureSlackRequest, _current_user: User = 
 
 
 @router.post("/configure/teams", summary="Configure Teams bot")
-async def configure_teams(request: ConfigureTeamsRequest, _current_user: User = Depends(get_current_user)):
+async def configure_teams(request: ConfigureTeamsRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Configure Teams bot."""
     service = get_chatbot_service()
     service.configure_teams(
@@ -129,7 +129,7 @@ async def slack_events(
     request: Request,
     x_slack_signature: str = Header(None, alias="X-Slack-Signature"),
     x_slack_request_timestamp: str = Header(None, alias="X-Slack-Request-Timestamp"),
-):
+) -> dict | result:
     """Handle Slack event webhook."""
     service = get_chatbot_service()
 
@@ -164,7 +164,7 @@ async def slack_commands(
     request: Request,
     x_slack_signature: str = Header(None, alias="X-Slack-Signature"),
     x_slack_request_timestamp: str = Header(None, alias="X-Slack-Request-Timestamp"),
-):
+) -> result:
     """Handle Slack slash command."""
     service = get_chatbot_service()
 
@@ -194,7 +194,7 @@ async def slack_interactions(
     request: Request,
     x_slack_signature: str = Header(None, alias="X-Slack-Signature"),
     x_slack_request_timestamp: str = Header(None, alias="X-Slack-Request-Timestamp"),
-):
+) -> Response | result:
     """Handle Slack interactive component."""
     service = get_chatbot_service()
 
@@ -230,7 +230,7 @@ async def slack_interactions(
 # --- Teams Webhook Endpoints ---
 
 @router.post("/teams/messages", summary="Handle Teams bot messages")
-async def teams_messages(request: Request):
+async def teams_messages(request: Request) -> dict | result:
     """Handle Teams bot messages."""
     service = get_chatbot_service()
 
@@ -251,7 +251,7 @@ async def teams_messages(request: Request):
 # --- User Linking Endpoints ---
 
 @router.post("/users/link", summary="Link a platform user to NexusAI")
-async def link_user(request: LinkUserRequest, _current_user: User = Depends(get_current_user)):
+async def link_user(request: LinkUserRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Link a platform user to NexusAI."""
     service = get_chatbot_service()
     success = await service.link_user(
@@ -268,7 +268,7 @@ async def link_user(request: LinkUserRequest, _current_user: User = Depends(get_
 
 
 @router.post("/users/unlink", summary="Unlink a platform user from NexusAI")
-async def unlink_user(request: UnlinkUserRequest, _current_user: User = Depends(get_current_user)):
+async def unlink_user(request: UnlinkUserRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Unlink a platform user from NexusAI."""
     service = get_chatbot_service()
     success = await service.unlink_user(
@@ -280,7 +280,7 @@ async def unlink_user(request: UnlinkUserRequest, _current_user: User = Depends(
 
 
 @router.get("/users/{platform}/{platform_user_id}", summary="Get linked user info")
-async def get_linked_user(platform: ChatPlatform, platform_user_id: str, _current_user: User = Depends(get_current_user)):
+async def get_linked_user(platform: ChatPlatform, platform_user_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get linked user info."""
     service = get_chatbot_service()
     user = await service.get_linked_user(platform, platform_user_id)
@@ -294,7 +294,7 @@ async def get_linked_user(platform: ChatPlatform, platform_user_id: str, _curren
 # --- Notification Endpoints ---
 
 @router.post("/notifications/send", summary="Send notification to subscribed channels")
-async def send_notification(request: SendNotificationRequest, _current_user: User = Depends(get_current_user)):
+async def send_notification(request: SendNotificationRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Send notification to subscribed channels."""
     service = get_chatbot_service()
     sent_to = await service.send_notification(
@@ -309,7 +309,7 @@ async def send_notification(request: SendNotificationRequest, _current_user: Use
 
 
 @router.post("/notifications/broadcast", summary="Broadcast notification to all platforms")
-async def broadcast_notification(request: BroadcastNotificationRequest, _current_user: User = Depends(get_current_user)):
+async def broadcast_notification(request: BroadcastNotificationRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Broadcast notification to all platforms."""
     service = get_chatbot_service()
     results = await service.broadcast_notification(
@@ -324,7 +324,7 @@ async def broadcast_notification(request: BroadcastNotificationRequest, _current
 # --- Subscription Endpoints ---
 
 @router.post("/subscriptions", status_code=status.HTTP_201_CREATED, summary="Subscribe a channel to event types")
-async def subscribe_channel(request: SubscribeRequest, _current_user: User = Depends(get_current_user)):
+async def subscribe_channel(request: SubscribeRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Subscribe a channel to event types."""
     service = get_chatbot_service()
     success = await service.subscribe_channel(
@@ -347,7 +347,7 @@ async def unsubscribe_channel(request: UnsubscribeRequest, _current_user: User =
 
 
 @router.get("/subscriptions/{platform}/{channel_id}", summary="Get subscriptions for a channel")
-async def get_subscriptions(platform: ChatPlatform, channel_id: str, _current_user: User = Depends(get_current_user)):
+async def get_subscriptions(platform: ChatPlatform, channel_id: str, _current_user: User = Depends(get_current_user)) -> dict:
     """Get subscriptions for a channel."""
     service = get_chatbot_service()
     subscriptions = await service.get_subscriptions(platform, channel_id)
@@ -357,7 +357,7 @@ async def get_subscriptions(platform: ChatPlatform, channel_id: str, _current_us
 # --- Message Endpoints ---
 
 @router.post("/messages/slack", summary="Send a message to Slack")
-async def send_slack_message(request: SendSlackMessageRequest, _current_user: User = Depends(get_current_user)):
+async def send_slack_message(request: SendSlackMessageRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Send a message to Slack."""
     service = get_chatbot_service()
     result = await service.send_slack_message(
@@ -370,7 +370,7 @@ async def send_slack_message(request: SendSlackMessageRequest, _current_user: Us
 
 
 @router.post("/messages/teams", summary="Send a message to Teams")
-async def send_teams_message(request: SendTeamsMessageRequest, _current_user: User = Depends(get_current_user)):
+async def send_teams_message(request: SendTeamsMessageRequest, _current_user: User = Depends(get_current_user)) -> dict:
     """Send a message to Teams."""
     service = get_chatbot_service()
     result = await service.send_teams_message(
@@ -384,7 +384,7 @@ async def send_teams_message(request: SendTeamsMessageRequest, _current_user: Us
 # --- Info Endpoints ---
 
 @router.get("/commands", summary="Get available bot commands")
-async def get_commands(platform: ChatPlatform | None = None, _current_user: User = Depends(get_current_user)):
+async def get_commands(platform: ChatPlatform | None = None, _current_user: User = Depends(get_current_user)) -> dict:
     """Get available bot commands."""
     service = get_chatbot_service()
 
@@ -397,7 +397,7 @@ async def get_commands(platform: ChatPlatform | None = None, _current_user: User
 
 
 @router.get("/dashboard", summary="Get chatbot dashboard data")
-async def get_chatbot_dashboard(_current_user: User = Depends(get_current_user)):
+async def get_chatbot_dashboard(_current_user: User = Depends(get_current_user)) -> dict:
     """Get chatbot dashboard data."""
     service = get_chatbot_service()
     dashboard = await service.get_chatbot_dashboard()

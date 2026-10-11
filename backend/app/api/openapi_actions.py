@@ -99,7 +99,7 @@ class ExecutionResponse(BaseModel):
 # ======================
 
 @router.get("/health", summary="Check OpenAPI actions service health")
-async def health_check():
+async def health_check() -> dict:
     """Check OpenAPI actions service health."""
     return {
         "status": "healthy" if settings.OPENAPI_ACTIONS_ENABLED else "disabled",
@@ -111,7 +111,7 @@ async def health_check():
 async def register_action(
     request: ActionRegisterRequest,
     current_user: User = Depends(get_current_user),
-):
+) -> ActionResponse:
     """Register a new OpenAPI action."""
     if not settings.OPENAPI_ACTIONS_ENABLED:
         raise HTTPException(
@@ -200,7 +200,7 @@ async def register_from_spec(
     base_url: str | None = None,
     auth_type: str = "none",
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Register an action from an OpenAPI specification file."""
     if not settings.OPENAPI_ACTIONS_ENABLED:
         raise HTTPException(
@@ -257,7 +257,7 @@ async def register_from_spec(
 @router.get("", response_model=list[ActionResponse])
 async def list_actions(
     current_user: User = Depends(get_current_user),
-):
+) -> list[ActionResponse]:
     """List all registered OpenAPI actions."""
     actions = _registry.list_actions()
 
@@ -281,7 +281,7 @@ async def list_actions(
 async def get_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get details of a specific action."""
     action = _registry.get(action_id)
     if not action:
@@ -327,7 +327,7 @@ async def get_action(
 async def list_operations(
     action_id: str,
     current_user: User = Depends(get_current_user),
-):
+) -> list[OperationResponse]:
     """List operations for an action."""
     action = _registry.get(action_id)
     if not action:
@@ -355,7 +355,7 @@ async def execute_action(
     action_id: str,
     request: ActionExecuteRequest,
     current_user: User = Depends(get_current_user),
-):
+) -> ExecutionResponse:
     """Execute an OpenAPI action operation."""
     if not settings.OPENAPI_ACTIONS_ENABLED:
         raise HTTPException(
@@ -407,7 +407,7 @@ async def execute_action(
 async def delete_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
-):
+) -> None:
     """Unregister an OpenAPI action."""
     if not _registry.get(action_id):
         raise HTTPException(
@@ -422,7 +422,7 @@ async def delete_action(
 async def enable_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Enable an action."""
     action = _registry.get(action_id)
     if not action:
@@ -439,7 +439,7 @@ async def enable_action(
 async def disable_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Disable an action."""
     action = _registry.get(action_id)
     if not action:
@@ -456,7 +456,7 @@ async def disable_action(
 async def get_tools_schema(
     action_id: str,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get OpenAI-compatible tool schemas for an action."""
     tools = _executor.get_tools_schema(action_id)
     if not tools:
@@ -472,7 +472,7 @@ async def get_tools_schema(
 async def validate_action(
     action_id: str,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Validate an action configuration."""
     action = _registry.get(action_id)
     if not action:
@@ -519,7 +519,7 @@ async def validate_action(
 async def register_github_action(
     token: str,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Register pre-built GitHub API action."""
     from app.services.agents.openapi_actions import create_github_action
 
@@ -539,7 +539,7 @@ async def register_jira_action(
     email: str,
     api_token: str,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Register pre-built Jira API action."""
     from app.services.agents.openapi_actions import create_jira_action
 

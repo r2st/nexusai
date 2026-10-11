@@ -172,7 +172,7 @@ class VersionsResponse(BaseModel):
 
 
 @router.get("/versions", response_model=VersionsResponse, summary="List all available API versions")
-async def list_api_versions():
+async def list_api_versions() -> VersionsResponse:
     """
     List all available API versions.
     
@@ -200,7 +200,7 @@ async def list_api_versions():
 
 
 @router.get("/versions/{version}", response_model=VersionInfo, summary="Get information about a specific API version")
-async def get_api_version(version: str):
+async def get_api_version(version: str) -> VersionInfo:
     """Get information about a specific API version."""
     if version not in API_VERSIONS:
         raise HTTPException(status_code=404, detail=f"Version not found: {version}")
@@ -279,7 +279,7 @@ class MigrationGuide(BaseModel):
 
 
 @router.get("/versions/migrate/{from_version}/{to_version}", response_model=MigrationGuide, summary="Get migration guide between versions")
-async def get_migration_guide(from_version: str, to_version: str):
+async def get_migration_guide(from_version: str, to_version: str) -> MigrationGuide:
     """
     Get migration guide between versions.
     
@@ -312,7 +312,7 @@ v2_router = create_versioned_router("v2", tags=["API v2"])
 
 
 @v1_router.get("/status")
-async def v1_status():
+async def v1_status() -> dict:
     """[DEPRECATED] Get API status."""
     return {
         "status": "ok",
@@ -322,7 +322,7 @@ async def v1_status():
 
 
 @v2_router.get("/status")
-async def v2_status():
+async def v2_status() -> dict:
     """Get API status."""
     return {
         "status": "ok",

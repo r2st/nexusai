@@ -211,7 +211,7 @@ async def delete_document(
     document_id: str,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> None:
     """Delete a document."""
     doc_service = DocumentService(db)
 

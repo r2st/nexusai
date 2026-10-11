@@ -90,7 +90,7 @@ class SessionResponse(BaseModel):
 async def list_providers(
     tenant_id: Optional[str] = Query(None),
     _current_user: User = Depends(get_current_admin_user),
-):
+) -> List[ProviderResponse]:
     """
     List available SSO providers.
 
@@ -100,13 +100,13 @@ async def list_providers(
 
 
 @router.get("/providers/{provider_id}", response_model=ProviderResponse, summary="Get SSO provider details")
-async def get_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)):
+async def get_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)) -> ProviderResponse:
     """Get SSO provider details."""
     _raise_not_configured()
 
 
 @router.post("/providers", response_model=ProviderResponse, status_code=status.HTTP_201_CREATED, summary="Create a new SSO provider")
-async def create_provider(request: ProviderCreateRequest, _current_user: User = Depends(get_current_admin_user)):
+async def create_provider(request: ProviderCreateRequest, _current_user: User = Depends(get_current_admin_user)) -> ProviderResponse:
     """
     Create a new SSO provider.
 
@@ -116,7 +116,7 @@ async def create_provider(request: ProviderCreateRequest, _current_user: User = 
 
 
 @router.delete("/providers/{provider_id}", status_code=204, summary="Delete an SSO provider")
-async def delete_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)):
+async def delete_provider(provider_id: str, _current_user: User = Depends(get_current_admin_user)) -> None:
     """Delete an SSO provider."""
     _raise_not_configured()
 
@@ -126,7 +126,7 @@ async def start_authentication(
     provider_id: str,
     redirect_uri: str = Query(..., description="URI to redirect after authentication"),
     tenant_id: Optional[str] = Query(None),
-):
+) -> None:
     """
     Start SSO authentication flow.
 
@@ -140,7 +140,7 @@ async def get_authorization_url(
     provider_id: str,
     redirect_uri: str = Query(...),
     tenant_id: Optional[str] = Query(None),
-):
+) -> AuthStartResponse:
     """
     Get authorization URL without redirecting.
 
@@ -155,7 +155,7 @@ async def oidc_callback(
     state: str = Query(...),
     error: Optional[str] = Query(None),
     error_description: Optional[str] = Query(None),
-):
+) -> None:
     """
     Handle OIDC callback from identity provider.
 
@@ -174,7 +174,7 @@ async def oidc_callback(
 @router.post("/callback/saml", summary="Handle SAML callback (ACS endpoint)")
 async def saml_callback(
     request: Request,
-):
+) -> None:
     """
     Handle SAML callback (ACS endpoint).
 
@@ -190,7 +190,7 @@ async def saml_callback(
 
 
 @router.get("/saml/{provider_id}/metadata", summary="Get SP metadata for SAML configuration")
-async def get_sp_metadata(provider_id: str):
+async def get_sp_metadata(provider_id: str) -> None:
     """
     Get SP metadata for SAML configuration.
 
@@ -203,7 +203,7 @@ async def get_sp_metadata(provider_id: str):
 async def refresh_token(
     request: "SSORefreshRequest",
     _current_user: User = Depends(get_current_admin_user),
-):
+) -> TokenResponse:
     """
     Refresh access token.
 
@@ -216,7 +216,7 @@ async def refresh_token(
 async def get_session(
     session_id: str = Query(...),
     _current_user: User = Depends(get_current_admin_user),
-):
+) -> SessionResponse:
     """Get current session information."""
     _raise_not_configured()
 
@@ -226,7 +226,7 @@ async def logout(
     session_id: str = Query(...),
     post_logout_uri: str = Query("/"),
     _current_user: User = Depends(get_current_admin_user),
-):
+) -> None:
     """
     Logout from SSO.
 
@@ -236,7 +236,7 @@ async def logout(
 
 
 @router.get("/well-known/openid-configuration", summary="OpenID Connect discovery document")
-async def openid_configuration():
+async def openid_configuration() -> None:
     """
     OpenID Connect discovery document.
 

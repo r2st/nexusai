@@ -113,7 +113,7 @@ def get_neo4j_client() -> Neo4jClient:
 # ======================
 
 @router.get("/health", summary="Check knowledge graph connectivity")
-async def health_check():
+async def health_check() -> dict:
     """Check knowledge graph connectivity."""
     if not settings.NEO4J_ENABLED:
         return {"status": "disabled", "message": "Knowledge graph is not enabled"}
@@ -137,7 +137,7 @@ async def health_check():
 @router.get("/schema", response_model=SchemaResponse)
 async def get_schema(
     current_user: User = Depends(get_current_user),
-):
+) -> SchemaResponse:
     """Get the knowledge graph schema."""
     client = get_neo4j_client()
     try:
@@ -150,7 +150,7 @@ async def get_schema(
 @router.get("/stats", response_model=StatsResponse)
 async def get_stats(
     current_user: User = Depends(get_current_user),
-):
+) -> StatsResponse:
     """Get knowledge graph statistics."""
     client = get_neo4j_client()
     try:
@@ -164,7 +164,7 @@ async def get_stats(
 async def create_node(
     request: NodeCreate,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Create a new node in the knowledge graph."""
     validate_cypher_identifier(request.label, "label")
     client = get_neo4j_client()
@@ -193,7 +193,7 @@ async def list_nodes(
     label: str | None = Query(None, description="Filter by node label"),
     limit: int = Query(100, ge=1, le=1000),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List nodes in the knowledge graph."""
     if label:
         validate_cypher_identifier(label, "label")
@@ -225,7 +225,7 @@ async def list_nodes(
 async def create_relationship(
     request: RelationshipCreate,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Create a relationship between nodes."""
     validate_cypher_identifier(request.source_label, "source_label")
     validate_cypher_identifier(request.target_label, "target_label")
@@ -261,7 +261,7 @@ async def list_relationships(
     relationship_type: str | None = Query(None),
     limit: int = Query(100, ge=1, le=1000),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """List relationships in the knowledge graph."""
     if relationship_type:
         validate_cypher_identifier(relationship_type, "relationship_type")
@@ -304,7 +304,7 @@ async def discover(
     request: DiscoveryRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> dict:
     """Run agent discovery workflow for a query."""
     client = get_neo4j_client()
     try:
@@ -336,7 +336,7 @@ async def discover_tables(
     project_id: str | None = None,
     schema_name: str | None = None,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Discover available tables in the knowledge graph."""
     client = get_neo4j_client()
     try:
@@ -376,7 +376,7 @@ async def discover_metrics(
     category: str | None = None,
     project_id: str | None = None,
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Discover available metrics in the knowledge graph."""
     client = get_neo4j_client()
     try:
@@ -397,7 +397,7 @@ async def discover_metrics(
 @router.get("/dora-entities")
 async def discover_dora_entities(
     current_user: User = Depends(get_current_user),
-):
+) -> entities:
     """Discover DORA metrics-related entities."""
     client = get_neo4j_client()
     try:
@@ -415,7 +415,7 @@ async def search_entities(
     entity_types: list[str] | None = Query(None),
     limit: int = Query(20, ge=1, le=100),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Search for entities in the knowledge graph."""
     if entity_types:
         for et in entity_types:
@@ -445,7 +445,7 @@ async def get_data_lineage(
     direction: str = Query("upstream", pattern="^(upstream|downstream)$"),
     max_depth: int = Query(5, ge=1, le=10),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get data lineage for an entity."""
     validate_cypher_identifier(entity_type, "entity_type")
     client = get_neo4j_client()
@@ -474,7 +474,7 @@ async def sync_from_postgresql(
     request: SyncRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> dict:
     """Sync PostgreSQL schema into the knowledge graph."""
     client = get_neo4j_client()
     try:

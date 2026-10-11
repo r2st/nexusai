@@ -42,13 +42,13 @@ class BatchRequest(BaseModel):
 
 
 @router.get("/health", summary="Health check for LangServe endpoints")
-async def langserve_health():
+async def langserve_health() -> dict:
     """Health check for LangServe endpoints."""
     return {"status": "healthy", "service": "langserve"}
 
 
 @router.get("/info", summary="Get information about the LangServe deployment")
-async def langserve_info():
+async def langserve_info() -> dict:
     """Get information about the LangServe deployment."""
     return {
         "name": "NexusAI Chat Service",
@@ -73,7 +73,7 @@ async def langserve_invoke(
     request: InvokeRequest,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> JSONResponse:
     """
     LangServe-compatible invoke endpoint.
     
@@ -102,7 +102,7 @@ async def langserve_stream(
     request: StreamRequest,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> StreamingResponse:
     """
     LangServe-compatible stream endpoint.
     
@@ -145,7 +145,7 @@ async def langserve_batch(
     request: BatchRequest,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> JSONResponse:
     """
     LangServe-compatible batch endpoint.
     
@@ -189,7 +189,7 @@ async def langserve_batch(
 
 
 @router.get("/chat/playground", summary="LangServe playground UI endpoint")
-async def langserve_playground(_current_user: User = Depends(get_current_user)):
+async def langserve_playground(_current_user: User = Depends(get_current_user)) -> HTMLResponse:
     """
     LangServe playground UI endpoint.
     

@@ -55,7 +55,7 @@ async def execute_query(
     request: UnifiedQueryRequest,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Execute a unified query across multiple data sources.
 
     Aggregates data from metrics, entities, events, and search
@@ -95,7 +95,7 @@ async def execute_query(
 )
 async def list_dashboards(
     current_user: User = Depends(get_current_user),
-):
+) -> list_dashboards:
     """List available pre-defined dashboard queries."""
     gateway = get_query_gateway()
     return gateway.list_dashboards()
@@ -111,7 +111,7 @@ async def execute_dashboard_query(
     team_id: str | None = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Execute a pre-defined dashboard query.
 
     Available dashboards:
@@ -158,7 +158,7 @@ async def get_metrics_summary(
     project_id: str | None = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get a summary of key metrics for dashboard cards.
 
     Returns latest DORA levels and SPACE scores.
@@ -226,7 +226,7 @@ async def get_entity_summary(
     project_id: str | None = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Get a summary of entity counts by type."""
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
@@ -259,7 +259,7 @@ async def get_entity_summary(
 )
 async def clear_cache(
     current_user: User = Depends(get_current_user),
-):
+) -> dict:
     """Clear cached query results for the current tenant."""
     tenant_id = str(current_user.organization_id) if current_user.organization_id else str(current_user.id)
 
