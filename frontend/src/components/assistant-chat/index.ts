@@ -1,5 +1,5 @@
 /**
- * NexusAI Assistant Chat Components
+ * GSTIndia Assistant Chat Components
  *
  * Built with assistant-ui (MIT License) for enhanced chat experience
  */

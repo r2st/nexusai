@@ -1,7 +1,7 @@
 /**
  * Chat components exports
  * 
- * Conversational AI-focused UI components for the NexusAI chat interface.
+ * Conversational AI-focused UI components for the GSTIndia chat interface.
  */
 
 // Core chat components

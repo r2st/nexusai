@@ -101,7 +101,7 @@ export default function AnalyticsPage() {
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2">
               <BarChart3 className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">NexusAI Analytics</span>
+              <span className="text-xl font-bold">GSTIndia Analytics</span>
             </Link>
           </div>
           <div className="flex items-center gap-2">

@@ -1,10 +1,10 @@
 /**
- * NexusAI Assistant Runtime Adapter
+ * GSTIndia Assistant Runtime Adapter
  *
  * This module creates a custom runtime for assistant-ui that connects
- * to the NexusAI FastAPI backend's setup chatbot service.
+ * to the GSTIndia FastAPI backend's setup chatbot service.
  *
- * MIT License - Compatible with NexusAI open source license
+ * MIT License - Compatible with GSTIndia open source license
  */
 
 import {
@@ -133,7 +133,7 @@ function formatQuickRepliesText(quickReplies: QuickReply[]): string {
 // =============================================================================
 
 /**
- * Creates a ChatModelAdapter for the NexusAI setup assistant
+ * Creates a ChatModelAdapter for the GSTIndia setup assistant
  */
 export function createNexusChatAdapter(config: NexusAssistantConfig = {}): ChatModelAdapter {
   return {
@@ -251,7 +251,7 @@ export function createNexusChatAdapter(config: NexusAssistantConfig = {}): ChatM
 import { useState, useEffect, useCallback } from 'react';
 
 /**
- * Hook to use the NexusAI assistant runtime
+ * Hook to use the GSTIndia assistant runtime
  */
 export function useNexusRuntime(config: NexusAssistantConfig = {}) {
   const adapter = createNexusChatAdapter(config);

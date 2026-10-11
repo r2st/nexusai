@@ -4,7 +4,7 @@
  * Assistant Chat Component
  *
  * Main chat interface built with assistant-ui (MIT License)
- * Provides a complete conversational UI for NexusAI setup assistant
+ * Provides a complete conversational UI for GSTIndia setup assistant
  */
 
 import { useState, useCallback } from 'react';
@@ -68,7 +68,7 @@ function ChatHeader({ onClose, onReset, currentStep, canGoBack }: ChatHeaderProp
             <Sparkles className="h-4 w-4 text-primary-foreground" />
           </div>
           <div>
-            <h2 className="font-semibold text-sm">NexusAI Assistant</h2>
+            <h2 className="font-semibold text-sm">GSTIndia Assistant</h2>
             {currentStep && (
               <p className="text-xs text-muted-foreground capitalize">
                 {currentStep.replace(/_/g, ' ')}
@@ -308,7 +308,7 @@ export function FloatingAssistantChat({
           <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
             <Sparkles className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-medium text-sm">NexusAI Assistant</span>
+          <span className="font-medium text-sm">GSTIndia Assistant</span>
         </button>
       </div>
     );

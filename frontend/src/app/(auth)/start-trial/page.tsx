@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  Sparkles,
   Loader2,
   CheckCircle,
   Users,
@@ -13,6 +12,7 @@ import {
   Zap,
   Shield,
 } from 'lucide-react';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -112,7 +112,7 @@ export default function StartTrialPage() {
       // Step 3: Start the trial
       await trialsApi.startTrial(org.id);
 
-      toast.success('Trial started! Welcome to NexusAI.');
+      toast.success('Trial started! Welcome to GSTIndia.');
 
       // Redirect to chat
       router.push('/chat');
@@ -140,14 +140,14 @@ export default function StartTrialPage() {
           {/* Logo */}
           <div>
             <Link href="/" className="inline-flex items-center gap-2">
-              <Sparkles className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-bold">NexusAI</span>
+              <DoAideLogo size={32} />
+              <span className="text-2xl font-bold">GSTIndia</span>
             </Link>
             <h1 className="mt-8 text-3xl font-bold tracking-tight">
               Start your free trial
             </h1>
             <p className="mt-2 text-muted-foreground">
-              Get full access to NexusAI Professional for 14 days. No credit
+              Get full access to GSTIndia Pro for 14 days. No credit
               card required.
             </p>
           </div>
@@ -207,7 +207,7 @@ export default function StartTrialPage() {
                 </>
               ) : (
                 <>
-                  <Sparkles className="mr-2 h-5 w-5" />
+                  <Zap className="mr-2 h-5 w-5" />
                   Start Free Trial
                 </>
               )}

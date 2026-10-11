@@ -3,7 +3,7 @@
 /**
  * Assistant Provider Component
  *
- * Wraps the assistant-ui runtime provider with NexusAI configuration
+ * Wraps the assistant-ui runtime provider with GSTIndia configuration
  */
 
 import { type ReactNode, useMemo, useCallback, useState } from 'react';

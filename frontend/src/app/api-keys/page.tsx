@@ -181,7 +181,7 @@ export default function ApiKeysPage() {
                 API Key Security
               </h3>
               <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                API keys provide programmatic access to NexusAI. Keep them secure and never share them publicly.
+                API keys provide programmatic access to GSTIndia. Keep them secure and never share them publicly.
                 You can create multiple keys with different scopes for different use cases.
               </p>
             </div>

@@ -89,11 +89,11 @@ const contextConfig: Record<AssistantContext, {
     welcomeMessage: "Hi! I'm your AI assistant. How can I help you today?",
     icon: Sparkles,
     quickActions: [
-      { id: 'help', label: 'How do I get started?', message: 'How do I get started with NexusAI?' },
-      { id: 'features', label: 'What can you do?', message: 'What features does NexusAI offer?' },
+      { id: 'help', label: 'How do I get started?', message: 'How do I get started with GSTIndia?' },
+      { id: 'features', label: 'What can you do?', message: 'What features does GSTIndia offer?' },
       { id: 'pricing', label: 'Tell me about pricing', message: 'What are the pricing plans?' },
     ],
-    systemPrompt: 'You are a helpful AI assistant for NexusAI platform. Help users navigate and use the platform effectively.',
+    systemPrompt: 'You are a helpful AI assistant for GSTIndia by DoAide. Help users navigate and use the GST compliance platform effectively.',
   },
   documents: {
     title: 'Document Helper',

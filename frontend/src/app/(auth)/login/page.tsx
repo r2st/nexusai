@@ -3,7 +3,8 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Sparkles, Loader2, Building2, User, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Loader2, Building2, User, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -156,8 +157,8 @@ function LoginPageContent() {
         {/* Logo */}
         <div className="text-center">
           <Link href="/" className="inline-flex items-center gap-2">
-            <Sparkles className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold">NexusAI</span>
+            <DoAideLogo size={32} />
+            <span className="text-2xl font-bold">GSTIndia</span>
           </Link>
           <h1 className="mt-6 text-2xl font-semibold">Welcome back</h1>
           <p className="mt-2 text-muted-foreground">

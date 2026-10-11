@@ -20,10 +20,10 @@ import {
   Menu,
   X,
   LogOut,
-  Sparkles,
   Clock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 import { useAuthStore } from '@/store/auth';
 
 interface NavItem {
@@ -134,7 +134,7 @@ export default function AdminLayout({
       <header className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-background border-b px-4 py-3">
         <div className="flex items-center justify-between">
           <Link href="/admin" className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <DoAideLogo size={20} />
             <span className="font-semibold">Admin</span>
           </Link>
           <button
@@ -195,8 +195,8 @@ export default function AdminLayout({
               !isSidebarOpen && 'opacity-0 pointer-events-none'
             )}
           >
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="font-semibold">NexusAI Admin</span>
+            <DoAideLogo size={20} />
+            <span className="font-semibold">GSTIndia Admin</span>
           </Link>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}

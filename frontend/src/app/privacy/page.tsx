@@ -1,15 +1,17 @@
 import Link from 'next/link';
-import { Sparkles } from 'lucide-react';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b">
+      <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto flex h-16 items-center px-4">
           <Link href="/" className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">NexusAI</span>
+            <DoAideLogo size={24} />
+            <span className="text-xl font-bold">DoAide</span>
+            <span className="text-muted-foreground">|</span>
+            <span className="text-base font-semibold">GSTIndia</span>
           </Link>
         </div>
       </header>
@@ -24,7 +26,7 @@ export default function PrivacyPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
             <p className="text-muted-foreground mb-4">
-              NexusAI ("we", "our", or "us") is committed to protecting your privacy.
+              GSTIndia by DoAide ("we", "our", or "us") is committed to protecting your privacy.
               This Privacy Policy explains how we collect, use, disclose, and safeguard
               your information when you use our Service.
             </p>
@@ -199,7 +201,7 @@ export default function PrivacyPage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              © 2025 NexusAI Contributors.
+              &copy; {new Date().getFullYear()} DoAide Technologies.
             </p>
             <div className="flex items-center gap-6">
               <Link

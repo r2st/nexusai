@@ -56,7 +56,7 @@ export function ChatSidebar({
         {/* Header */}
         <div className="flex h-14 items-center justify-between border-b px-4">
           <Link href="/" className="font-semibold">
-            NexusAI
+            GSTIndia
           </Link>
           <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" onClick={onNewChat} aria-label="Create new chat">

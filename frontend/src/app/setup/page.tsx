@@ -4,7 +4,8 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SetupLauncher } from '@/components/setup-assistant';
 import { AssistantChat } from '@/components/assistant-chat';
-import { Sparkles, ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 import Link from 'next/link';
 
 type FlowType = 'connection' | 'project' | 'pipeline' | 'onboarding';
@@ -79,8 +80,8 @@ function SetupPageContent() {
               </button>
             )}
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <Sparkles className="h-5 w-5 text-primary" />
-              <span className="font-semibold">NexusAI</span>
+              <DoAideLogo size={20} />
+              <span className="font-semibold">GSTIndia</span>
             </Link>
           </div>
 
@@ -120,7 +121,7 @@ function SetupPageContent() {
           <div className="py-8">
             {/* Welcome Section */}
             <div className="px-6 mb-8">
-              <h1 className="text-3xl font-bold mb-2">NexusAI Assistant</h1>
+              <h1 className="text-3xl font-bold mb-2">GSTIndia Assistant</h1>
               <p className="text-muted-foreground text-lg">
                 Connect data sources, view metrics, and manage your engineering analytics through conversation.
               </p>

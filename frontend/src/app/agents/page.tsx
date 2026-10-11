@@ -88,7 +88,7 @@ export default function AgentsPage() {
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2">
               <Bot className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">NexusAI Agents</span>
+              <span className="text-xl font-bold">GSTIndia Agents</span>
             </Link>
           </div>
           <div className="flex items-center gap-2">

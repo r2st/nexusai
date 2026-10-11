@@ -11,6 +11,7 @@ import {
   ArrowRight,
   HelpCircle,
 } from 'lucide-react';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -137,8 +138,10 @@ export default function PricingPage() {
       <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">NexusAI</span>
+            <DoAideLogo size={24} />
+            <span className="text-xl font-bold">DoAide</span>
+            <span className="text-muted-foreground">|</span>
+            <span className="text-base font-semibold">GSTIndia</span>
           </Link>
           <nav className="flex items-center gap-4">
             <Link
@@ -329,8 +332,8 @@ export default function PricingPage() {
               Ready to supercharge your team?
             </h2>
             <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-              Join thousands of teams already using NexusAI to build better
-              software faster.
+              Join thousands of businesses already using GSTIndia for seamless
+              GST compliance.
             </p>
             <div className="flex items-center justify-center gap-4">
               <Link href="/start-trial">
@@ -354,7 +357,7 @@ export default function PricingPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} NexusAI Contributors.
+              &copy; {new Date().getFullYear()} DoAide Technologies.
             </p>
             <div className="flex items-center gap-6">
               <Link

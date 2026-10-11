@@ -121,7 +121,7 @@ export function IDEChatPanel({
       <header className="flex items-center justify-between px-3 py-2 border-b bg-muted/30">
         <div className="flex items-center gap-2">
           <Code2 className="h-4 w-4 text-primary" />
-          <span className="text-sm font-medium">NexusAI</span>
+          <span className="text-sm font-medium">GSTIndia</span>
         </div>
         <div className="flex items-center gap-1">
           <Button

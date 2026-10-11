@@ -125,7 +125,7 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
   const downloadBackupCodes = () => {
     if (!setupData?.backup_codes) return;
 
-    const content = `NexusAI Two-Factor Authentication Backup Codes
+    const content = `GSTIndia Two-Factor Authentication Backup Codes
 ==============================================
 Generated: ${new Date().toISOString()}
 

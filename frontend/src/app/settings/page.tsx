@@ -229,7 +229,7 @@ export default function SettingsPage() {
                   <div>
                     <h3 className="font-medium mb-2">Theme</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Choose how NexusAI looks to you
+                      Choose how GSTIndia looks to you
                     </p>
                     <ThemeSelect />
                   </div>

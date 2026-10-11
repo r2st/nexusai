@@ -204,7 +204,7 @@ function WelcomeScreen() {
         <Sparkles className="h-8 w-8 text-primary" />
       </div>
       <h1 className="text-2xl font-semibold tracking-tight">
-        Welcome to NexusAI
+        Welcome to GSTIndia
       </h1>
       <p className="mt-2 max-w-md text-muted-foreground">
         Your AI-powered assistant for DevOps, analytics, and more.

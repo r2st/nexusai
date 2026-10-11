@@ -1,15 +1,17 @@
 import Link from 'next/link';
-import { Sparkles } from 'lucide-react';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b">
+      <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto flex h-16 items-center px-4">
           <Link href="/" className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">NexusAI</span>
+            <DoAideLogo size={24} />
+            <span className="text-xl font-bold">DoAide</span>
+            <span className="text-muted-foreground">|</span>
+            <span className="text-base font-semibold">GSTIndia</span>
           </Link>
         </div>
       </header>
@@ -24,7 +26,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
             <p className="text-muted-foreground mb-4">
-              By accessing or using NexusAI ("Service"), you agree to be bound by these
+              By accessing or using GSTIndia by DoAide ("Service"), you agree to be bound by these
               Terms of Service ("Terms"). If you disagree with any part of the terms,
               you may not access the Service.
             </p>
@@ -33,7 +35,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">2. Description of Service</h2>
             <p className="text-muted-foreground mb-4">
-              NexusAI provides an AI-powered platform for teams including:
+              GSTIndia provides an AI-powered platform for teams including:
             </p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
               <li>AI chat capabilities with multiple model providers</li>
@@ -82,7 +84,7 @@ export default function TermsPage() {
             <h2 className="text-2xl font-semibold mb-4">5. Intellectual Property</h2>
             <p className="text-muted-foreground mb-4">
               The Service and its original content, features, and functionality are owned
-              by NexusAI and are protected by international copyright, trademark, and
+              by GSTIndia and are protected by international copyright, trademark, and
               other intellectual property laws.
             </p>
             <p className="text-muted-foreground mb-4">
@@ -130,7 +132,7 @@ export default function TermsPage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">9. Limitation of Liability</h2>
             <p className="text-muted-foreground mb-4">
-              In no event shall NexusAI be liable for any indirect, incidental, special,
+              In no event shall GSTIndia be liable for any indirect, incidental, special,
               consequential, or punitive damages, including loss of profits, data, or
               goodwill, arising from your use of the Service.
             </p>
@@ -164,7 +166,7 @@ export default function TermsPage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              © 2025 NexusAI Contributors.
+              © 2025 GSTIndia Contributors.
             </p>
             <div className="flex items-center gap-6">
               <Link

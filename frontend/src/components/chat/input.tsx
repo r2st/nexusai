@@ -309,7 +309,7 @@ export const ChatInput = memo(function ChatInput({
                 <span>Tools {toolsEnabled ? 'on' : 'off'}</span>
               </label>
             ) : null}
-            <span>NexusAI can make mistakes</span>
+            <span>GSTIndia can make mistakes</span>
           </div>
         </div>
       </div>

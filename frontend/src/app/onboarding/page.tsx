@@ -257,7 +257,7 @@ function OnboardingContent() {
                 </div>
               </div>
               <h1 className="text-2xl font-bold mb-2">
-                Welcome to NexusAI{user?.full_name ? `, ${user.full_name.split(' ')[0]}` : ''}!
+                Welcome to GSTIndia{user?.full_name ? `, ${user.full_name.split(' ')[0]}` : ''}!
               </h1>
               <p className="text-muted-foreground mb-8">
                 Let&apos;s get you set up in just a few steps. You&apos;ll be chatting with AI in no time.
@@ -433,7 +433,7 @@ function OnboardingContent() {
                     <Zap className="h-6 w-6 text-primary" />
                   </div>
                 </div>
-                <h1 className="text-2xl font-bold mb-2">What will you use NexusAI for?</h1>
+                <h1 className="text-2xl font-bold mb-2">What will you use GSTIndia for?</h1>
                 <p className="text-muted-foreground">
                   Select all that apply – we&apos;ll customize your experience
                 </p>
@@ -520,7 +520,7 @@ function OnboardingContent() {
               </div>
               <h1 className="text-2xl font-bold mb-2">You&apos;re all set!</h1>
               <p className="text-muted-foreground mb-8">
-                Your workspace is ready. Let&apos;s start exploring NexusAI.
+                Your workspace is ready. Let&apos;s start exploring GSTIndia.
               </p>
 
               <div className="grid gap-3 mb-8">

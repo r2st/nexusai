@@ -68,7 +68,7 @@ function AssistantMessage() {
       {/* Content */}
       <div className="flex-1 space-y-2 overflow-hidden">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium">NexusAI Assistant</span>
+          <span className="text-sm font-medium">GSTIndia Assistant</span>
           <MessageActions />
         </div>
         <MessageContent />
@@ -161,7 +161,7 @@ function EmptyState() {
       <div className="h-16 w-16 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center mb-4">
         <Sparkles className="h-8 w-8 text-primary-foreground" />
       </div>
-      <h2 className="text-xl font-semibold mb-2">NexusAI Assistant</h2>
+      <h2 className="text-xl font-semibold mb-2">GSTIndia Assistant</h2>
       <p className="text-muted-foreground max-w-md">
         I can help you connect data sources, view metrics, and set up your engineering analytics.
         Type a message to get started!

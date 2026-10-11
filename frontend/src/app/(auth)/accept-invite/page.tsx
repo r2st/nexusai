@@ -3,7 +3,8 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Sparkles, Loader2, CheckCircle2, XCircle, Eye, EyeOff, Building2 } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, Eye, EyeOff, Building2 } from 'lucide-react';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -204,8 +205,8 @@ function AcceptInviteContent() {
         {/* Logo */}
         <div className="text-center">
           <Link href="/" className="inline-flex items-center gap-2">
-            <Sparkles className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold">NexusAI</span>
+            <DoAideLogo size={32} />
+            <span className="text-2xl font-bold">GSTIndia</span>
           </Link>
         </div>
 

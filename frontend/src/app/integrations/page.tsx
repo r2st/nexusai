@@ -250,7 +250,7 @@ export default function IntegrationsPage() {
         <div className="mb-8">
           <h1 className="text-2xl font-bold">Integrations</h1>
           <p className="text-muted-foreground mt-1">
-            Connect your tools to supercharge NexusAI
+            Connect your tools to supercharge GSTIndia
           </p>
         </div>
 

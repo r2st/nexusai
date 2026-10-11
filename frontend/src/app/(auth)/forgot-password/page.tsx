@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Sparkles, Loader2, ArrowLeft, Mail } from 'lucide-react';
+import { Loader2, ArrowLeft, Mail } from 'lucide-react';
+import { DoAideLogo } from '@/components/ui/doaide-logo';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -37,8 +38,8 @@ export default function ForgotPasswordPage() {
           {/* Logo */}
           <div>
             <Link href="/" className="inline-flex items-center gap-2">
-              <Sparkles className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-bold">NexusAI</span>
+              <DoAideLogo size={32} />
+              <span className="text-2xl font-bold">GSTIndia</span>
             </Link>
           </div>
 
@@ -75,8 +76,8 @@ export default function ForgotPasswordPage() {
         {/* Logo */}
         <div className="text-center">
           <Link href="/" className="inline-flex items-center gap-2">
-            <Sparkles className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold">NexusAI</span>
+            <DoAideLogo size={32} />
+            <span className="text-2xl font-bold">GSTIndia</span>
           </Link>
           <h1 className="mt-6 text-2xl font-semibold">Forgot your password?</h1>
           <p className="mt-2 text-muted-foreground">
