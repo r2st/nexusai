@@ -285,12 +285,13 @@ export default function AuditLogsPage() {
         {/* Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input
               placeholder="Search by action, user, or resource..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
+              aria-label="Search audit logs"
             />
           </div>
 
@@ -298,6 +299,7 @@ export default function AuditLogsPage() {
             value={selectedAction}
             onChange={(e) => setSelectedAction(e.target.value)}
             className="rounded-md border bg-background px-3 py-2 text-sm"
+            aria-label="Filter by action type"
           >
             {actionTypes.map((type) => (
               <option key={type.id} value={type.id}>
@@ -310,6 +312,7 @@ export default function AuditLogsPage() {
             value={selectedSeverity}
             onChange={(e) => setSelectedSeverity(e.target.value)}
             className="rounded-md border bg-background px-3 py-2 text-sm"
+            aria-label="Filter by severity"
           >
             <option value="all">All Severities</option>
             <option value="info">Info</option>
@@ -321,6 +324,7 @@ export default function AuditLogsPage() {
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value)}
             className="rounded-md border bg-background px-3 py-2 text-sm"
+            aria-label="Filter by date range"
           >
             <option value="24h">Last 24 hours</option>
             <option value="7d">Last 7 days</option>

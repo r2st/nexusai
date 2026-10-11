@@ -242,8 +242,9 @@ export default function ActionsPage() {
                         handleDelete(action.action_id);
                       }}
                       className="text-destructive hover:text-destructive"
+                      aria-label={`Delete ${action.name}`}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4" aria-hidden="true" />
                     </Button>
                   </div>
                 </div>

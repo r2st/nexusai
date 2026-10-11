@@ -76,13 +76,14 @@ export default function AdminOrganizationsPage() {
 
       <div className="mb-6">
         <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
           <input
             type="text"
             placeholder="Search by name, slug, or owner email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-lg border bg-background pl-9 pr-3 py-2 text-sm"
+            aria-label="Search organizations"
           />
         </div>
       </div>
