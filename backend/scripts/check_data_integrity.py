@@ -109,15 +109,83 @@ ORPHAN_CHECKS = [
             WHERE d.id IS NULL
         """,
     },
+    {
+        "name": "cost_entries with invalid conversation_id",
+        "query": """
+            SELECT COUNT(*) FROM cost_entries ce
+            LEFT JOIN conversations c ON ce.conversation_id = c.id
+            WHERE ce.conversation_id IS NOT NULL AND c.id IS NULL
+        """,
+    },
+    {
+        "name": "ai_usage_logs with invalid user_id",
+        "query": """
+            SELECT COUNT(*) FROM ai_usage_logs aul
+            LEFT JOIN users u ON aul.user_id = u.id
+            WHERE aul.user_id IS NOT NULL AND u.id IS NULL
+        """,
+    },
+    {
+        "name": "personal_access_tokens with invalid user_id",
+        "query": """
+            SELECT COUNT(*) FROM personal_access_tokens pat
+            LEFT JOIN users u ON pat.user_id = u.id
+            WHERE u.id IS NULL
+        """,
+    },
+]
+
+CONSISTENCY_CHECKS = [
+    {
+        "name": "organizations with stale current_member_count",
+        "query": """
+            SELECT COUNT(*) FROM organizations o
+            WHERE o.current_member_count != (
+                SELECT COUNT(*) FROM organization_members om
+                WHERE om.organization_id = o.id AND om.is_active = true
+            )
+        """,
+    },
+    {
+        "name": "organizations with stale current_project_count",
+        "query": """
+            SELECT COUNT(*) FROM organizations o
+            WHERE o.current_project_count != (
+                SELECT COUNT(*) FROM projects p
+                WHERE p.organization_id = o.id
+            )
+        """,
+    },
+    {
+        "name": "conversations with stale message_count",
+        "query": """
+            SELECT COUNT(*) FROM conversations c
+            WHERE c.message_count != (
+                SELECT COUNT(*) FROM messages m
+                WHERE m.conversation_id = c.id
+            )
+        """,
+    },
+    {
+        "name": "documents with stale chunk_count",
+        "query": """
+            SELECT COUNT(*) FROM documents d
+            WHERE d.status = 'completed' AND d.chunk_count != (
+                SELECT COUNT(*) FROM document_chunks dc
+                WHERE dc.document_id = d.id
+            )
+        """,
+    },
 ]
 
 
 async def check_integrity(database_url: str) -> dict:
     engine = create_async_engine(database_url, echo=False)
 
-    results = {"orphans": [], "clean": [], "errors": []}
+    results = {"orphans": [], "inconsistencies": [], "clean": [], "errors": []}
 
     async with engine.begin() as conn:
+        print("--- Orphan Record Checks ---")
         for check in ORPHAN_CHECKS:
             try:
                 result = await conn.execute(text(check["query"]))
@@ -125,6 +193,22 @@ async def check_integrity(database_url: str) -> dict:
                 if count and count > 0:
                     results["orphans"].append({"name": check["name"], "count": count})
                     print(f"  ORPHAN: {check['name']} — {count} records")
+                else:
+                    results["clean"].append(check["name"])
+                    print(f"  OK: {check['name']}")
+            except Exception as e:
+                err_msg = str(e).split("\n")[0]
+                results["errors"].append({"name": check["name"], "error": err_msg})
+                print(f"  SKIP: {check['name']} — {err_msg}")
+
+        print("\n--- Consistency Checks ---")
+        for check in CONSISTENCY_CHECKS:
+            try:
+                result = await conn.execute(text(check["query"]))
+                count = result.scalar()
+                if count and count > 0:
+                    results["inconsistencies"].append({"name": check["name"], "count": count})
+                    print(f"  STALE: {check['name']} — {count} records")
                 else:
                     results["clean"].append(check["name"])
                     print(f"  OK: {check['name']}")
@@ -149,10 +233,17 @@ async def main():
     print(f"\nSummary:")
     print(f"  Clean: {len(results['clean'])}")
     print(f"  Orphans: {len(results['orphans'])}")
+    print(f"  Inconsistencies: {len(results['inconsistencies'])}")
     print(f"  Skipped: {len(results['errors'])}")
+
+    has_issues = results["orphans"] or results["inconsistencies"]
 
     if results["orphans"]:
         print("\nOrphan records found — run FK migration to prevent future orphans.")
+    if results["inconsistencies"]:
+        print("\nStale counters found — run a reconciliation to fix cached counts.")
+
+    if has_issues:
         sys.exit(1)
 
     print("\nAll checks passed.")

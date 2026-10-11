@@ -52,7 +52,7 @@ class PersonalAccessToken(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     tenant_id = Column(UUID(as_uuid=True), nullable=False, index=True)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
     # Token identification
     name = Column(String(255), nullable=False)
