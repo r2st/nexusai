@@ -16,6 +16,8 @@ from app.core.database import Base
 # Import all models to ensure they're registered with SQLAlchemy
 from app.models import user, organization, project, connection
 from app.models import ai_analytics, personal_access_token
+from app.models import audit_log, conversation, cost_entry
+from app.models import document, hallucination_log, subscription
 
 # Alembic Config object
 config = context.config
