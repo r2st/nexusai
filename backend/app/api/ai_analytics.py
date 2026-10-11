@@ -116,7 +116,7 @@ PLUGINS = {
 
 
 @router.get("/plugins")
-async def list_plugins() -> list[dict[str, Any]]:
+async def list_plugins(_current_user: User = Depends(get_current_user)) -> list[dict[str, Any]]:
     """List available AI analytics plugins."""
     return [
         {
@@ -131,7 +131,7 @@ async def list_plugins() -> list[dict[str, Any]]:
 
 
 @router.get("/plugins/{plugin_id}")
-async def get_plugin(plugin_id: str) -> dict[str, Any]:
+async def get_plugin(plugin_id: str, _current_user: User = Depends(get_current_user)) -> dict[str, Any]:
     """Get plugin details."""
     plugin = PLUGINS.get(plugin_id)
     if not plugin:

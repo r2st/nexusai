@@ -189,7 +189,7 @@ async def langserve_batch(
 
 
 @router.get("/chat/playground")
-async def langserve_playground():
+async def langserve_playground(_current_user: User = Depends(get_current_user)):
     """
     LangServe playground UI endpoint.
     
