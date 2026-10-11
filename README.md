@@ -159,12 +159,12 @@ Edit your `.env` file:
 ```bash
 # For Google Gemini (default, free tier)
 DEFAULT_AI_PROVIDER=google
-DEFAULT_AI_MODEL=gemini-1.5-flash
+DEFAULT_AI_MODEL=gemini-2.5-flash
 GOOGLE_API_KEY=your-key
 
 # For Groq (fastest free option)
 DEFAULT_AI_PROVIDER=groq
-DEFAULT_AI_MODEL=llama-3.1-70b-versatile
+DEFAULT_AI_MODEL=llama-3.3-70b-versatile
 GROQ_API_KEY=your-key
 
 # For Ollama (local, unlimited)
@@ -177,9 +177,44 @@ DEFAULT_AI_MODEL=gpt-4o
 OPENAI_API_KEY=sk-your-key
 ```
 
+## Architecture
+
+```
+nexusai/
+├── backend/              # FastAPI + Python
+│   ├── app/
+│   │   ├── api/          # REST endpoints (auth, chat, agents, compliance, ...)
+│   │   ├── core/         # Config, database, security, middleware
+│   │   ├── models/       # SQLAlchemy models (User, Organization, Conversation, ...)
+│   │   ├── services/     # Business logic layer
+│   │   │   ├── agents/       # AI agent orchestration (LangGraph)
+│   │   │   ├── llm_gateway/  # Multi-provider LLM routing with circuit breaker
+│   │   │   ├── rag/          # Document chunking, embedding, retrieval
+│   │   │   ├── mcp/          # Model Context Protocol server & tools
+│   │   │   ├── guardrails/   # Input/output safety (PII, injection, content)
+│   │   │   ├── compliance/   # GDPR, SOC2, HIPAA compliance
+│   │   │   └── ...
+│   │   └── worker.py     # Background task consumer
+│   ├── alembic/          # Database migrations
+│   └── tests/            # Unit + integration tests
+├── frontend/             # React + TypeScript + Vite
+├── deploy/               # Kubernetes, Prometheus, Grafana configs
+├── docker/               # Docker Compose configurations
+├── helm/                 # Helm chart for K8s deployment
+└── docs/                 # Architecture and API documentation
+```
+
+**Key components:**
+- **Multi-tenant**: Row-level security (RLS) via PostgreSQL, tenant-scoped middleware
+- **LLM Gateway**: Supports 12+ providers (OpenAI, Anthropic, Google, Ollama, etc.) with automatic fallback and circuit breaker
+- **MCP Server**: Built-in Model Context Protocol with DevLake, Jira, CI, and repository tools
+- **RAG Pipeline**: Document upload → chunking → embedding → vector search
+- **Observability**: Langfuse tracing, OpenTelemetry, Prometheus metrics
+
 ## Documentation
 
 - [Development Guide](docs/DEVELOPMENT.md) - Full setup, commands, and architecture
+- [Architecture Overview](docs/ARCHITECTURE.md) - System design and data flow
 - [Setup Chatbot](docs/SETUP_CHATBOT.md) - AI assistant documentation
 - [DevLake Improvements](docs/DEVLAKE_IMPROVEMENTS.md) - Enhancement details
 - HTML docs site (Docusaurus): `make docs-site-build` → open `docs/build/index.html`
