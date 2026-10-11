@@ -1,6 +1,6 @@
 """Authentication API endpoints."""
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, EmailStr, Field, field_validator
 import re
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,6 +12,25 @@ from app.services.auth import AuthService
 
 router = APIRouter()
 logger = structlog.get_logger()
+
+
+async def _check_auth_rate_limit(request: Request) -> None:
+    """Enforce stricter rate limits on auth endpoints (10 req/min per IP)."""
+    from app.core.cache import auth_rate_limiter
+
+    forwarded = request.headers.get("X-Forwarded-For")
+    if forwarded:
+        client_ip = forwarded.split(",")[0].strip()
+    else:
+        client_ip = request.client.host if request.client else "unknown"
+
+    allowed, info = await auth_rate_limiter.is_allowed(f"ip:{client_ip}")
+    if not allowed:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many authentication attempts. Please try again later.",
+            headers={"Retry-After": str(info.get("reset_in", 60))},
+        )
 
 
 class RegisterRequest(BaseModel):
@@ -69,6 +88,7 @@ class AuthResponse(BaseModel):
 async def register(
     request: RegisterRequest,
     db: AsyncSession = Depends(get_db),
+    _rl: None = Depends(_check_auth_rate_limit),
 ) -> AuthResponse:
     """Register a new user."""
     auth_service = AuthService(db)
@@ -110,6 +130,7 @@ async def register(
 async def login(
     request: LoginRequest,
     db: AsyncSession = Depends(get_db),
+    _rl: None = Depends(_check_auth_rate_limit),
 ) -> AuthResponse:
     """Login with email and password."""
     from sqlalchemy import select
@@ -161,6 +182,7 @@ async def login(
 async def refresh_tokens(
     request: RefreshRequest,
     db: AsyncSession = Depends(get_db),
+    _rl: None = Depends(_check_auth_rate_limit),
 ) -> Token:
     """Refresh access token."""
     auth_service = AuthService(db)

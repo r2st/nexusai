@@ -576,6 +576,12 @@ hourly_rate_limiter = RateLimiter(
     window_seconds=3600,
 )
 
+auth_rate_limiter = RateLimiter(
+    key_prefix="auth",
+    max_requests=10,
+    window_seconds=60,
+)
+
 
 class TenantRateLimiter:
     """Tenant-aware rate limiter with separate limits for tenant and user.
