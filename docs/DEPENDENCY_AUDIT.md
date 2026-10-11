@@ -12,17 +12,16 @@
 
 All CVE fixes are in the langchain 1.x line. No patched 0.3.x versions exist.
 
-| Package | Installed | CVE | Type | Fix Version |
-|---|---|---|---|---|
-| langchain | 0.3.30 | CVE-2026-55443 | Path traversal | 1.3.9 |
-| langchain-core | 0.3.86 | CVE-2026-34070 | Path traversal | 1.2.22 |
-| langchain-core | 0.3.86 | CVE-2026-26013 | SSRF | 1.2.11 |
-| langchain-openai | 0.3.35 | CVE-2026-41488 | SSRF | 1.1.14 |
-| langchain-anthropic | 0.3.22 | CVE-2026-55443 | Path traversal | 1.4.6 |
-| langchain-text-splitters | 0.3.11 | CVE-2026-41481 | SSRF | 1.1.2 |
+| Package | Installed | CVE | Type | Fix Version | Status |
+|---|---|---|---|---|---|
+| langchain | ~~0.3.30~~ 1.4.4 | CVE-2026-55443 | Path traversal | 1.3.9 | **Fixed** |
+| langchain-core | ~~0.3.86~~ 1.6.9 | CVE-2026-34070 | Path traversal | 1.2.22 | **Fixed** |
+| langchain-core | ~~0.3.86~~ 1.6.9 | CVE-2026-26013 | SSRF | 1.2.11 | **Fixed** |
+| langchain-openai | ~~0.3.35~~ 1.7.0 | CVE-2026-41488 | SSRF | 1.1.14 | **Fixed** |
+| langchain-anthropic | ~~0.3.22~~ 1.7.5 | CVE-2026-55443 | Path traversal | 1.4.6 | **Fixed** |
+| langchain-text-splitters | ~~0.3.11~~ 1.1.3 | CVE-2026-41481 | SSRF | 1.1.2 | **Fixed** |
 
-**Risk**: Path traversal allows reading arbitrary files; SSRF allows internal network probing.
-**Mitigation**: Pin to 0.3.x with upper bounds (done). Plan 1.x upgrade as priority.
+**Status**: All 5 CVEs fixed via LangChain 1.x migration (2026-10-11).
 
 ### Other CVEs
 
@@ -36,10 +35,10 @@ All CVE fixes are in the langchain 1.x line. No patched 0.3.x versions exist.
 
 ## Major Version Gaps (2+ majors behind)
 
-| Package | Installed | Latest | Gap | Blocked By |
+| Package | Installed | Latest | Gap | Status |
 |---|---|---|---|---|
-| openai | 1.109.1 | 3.28.0 | 2 majors | langchain-openai 0.3.x requires openai<2 |
-| langchain-google-genai | 2.1.12 | 4.4.1 | 2 majors | Requires langchain-core 1.x |
+| openai | ~~1.109.1~~ 3.28.0 | 3.28.0 | — | **Fixed** |
+| langchain-google-genai | ~~2.1.12~~ 4.4.1 | 4.4.1 | — | **Fixed** |
 
 ---
 
@@ -92,13 +91,14 @@ from langchain_community.embeddings import OllamaEmbeddings  # → langchain_oll
 - [ ] Update `unstructured` to >=0.24.0 (SSRF fix)
 
 ### Phase 2: Short-term (medium risk, 1-2 sprints)
-- [ ] **LangChain 1.x migration** — blocks fixing 5 CVEs
-  - Upgrade langchain, langchain-core, langchain-openai, langchain-anthropic, langchain-text-splitters together
-  - Then unpin openai (→ 3.x) and anthropic (→ 1.x)
-  - Test all chat, RAG, agent, and embedding flows
-  - Key API changes: message types, tool calling, runnable interface
-- [ ] Replace deprecated Ollama imports with `langchain-ollama`
-- [ ] Update `langchain-google-genai` 2.x → 4.x
+- [x] **LangChain 1.x migration** — fixes 5 CVEs
+  - langchain 0.3.30 → 1.4.4, langchain-core 0.3.86 → 1.6.9
+  - langchain-openai 0.3.35 → 1.7.0, langchain-anthropic 0.3.22 → 1.7.5
+  - langchain-text-splitters 0.3.11 → 1.1.3
+  - openai 1.x → 3.28.0, anthropic 0.x → 1.13.0
+  - nemoguardrails 0.17.0 retained with --no-deps (compat shims for langchain 1.x)
+- [x] Replace deprecated Ollama imports with `langchain-ollama` 1.1.0
+- [x] Update `langchain-google-genai` 2.1.12 → 4.4.1
 
 ### Phase 3: When convenient (low priority)
 - [ ] `pandas` 2.x → 3.x (load-tests only)

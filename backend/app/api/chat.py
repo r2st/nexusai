@@ -325,6 +325,7 @@ async def get_messages(
     "/conversations/{conversation_id}/chat",
     summary="Send a chat message",
     description="Send a message and receive an AI response. Supports streaming, MCP tool usage, and file attachments.",
+    response_model=None,
 )
 async def chat(
     conversation_id: str,

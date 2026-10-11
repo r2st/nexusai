@@ -140,7 +140,7 @@ class RAGASService:
             return LangchainLLMWrapper(llm)
 
         elif provider == "ollama":
-            from langchain_community.chat_models import ChatOllama
+            from langchain_ollama import ChatOllama
 
             llm = ChatOllama(
                 model=model,
@@ -163,7 +163,7 @@ class RAGASService:
             return LangchainEmbeddingsWrapper(embeddings)
 
         elif provider == "ollama":
-            from langchain_community.embeddings import OllamaEmbeddings
+            from langchain_ollama import OllamaEmbeddings
 
             embeddings = OllamaEmbeddings(model=model)
             return LangchainEmbeddingsWrapper(embeddings)
