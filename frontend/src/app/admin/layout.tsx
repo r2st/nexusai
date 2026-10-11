@@ -140,15 +140,16 @@ export default function AdminLayout({
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="p-2 hover:bg-muted rounded-md"
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMobileMenuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
           </button>
         </div>
       </header>
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
+        <div className="lg:hidden fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} aria-hidden="true" />
       )}
 
       {/* Mobile Sidebar */}
@@ -158,7 +159,7 @@ export default function AdminLayout({
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <nav className="p-4 space-y-1">
+        <nav className="p-4 space-y-1" aria-label="Admin navigation">
           {adminNavItems.map((item) => (
             <Link
               key={item.href}
@@ -200,8 +201,9 @@ export default function AdminLayout({
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-1.5 hover:bg-muted rounded-md"
+            aria-label={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
           >
-            <ChevronLeft className={cn('h-4 w-4 transition-transform', !isSidebarOpen && 'rotate-180')} />
+            <ChevronLeft className={cn('h-4 w-4 transition-transform', !isSidebarOpen && 'rotate-180')} aria-hidden="true" />
           </button>
         </div>
 
