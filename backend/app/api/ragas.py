@@ -386,8 +386,8 @@ async def list_metrics() -> dict[str, Any]:
 async def create_dataset(
     name: str,
     samples: list[EvaluationSampleRequest],
-    description: str | None = None,
     current_user: Annotated[User, Depends(get_current_user)],
+    description: str | None = None,
 ) -> dict[str, Any]:
     """Create an evaluation dataset."""
     try:

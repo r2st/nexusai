@@ -210,6 +210,9 @@ class SessionManager:
         if not session:
             return None
 
+        if not session.is_active:
+            return None
+
         # Verify host
         if session.host_user_id != ended_by:
             # Check if user is moderator

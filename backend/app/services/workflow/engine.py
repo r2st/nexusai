@@ -216,11 +216,45 @@ class WorkflowEngine:
         await self._unregister_workflow_triggers(workflow)
         return workflow
 
+    async def archive_workflow(self, workflow_id: str) -> Workflow | None:
+        """Archive a workflow. Only PAUSED or DRAFT workflows can be archived."""
+        workflow = self._workflows.get(workflow_id)
+        if not workflow:
+            return None
+
+        if workflow.status == WorkflowStatus.ACTIVE:
+            raise ValueError(
+                "Cannot archive an active workflow (pause it first)"
+            )
+        if workflow.status == WorkflowStatus.ARCHIVED:
+            raise ValueError("Workflow is already archived")
+
+        workflow.status = WorkflowStatus.ARCHIVED
+        workflow.updated_at = datetime.utcnow()
+
+        await self._unregister_workflow_triggers(workflow)
+        return workflow
+
     async def delete_workflow(self, workflow_id: str) -> bool:
-        """Delete a workflow."""
+        """Delete a workflow. Fails if there are running executions."""
         workflow = self._workflows.get(workflow_id)
         if not workflow:
             return False
+
+        running = [
+            e for e in self._executions.values()
+            if e.workflow_id == workflow_id
+            and e.status in (
+                WorkflowExecutionStatus.RUNNING,
+                WorkflowExecutionStatus.PENDING,
+                WorkflowExecutionStatus.WAITING,
+            )
+        ]
+        if running:
+            raise ValueError(
+                f"Cannot delete workflow with {len(running)} active execution(s). "
+                f"Cancel them first."
+            )
 
         await self._unregister_workflow_triggers(workflow)
         del self._workflows[workflow_id]

@@ -151,11 +151,27 @@ async def pause_workflow(workflow_id: str, _current_user: User = Depends(get_cur
     return {"workflow": workflow.model_dump()}
 
 
+@router.post("/{workflow_id}/archive")
+async def archive_workflow(workflow_id: str, _current_user: User = Depends(get_current_user)):
+    """Archive a workflow."""
+    engine = get_workflow_engine()
+    try:
+        workflow = await engine.archive_workflow(workflow_id)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    if not workflow:
+        raise HTTPException(status_code=404, detail="Workflow not found")
+    return {"workflow": workflow.model_dump()}
+
+
 @router.delete("/{workflow_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_workflow(workflow_id: str, _current_user: User = Depends(get_current_user)) -> None:
     """Delete a workflow."""
     engine = get_workflow_engine()
-    deleted = await engine.delete_workflow(workflow_id)
+    try:
+        deleted = await engine.delete_workflow(workflow_id)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     if not deleted:
         raise HTTPException(status_code=404, detail="Workflow not found")
 
