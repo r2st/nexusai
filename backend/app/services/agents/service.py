@@ -238,8 +238,8 @@ class AgentService:
             if hasattr(response, "usage_metadata") and response.usage_metadata:
                 execution.total_tokens = response.usage_metadata.get("total_tokens", 0)
 
-            # Increment usage count
-            agent.usage_count += 1
+            # Increment usage count using SQL expression to avoid race conditions
+            agent.usage_count = Agent.usage_count + 1
 
             await self.db.flush()
 
@@ -476,10 +476,15 @@ class AgentService:
         if not agent:
             return None
 
-        # Update rating (simple average for now)
-        current_total = (agent.rating or 0) * agent.rating_count
-        agent.rating_count += 1
-        agent.rating = (current_total + rating) / agent.rating_count
+        from sqlalchemy import case, cast, Float
+        # Update rating using SQL expressions to avoid race conditions
+        # new_avg = (old_avg * old_count + new_rating) / (old_count + 1)
+        coalesced_rating = case(
+            (Agent.rating.is_(None), 0.0),
+            else_=cast(Agent.rating, Float),
+        )
+        agent.rating = (coalesced_rating * Agent.rating_count + rating) / (Agent.rating_count + 1)
+        agent.rating_count = Agent.rating_count + 1
 
         await self.db.flush()
 

@@ -504,6 +504,14 @@ async def remove_member(
     await revoke_org_membership(member.user_id, org_id, member.role)
     member.is_active = False
 
+    # Update cached member count using SQL expression to avoid race conditions
+    result = await db.execute(
+        select(Organization).where(Organization.id == org_id)
+    )
+    org = result.scalar_one_or_none()
+    if org:
+        org.current_member_count = Organization.current_member_count - 1
+
     await db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)

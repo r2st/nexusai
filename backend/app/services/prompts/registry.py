@@ -222,20 +222,22 @@ class PromptRegistry:
         prompt.updated_at = datetime.now(UTC)
 
         # Create new version if template changed
-        if template or system_prompt is not None:
+        version_incremented = bool(template or system_prompt is not None)
+        if version_incremented:
             prompt.current_version += 1
             await self._create_version(
                 session, prompt, change_description or "Updated template"
             )
 
-        # Update in database
+        # Update in database — use current_version + 1 in SQL to avoid race conditions
+        version_expr = "current_version + 1" if version_incremented else "current_version"
         await session.execute(
-            text("""
+            text(f"""
                 UPDATE prompts SET
                     template = :template,
                     system_prompt = :system_prompt,
                     variables = :variables,
-                    current_version = :current_version,
+                    current_version = {version_expr},
                     updated_at = :updated_at,
                     status = :status,
                     description = :description,
@@ -247,7 +249,6 @@ class PromptRegistry:
                 "template": prompt.template,
                 "system_prompt": prompt.system_prompt,
                 "variables": prompt.variables,
-                "current_version": prompt.current_version,
                 "updated_at": prompt.updated_at,
                 "status": prompt.status.value,
                 "description": prompt.description,
